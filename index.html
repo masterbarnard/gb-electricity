@@ -22,7 +22,7 @@
      the only two places the name or version is typed rather than read, so the harness now
      asserts they match the constants - a rename that missed them would show the old name for
      a frame and, with script blocked, permanently. -->
-<title>GB Electricity v0.315 — Live Generation &amp; Demand</title>
+<title>GB Electricity v0.316 — Live Generation &amp; Demand</title>
 <style>
   :root{
     /* ---- Interface tokens. Identity lives here and nowhere else. ---- */
@@ -1575,6 +1575,97 @@
     #mixrows{grid-template-columns:10px max-content minmax(30px,1fr) 54px 36px;column-gap:6px;}
     .mixname{font-size:11px;}
   }
+
+
+  /* ================= MOBILE OPTIMISATION (v0.316) =================
+     The phone layout needs to be designed for the actual viewport, not merely allowed to
+     shrink. In particular, the three headline figures must never share a row on a phone:
+     at ~390px the figures, units and labels become unreadable and the first card can clip.
+     The mobile rules below deliberately preserve the desktop hierarchy while giving each
+     major reading enough width to breathe.
+  */
+  @media (max-width:760px){
+    html,body{overflow-x:hidden;}
+    .wrap{padding-left:12px;padding-right:12px;}
+
+    /* Masthead: keep identity and controls compact without horizontal overflow. */
+    .header-top{padding:9px 0 7px;gap:8px;}
+    .brand{gap:9px;min-width:0;width:100%;margin-right:0;}
+    .mark{width:28px;height:28px;}
+    .wordmark .name{font-size:18px;white-space:nowrap;}
+    .wordmark .sub,.byline{display:none;}
+    .header-actions{width:100%;display:flex;align-items:center;justify-content:flex-start;
+      flex-wrap:nowrap;gap:7px;min-width:0;}
+    .livewrap{font-size:10px;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;}
+    .tempchip{font-size:10px;flex:0 0 auto;}
+    .tempchip .tdelta{display:none;}
+    .unitswitch{flex:0 0 auto;}
+    .unitbtn{font-size:10px;padding:7px 9px;min-width:28px;}
+    .toolbtn{font-size:11px;padding:8px 10px;flex:0 0 auto;white-space:nowrap;}
+    .theme-switch{flex:0 0 auto;}
+
+    /* The view selector is a normal scrolling control, not a sticky navigation element. */
+    .viewbar-strip{padding:7px 0 8px;}
+    .viewbar .viewbtn{font-size:11px;min-width:62px;padding:8px 12px;}
+
+    /* Headline figures: one card per row. This is the key fix for the clipped mobile
+       screenshot seen in v0.315. */
+    .g-tiles,
+    body[data-density="simple"] .g-tiles,
+    .g-tiles > .tile.hero{grid-template-columns:1fr !important;grid-column:span 1 !important;}
+    .g-tiles{gap:9px !important;margin-top:12px;}
+    .g-tiles > .tile{width:100%;min-width:0;}
+    .tile{padding:12px 14px 13px;}
+    .tile .label{font-size:10px;line-height:1.2;}
+    .tile .value{font-size:31px;line-height:1.05;white-space:nowrap;}
+    .tile .value .unit{font-size:14px;margin-left:3px;}
+    .tile .essential{font-size:11px;line-height:1.35;margin-top:5px;}
+    .tileicon{display:none;}
+
+    /* System at a Glance: retain the useful 2×2 dashboard shape on phones. */
+    .insightbar{margin-top:12px;padding:9px 10px 10px;border-radius:9px;}
+    .insight-head{margin-bottom:7px;}
+    .insight-head h2{font-size:10px;}
+    .insight-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:7px;}
+    .insight-item{padding:8px 9px;min-width:0;}
+    .insight-item .k{font-size:8px;}
+    .insight-item .v{font-size:15px;line-height:1.05;}
+    .insight-driver{font-size:11px;line-height:1.4;margin-top:8px;padding-top:8px;}
+
+    /* Panels: reduce chrome and protect the actual data area. */
+    .grid{gap:10px;margin-top:12px;}
+    .grid:has(> .panel){margin-top:10px;}
+    .panel-body{padding:10px 10px 12px;}
+    .panel-head{gap:6px;padding-right:7px;}
+    .panel-head h2{font-size:10.5px;padding:5px 9px 6px;}
+    .panel-head .note{font-size:8.5px;}
+    .chartbox{min-height:210px;}
+    #mixrows{grid-template-columns:11px minmax(82px,max-content) minmax(40px,1fr) 54px 38px;
+      column-gap:6px;row-gap:8px;}
+    .mixname{font-size:11px;}
+    .mixname .code{font-size:8px;}
+    .mixmw{font-size:10.5px;}
+    .mixpc{font-size:9.5px;}
+    #embrows{grid-template-columns:11px minmax(82px,max-content) minmax(40px,1fr) 54px 38px;
+      column-gap:6px;}
+    .legend{gap:4px 9px;}
+    .legend span{font-size:10px;}
+  }
+
+  @media (max-width:400px){
+    .wrap{padding-left:10px;padding-right:10px;}
+    .header-actions{gap:5px;}
+    .livewrap{font-size:9.5px;}
+    .unitbtn{padding:6px 7px;min-width:26px;}
+    .toolbtn{font-size:10px;padding:7px 8px;}
+    .theme-switch{transform:scale(.88);transform-origin:right center;margin-right:-4px;}
+    .tile .value{font-size:29px;}
+    .insight-grid{gap:6px;}
+    .insight-item .v{font-size:14px;}
+    #mixrows,#embrows{grid-template-columns:10px minmax(76px,max-content) minmax(25px,1fr) 50px 34px;
+      column-gap:5px;}
+  }
+
 </style>
 </head>
 <body data-density="simple">
@@ -2320,7 +2411,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.315";
+const APP_VERSION = "v0.316";
 // v0.315: remove the personal "Built by Kyle Barnard" credit from the masthead; attribution remains in About.
 
 const BASE = "https://data.elexon.co.uk/bmrs/api/v1";
