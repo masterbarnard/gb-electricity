@@ -285,7 +285,7 @@
      It also drops half a point below the strapline and loses its bold, so the vertical order in
      the wordmark now matches the order of importance: the tool, what it is, who made it. */
   .header-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
-  .version-label{font-family:var(--mono);font-size:10.5px;color:var(--ink-dim);letter-spacing:.02em;
+  .version-label{font-size:10.5px;color:var(--ink-dim);letter-spacing:.02em;
     white-space:nowrap;}
   .livewrap{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:var(--ink-dim);
     font-variant-numeric:tabular-nums;white-space:nowrap;}
@@ -982,7 +982,7 @@
      applied to its children. That is also why this cannot be done with opacity on the row. */
   #mixrows.dim .mixrow > *{opacity:.45;}
   #mixrows.dim .mixrow.on > *{opacity:1;}
-  #mixrows .mixrow.on .mixname{color:var(--blue-text);}
+  #mixrows .mixrow.on .mixname{color:var(--ink);font-weight:800;}
   #mixrows .mixrow.on .track{box-shadow:0 0 0 1.5px var(--blue-line);}
   #mixrows .mixrow > *{transition:opacity .12s ease;}
   @media (prefers-reduced-motion:reduce){ #mixrows .mixrow > *{transition:none;} }
@@ -1413,6 +1413,25 @@
 
   .callout{padding:8px 11px;border-radius:6px;font-size:11px;line-height:1.45;background:var(--grey-bg);
     color:var(--ink-dim);}
+  /* v0.3192: compact history controls for the Detailed charts. */
+  .panel-tools{display:flex;align-items:center;gap:5px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end;}
+  .panel-head .panel-tools{padding-top:5px;}
+  .range-switch{display:inline-flex;align-items:center;border:1px solid var(--grey-line);border-radius:7px;overflow:hidden;background:var(--surface);}
+  .range-btn,.export-btn{appearance:none;border:0;background:transparent;color:var(--ink-dim);font:600 9px var(--sans);padding:5px 7px;cursor:pointer;}
+  .range-btn + .range-btn{border-left:1px solid var(--grey-line);}
+  .range-btn.is-on{background:var(--blue-pale);color:var(--blue-text);}
+  .range-btn:focus-visible,.export-btn:focus-visible{outline:2px solid var(--blue-text);outline-offset:1px;}
+  .export-btn{border:1px solid var(--grey-line);border-radius:7px;color:var(--blue-text);background:var(--surface);}
+  .livewrap.stale{color:var(--warn);}
+  .livewrap.err{color:var(--bad);}
+  .legend-key{appearance:none;border:0;background:none;color:inherit;font:inherit;padding:1px 2px;margin:-1px -2px;display:inline-flex;align-items:center;gap:5px;cursor:pointer;border-radius:3px;}
+  .legend-key:hover,.legend-key.is-on{background:var(--blue-pale);color:var(--ink);font-weight:700;}
+  #stacklegend.has-highlight .legend-key:not(.is-on){opacity:.42;}
+  #stacklegend .legend-key.is-on i{filter:brightness(1.08) saturate(1.05);}
+  .legend-key:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;}
+  .chart.legend-focus polygon[data-fuel]{opacity:.32;}
+  .chart.legend-focus polygon[data-fuel].on{opacity:1;}
+  .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;}
   .callout b{color:var(--ink);}
   .callout.flag{background:var(--bad-bg);color:var(--bad);}
   .callout.flag b{color:var(--bad);}
@@ -1554,6 +1573,8 @@
      hoping is not a fix. Below 760px the action row WRAPS again and the switch may take a second
      line with the theme control — one row of header height, and it cannot overflow. */
   @media (max-width:760px){
+    .panel-tools{width:100%;justify-content:flex-start;margin-left:0;margin-top:4px;padding-top:2px;}
+    .panel-head{flex-wrap:wrap;}
     .header-actions{flex-wrap:wrap;justify-content:flex-end;row-gap:6px;}
     /* 68px of red on a 360px rule would be 19% and would stop being an accent. */
     :root{ --red-tail:20px; }   /* the proportion holds across breakpoints, not the pixel count */
@@ -1764,7 +1785,7 @@
         </div>
       </div>
       <div class="header-actions">
-        <span class="livewrap"><span class="livedot" id="livedot"></span><span id="livetext">connecting…</span></span>
+        <span class="livewrap" id="live-status" title="Waiting for the latest live data"><span class="livedot" id="livedot"></span><span id="livetext" aria-live="polite">connecting…</span></span>
         <button class="tempchip" id="tempchip" aria-expanded="false"
                 aria-label="GB average temperature — details" hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -1939,7 +1960,7 @@
       <div class="sparkwrap"><svg class="spark" id="fq-spark" preserveAspectRatio="none"
         role="img" aria-labelledby="fq-spark-t"><title id="fq-spark-t"></title></svg>
         <div class="sparkcap" id="fq-spark-cap"></div></div>
-      <div class="meta" id="t-fq-meta">Elexon <b class="ds">FREQ</b>, measured every 15 seconds</div>
+      <div class="meta" id="t-fq-meta">Elexon <span class="term ds" data-term="FREQ">FREQ</span>, measured every 15 seconds</div>
     </div>
   </section>
 
@@ -2004,8 +2025,15 @@
 
     <div class="panel" id="panel-stack">
       <div class="panel-head">
-        <h2>Last 24 hours</h2>
-        <span class="note">Half-hourly outturn</span>
+        <h2 id="stack-title">Last 24 hours</h2>
+        <span class="note" id="stack-note">Half-hourly outturn</span>
+        <div class="panel-tools" aria-label="Generation history controls">
+          <div class="range-switch" role="group" aria-label="Generation history range">
+            <button type="button" class="range-btn is-on" data-history="24h" aria-pressed="true">24h</button>
+            <button type="button" class="range-btn" data-history="7d" aria-pressed="false">7d</button>
+          </div>
+          <button type="button" class="export-btn" id="export-stack" title="Download the selected generation history as CSV">CSV</button>
+        </div>
         <button class="panelbtn xp" data-panel="stack" aria-expanded="false"
           aria-label="Expand view" title="Expand view">
           <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -2021,7 +2049,7 @@
         </div>
         <div class="legend" id="stacklegend"></div>
         <div class="subchart">
-          <div class="subchart-title">Imbalance price <span>system sell / buy price, <b class="ds">DISEBSP</b></span></div>
+          <div class="subchart-title">Imbalance price <span>system sell / buy price, <span class="term ds" data-term="DISEBSP">DISEBSP</span></span></div>
           <div class="chartbox" id="pricebox">
             <svg class="chart" id="price" role="img"
                  aria-label="Line chart of the imbalance price over the last 24 hours"></svg>
@@ -2039,7 +2067,14 @@
     <div class="panel" id="panel-ic">
       <div class="panel-head">
         <h2>Interconnector flows</h2>
-        <span class="note" id="ic-note"><b class="ds">INTOUTHH</b> · half-hourly</span>
+        <span class="note" id="ic-note"><span class="term ds" data-term="INTOUTHH">INTOUTHH</span> · half-hourly</span>
+        <div class="panel-tools" aria-label="Interconnector history controls">
+          <div class="range-switch" role="group" aria-label="Interconnector history range">
+            <button type="button" class="range-btn is-on" data-ic-history="24h" aria-pressed="true">24h</button>
+            <button type="button" class="range-btn" data-ic-history="7d" aria-pressed="false">7d</button>
+          </div>
+          <button type="button" class="export-btn" id="export-ic" title="Download the selected interconnector history as CSV">CSV</button>
+        </div>
         <button class="panelbtn xp" data-panel="ic" aria-expanded="false"
           aria-label="Expand view" title="Expand view">
           <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -2073,7 +2108,7 @@
           <span class="viewbtn is-on" data-view="wind">Wind</span>
           <span class="viewbtn" data-view="solar">Solar</span>
         </button>
-        <span class="note" id="wind-note"><b class="ds">FUELHH</b> vs <b class="ds">WINDFOR</b></span>
+        <span class="note" id="wind-note"><span class="term ds" data-term="FUELHH">FUELHH</span> vs <span class="term ds" data-term="WINDFOR">WINDFOR</span></span>
         <button class="panelbtn xp" data-panel="wind" aria-expanded="false"
           aria-label="Expand view" title="Expand view">
           <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -2150,7 +2185,7 @@
     <div class="panel" id="panel-freq">
       <div class="panel-head">
         <h2>System frequency</h2>
-        <span class="note"><b class="ds">FREQ</b> · 15-second</span>
+        <span class="note"><span class="term ds" data-term="FREQ">FREQ</span> · 15-second</span>
         <button class="panelbtn xp" data-panel="freq" aria-expanded="false"
           aria-label="Expand view" title="Expand view">
           <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -2254,7 +2289,7 @@
         The code stays mapped so a residual could never be dropped silently, and the table view still shows the raw
         zero — but naming it in a label would imply the grid has an option it no longer has.
         Storage (pumped) and interconnectors go negative when pumping or exporting, and are excluded from the
-        low-carbon denominator. No API key is required and no data leaves your browser.
+        low-carbon denominator. No API key is required. Elexon, NESO and Sheffield Solar feeds are read by the browser; LCCC data is fetched server-side by the dashboard's same-origin proxy because the LCCC CKAN API is not relied on for browser CORS.
       </p>
 
       <h4>&ldquo;Other&rdquo; is a residual, and cannot be broken down</h4>
@@ -2266,7 +2301,7 @@
         transmission-connected output, and it peaks in the evening &mdash; at peak it can exceed hydro,
         pumped storage, OCGT, oil and coal put together, so it is not a rounding error.
         <b>It cannot be decomposed from published data, and this page checked.</b>
-        <b class="ds">FUELINST</b> and <b class="ds">FUELHH</b> carry no BM unit field at all;
+        <b class="ds">FUELINST</b> and <span class="term ds" data-term="FUELHH">FUELHH</span> carry no BM unit field at all;
         <b class="ds">B1610</b> gives half-hourly metered volumes per BM unit but its
         <b class="ds">psrType</b> is the literal string &ldquo;Generation&rdquo; on every record, with no fuel
         type; and <b class="ds">/reference/bmunits/all</b> does carry a fuel type, but it is
@@ -2356,7 +2391,7 @@
 
       <h4>System frequency, and two limits that are not the same</h4>
       <p>
-        Frequency is Elexon's <b class="ds">FREQ</b> dataset at its native <b>15-second</b> resolution — the
+        Frequency is Elexon's <span class="term ds" data-term="FREQ">FREQ</span> dataset at its native <b>15-second</b> resolution — the
         fastest-moving figure on this page by a wide margin, next to a fuel mix that updates every five
         minutes and settlement data that updates every half hour.
       </p>
@@ -2435,8 +2470,8 @@
         <span>carbonintensity.org.uk GET /intensity</span>
         <span>carbonintensity.org.uk GET /intensity/factors</span>
         <span>carbonintensity.org.uk GET /intensity/{from}/pt24h</span>
-        <span>LCCC Data Portal GET /api/3/action/datastore_search · CfD actuals</span>
-        <span>LCCC Data Portal GET /api/3/action/datastore_search · CfD portfolio</span>
+        <span>Dashboard proxy GET /api/lccc · LCCC CfD actuals</span>
+        <span>Dashboard proxy GET /api/lccc · LCCC CfD portfolio</span>
       </div>
 
       <h4>Data sources and attribution</h4>
@@ -2527,7 +2562,7 @@
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" id="version-label" title="Dashboard version"></span> &middot;
+      <span class="version-label" id="version-label" title="Dashboard version">v0.3193</span> &middot;
       <button type="button" id="btn-about" class="footer-link">About this Dashboard</button>
     </div>
   </div>
@@ -2578,7 +2613,9 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.3191";
+const APP_VERSION = "v0.3193";
+// v0.3193: LCCC same-origin proxy; fixed 7-day FUELHH grouping/history; permanent embedded-solar estimate; chart cross-highlighting; control padding; footer typography; dark-mode polish.
+// v0.3192: 24h/7d generation and interconnector history with CSV export; acronym tooltips; keyboard-accessible chart legends; explicit stale/reconnection status; embedded-solar visibility control.
 // v0.3190: SEO title/description/canonical, crawlable favicon, simplified Other label, and release metadata polish.
 // v0.315: remove the personal "Built by Kyle Barnard" credit from the masthead; attribution remains in About.
 
@@ -2605,12 +2642,13 @@ const proxied = (u)=> PVLIVE_PROXY
    proxy in the way. That is the whole reason this panel could be added without hosting first. */
 const CARBON = "https://api.carbonintensity.org.uk";
 
-/* LCCC Data Portal CKAN Data Store API. These two public JSON resources are currently
-   marked UK Open Government Licence (OGL) by LCCC. No API key is required. */
-const LCCC_API = "https://dp.lowcarboncontracts.uk/api/3/action/datastore_search";
+/* LCCC Data Portal CKAN Data Store API. The browser calls our same-origin Pages Function,
+   which resolves the current JSON resource and queries LCCC server-side. This avoids relying on
+   LCCC's browser CORS policy and also means a future resource-ID change does not break the page. */
+const LCCC_API = "/api/lccc";
 const LCCC_RES = {
-  actualCfd: "37d1bef4-55d7-4b8e-8a47-1d24b123a20e",
-  portfolio: "fdaf09d2-8cff-4799-a5b0-1c59444e492b"
+  actualCfd: "actual-cfd-generation-and-avoided-ghg-emissions",
+  portfolio: "cfd-contract-portfolio-status"
 };
 
 /* THE BANDS ARE REVISED EVERY YEAR, AND THAT IS THE INTERESTING PART.
@@ -3260,10 +3298,11 @@ function seriesFor(code){
 /* ============================================================
    STATE
    ============================================================ */
-const S = { fuelinst:null, summary:null, demand:null, ic:null, windfor:null, price:null, icLatest:null, temp:null,
+const S = { fuelinst:null, summary:null, demand:null, ic:null, ic7d:null, fuelhh:null, windfor:null, price:null, icLatest:null, temp:null,
             pxToday:null, pxYday:null,
             prices:null, lcExplainer:null, tempExplainer:null,
-            pvlive:null, agws:null, solarSource:null, ciNow:null, ci24:null, ciFact:null, freq:null, winEarly:null, winLate:null, dgws:null, windView:"wind", health:null, lcccActual:null, lcccPortfolio:null, lcccUpdated:null, errors:[] };
+            pvlive:null, agws:null, agwsHistory:null, solarSource:null, ciNow:null, ci24:null, ciFact:null, freq:null, winEarly:null, winLate:null, dgws:null, windView:"wind", health:null, lcccActual:null, lcccPortfolio:null, lcccUpdated:null,
+            historyWindow:"24h", icHistoryWindow:"24h", historyLoaded:false, selectedFuel:null, errors:[] };
 
 /* FIRST-LOAD PROGRESS. Returns a tick function and arms itself only once — every later refresh
    gets an inert object, so a background reload cannot make a page a reader is already using look
@@ -3293,17 +3332,49 @@ function loadProgress(total){
 /* ============================================================
    FETCH
    ============================================================ */
-async function getLCCC(resourceId, params="", {timeout=25000}={}){
+async function getLCCC(dataset, params="", {timeout=25000}={}){
   const ctl = new AbortController();
   const t = setTimeout(()=>ctl.abort(), timeout);
   try{
-    const url = LCCC_API + "?resource_id=" + encodeURIComponent(resourceId) + "&" + params;
+    const url = LCCC_API + "?dataset=" + encodeURIComponent(dataset) + (params ? "&" + params : "");
     const res = await fetch(url, {signal:ctl.signal, headers:{"Accept":"application/json"}});
     if(!res.ok) throw new Error("HTTP "+res.status+" on LCCC Data Portal");
     const j = await res.json();
-    if(!j || !j.success || !j.result) throw new Error("Invalid LCCC API response");
+    if(!j || !j.success || !j.result || !Array.isArray(j.result.records)) throw new Error("Invalid LCCC API response");
     return j.result;
   } finally { clearTimeout(t); }
+}
+
+let historyLoading=false;
+async function loadHistoryData(){
+  if(historyLoading || S.historyLoaded) return;
+  historyLoading=true;
+  const now=new Date();
+  const days=[
+    [new Date(now.getTime()-6*86400000), new Date(now.getTime()-3*86400000)],
+    [new Date(now.getTime()-3*86400000), now]
+  ];
+  try{
+    const fuelJobs=days.map(([a,b])=>
+      getJSON(`/datasets/FUELHH?settlementDateFrom=${londonDate(a)}&settlementDateTo=${londonDate(b)}`));
+    const icJobs=days.map(([a,b])=>
+      getJSON(`/generation/outturn/interconnectors?settlementDateFrom=${londonDate(a)}&settlementDateTo=${londonDate(b)}`));
+    const [fuelParts,icParts,agws7]=await Promise.all([
+      Promise.all(fuelJobs),
+      Promise.all(icJobs),
+      getJSON(`/generation/actual/per-type/wind-and-solar?from=${encodeURIComponent(iso(new Date(now.getTime()-7*86400000)))}&to=${encodeURIComponent(iso(now))}`)
+    ]);
+    S.fuelhh=fuelParts.flatMap(rows);
+    S.ic7d=icParts.flatMap(rows);
+    S.agwsHistory=rows(agws7);
+    S.historyLoaded=true;
+    S.errors=(S.errors||[]).filter(x=>!/^history:/.test(x));
+    render();
+  }catch(e){
+    S.errors=(S.errors||[]).filter(x=>!/^history:/.test(x));
+    S.errors.push("history: "+(e.message||e));
+    renderStatus(latestSnapshot());
+  }finally{historyLoading=false;}
 }
 
 async function loadAll(){
@@ -3453,14 +3524,16 @@ function latestSnapshot(){
 /* Embedded solar, half-hourly, keyed on ISO start time — from whichever source is live. */
 function solarMap(){
   const m = new Map();
-  if(S.solarSource === "pvlive"){
-    for(const r of S.pvlive){ const k = new Date(r.t).toISOString().slice(0,16); m.set(k, r.mw); }
-  } else if(S.solarSource === "agws"){
-    /* The endpoint accepts ?psrType=Solar and then ignores it — it returns Solar, Wind Onshore
-       and Wind Offshore for every half hour. Without this filter the map was overwritten three
-       times per key and kept whichever row happened to come last, so the "solar" figure could
-       silently be a wind figure. Never trust a server-side filter you have not seen work. */
-    for(const r of S.agws){
+  const agwsSource = S.historyWindow === "7d" ? (S.agwsHistory||[]) : (S.agws||[]);
+  if(S.historyWindow !== "7d" && S.solarSource === "pvlive"){
+    for(const r of (S.pvlive||[])){
+      const k = new Date(r.t).toISOString().slice(0,16);
+      m.set(k, r.mw);
+    }
+  } else {
+    /* AGWS carries Solar, Wind Onshore and Wind Offshore together. Filter explicitly so the
+       solar series cannot be overwritten by whichever fuel row happens to come last. */
+    for(const r of agwsSource){
       if(r.psrType !== "Solar") continue;
       m.set(new Date(r.startTime).toISOString().slice(0,16), r.quantity);
     }
@@ -3514,11 +3587,32 @@ function solarCrossCheck(){
 }
 
 function stackSeries(){
-  if(!S.summary || !S.summary.length) return [];
-  return S.summary.map(p=>{
-    const byKey = Object.fromEntries(SERIES.map(s=>[s.key,0]));
+  const source=S.historyWindow==="7d" ? S.fuelhh : S.summary;
+  if(!source || !source.length) return [];
+  if(S.historyWindow==="7d"){
+    /* FUELHH is one record per fuel type per half hour, unlike the summary endpoint.
+       Group by start time before drawing; otherwise every fuel becomes a separate near-zero
+       point and the seven-day stack collapses into a blank chart. */
+    const groups=new Map();
+    source.forEach(p=>{
+      const t=p.startTime || p.StartTime;
+      if(!t) return;
+      const k=new Date(t).toISOString();
+      let g=groups.get(k);
+      if(!g){
+        g={t,sp:p.settlementPeriod||p.SettlementPeriod,
+           byKey:Object.fromEntries(SERIES.map(s=>[s.key,0]))};
+        groups.set(k,g);
+      }
+      const code=p.fuelType ?? p.fuelTypeCode ?? p.fuelTypeDescription ?? p.FuelType;
+      g.byKey[seriesFor(code)] += Number(p.generation ?? p.generationMW ?? p.Generation ?? 0) || 0;
+    });
+    return [...groups.values()].sort((a,b)=>a.t<b.t?-1:1);
+  }
+  return source.map(p=>{
+    const byKey=Object.fromEntries(SERIES.map(s=>[s.key,0]));
     for(const d of (p.data||[])) byKey[seriesFor(d.fuelType)] += (d.generation||0);
-    return {t:p.startTime, sp:p.settlementPeriod, byKey};
+    return {t:p.startTime,sp:p.settlementPeriod,byKey};
   }).sort((a,b)=>a.t<b.t?-1:1).slice(-48);
 }
 
@@ -3615,20 +3709,17 @@ function renderHealth(){
 }
 
 function renderStatus(snap){
-  const dot=$("livedot"), txt=$("livetext");
-  if(!snap){ dot.className="livedot err"; txt.textContent="no data"; }
+  const dot=$("livedot"),txt=$("livetext"),live=$("live-status");
+  if(!snap){dot.className="livedot err";live.classList.remove("stale");live.classList.add("err");txt.textContent="No live data";live.title="The latest Elexon live generation snapshot could not be loaded.";}
   else{
-    const ageMin = (Date.now()-new Date(snap.publishTime).getTime())/60000;
-    dot.className = "livedot" + (ageMin>20 ? " stale" : "");
-    txt.textContent = fmtTime(snap.publishTime)+" · SP"+(snap.settlementPeriod??"–");
+    const ageMin=(Date.now()-new Date(snap.publishTime).getTime())/60000,stale=ageMin>20;
+    dot.className="livedot"+(stale?" stale":"");live.classList.toggle("stale",stale);live.classList.remove("err");
+    txt.textContent=(stale?"Stale · ":"Live · ")+"updated "+fmtTime(snap.publishTime)+" · SP"+(snap.settlementPeriod??"–");
+    live.title=stale?"The latest live snapshot is more than 20 minutes old. Use Refresh to try again.":"Latest Elexon live generation snapshot: "+fmtTime(snap.publishTime)+" · settlement period "+(snap.settlementPeriod??"–");
   }
   const eb=$("errbar");
-  if(S.errors.length){
-    eb.style.display="block";
-    eb.innerHTML = "<b>Some feeds didn't load.</b> "+S.errors.map(esc).join(" · ") +
-      "<br>If you opened this file directly and the browser reports a CORS or network error, "+
-      "serve the folder over http (e.g. <b class='ds'>python3 -m http.server</b>) and reload.";
-  } else eb.style.display="none";
+  if(S.errors.length){eb.style.display="block";eb.innerHTML="<b>Some feeds didn't load.</b> "+S.errors.map(esc).join(" · ")+"<br>Use <b>Refresh</b> to retry. If you opened this file directly and the browser reports a CORS or network error, serve the folder over http (e.g. <b class='ds'>python3 -m http.server</b>) and reload.";}
+  else eb.style.display="none";
 }
 
 /* ============================================================
@@ -3930,7 +4021,7 @@ function renderFreqTile(){
   const val=$("t-fq"), meta=$("t-fq-meta");
   if(!pts.length){
     val.innerHTML = '<span class="skeleton">—</span><span class="unit">Hz</span>';
-    meta.innerHTML = 'Elexon <b class="ds">FREQ</b> unavailable this refresh.';
+    meta.innerHTML = 'Elexon <span class="term ds" data-term="FREQ">FREQ</span> unavailable this refresh.';
     // The sparkline is cleared too, or a stale hour sits under a missing figure.
     sparkline($("fq-spark"), $("fq-spark-cap"), [], {label:"System frequency"});
     return;
@@ -4347,12 +4438,12 @@ function chartGeom(box, tallness){
 function attachHover(box, svg, handler){
   const hide = ()=>{
     box.querySelector(".tip").classList.remove("show");
-    const ch = svg.querySelector(".crosshair"); if(ch) ch.style.display="none";
     /* v0.26: any chart that dims itself to highlight one band clears here too. Put in the shared
        helper rather than in the one chart that does it, so the next one cannot forget — a
        highlight left behind after the pointer leaves is a chart lying about where you are. */
     svg.classList.remove("is-dim");
     svg.querySelectorAll(".on").forEach(el=>el.classList.remove("on"));
+    setFuelHighlight(S.selectedFuel);
   };
   box.onpointermove = (ev)=>handler(ev);
   box.onpointerdown = (ev)=>handler(ev);
@@ -4376,12 +4467,46 @@ function placeTip(tip, box, px, py){
 }
 
 /* ============================================================
+   SHARED FUEL HIGHLIGHT
+   The fuel-mix ranking and the history stack are two views of the same series. One shared
+   highlight state keeps them visually linked when the pointer moves between panels. */
+function setFuelHighlight(key){
+  S.highlightFuel = key || null;
+  const mix=$("mixrows"), strip=$("compstrip"), stack=$("stack"), legend=$("stacklegend");
+  if(mix){
+    mix.classList.toggle("dim",!!key);
+    mix.querySelectorAll(".mixrow").forEach(r=>r.classList.toggle("on",!!key && r.dataset.fuel===key));
+  }
+  if(strip){
+    strip.classList.toggle("dim",!!key);
+    strip.querySelectorAll("i").forEach(i=>i.classList.toggle("on",!!key && i.dataset.fuel===key));
+  }
+  if(stack){
+    stack.classList.toggle("is-dim",!!key);
+    stack.querySelectorAll("polygon[data-fuel]").forEach(g=>g.classList.toggle("on",!!key && g.dataset.fuel===key));
+  }
+  if(legend){
+    legend.classList.toggle("has-highlight",!!key);
+    legend.querySelectorAll("[data-legend-fuel]").forEach(b=>{
+      const selected=!!key && b.dataset.legendFuel===key;
+      b.classList.toggle("is-on",selected);
+      b.setAttribute("aria-pressed",String(selected));
+    });
+  }
+}
+/* ============================================================
    RENDER — 24h stacked area
    ============================================================ */
 function renderStack(){
   const data = stackSeries();
   const svg = $("stack"), tip = $("stacktip"), box = $("stackbox");
-  if(!data.length){ svg.innerHTML=""; return; }
+  $("stack-title").textContent=S.historyWindow==="7d"?"Last 7 days":"Last 24 hours";
+  $("stack-note").textContent=S.historyWindow==="7d"?"Half-hourly FUELHH outturn":"Half-hourly outturn";
+  if(!data.length){
+    svg.innerHTML="";
+    $("stack-note").textContent=S.historyWindow==="7d"?"Loading FUELHH history…":"Half-hourly outturn";
+    return;
+  }
   /* ⚠ THE ONE SIZE DIFFERENCE BETWEEN THE MODES, and it is an amendment to the v0.25 rule
      rather than an exception slipped past it. That rule — card sizes, type, colour and grid
      identical between Detailed and Simplified — exists so switching reads as "show me less"
@@ -4527,10 +4652,26 @@ function renderStack(){
   svg.innerHTML = out;
 
   $("stacklegend").innerHTML = SERIES.map(s=>
-      `<span><i style="background:var(${s.css})"></i>${esc(s.label)}</span>`).join("")
-    + (anySolar ? `<span><i class="est"></i>Embedded solar — estimated</span>` : "")
+      `<button type="button" class="legend-key" data-legend-fuel="${esc(s.key)}" aria-pressed="false" aria-label="Highlight ${esc(s.label)} in the generation chart"><i style="background:var(${s.css})"></i>${esc(s.label)}</button>`).join("")
+    + (anySolar ? `<button type="button" class="legend-key" data-legend-fuel="solar" aria-pressed="false" aria-label="Highlight embedded solar in the generation chart"><i class="est"></i>Embedded solar — estimated</button>` : "")
     + `<span><i class="daylight"></i>Daylight</span>`
     + `<span><i class="night"></i>Night</span>`;
+  const legend=$("stacklegend");
+  if(!legend.dataset.bound){
+    legend.dataset.bound="1";
+    legend.addEventListener("click",e=>{
+      const b=e.target.closest("[data-legend-fuel]");if(!b)return;
+      const key=b.dataset.legendFuel;
+      S.selectedFuel = S.selectedFuel===key ? null : key;
+      setFuelHighlight(S.selectedFuel);
+    });
+    legend.addEventListener("keydown",e=>{
+      if(e.key!=="Escape")return;
+      S.selectedFuel=null;
+      setFuelHighlight(null);
+    });
+  }
+  setFuelHighlight(S.selectedFuel);
 
   const ch = svg.querySelector(".crosshair");
   attachHover(box, svg, (ev)=>{
@@ -4560,6 +4701,7 @@ function renderStack(){
     svg.classList.toggle("is-dim", !!hoverKey);
     svg.querySelectorAll("polygon[data-fuel]").forEach(g=>
       g.classList.toggle("on", g.dataset.fuel === hoverKey));
+    setFuelHighlight(hoverKey || S.selectedFuel);
     tip.innerHTML = `<div class="t-head">${fmtDate(p.t)} ${fmtTime(p.t)} · SP${p.sp}</div>` +
       SERIES.slice().reverse().filter(s=>Math.abs(p.byKey[s.key])>=1).map(s=>
         `<div class="t-row${s.key===hoverKey?" t-on":""}"><i style="background:var(${s.css})"></i><span class="n">${esc(s.label)}</span>
@@ -5161,12 +5303,7 @@ function renderFreq(){
      different places in the panel and a tooltip anchored to the strip would appear a long way
      from a row near the bottom of the list. */
   function paint(key){
-    strip.classList.toggle("dim", !!key);
-    strip.querySelectorAll("i").forEach(i=>i.classList.toggle("on", i.dataset.fuel===key));
-    if(rows){
-      rows.classList.toggle("dim", !!key);
-      rows.querySelectorAll(".mixrow").forEach(r=>r.classList.toggle("on", r.dataset.fuel===key));
-    }
+    setFuelHighlight(key || S.selectedFuel);
   }
   function body(r){
     const swatch = r.est
@@ -5237,10 +5374,24 @@ function detailNote(lead, body){
    RENDER — interconnectors
    ============================================================ */
 function renderIC(){
-  if(!S.ic || !S.ic.length){ $("icrows").innerHTML = '<div class="callout">Interconnector feed unavailable.</div>'; return; }
-  let latest=""; for(const r of S.ic) if(r.startTime>latest) latest=r.startTime;
-  const recs = S.ic.filter(r=>r.startTime===latest).sort((a,b)=>Math.abs(b.generation)-Math.abs(a.generation));
-  $("ic-note").innerHTML = '<b class="ds">INTOUTHH</b> · '+esc(fmtTime(latest))+" · SP"+esc((recs[0]||{}).settlementPeriod??"–");
+  const source=S.icHistoryWindow==="7d" ? S.ic7d : S.ic;
+  if(!source || !source.length){
+    $("icrows").innerHTML=`<div class="callout">${S.icHistoryWindow==="7d"?"Loading seven-day interconnector history…":"Interconnector feed unavailable."}</div>`;
+    return;
+  }
+  let latest="";for(const r of source)if(r.startTime>latest)latest=r.startTime;
+  let recs;
+  if(S.icHistoryWindow==="7d"){
+    const groups=new Map();
+    source.forEach(r=>{
+      const k=r.interconnectorName||"Other",g=groups.get(k)||{sum:0,n:0,latest:r.startTime};
+      g.sum+=Number(r.generation)||0;g.n++;if(r.startTime>g.latest)g.latest=r.startTime;groups.set(k,g);
+    });
+    recs=[...groups.entries()].map(([name,g])=>({interconnectorName:name,generation:g.n?g.sum/g.n:0,startTime:g.latest,settlementPeriod:null}))
+      .sort((a,b)=>Math.abs(b.generation)-Math.abs(a.generation));
+  }else recs=source.filter(r=>r.startTime===latest).sort((a,b)=>Math.abs(b.generation)-Math.abs(a.generation));
+  $("ic-note").innerHTML='<span class="term ds" data-term="INTOUTHH">INTOUTHH</span> · '+
+    (S.icHistoryWindow==="7d"?"7-day average":esc(fmtTime(latest))+" · SP"+esc((recs[0]||{}).settlementPeriod??"–"));
 
   /* THE DENOMINATOR IS CAPACITY, NOT THE BIGGEST FLOW (v0.27). See the .captrack rules for the
      reasoning. The fallback to the largest flow is not decoration: it is what keeps the panel
@@ -5306,7 +5457,8 @@ function renderIC(){
   $("icnet").innerHTML =
     `<div class="icnet-head">
        <span class="icnet-label">Net position — all ${recs.length} links</span>
-       <span class="icnet-val ${net>0?"in-c":(net<0?"out-c":"idle-c")}">${
+       <span class="icnet-val ${net>0?"in-c":(net<0?"out-c":"idle-c")}" role="status" aria-label="Net interconnector position: ${
+         net>0?"importing ":net<0?"exporting ":"balanced at "}${uv(Math.abs(net))} ${U()}">${
          net>0?"+":(net<0?"−":"")}${uv(Math.abs(net))}<span class="unit" style="font-size:11px"> ${U()}</span
          ><span class="icnet-dir">${dir.toUpperCase()}</span></span>
      </div>
@@ -5326,7 +5478,9 @@ function renderIC(){
      one total rather than as a bar whose length would have to be taken on trust against a
      scale it does not share. */
   $("ic-summary").innerHTML = detailNote(
-    `Gross flow <b>${uv(gross)} ${U()}</b>. Half-hourly settlement-period values, so these
+    S.icHistoryWindow==="7d"
+      ? `Seven-day average net position <b>${uv(Math.abs(net))} ${U()}</b> across the loaded interconnectors.`
+      : `Gross flow <b>${uv(gross)} ${U()}</b>. Half-hourly settlement-period values, so these
      <b>lag the 5-minute fuel mix by up to 30 minutes.</b>`,
     `Import <b>${uv(imp)} ${U()}</b> across ${nImp} link${nImp===1?"":"s"}, export
      <b>${uv(exp)} ${U()}</b> across ${nExp}. The strip above is scaled to that gross figure,
@@ -5499,7 +5653,7 @@ function renderWind(){
     const tot = v.on + v.off;
     split.innerHTML = tot>0
       ? `<div class="splithead"><span>Onshore / offshore</span>
-           <span class="src"><b class="ds">AGWS</b> · ${fmtTime(lastK)}</span></div>
+           <span class="src"><span class="term ds" data-term="AGWS">AGWS</span> · ${fmtTime(lastK)}</span></div>
          <div class="splitstrip" role="img" aria-label="Onshore ${Math.round(v.on)} megawatts, offshore ${Math.round(v.off)} megawatts">
            <i style="width:${(v.on/tot*100).toFixed(2)}%"></i>
            <i class="off" style="width:${(v.off/tot*100).toFixed(2)}%"></i>
@@ -5634,7 +5788,7 @@ function renderWindSolar(){
       `Day-ahead forecast out by <b>${uv(mae)} ${U()}</b> on average across ${pairs.length} daylight periods. ` +
       `<b>Neither series here is metered</b> — both are GB-wide estimates that include embedded solar.`,
       `Outturn ran <b>${bias>=0?"above":"below"}</b> forecast by <b>${uv(Math.abs(bias))} ${U()}</b> on average. ` +
-      `The forecast is Elexon's <b class="ds">DGWS</b> day-ahead run, published around 16:45 the ` +
+      `The forecast is Elexon's <span class="term ds" data-term="DGWS">DGWS</span> day-ahead run, published around 16:45 the ` +
       `previous afternoon and covering one settlement day; the outturn is ` +
       `<b>${S.solarSource==="pvlive"?"PV_Live from Sheffield Solar":"Elexon's AGWS"}</b>. ` +
       `<b>The error is scored on daylight periods only.</b> Averaging across the whole day would ` +
@@ -5675,8 +5829,8 @@ function renderWindSolar(){
     $("wind-title").textContent = view==="solar"
       ? "Solar — outturn vs forecast" : "Wind — outturn vs forecast";
     $("wind-note").innerHTML = view==="solar"
-      ? `<b class="ds">${S.solarSource==="agws"?"AGWS":"PV_LIVE"}</b> vs <b class="ds">DGWS</b>`
-      : `<b class="ds">FUELHH</b> vs <b class="ds">WINDFOR</b>`;
+      ? `<b class="ds">${S.solarSource==="agws"?"AGWS":"PV_LIVE"}</b> vs <span class="term ds" data-term="DGWS">DGWS</span>`
+      : `<span class="term ds" data-term="FUELHH">FUELHH</span> vs <span class="term ds" data-term="WINDFOR">WINDFOR</span>`;
     $("wind-legend").innerHTML = view==="solar" ? SOLAR_LEGEND : WIND_LEGEND;
     if(view==="wind"){
       $("w-early-k").textContent = "First forecast";
@@ -5765,7 +5919,7 @@ function renderLCCC(){
     $("lccc-tech-count").textContent=tech.size.toLocaleString("en-GB");
     lcccBarRows($("lccc-gen-rows"),tech,v=>lcccFmtGWh(v));
     genFoot.innerHTML=`Actual CfD generation eligible for CfD payments on <b>${esc(lcccFmtDate(latest))}</b>. `+
-      `Payments are nominal. <a class="lccc-link" href="https://dp.lowcarboncontracts.uk/dataset/actual-cfd-generation-and-avoided-ghg-emissions" target="_blank" rel="noopener noreferrer">LCCC dataset ↗</a>`;
+      `Payments are nominal. LCCC API data is retrieved through the dashboard proxy. <a class="lccc-link" href="https://dp.lowcarboncontracts.uk/dataset/actual-cfd-generation-and-avoided-ghg-emissions" target="_blank" rel="noopener noreferrer">LCCC dataset ↗</a>`;
   }
   if(!port || !port.length){
     $("lccc-contract-count").textContent="—"; $("lccc-cap-total").textContent="—"; $("lccc-live-count").textContent="—";
@@ -5782,7 +5936,7 @@ function renderLCCC(){
     $("lccc-cap-total").textContent=lcccFmtMW(cap);
     $("lccc-live-count").textContent=live.toLocaleString("en-GB");
     lcccBarRows($("lccc-port-rows"),tech,v=>lcccFmtMW(v),"var(--c-wind)");
-    portFoot.innerHTML=`Maximum contract capacity by technology. <a class="lccc-link" href="https://dp.lowcarboncontracts.uk/dataset/cfd-contract-portfolio-status" target="_blank" rel="noopener noreferrer">LCCC portfolio dataset ↗</a>`;
+    portFoot.innerHTML=`Maximum contract capacity by technology. LCCC API data is retrieved through the dashboard proxy. <a class="lccc-link" href="https://dp.lowcarboncontracts.uk/dataset/cfd-contract-portfolio-status" target="_blank" rel="noopener noreferrer">LCCC portfolio dataset ↗</a>`;
   }
 }
 
@@ -5798,7 +5952,42 @@ function render(){
   renderStack(); renderPrice(); renderIC(); renderWind();
   renderCarbon(); renderFreq(); renderEmissions();
   renderLCCC();
+  attachTerms();
 }
+
+/* ============================================================
+   HISTORY RANGES + CSV EXPORT
+   v0.3192: generation mix and interconnector flows can now be inspected over 24h or 7d.
+   The 7-day feeds are fetched only when first requested. */
+function setHistoryWindow(w){
+  S.historyWindow=w;document.querySelectorAll("[data-history]").forEach(b=>{const on=b.dataset.history===w;b.classList.toggle("is-on",on);b.setAttribute("aria-pressed",String(on));});
+  if(w==="7d"&&!S.historyLoaded){$("stack-note").textContent="Loading FUELHH history…";loadHistoryData();}
+  renderStack();renderPrice();
+}
+function setICHistoryWindow(w){
+  S.icHistoryWindow=w;document.querySelectorAll("[data-ic-history]").forEach(b=>{const on=b.dataset.icHistory===w;b.classList.toggle("is-on",on);b.setAttribute("aria-pressed",String(on));});
+  if(w==="7d"&&!S.historyLoaded)loadHistoryData();renderIC();
+}
+function csvCell(v){const x=String(v??"");return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x;}
+function downloadCSV(name,rows){
+  if(!rows.length)return;const keys=[...new Set(rows.flatMap(r=>Object.keys(r)))];
+  const csv=[keys.map(csvCell).join(","),...rows.map(r=>keys.map(k=>csvCell(r[k])).join("\n"))].join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},0);
+}
+function exportStackCSV(){const rows=stackSeries().map(p=>{const r={startTime:p.t,settlementPeriod:p.sp};SERIES.forEach(s=>r[s.label]=Math.round(p.byKey[s.key]||0));return r;});downloadCSV(`gb-electricity-generation-${S.historyWindow}.csv`,rows);}
+function exportICCSV(){
+  const src=S.icHistoryWindow==="7d"?S.ic7d:S.ic;
+  const cutoff=S.icHistoryWindow==="24h"?Date.now()-24*3600000:0;
+  const rows=(src||[]).filter(r=>!cutoff||new Date(r.startTime).getTime()>=cutoff)
+    .map(r=>({startTime:r.startTime,settlementDate:r.settlementDate,settlementPeriod:r.settlementPeriod,interconnector:r.interconnectorName,generationMW:r.generation}));
+  downloadCSV(`gb-electricity-interconnectors-${S.icHistoryWindow}.csv`,rows);
+}
+document.addEventListener("click",e=>{
+  const h=e.target.closest("[data-history]");if(h){setHistoryWindow(h.dataset.history);return;}
+  const i=e.target.closest("[data-ic-history]");if(i){setICHistoryWindow(i.dataset.icHistory);return;}
+  if(e.target.closest("#export-stack")){exportStackCSV();return;}if(e.target.closest("#export-ic")){exportICCSV();return;}
+});
 
 /* ============================================================
    CONTROLS
@@ -6115,6 +6304,45 @@ document.addEventListener("click",(e)=>{
   const b = e.target.closest(".ic-open");
   if(b) openIC(b.dataset.ic);
 });
+
+/* ============================================================
+   CONTEXTUAL DATASET TERMS
+   Short, touch-friendly definitions for machine identifiers. */
+const termDefs={
+  INDO:"Initial National Demand Outturn — the transmission-system demand figure published by Elexon.",
+  DISEBSP:"System Sell Price / System Buy Price — the imbalance price dataset used for the settlement price chart.",
+  INTOUTHH:"Half-hourly interconnector outturn — measured flow into or out of Great Britain.",
+  FUELHH:"Half-hourly generation outturn by fuel type — Elexon’s 30-minute average generation dataset.",
+  FUELINST:"Instantaneous generation outturn by fuel type — Elexon’s near-real-time fuel mix feed.",
+  WINDFOR:"Wind generation forecast — Elexon’s forecast of GB wind output.",
+  DGWS:"Day-ahead generation forecast for wind and solar — Elexon’s DGWS feed.",
+  AGWS:"Actual generation for wind and solar — Elexon’s AGWS outturn feed.",
+  PV_LIVE:"PV_Live — Sheffield Solar’s modelled estimate of GB photovoltaic generation, including embedded solar.",
+  FREQ:"System frequency — measured GB system frequency, published at 15-second resolution.",
+  B1610:"B1610 — an Elexon embedded-generation dataset used in demand and embedded-generation analysis.",
+  PSRTYPE:"psrType — the technology classification used by Elexon’s wind-and-solar endpoint.",
+  OTHER:"OTHER — Elexon’s residual fuel category for generation not assigned to the named fuel categories."
+};
+function attachTerms(){
+  const pop=$("infopop");
+  document.querySelectorAll(".term[data-term]").forEach(el=>{
+    if(el.dataset.termBound)return;el.dataset.termBound="1";el.setAttribute("tabindex","0");
+    const show=()=>{
+      pop.innerHTML=`<b>${esc(el.dataset.term)}</b> — ${esc(termDefs[el.dataset.term]||"Dataset identifier.")}`;
+      const r=el.getBoundingClientRect();pop.hidden=false;const w=pop.offsetWidth,h=pop.offsetHeight;
+      let left=Math.min(r.left,innerWidth-w-10),top=r.bottom+7;if(top+h>innerHeight-8)top=Math.max(8,r.top-h-7);
+      pop.style.left=Math.max(8,left)+"px";pop.style.top=top+"px";el.setAttribute("aria-describedby","infopop");
+    };
+    const hide=()=>{pop.hidden=true;};
+    el.addEventListener("mouseenter",()=>{if(matchMedia("(pointer:fine)").matches)show();});
+    el.addEventListener("mouseleave",()=>{if(matchMedia("(pointer:fine)").matches)hide();});
+    el.addEventListener("focus",()=>{if(el.matches(":focus-visible"))show();});
+    el.addEventListener("blur",hide);
+    el.addEventListener("click",e=>{e.stopPropagation();pop.hidden?show():hide();});
+    el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pop.hidden?show():hide();}});
+  });
+}
+attachTerms();
 
 /* ============================================================
    ABOUT THIS DASHBOARD
