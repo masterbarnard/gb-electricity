@@ -3,6 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KS1Y7Q1LJH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-KS1Y7Q1LJH');
+</script>
 <!-- Favicon. Same mark as the masthead, simplified for 16px and nothing else.
      Rendered at 16/32/64 against light and dark chrome before choosing: a version with a
      terminal dot lost the dot at 16px and a longer tail muddied the peak, so this is the
@@ -22,7 +31,7 @@
      the only two places the name or version is typed rather than read, so the harness now
      asserts they match the constants - a rename that missed them would show the old name for
      a frame and, with script blocked, permanently. -->
-<title>GB Electricity v0.316 — Live Generation &amp; Demand</title>
+<title>GB Electricity v0.319 — Live Generation &amp; Demand</title>
 <style>
   :root{
     /* ---- Interface tokens. Identity lives here and nowhere else. ---- */
@@ -238,7 +247,7 @@
      matches TWO elements, not one: the short wrap above the sticky view-switch strip that holds
      the health and error notices, and the long one below it that holds the page. The first was
      silently getting 52px of dead space on every load. It goes on `#main` by name. */
-  #main{padding-bottom:52px;}
+  #main{padding-bottom:24px;}
   /* ⚠ `width:100%` IS LOAD-BEARING (v0.31), and it is fixing a fault introduced at rev 26.
      `body` became `display:flex; flex-direction:column` so the footer could take the leftover
      space. A flex item with `auto` margins on the CROSS AXIS does not stretch — `margin:0 auto`
@@ -256,7 +265,7 @@
   /* ================= Masthead ================= */
   .masthead{background:var(--surface);position:sticky;top:0;z-index:60;}
   .header-top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-    padding-top:18px;padding-bottom:14px;}
+    padding-top:15px;padding-bottom:11px;}
   .brand{display:flex;align-items:center;gap:12px;margin-right:auto;min-width:0;}
   .mark{width:34px;height:34px;flex-shrink:0;}
   .wordmark{display:flex;flex-direction:column;line-height:1.05;min-width:0;}
@@ -496,6 +505,13 @@
   .insight-item::before{content:"";position:absolute;inset:0 auto 0 0;width:var(--fill);
     background:var(--bar);opacity:.10;pointer-events:none;transition:width .25s ease;}
   .insight-item > *{position:relative;z-index:1;}
+  /* v0.319: the four readings are interrogable on hover, keyboard focus and tap.
+     A subtle dotted underline on the label is enough to signal "there is more here"
+     without adding four visible info buttons to an already compact dashboard. */
+  .insight-item{cursor:help;}
+  .insight-item .k{border-bottom:1px dotted var(--ink-mute);width:max-content;max-width:100%;}
+  .insight-item:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;}
+  .insight-item.tip-active{border-color:var(--blue-text);}
   .insight-item .k{font-size:8.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
     color:var(--ink-mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .insight-item .v{font-size:17px;font-weight:800;line-height:1.05;margin-top:4px;
@@ -649,27 +665,35 @@
   /* .ds = a machine identifier (dataset name, BMRS code, endpoint). The ONE thing mono is for. */
   .ds{font-family:var(--mono);font-weight:400;letter-spacing:.02em;}
   .panel-body{padding:13px 15px 15px;flex:1;min-width:0;}
-  .panelbtn{margin-top:5px;font-family:var(--sans);font-size:13px;line-height:1;color:var(--ink-dim);background:none;
-    border:1px solid currentColor;border-radius:5px;padding:4px 7px;cursor:pointer;opacity:.75;
-    -webkit-tap-highlight-color:transparent;}
-  .panelbtn:hover{opacity:1;}
-  .panelbtn:hover{color:var(--blue-text);}
+  /* Panel controls: the icon communicates expansion directly.
+     The expanded state uses the same button as a close/back control, so there is only one
+     interaction to learn and no separate browser-fullscreen control. */
+  .panelbtn{margin-top:5px;width:34px;height:32px;min-width:34px;padding:0;display:inline-flex;align-items:center;
+    justify-content:center;color:var(--blue-text);background:var(--surface);border:1px solid var(--blue-text);
+    border-radius:7px;cursor:pointer;opacity:1;-webkit-tap-highlight-color:transparent;flex:0 0 auto;}
+  .panelbtn:hover{background:var(--blue-line);}
+  .panelbtn:active{background:var(--blue-line);}
   .panelbtn:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;}
-  .panel-head .note + .panelbtn{margin-left:8px;}
+  .panelbtn .expand-icon{width:16px;height:16px;display:block;fill:none;stroke:currentColor;
+    stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+  .panelbtn.is-close{font-size:23px;font-weight:400;line-height:1;}
+  .panel-head .note + .panelbtn{margin-left:6px;}
   .panel-head .note{margin-left:auto;}
-  .panelbtn.fs{display:none;}
-  /* Expanded: one panel takes the whole page, everything else stands down. */
+
+  /* Expanded: one panel occupies the dashboard's available viewport.
+     This is intentionally not browser fullscreen: the site header remains visible and the
+     panel becomes a full-width, full-height reading surface with its own scrollable body. */
+  body[data-expanded]{overflow:hidden;}
   body[data-expanded] .grid > :not(.is-expanded){display:none;}
-  body[data-expanded] .grid{grid-template-columns:minmax(0,1fr) !important;margin-top:16px;}
+  body[data-expanded] .grid{grid-template-columns:minmax(0,1fr) !important;margin-top:12px;}
   body[data-expanded] footer.foot{display:none;}
-  .panel.is-expanded{grid-column:1/-1;}
-  body[data-expanded] .is-expanded .panelbtn.fs{display:inline-block;}
-  /* True full screen needs its own surface — a fullscreen element is transparent by default. */
-  /* Full screen has no page behind it for a tab to rise above, so the tab returns to the
-     corner rather than floating over nothing. */
-  .panel:fullscreen{background:var(--surface);border-radius:0;border:none;margin-top:0;}
-  .panel:fullscreen .panel-head h2{margin-top:0;border-radius:0 0 10px 0;}
-  .panel:fullscreen .panel-body{overflow:auto;}
+  .panel.is-expanded{
+    grid-column:1/-1;
+    min-height:calc(100dvh - 24px);
+    height:calc(100dvh - 24px);
+    margin-top:12px;
+  }
+  .panel.is-expanded .panel-body{overflow:auto;-webkit-overflow-scrolling:touch;}
 
   /* ================= Stat tiles ================= */
   /* Tiles are level 2. Panels get the strong blue frame because they hold the charts and the
@@ -1537,6 +1561,7 @@
     .panel-head{padding-right:9px;}
     .panel-head h2{font-size:10.5px;padding:5px 11px 6px;border-radius:7px 7px 0 0;}
     .panel-head .note{font-size:9px;padding:7px 0 0;}
+    .panelbtn{width:34px;height:32px;min-width:34px;font-size:18px;border-radius:7px;}
     .tile{padding:11px 13px 12px;}
     .tile .value{font-size:28px;}
   }
@@ -1577,7 +1602,7 @@
   }
 
 
-  /* ================= MOBILE OPTIMISATION (v0.316) =================
+  /* ================= MOBILE OPTIMISATION (v0.318) =================
      The phone layout needs to be designed for the actual viewport, not merely allowed to
      shrink. In particular, the three headline figures must never share a row on a phone:
      at ~390px the figures, units and labels become unreadable and the first card can clip.
@@ -1625,7 +1650,7 @@
     /* System at a Glance: retain the useful 2×2 dashboard shape on phones. */
     .insightbar{margin-top:12px;padding:9px 10px 10px;border-radius:9px;}
     .insight-head{margin-bottom:7px;}
-    .insight-head h2{font-size:10px;}
+    .insight-head h2{font-size:10px;line-height:1.2;}
     .insight-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:7px;}
     .insight-item{padding:8px 9px;min-width:0;}
     .insight-item .k{font-size:8px;}
@@ -1664,6 +1689,25 @@
     .insight-item .v{font-size:14px;}
     #mixrows,#embrows{grid-template-columns:10px minmax(76px,max-content) minmax(25px,1fr) 50px 34px;
       column-gap:5px;}
+  }
+
+
+  /* v0.318: expanded panels use the phone viewport rather than an arbitrary short chart band.
+     The header stays visible, while the panel body can scroll without horizontal overflow. */
+  @media (max-width:760px){
+    body[data-expanded]{overflow:hidden;}
+    body[data-expanded] .wrap{padding-left:8px;padding-right:8px;}
+    .panel.is-expanded{
+      min-height:calc(100dvh - 18px);
+      height:calc(100dvh - 18px);
+      margin-top:9px;
+      border-radius:9px;
+    }
+    .panel.is-expanded .panel-head{padding-right:7px;}
+    .panel.is-expanded .panel-body{padding:10px 9px 14px;overflow-y:auto;overflow-x:hidden;}
+    .panelbtn{width:36px;height:36px;min-width:36px;}
+    .panelbtn .expand-icon{width:17px;height:17px;}
+    .panelbtn.is-close{font-size:25px;}
   }
 
 </style>
@@ -1877,12 +1921,24 @@
 
   <!-- ================= SYSTEM AT A GLANCE ================= -->
   <section class="insightbar" id="system-insight" aria-label="At a glance">
-    <div class="insight-head"><h2>At a glance</h2></div>
+    <div class="insight-head"><h2>Live generation at a glance</h2></div>
     <div class="insight-grid">
-      <div class="insight-item fuel-generation" id="si-generation-card"><div class="k">GB generation</div><div class="v" id="si-generation">—</div></div>
-      <div class="insight-item fuel-wind" id="si-wind-card"><div class="k">Wind</div><div class="v" id="si-wind">—</div></div>
-      <div class="insight-item fuel-solar" id="si-solar-card"><div class="k">Solar</div><div class="v" id="si-solar">—</div></div>
-      <div class="insight-item fuel-imports" id="si-imports-card"><div class="k">Net imports</div><div class="v" id="si-imports">—</div></div>
+      <div class="insight-item fuel-generation" id="si-generation-card" tabindex="0"
+        role="button" aria-expanded="false" aria-describedby="infopop" data-insight="generation">
+        <div class="k">GB generation</div><div class="v" id="si-generation">—</div>
+      </div>
+      <div class="insight-item fuel-wind" id="si-wind-card" tabindex="0"
+        role="button" aria-expanded="false" aria-describedby="infopop" data-insight="wind">
+        <div class="k">Wind</div><div class="v" id="si-wind">—</div>
+      </div>
+      <div class="insight-item fuel-solar" id="si-solar-card" tabindex="0"
+        role="button" aria-expanded="false" aria-describedby="infopop" data-insight="solar">
+        <div class="k">Solar</div><div class="v" id="si-solar">—</div>
+      </div>
+      <div class="insight-item fuel-imports" id="si-imports-card" tabindex="0"
+        role="button" aria-expanded="false" aria-describedby="infopop" data-insight="imports">
+        <div class="k">Net imports</div><div class="v" id="si-imports">—</div>
+      </div>
     </div>
     <div class="insight-driver" id="si-driver">Waiting for enough live data to describe the current movement.</div>
   </section>
@@ -1894,8 +1950,12 @@
       <div class="panel-head">
         <h2>Generation by fuel type</h2>
         <span class="note" id="mix-note">5-min</span>
-        <button class="panelbtn xp" data-panel="mix" aria-expanded="false" title="Expand to full width">&#10530;</button>
-        <button class="panelbtn fs" data-panel="mix" title="True full screen">&#9974;</button>
+        <button class="panelbtn xp" data-panel="mix" aria-expanded="false"
+          aria-label="Expand view" title="Expand view">
+          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
+          </svg>
+        </button>
       </div>
       <div class="panel-body">
         <!-- v0.20: the strip and the rows share one positioned wrapper, because they now share
@@ -1922,8 +1982,12 @@
       <div class="panel-head">
         <h2>Last 24 hours</h2>
         <span class="note">Half-hourly outturn</span>
-        <button class="panelbtn xp" data-panel="stack" aria-expanded="false" title="Expand to full width">&#10530;</button>
-        <button class="panelbtn fs" data-panel="stack" title="True full screen">&#9974;</button>
+        <button class="panelbtn xp" data-panel="stack" aria-expanded="false"
+          aria-label="Expand view" title="Expand view">
+          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
+          </svg>
+        </button>
       </div>
       <div class="panel-body">
         <div class="chartbox" id="stackbox">
@@ -1952,8 +2016,12 @@
       <div class="panel-head">
         <h2>Interconnector flows</h2>
         <span class="note" id="ic-note"><b class="ds">INTOUTHH</b> · half-hourly</span>
-        <button class="panelbtn xp" data-panel="ic" aria-expanded="false" title="Expand to full width">&#10530;</button>
-        <button class="panelbtn fs" data-panel="ic" title="True full screen">&#9974;</button>
+        <button class="panelbtn xp" data-panel="ic" aria-expanded="false"
+          aria-label="Expand view" title="Expand view">
+          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
+          </svg>
+        </button>
       </div>
       <div class="panel-body" id="ic-body">
         <div id="icrows"></div>
@@ -1982,8 +2050,12 @@
           <span class="viewbtn" data-view="solar">Solar</span>
         </button>
         <span class="note" id="wind-note"><b class="ds">FUELHH</b> vs <b class="ds">WINDFOR</b></span>
-        <button class="panelbtn xp" data-panel="wind" aria-expanded="false" title="Expand to full width">&#10530;</button>
-        <button class="panelbtn fs" data-panel="wind" title="True full screen">&#9974;</button>
+        <button class="panelbtn xp" data-panel="wind" aria-expanded="false"
+          aria-label="Expand view" title="Expand view">
+          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
+          </svg>
+        </button>
       </div>
       <div class="panel-body">
         <div class="chartbox" id="windbox">
@@ -2018,8 +2090,12 @@
       <div class="panel-head">
         <h2>Carbon intensity</h2>
         <span class="note" id="ci-note">NESO · half-hourly</span>
-        <button class="panelbtn xp" data-panel="ci" aria-expanded="false" title="Expand to full width">&#10530;</button>
-        <button class="panelbtn fs" data-panel="ci" title="True full screen">&#9974;</button>
+        <button class="panelbtn xp" data-panel="ci" aria-expanded="false"
+          aria-label="Expand view" title="Expand view">
+          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
+          </svg>
+        </button>
       </div>
       <div class="panel-body">
         <div class="chartbox" id="cibox">
@@ -2051,8 +2127,12 @@
       <div class="panel-head">
         <h2>System frequency</h2>
         <span class="note"><b class="ds">FREQ</b> · 15-second</span>
-        <button class="panelbtn xp" data-panel="freq" aria-expanded="false" title="Expand to full width">&#10530;</button>
-        <button class="panelbtn fs" data-panel="freq" title="True full screen">&#9974;</button>
+        <button class="panelbtn xp" data-panel="freq" aria-expanded="false"
+          aria-label="Expand view" title="Expand view">
+          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
+          </svg>
+        </button>
       </div>
       <div class="panel-body">
         <div class="chartbox" id="freqbox">
@@ -2411,7 +2491,8 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.316";
+const APP_VERSION = "v0.319";
+// v0.319: tighten vertical desktop spacing, clarify the live system snapshot, add At a glance tooltips, and add Google Analytics.
 // v0.315: remove the personal "Built by Kyle Barnard" credit from the masthead; attribution remains in About.
 
 const BASE = "https://data.elexon.co.uk/bmrs/api/v1";
@@ -4138,10 +4219,11 @@ function chartGeom(box, tallness){
   /* Expanded and full-screen views earn their height from the window, not from the grid
      tier — otherwise a full-width chart sits in a short band with the page empty beneath it. */
   const panel = box.closest(".panel");
-  const fs = !!document.fullscreenElement;
-  const expanded = fs || (panel && panel.classList.contains("is-expanded"));
+  const expanded = !!(panel && panel.classList.contains("is-expanded"));
+  /* In expanded mode the panel itself owns the viewport height. Give the chart most of the
+     available surface while leaving room for its legend/statistics and the scrollable body. */
   const H = expanded
-    ? Math.max(300, Math.round(window.innerHeight * (fs ? 0.78 : 0.62)))
+    ? Math.max(320, Math.round(window.innerHeight * (W < 700 ? 0.54 : 0.58)))
     : (W < 430 ? tallness.sm : (W < 700 ? tallness.md : tallness.lg));
   return {W, H, ml: W<430?34:42, mr:3, mt:12, mb:24};
 }
@@ -4394,7 +4476,7 @@ function renderPrice(){
   const geom = chartGeom(box, {sm:120, md:140, lg:150});
   if(!geom) return;
   const {W,ml,mr} = geom;
-  const H = document.fullscreenElement || (box.closest(".panel")||{}).classList?.contains("is-expanded")
+  const H = null || (box.closest(".panel")||{}).classList?.contains("is-expanded")
     ? Math.min(260, geom.H) : geom.H;
   const mt=10, mb=20, iw=W-ml-mr, ih=H-mt-mb;
   svg.setAttribute("viewBox",`0 0 ${W} ${H}`); svg.setAttribute("height",H);
@@ -5645,6 +5727,80 @@ function icFlowLine(key){
   body.addEventListener("pointerleave", ()=>tip.classList.remove("show"));
 })();
 
+/* v0.319: At a glance tooltips. These are deliberately short definitions rather than
+   another permanent paragraph: the panel is now labelled as live, and a reader can interrogate
+   any of the four readings when the distinction matters. The same global popover component is
+   used elsewhere on the dashboard, so behaviour is consistent across mouse, keyboard and touch. */
+const insightExplainers = {
+  generation:
+    "<b>GB generation</b> is the electricity currently generated within Great Britain, excluding net interconnector imports. It includes the embedded solar estimate used by this dashboard.",
+  wind:
+    "<b>Wind</b> is the current GB wind-generation outturn reported through the live Elexon generation data. It is shown here as a component of GB generation.",
+  solar:
+    "<b>Solar</b> is the current embedded solar-generation estimate used by this dashboard. It is modelled rather than directly metered through the transmission system, so it is kept visually distinct from the metered fuel categories.",
+  imports:
+    "<b>Net imports</b> is the current net electricity flow across GB's interconnectors. A positive value means GB is importing more electricity than it is exporting; a negative value means GB is a net exporter."
+};
+
+function attachInsightTooltip(card){
+  const pop = $("infopop");
+  let open = false, pinned = false;
+  const fine = ()=>matchMedia("(pointer:fine)").matches;
+
+  function place(){
+    const r = card.getBoundingClientRect();
+    pop.hidden = false;
+    const w = pop.offsetWidth, h = pop.offsetHeight;
+    let left = Math.min(r.left, window.innerWidth - w - 10);
+    let top = r.bottom + 8;
+    if(top + h > window.innerHeight - 8) top = Math.max(8, r.top - h - 8);
+    pop.style.left = Math.max(8,left)+"px";
+    pop.style.top = top+"px";
+  }
+  function show(pin=false){
+    pop.innerHTML = insightExplainers[card.dataset.insight] || "Not available until data loads.";
+    place();
+    open = true;
+    pinned = pin;
+    card.classList.add("tip-active");
+    card.setAttribute("aria-expanded","true");
+  }
+  function hide(){
+    if(!open) return;
+    pop.hidden = true;
+    open = false;
+    pinned = false;
+    card.classList.remove("tip-active");
+    card.setAttribute("aria-expanded","false");
+  }
+
+  card.addEventListener("mouseenter",()=>{ if(fine() && !pinned) show(false); });
+  card.addEventListener("mouseleave",()=>{ if(fine() && !pinned) hide(); });
+  card.addEventListener("focus",()=>{ if(card.matches(":focus-visible") && !pinned) show(false); });
+  card.addEventListener("blur",hide);
+  card.addEventListener("click",(e)=>{
+    e.stopPropagation();
+    if(pinned) hide(); else show(true);
+  });
+  card.addEventListener("keydown",(e)=>{
+    if(e.key==="Enter" || e.key===" "){
+      e.preventDefault();
+      if(pinned) hide(); else show(true);
+    }
+  });
+  document.addEventListener("click",(e)=>{
+    if(open && !pop.contains(e.target) && !card.contains(e.target)) hide();
+  });
+  document.addEventListener("keydown",(e)=>{
+    if(e.key==="Escape" && open){ hide(); e.stopImmediatePropagation(); }
+  }, true);
+  window.addEventListener("scroll",()=>{ if(open && !pinned) hide(); },true);
+  window.addEventListener("resize",()=>{ if(open) hide(); });
+}
+
+["si-generation-card","si-wind-card","si-solar-card","si-imports-card"]
+  .forEach(id=>attachInsightTooltip($(id)));
+
 /* Small disclosure popover. Hover alone would be unreachable on touch and by keyboard, so it
    opens on click/Enter too, is announced via aria-expanded, and closes on Escape, outside
    click or scroll. */
@@ -5803,45 +5959,50 @@ $("btn-about").addEventListener("click", ()=>{
   openModal($("about-modal"));
 });
 
-/* Expand / full screen. Charts draw at true pixel size, so both transitions have to
-   re-render them rather than relying on CSS to scale anything. */
+/* Expand view. The panel becomes the full-width, full-height reading surface; the same
+   button then becomes an X that closes the expanded view. No browser fullscreen API is used. */
 let expandedPanel = null;
+const EXPAND_ICON = `<svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
+</svg>`;
+
 function setExpanded(key){
   expandedPanel = key;
   document.querySelectorAll(".panel").forEach(p=>p.classList.remove("is-expanded"));
+
   if(key){
-    document.getElementById("panel-"+key).classList.add("is-expanded");
+    const panel = document.getElementById("panel-"+key);
+    if(panel) panel.classList.add("is-expanded");
     document.body.setAttribute("data-expanded", key);
   } else {
     document.body.removeAttribute("data-expanded");
   }
+
   document.querySelectorAll(".panelbtn.xp").forEach(b=>{
     const on = b.dataset.panel === key;
     b.setAttribute("aria-expanded", String(on));
-    b.innerHTML = on ? "&#10529;" : "&#10530;";
-    b.title = on ? "Back to the dashboard" : "Expand to full width";
+    b.innerHTML = on ? "&times;" : EXPAND_ICON;
+    b.classList.toggle("is-close", on);
+    b.setAttribute("aria-label", on ? "Close expanded view" : "Expand view");
+    b.title = on ? "Close expanded view" : "Expand view";
   });
+
   requestAnimationFrame(redrawCharts);
 }
-/* One list of the pixel-sized charts, not three. Expand, full screen and resize each redrew
-   them from their own hand-written list, so v0.03's two new charts would have had to be added
-   in three places and would have been missed in at least one. */
+
 function redrawCharts(){ renderStack(); renderPrice(); renderWind(); renderCarbon(); renderFreq(); renderEmissions(); }
+
 document.addEventListener("click",(e)=>{
   const xp = e.target.closest(".panelbtn.xp");
-  if(xp){ setExpanded(expandedPanel === xp.dataset.panel ? null : xp.dataset.panel); return; }
-  const fs = e.target.closest(".panelbtn.fs");
-  if(fs){
-    const el = document.getElementById("panel-"+fs.dataset.panel);
-    if(document.fullscreenElement) document.exitFullscreen();
-    else if(el.requestFullscreen) el.requestFullscreen().catch(()=>{});
+  if(xp){
+    setExpanded(expandedPanel === xp.dataset.panel ? null : xp.dataset.panel);
     return;
   }
 });
+
 document.addEventListener("keydown",(e)=>{
-  if(e.key === "Escape" && !document.fullscreenElement && expandedPanel) setExpanded(null);
+  if(e.key === "Escape" && expandedPanel) setExpanded(null);
 });
-document.addEventListener("fullscreenchange", ()=>{ requestAnimationFrame(redrawCharts); });
 
 /* Switching units re-renders from the data already held — it does not refetch, because nothing
    about the data changed. render() rebuilds every figure from the same megawatt values, so the
