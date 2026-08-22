@@ -265,9 +265,9 @@
     padding-top:15px;padding-bottom:11px;}
   .brand{display:flex;align-items:center;gap:12px;margin-right:auto;min-width:0;}
   .mark{width:34px;height:34px;flex-shrink:0;}
-  .wordmark{display:flex;flex-direction:column;line-height:1.05;min-width:0;}
+  .wordmark{display:flex;flex-direction:column;line-height:1.02;min-width:0;}
   .wordmark .name{font-size:21px;font-weight:700;color:var(--ink);letter-spacing:-0.01em;}
-  .wordmark .sub{font-size:11px;color:var(--ink-dim);letter-spacing:.03em;margin-top:1px;}
+  .wordmark .sub{font-size:11px;color:var(--ink-dim);letter-spacing:.03em;margin-top:3px;}
   /* ================= BYLINE (v0.27) =================
      A third line in the wordmark, one step quieter than the strapline above it — which is the
      whole design. A credit that competes with the tool's own name reads as self-promotion; a
@@ -1509,6 +1509,33 @@
   @media (max-width:620px){ .modal-body.scroll{max-height:none;} }
   .skeleton{color:var(--ink-mute);}
 
+  /* ================= LCCC PANELS (v0.3191) ================= */
+  .lccc-meta{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px;}
+  .lccc-statgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:11px;}
+  .lccc-stat{padding:8px 9px;border:1px solid var(--grey-line);border-radius:7px;background:var(--page);min-width:0;}
+  .lccc-stat .k{font-size:8px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-mute);}
+  .lccc-stat .v{font-size:18px;font-weight:800;line-height:1.05;margin-top:4px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lccc-stat .s{font-size:8.5px;color:var(--ink-dim);margin-top:3px;line-height:1.2;}
+  .lccc-rows{display:grid;gap:5px;}
+  .lccc-row{display:grid;grid-template-columns:minmax(100px,1.2fr) minmax(60px,2fr) 66px;gap:8px;align-items:center;}
+  .lccc-row .name{font-size:10.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lccc-row .bar{height:10px;border-radius:999px;background:var(--grey-fill);overflow:hidden;}
+  .lccc-row .bar i{display:block;height:100%;width:0;background:var(--blue-text);border-radius:inherit;}
+  .lccc-row .val{text-align:right;font-size:10px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .lccc-foot{margin-top:10px;padding-top:8px;border-top:1px solid var(--grey-line);font-size:9.5px;line-height:1.4;color:var(--ink-dim);}
+  .lccc-foot b{color:var(--ink);}
+  .lccc-empty{font-size:11px;color:var(--ink-dim);padding:10px 0;}
+  .lccc-link{color:var(--blue-text);text-decoration:underline;text-underline-offset:2px;}
+  body[data-density="simple"] #sec-lccc{display:none;}
+  @media (max-width:620px){
+    .lccc-statgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;}
+    .lccc-stat{padding:7px 7px;}
+    .lccc-stat .v{font-size:15px;}
+    .lccc-row{grid-template-columns:minmax(86px,1.1fr) minmax(50px,2fr) 58px;gap:6px;}
+    .lccc-row .name{font-size:10px;}
+    .lccc-row .val{font-size:9.5px;}
+  }
+
   /* ================= Responsive =================
      Breakpoints mirror the Wiki's own (760px), with an extra tier at 1080/620 for the
      dashboard's four-across tile row. */
@@ -1733,7 +1760,7 @@
              style="color:var(--blue-text)"><polyline points="3,22 12,22 16,8 21,24" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="21,24 29,16" fill="none" stroke="var(--mark-red)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <div class="wordmark">
           <span class="name">GB Electricity</span>
-          <span class="sub">Live GB generation &amp; demand · Elexon Insights (BMRS)</span>
+          <span class="sub">Live GB generation &amp; demand</span>
         </div>
       </div>
       <div class="header-actions">
@@ -2156,6 +2183,55 @@
 
 
 
+  <!-- ================= LCCC: CfD DATA ================= -->
+  <section class="grid g-2a" id="sec-lccc">
+
+    <div class="panel" id="panel-lccc-generation">
+      <div class="panel-head">
+        <h2>CfD generation</h2>
+        <span class="note">LCCC · daily</span>
+        <button class="panelbtn xp" data-panel="lccc-generation" aria-expanded="false"
+          aria-label="Expand view" title="Expand view">
+          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
+          </svg>
+        </button>
+      </div>
+      <div class="panel-body" id="lccc-generation-body">
+        <div class="lccc-statgrid">
+          <div class="lccc-stat"><div class="k">Generation</div><div class="v" id="lccc-gen-total">—</div><div class="s" id="lccc-gen-date">latest settlement date</div></div>
+          <div class="lccc-stat"><div class="k">CfD payments</div><div class="v" id="lccc-pay-total">—</div><div class="s">nominal £</div></div>
+          <div class="lccc-stat"><div class="k">Technologies</div><div class="v" id="lccc-tech-count">—</div><div class="s">represented in latest day</div></div>
+        </div>
+        <div class="lccc-rows" id="lccc-gen-rows"></div>
+        <div class="lccc-foot" id="lccc-gen-foot">Waiting for LCCC data.</div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-lccc-portfolio">
+      <div class="panel-head">
+        <h2>CfD contract portfolio</h2>
+        <span class="note">LCCC · portfolio status</span>
+        <button class="panelbtn xp" data-panel="lccc-portfolio" aria-expanded="false"
+          aria-label="Expand view" title="Expand view">
+          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
+          </svg>
+        </button>
+      </div>
+      <div class="panel-body" id="lccc-portfolio-body">
+        <div class="lccc-statgrid">
+          <div class="lccc-stat"><div class="k">Contracts</div><div class="v" id="lccc-contract-count">—</div><div class="s">portfolio units</div></div>
+          <div class="lccc-stat"><div class="k">Contract capacity</div><div class="v" id="lccc-cap-total">—</div><div class="s">maximum contracted MW</div></div>
+          <div class="lccc-stat"><div class="k">Post-start</div><div class="v" id="lccc-live-count">—</div><div class="s">units past start date</div></div>
+        </div>
+        <div class="lccc-rows" id="lccc-port-rows"></div>
+        <div class="lccc-foot" id="lccc-port-foot">Waiting for LCCC data.</div>
+      </div>
+    </div>
+
+  </section>
+
   <!-- ================= "About this Dashboard" =================
        Kept in a <template> rather than written inline in the dialog, so the prose is authored
        as ordinary markup here and cloned once on first open. -->
@@ -2359,6 +2435,8 @@
         <span>carbonintensity.org.uk GET /intensity</span>
         <span>carbonintensity.org.uk GET /intensity/factors</span>
         <span>carbonintensity.org.uk GET /intensity/{from}/pt24h</span>
+        <span>LCCC Data Portal GET /api/3/action/datastore_search · CfD actuals</span>
+        <span>LCCC Data Portal GET /api/3/action/datastore_search · CfD portfolio</span>
       </div>
 
       <h4>Data sources and attribution</h4>
@@ -2380,9 +2458,18 @@
         <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>.
         <a href="https://www.solar.sheffield.ac.uk/pvlive/" target="_blank" rel="noopener noreferrer">solar.sheffield.ac.uk/pvlive</a>
       </p>
+      <p class="attrib">
+        <b>LCCC data</b> is provided by the Low Carbon Contracts Company through the
+        <a href="https://dp.lowcarboncontracts.uk/" target="_blank" rel="noopener noreferrer">LCCC Data Portal</a>.
+        The CfD datasets used here are marked as licensed under the
+        <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener noreferrer">UK Open Government Licence (OGL)</a>.
+        Use of the LCCC Data Portal and its contents is also subject to the
+        <a href="https://www.lowcarboncontracts.uk/terms-of-use/" target="_blank" rel="noopener noreferrer">LCCC Terms of Use</a>.
+        The portal's disclaimer states that its content is provided without warranty as to accuracy, completeness or currency and is used at the user's own risk.
+      </p>
       <p>
         <b>GB Electricity is an independent, non-commercial personal project.</b> It is not
-        affiliated with, endorsed by, or an official product of Elexon Limited, NESO, or the
+        affiliated with, endorsed by, or an official product of Elexon Limited, NESO, LCCC, or the
         University of Sheffield. No logos or trade marks of any of them are used here.
       </p>
       <p>
@@ -2434,7 +2521,10 @@
       <span class="rights">&copy; 2026 <a href="https://www.linkedin.com/in/kyle-barnard/"
         target="_blank" rel="noopener noreferrer">Kyle Barnard</a> &middot; GB Electricity</span>
       <span>Data provided via <a href="https://bmrs.elexon.co.uk/" target="_blank"
-        rel="noopener noreferrer">Elexon Insights APIs</a></span>
+        rel="noopener noreferrer">Elexon Insights APIs</a>, <a href="https://dp.lowcarboncontracts.uk/" target="_blank"
+        rel="noopener noreferrer">LCCC Data Portal</a>, <a href="https://carbonintensity.org.uk/" target="_blank"
+        rel="noopener noreferrer">NESO Carbon Intensity API</a> &amp; <a href="https://www.solar.sheffield.ac.uk/pvlive/" target="_blank"
+        rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
       <span class="version-label" id="version-label" title="Dashboard version"></span> &middot;
@@ -2488,7 +2578,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.3190";
+const APP_VERSION = "v0.3191";
 // v0.3190: SEO title/description/canonical, crawlable favicon, simplified Other label, and release metadata polish.
 // v0.315: remove the personal "Built by Kyle Barnard" credit from the masthead; attribution remains in About.
 
@@ -2514,6 +2604,14 @@ const proxied = (u)=> PVLIVE_PROXY
    sends Access-Control-Allow-Origin: *, so it is readable from a page opened off disk with no
    proxy in the way. That is the whole reason this panel could be added without hosting first. */
 const CARBON = "https://api.carbonintensity.org.uk";
+
+/* LCCC Data Portal CKAN Data Store API. These two public JSON resources are currently
+   marked UK Open Government Licence (OGL) by LCCC. No API key is required. */
+const LCCC_API = "https://dp.lowcarboncontracts.uk/api/3/action/datastore_search";
+const LCCC_RES = {
+  actualCfd: "37d1bef4-55d7-4b8e-8a47-1d24b123a20e",
+  portfolio: "fdaf09d2-8cff-4799-a5b0-1c59444e492b"
+};
 
 /* THE BANDS ARE REVISED EVERY YEAR, AND THAT IS THE INTERESTING PART.
    NESO re-cuts the very low / low / moderate / high / very high thresholds each 1 January as
@@ -3165,7 +3263,7 @@ function seriesFor(code){
 const S = { fuelinst:null, summary:null, demand:null, ic:null, windfor:null, price:null, icLatest:null, temp:null,
             pxToday:null, pxYday:null,
             prices:null, lcExplainer:null, tempExplainer:null,
-            pvlive:null, agws:null, solarSource:null, ciNow:null, ci24:null, ciFact:null, freq:null, winEarly:null, winLate:null, dgws:null, windView:"wind", health:null, errors:[] };
+            pvlive:null, agws:null, solarSource:null, ciNow:null, ci24:null, ciFact:null, freq:null, winEarly:null, winLate:null, dgws:null, windView:"wind", health:null, lcccActual:null, lcccPortfolio:null, lcccUpdated:null, errors:[] };
 
 /* FIRST-LOAD PROGRESS. Returns a tick function and arms itself only once — every later refresh
    gets an inert object, so a background reload cannot make a page a reader is already using look
@@ -3195,6 +3293,19 @@ function loadProgress(total){
 /* ============================================================
    FETCH
    ============================================================ */
+async function getLCCC(resourceId, params="", {timeout=25000}={}){
+  const ctl = new AbortController();
+  const t = setTimeout(()=>ctl.abort(), timeout);
+  try{
+    const url = LCCC_API + "?resource_id=" + encodeURIComponent(resourceId) + "&" + params;
+    const res = await fetch(url, {signal:ctl.signal, headers:{"Accept":"application/json"}});
+    if(!res.ok) throw new Error("HTTP "+res.status+" on LCCC Data Portal");
+    const j = await res.json();
+    if(!j || !j.success || !j.result) throw new Error("Invalid LCCC API response");
+    return j.result;
+  } finally { clearTimeout(t); }
+}
+
 async function loadAll(){
   const now = new Date();
   const from = new Date(now.getTime() - 45*60*1000);
@@ -3246,6 +3357,11 @@ async function loadAll(){
            is why the solar view says so rather than letting a reader assume it is metered the way
            the wind series is. */
     dgws    : ()=>getJSON(`/forecast/generation/wind-and-solar/day-ahead?from=${encodeURIComponent(iso(new Date(now-26*3600*1000)))}&to=${encodeURIComponent(iso(new Date(now.getTime()+2*3600*1000)))}&processType=${encodeURIComponent("day ahead")}`),
+    /* LCCC: latest actual CfD generation/payments. Sorted newest-first so the client only
+       needs the latest slice, then isolates the newest settlement date. */
+    lcccActual: ()=>getLCCC(LCCC_RES.actualCfd, "limit=5000&sort=Settlement_Date%20desc"),
+    /* LCCC: current CfD contract portfolio snapshot. */
+    lcccPortfolio: ()=>getLCCC(LCCC_RES.portfolio, "limit=5000"),
     /* Carbon intensity, two calls rather than one. The range endpoint matches on each period's
        END timestamp, so the period currently in progress can fall outside it; /intensity always
        returns the current half hour. Cheaper to ask twice than to reason about the boundary. */
@@ -3283,6 +3399,8 @@ async function loadAll(){
          and the single record is unwrapped where it is used. */
       S[k] = (k==="health")
         ? (r.value || null)                      /* an object, not rows — never run through rows() */
+        : (k==="lcccActual" || k==="lcccPortfolio")
+        ? ((r.value && Array.isArray(r.value.records)) ? r.value.records : [])
         : (k==="pvlive")
         ? (r.value && Array.isArray(r.value.data)
             ? r.value.data.map(a=>({t:a[1], mw:a[2]})).filter(x=>x.t && x.mw!=null)
@@ -3301,11 +3419,13 @@ async function loadAll(){
       /* A health endpoint that cannot be reached is not evidence of ill health — it is the same
          network problem the error bar already reports. Silence rather than a second alarm. */
       else if(k==="health") S.health = null;
+      else if(k==="lcccActual" || k==="lcccPortfolio") S[k] = null;
       else S.errors.push(k+": "+((r.reason && r.reason.message) || r.reason));
     }
   });
   S.solarSource = (S.pvlive && S.pvlive.length) ? "pvlive"
                 : ((S.agws && S.agws.some(r=>r.psrType==="Solar")) ? "agws" : null);
+  S.lcccUpdated = new Date().toISOString();
 
   S.prices = [].concat(S.pxYday||[], S.pxToday||[])
     .filter(r=>r && r.systemSellPrice!=null && r.startTime)
@@ -5578,6 +5698,95 @@ function renderWindSolar(){
 })();
 
 /* ============================================================
+   RENDER — LCCC
+   The two panels use LCCC's public CKAN Data Store resources. They deliberately aggregate the
+   latest data in-browser rather than copying a snapshot into the page, so the panels update when
+   LCCC updates the underlying datasets.
+   ============================================================ */
+function lcccNum(v){
+  const n = Number(String(v ?? "").replace(/,/g,""));
+  return Number.isFinite(n) ? n : 0;
+}
+function lcccDateKey(v){
+  if(!v) return "";
+  const s = String(v);
+  return s.length >= 10 ? s.slice(0,10) : s;
+}
+function lcccFmtDate(v){
+  if(!v) return "—";
+  const d = new Date(v + (String(v).length===10 ? "T00:00:00Z" : ""));
+  if(Number.isNaN(d.getTime())) return String(v);
+  return new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"short",year:"numeric",timeZone:"UTC"}).format(d);
+}
+function lcccFmtMW(v){
+  const n=lcccNum(v);
+  return n>=1000 ? (n/1000).toFixed(2)+" GW" : Math.round(n).toLocaleString("en-GB")+" MW";
+}
+function lcccFmtGWh(v){
+  const n=lcccNum(v)/1000;
+  return n>=1000 ? (n/1000).toFixed(2)+" TWh" : n.toFixed(1)+" GWh";
+}
+function lcccFmtGBP(v){
+  const n=Math.abs(lcccNum(v));
+  if(n>=1e9) return "£"+(n/1e9).toFixed(2)+"bn";
+  if(n>=1e6) return "£"+(n/1e6).toFixed(1)+"m";
+  if(n>=1e3) return "£"+(n/1e3).toFixed(0)+"k";
+  return "£"+Math.round(n).toLocaleString("en-GB");
+}
+function lcccBarRows(el, groups, formatter, cssVar="var(--blue-text)"){
+  const arr=[...groups.entries()].sort((a,b)=>b[1]-a[1]);
+  const top=arr.slice(0,7), rest=arr.slice(7).reduce((a,[,v])=>a+v,0);
+  if(rest>0) top.push(["Other",rest]);
+  const max=top[0]?.[1]||1;
+  el.innerHTML=top.map(([name,val])=>
+    `<div class="lccc-row"><div class="name" title="${esc(name)}">${esc(name)}</div>`+
+    `<div class="bar"><i style="width:${Math.max(1,val/max*100).toFixed(1)}%;background:${cssVar}"></i></div>`+
+    `<div class="val">${formatter(val)}</div></div>`).join("");
+}
+function renderLCCC(){
+  const gen=S.lcccActual, port=S.lcccPortfolio;
+  const genFoot=$("lccc-gen-foot"), portFoot=$("lccc-port-foot");
+  if(!gen || !gen.length){
+    $("lccc-gen-total").textContent="—"; $("lccc-pay-total").textContent="—"; $("lccc-tech-count").textContent="—";
+    $("lccc-gen-rows").innerHTML=`<div class="lccc-empty">LCCC CfD generation data is temporarily unavailable.</div>`;
+    genFoot.innerHTML=`Source: <a class="lccc-link" href="https://dp.lowcarboncontracts.uk/dataset/actual-cfd-generation-and-avoided-ghg-emissions" target="_blank" rel="noopener noreferrer">LCCC Data Portal</a>.`;
+  } else {
+    const dates=gen.map(r=>lcccDateKey(r.Settlement_Date)).filter(Boolean).sort();
+    const latest=dates[dates.length-1];
+    const rows=gen.filter(r=>lcccDateKey(r.Settlement_Date)===latest);
+    const tech=new Map(); let totalGen=0,totalPay=0;
+    rows.forEach(r=>{
+      const t=String(r.Technology||"Other");
+      const g=lcccNum(r.CFD_Generation_MWh), p=lcccNum(r.CFD_Payments_GBP);
+      totalGen+=g; totalPay+=p; tech.set(t,(tech.get(t)||0)+g);
+    });
+    $("lccc-gen-total").textContent=lcccFmtGWh(totalGen);
+    $("lccc-pay-total").textContent=lcccFmtGBP(totalPay);
+    $("lccc-tech-count").textContent=tech.size.toLocaleString("en-GB");
+    lcccBarRows($("lccc-gen-rows"),tech,v=>lcccFmtGWh(v));
+    genFoot.innerHTML=`Actual CfD generation eligible for CfD payments on <b>${esc(lcccFmtDate(latest))}</b>. `+
+      `Payments are nominal. <a class="lccc-link" href="https://dp.lowcarboncontracts.uk/dataset/actual-cfd-generation-and-avoided-ghg-emissions" target="_blank" rel="noopener noreferrer">LCCC dataset ↗</a>`;
+  }
+  if(!port || !port.length){
+    $("lccc-contract-count").textContent="—"; $("lccc-cap-total").textContent="—"; $("lccc-live-count").textContent="—";
+    $("lccc-port-rows").innerHTML=`<div class="lccc-empty">LCCC CfD portfolio data is temporarily unavailable.</div>`;
+    portFoot.innerHTML=`Source: <a class="lccc-link" href="https://dp.lowcarboncontracts.uk/dataset/cfd-contract-portfolio-status" target="_blank" rel="noopener noreferrer">LCCC Data Portal</a>.`;
+  } else {
+    const rows=port.filter(r=>String(r.CFD_ID||r.Name_of_CfD_Unit||"").trim());
+    const ids=new Set(rows.map(r=>String(r.CFD_ID||r.Name_of_CfD_Unit)));
+    const cap=rows.reduce((a,r)=>a+lcccNum(r.Maximum_Contract_Capacity_MW),0);
+    const live=rows.filter(r=>/post[- ]?start|operational|operating/i.test(String(r.Status||""))).length;
+    const tech=new Map();
+    rows.forEach(r=>{ const t=String(r.Technology_Type||"Other"); tech.set(t,(tech.get(t)||0)+lcccNum(r.Maximum_Contract_Capacity_MW)); });
+    $("lccc-contract-count").textContent=ids.size.toLocaleString("en-GB");
+    $("lccc-cap-total").textContent=lcccFmtMW(cap);
+    $("lccc-live-count").textContent=live.toLocaleString("en-GB");
+    lcccBarRows($("lccc-port-rows"),tech,v=>lcccFmtMW(v),"var(--c-wind)");
+    portFoot.innerHTML=`Maximum contract capacity by technology. <a class="lccc-link" href="https://dp.lowcarboncontracts.uk/dataset/cfd-contract-portfolio-status" target="_blank" rel="noopener noreferrer">LCCC portfolio dataset ↗</a>`;
+  }
+}
+
+/* ============================================================
    RENDER
    ============================================================ */
 function render(){
@@ -5588,6 +5797,7 @@ function render(){
   renderTemp();
   renderStack(); renderPrice(); renderIC(); renderWind();
   renderCarbon(); renderFreq(); renderEmissions();
+  renderLCCC();
 }
 
 /* ============================================================
