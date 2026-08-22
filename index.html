@@ -8,7 +8,21 @@
 <meta property="og:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta property="og:description" content="Live GB electricity generation and demand dashboard, showing the current power mix, wind, solar, interconnector imports and national demand using Elexon Insights data.">
 <meta property="og:url" content="https://gbelectricity.uk/">
+<!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview.png?v=3197">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview.png?v=3197">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="GB Electricity — Live GB generation and demand dashboard">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
+<meta name="twitter:description" content="Live GB electricity generation and demand dashboard, showing the current power mix, wind, solar, interconnector imports and national demand using Elexon Insights data.">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview.png?v=3197">
+<meta name="twitter:image:alt" content="GB Electricity — Live GB generation and demand dashboard">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
+<!-- v0.3197: social preview image, mobile scrolling and release-hardening checks. -->
 <!-- Favicon. Same mark as the masthead, simplified for 16px and nothing else.
      Rendered at 16/32/64 against light and dark chrome before choosing: a version with a
      terminal dot lost the dot at 16px and a longer tail muddied the peak, so this is the
@@ -695,7 +709,12 @@
     height:calc(100dvh - 24px);
     margin-top:12px;
   }
-  .panel.is-expanded .panel-body{overflow:auto;-webkit-overflow-scrolling:touch;}
+  .panel.is-expanded .panel-body{
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+    touch-action:pan-y;
+  }
 
   /* ================= Stat tiles ================= */
   /* Tiles are level 2. Panels get the strong blue frame because they hold the charts and the
@@ -994,8 +1013,8 @@
   #mixrows .mixrow .track{cursor:default;}
 
   /* ================= Charts ================= */
-  .chartbox{position:relative;width:100%;touch-action:pan-y;}
-  svg.chart{display:block;width:100%;overflow:visible;}
+  .chartbox{position:relative;width:100%;min-width:0;max-width:100%;touch-action:pan-y;-webkit-user-select:none;user-select:none;}
+  svg.chart{display:block;width:100%;max-width:100%;overflow:visible;}
   .gridline{stroke:var(--grey-line);stroke-width:1;stroke-dasharray:2 3;}
   .crosshair{stroke:var(--ink-dim);stroke-width:1;stroke-dasharray:3 3;pointer-events:none;}
   .axlabel{font-size:10px;fill:var(--ink-dim);font-family:var(--sans);}
@@ -1085,6 +1104,17 @@
   .viewbar .viewbtn{font-size:10.5px; padding:5px 12px; min-width:62px;}
   @media (pointer:coarse){ .viewbar .viewswitch{min-height:44px;}
     .viewbar .viewbtn{min-height:44px;display:inline-flex;align-items:center;justify-content:center;} }
+
+  /* v0.3197: chart controls and panel actions need the same 44px touch-target contract as the
+     main view switch. The visual ink stays compact; the button boxes provide the actual finger
+     target so tapping a range or expanding a panel does not require precision. */
+  @media (pointer:coarse){
+    .panelbtn{width:44px;height:44px;min-width:44px;margin-top:0;}
+    .range-switch{height:44px;min-height:44px;}
+    .range-btn{min-height:44px;padding:0 7px;display:inline-flex;align-items:center;justify-content:center;}
+    .export-btn{height:44px;min-height:44px;}
+    .modal-close{min-width:44px;min-height:44px;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;}
+  }
 
   /* ================= SIMPLIFIED (v0.25) =================
      A DENSITY control, not a layout variation. The two modes answer two different questions:
@@ -1636,6 +1666,36 @@
     .mixname{font-size:11px;}
   }
 
+  /* ================= NARROW VIEWPORT HARDENING (v0.3197) =================
+     390px-and-under is a real phone target, not a theoretical minimum. The principal dashboard
+     rows already collapse at 1080px, but this tier removes any remaining width assumptions from
+     chart containers, SVGs and legends and guarantees the investigation panels remain a single
+     readable column. */
+  @media (max-width:390px){
+    .grid,
+    .grid.g-2a,
+    .g-2a,
+    .g-tiles,
+    body[data-density="simple"] .g-tiles{
+      grid-template-columns:minmax(0,1fr) !important;
+      min-width:0;
+    }
+    .g-tiles > .tile.hero{grid-column:span 1 !important;}
+    .panel,.panel-body,.panel-head,.panel-tools,.chartbox,
+    svg.chart,.legend,.legend span,.mixrow,.icrow,.statrow{
+      min-width:0;
+      max-width:100%;
+    }
+    .chartbox{overflow:hidden;}
+    svg.chart{width:100%;height:auto;}
+    .legend{padding-right:2px;}
+    .legend span{white-space:normal;line-height:1.25;}
+    .panel-tools{flex-wrap:wrap;}
+    .range-switch{flex:0 0 78px;}
+    .export-btn{flex:0 0 102px;}
+    .panel-head .note{max-width:100%;overflow-wrap:anywhere;}
+  }
+
 
   /* ================= MOBILE OPTIMISATION (v0.318) =================
      The phone layout needs to be designed for the actual viewport, not merely allowed to
@@ -1645,7 +1705,25 @@
      major reading enough width to breathe.
   */
   @media (max-width:760px){
-    html,body{overflow-x:hidden;}
+    /* v0.3196 mobile scrolling: let the document behave like a normal native page on touch.
+       The sticky masthead is useful on desktop, but on a phone it consumes a large fixed
+       portion of the viewport and makes long dashboard swipes feel heavier. */
+    html{
+      overflow-x:hidden;
+      overflow-y:auto;
+      scrollbar-gutter:auto;
+      -webkit-overflow-scrolling:touch;
+      scroll-behavior:auto;
+    }
+    body{
+      overflow-x:hidden;
+      overflow-y:auto;
+      min-height:100dvh;
+      -webkit-overflow-scrolling:touch;
+      overscroll-behavior-y:auto;
+      touch-action:pan-y;
+    }
+    .masthead{position:relative;top:auto;}
     .wrap{padding-left:12px;padding-right:12px;}
 
     /* Masthead: keep identity and controls compact without horizontal overflow. */
@@ -2482,7 +2560,7 @@
 <footer class="foot">
   <div class="wrap">
     <div class="foot-left">
-      <span class="rights">&copy; 2026 <a href="https://www.linkedin.com/in/kyle-barnard/"
+      <span class="rights">&copy; <span id="copyright-year">2026</span> <a href="https://www.linkedin.com/in/kyle-barnard/"
         target="_blank" rel="noopener noreferrer">Kyle Barnard</a> &middot; GB Electricity</span>
       <span>Data provided via <a href="https://bmrs.elexon.co.uk/" target="_blank"
         rel="noopener noreferrer">Elexon Insights APIs</a>, <a href="https://carbonintensity.org.uk/" target="_blank"
@@ -2490,7 +2568,7 @@
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" id="version-label" title="Dashboard version">v0.3193</span> &middot;
+      <span class="version-label" id="version-label" title="Dashboard version">v0.3197</span> &middot;
       <button type="button" id="btn-about" class="footer-link">About this Dashboard</button>
     </div>
   </div>
@@ -2541,8 +2619,9 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.3196";
+const APP_VERSION = "v0.3197";
 // v0.3193: LCCC same-origin proxy; fixed 7-day FUELHH grouping/history; permanent embedded-solar estimate; chart cross-highlighting; control padding; footer typography; dark-mode polish.
+ // v0.3197: dynamic footer year/version placeholder; resilient per-panel rendering and metric fallbacks; <=390px layout hardening; 44px touch targets; verified favicon/social metadata.
 // v0.3192: 24h/7d generation and interconnector history with CSV export; acronym tooltips; keyboard-accessible chart legends; explicit stale/reconnection status; embedded-solar visibility control.
 // v0.3190: SEO title/description/canonical, crawlable favicon, simplified Other label, and release metadata polish.
 // v0.3194: remove redundant manual Refresh control; fix LCCC proxy calls; vertically centre footer release controls.
@@ -5779,14 +5858,50 @@ function renderWindSolar(){
 /* ============================================================
    RENDER
    ============================================================ */
+function safeRender(label, fn){
+  try{
+    fn();
+  }catch(e){
+    S.errors = (S.errors||[]).filter(x=>!x.startsWith("render:"+label));
+    S.errors.push("render:"+label+": "+(e && e.message ? e.message : e));
+  }
+}
+function renderMetricFallbacks(){
+  /* A failed feed should leave a readable state, never NaN/undefined. The normal renderers
+     already use these placeholders when their source is empty; this final guard also covers
+     malformed responses that make a renderer throw after receiving a non-empty payload. */
+  const fallbacks = {
+    "t-gen": '<span class="skeleton">—</span><span class="unit">MW</span>',
+    "t-und": '<span class="skeleton">—</span><span class="unit">MW</span>',
+    "t-dem": '<span class="skeleton">—</span><span class="unit">MW</span>',
+    "t-lc":  '<span class="skeleton">—</span><span class="unit">%</span>',
+    "t-ci":  '<span class="skeleton">—</span><span class="unit">gCO<sub>2</sub>/kWh</span>',
+    "t-px":  '<span class="skeleton">—</span><span class="unit">£/MWh</span>',
+    "t-fq":  '<span class="skeleton">—</span><span class="unit">Hz</span>'
+  };
+  Object.entries(fallbacks).forEach(([id,markup])=>{
+    const el=$(id);
+    if(el && /(?:NaN|undefined|null)/i.test(el.textContent||"")) el.innerHTML=markup;
+  });
+}
 function render(){
   const snap = latestSnapshot();
-  renderStatus(snap);
-  renderHealth();
-  if(snap){ renderTiles(snap); renderSystemInsight(snap); renderMix(snap); }
-  renderTemp();
-  renderStack(); renderPrice(); renderIC(); renderWind();
-  renderCarbon(); renderFreq(); renderEmissions();
+  safeRender("status", ()=>renderStatus(snap));
+  safeRender("health", renderHealth);
+  if(snap){
+    safeRender("tiles", ()=>renderTiles(snap));
+    safeRender("insight", ()=>renderSystemInsight(snap));
+    safeRender("mix", ()=>renderMix(snap));
+  }
+  safeRender("temperature", renderTemp);
+  safeRender("generation-history", renderStack);
+  safeRender("price", renderPrice);
+  safeRender("interconnectors", renderIC);
+  safeRender("wind", renderWind);
+  safeRender("carbon", renderCarbon);
+  safeRender("frequency", renderFreq);
+  safeRender("emissions", renderEmissions);
+  renderMetricFallbacks();
   attachTerms();
 }
 
@@ -6205,6 +6320,8 @@ attachTerms();
    ABOUT THIS DASHBOARD
    ============================================================ */
 $("version-label").textContent = APP_VERSION;
+const copyrightYear = $("copyright-year");
+if(copyrightYear) copyrightYear.textContent = String(new Date().getFullYear());
 document.querySelector(".wordmark .name").textContent = APP_NAME;
 document.title = APP_NAME + " \u2014 Live Generation & Demand";
 $("about-modal-title").textContent = "About this Dashboard";
