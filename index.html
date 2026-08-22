@@ -22,7 +22,7 @@
 <meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview.png?v=3197">
 <meta name="twitter:image:alt" content="GB Electricity — Live GB generation and demand dashboard">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
-<!-- v0.3197: social preview image, mobile scrolling and release-hardening checks. -->
+<!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
 <!-- Favicon. Same mark as the masthead, simplified for 16px and nothing else.
      Rendered at 16/32/64 against light and dark chrome before choosing: a version with a
      terminal dot lost the dot at 16px and a longer tail muddied the peak, so this is the
@@ -246,6 +246,73 @@
   body{padding:0;overflow-x:hidden;overflow-y:auto;
        min-height:100dvh;display:flex;flex-direction:column;}
   body > footer.foot{margin-top:auto;}
+
+  /* v0.3198: Simplified desktop is a single-viewport dashboard.
+     The scrollbar appeared after live data populated because the final rendered
+     content became a few pixels taller than the viewport. Keep Detailed as a
+     normal scrolling document; only Simplified desktop gets a fixed viewport. */
+  @media (min-width:901px){
+    html:has(body[data-density="simple"]){
+      overflow:hidden;
+    }
+    body[data-density="simple"]{
+      height:100dvh;
+      min-height:100dvh;
+      max-height:100dvh;
+      overflow:hidden;
+    }
+    body[data-density="simple"] #main{
+      min-height:0;
+      overflow:hidden;
+    }
+    body[data-density="simple"] footer.foot{
+      margin-top:auto;
+    }
+  }
+
+  @media (min-width:901px){
+    body[data-density="simple"] #main{
+      padding-bottom:0;
+    }
+    body[data-density="simple"] .g-tiles{
+      gap:12px;
+    }
+    body[data-density="simple"] .grid.g-tiles + .grid{
+      margin-top:14px;
+    }
+    body[data-density="simple"] .insightbar{
+      margin-top:10px;
+      padding-top:8px;
+      padding-bottom:9px;
+    }
+    body[data-density="simple"] .insight-driver{
+      margin-top:7px;
+      padding-top:7px;
+    }
+    body[data-density="simple"] .grid:has(> .panel){
+      margin-top:8px;
+    }
+    body[data-density="simple"] footer.foot{
+      padding-top:12px;
+      padding-bottom:11px;
+    }
+  }
+
+  /* Exceptional state: a visible health/error banner must never be clipped by
+     the normal one-viewport Simplified layout. Allow the document to scroll. */
+  @media (min-width:901px){
+    body[data-density="simple"]:has(#healthbar[style*="display: block"]),
+    body[data-density="simple"]:has(#errbar[style*="display: block"]){
+      height:auto;
+      min-height:100dvh;
+      max-height:none;
+      overflow:auto;
+    }
+    html:has(body[data-density="simple"] #healthbar[style*="display: block"]),
+    html:has(body[data-density="simple"] #errbar[style*="display: block"]){
+      overflow:auto;
+    }
+  }
   /* ⚠ THE GAP ABOVE THE FOOTER GOES ON THE CONTENT, NOT ON THE FOOTER (v0.31).
      The footer had `margin-top:52px` and it was doing nothing: `body > footer.foot{margin-top:auto}`
      — the rule that anchors it to the floor of a short page — is more specific, and `auto`
@@ -2619,9 +2686,9 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.3197";
+const APP_VERSION = "v0.3198";
 // v0.3193: LCCC same-origin proxy; fixed 7-day FUELHH grouping/history; permanent embedded-solar estimate; chart cross-highlighting; control padding; footer typography; dark-mode polish.
- // v0.3197: dynamic footer year/version placeholder; resilient per-panel rendering and metric fallbacks; <=390px layout hardening; 44px touch targets; verified favicon/social metadata.
+ // v0.3198: desktop Simplified view constrained to one viewport; removed post-load scrollbar/jump; desktop density spacing tightened only where required; release-hardening regression checks.
 // v0.3192: 24h/7d generation and interconnector history with CSV export; acronym tooltips; keyboard-accessible chart legends; explicit stale/reconnection status; embedded-solar visibility control.
 // v0.3190: SEO title/description/canonical, crawlable favicon, simplified Other label, and release metadata polish.
 // v0.3194: remove redundant manual Refresh control; fix LCCC proxy calls; vertically centre footer release controls.
