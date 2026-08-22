@@ -367,7 +367,12 @@
   .unitbtn.is-on{color:var(--ink);}
   .unitswitch:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;}
 
-  @media (max-width:760px){ .unitbtn{padding:5px 8px;font-size:10px;} }
+  @media (max-width:760px){
+    .panel-head .panel-tools{padding-top:6px;}
+    .panel-tools{gap:5px;}
+    .range-switch{flex-basis:76px;width:76px;height:28px;}
+    .export-btn{flex-basis:96px;width:96px;height:28px;font-size:8.5px;}
+ .unitbtn{padding:5px 8px;font-size:10px;} }
 
   /* PANEL VIEW SWITCH (v0.20). Same mechanism as the unit switch — a slider under two labels
      that both stay legible — deliberately at a smaller scale, and sitting inside a panel head
@@ -1413,15 +1418,27 @@
 
   .callout{padding:8px 11px;border-radius:6px;font-size:11px;line-height:1.45;background:var(--grey-bg);
     color:var(--ink-dim);}
-  /* v0.3192: compact history controls for the Detailed charts. */
-  .panel-tools{display:flex;align-items:center;gap:5px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end;}
-  .panel-head .panel-tools{padding-top:5px;}
-  .range-switch{display:inline-flex;align-items:center;border:1px solid var(--grey-line);border-radius:7px;overflow:hidden;background:var(--surface);}
-  .range-btn,.export-btn{appearance:none;border:0;background:transparent;color:var(--ink-dim);font:600 9px var(--sans);padding:5px 7px;cursor:pointer;}
-  .range-btn + .range-btn{border-left:1px solid var(--grey-line);}
-  .range-btn.is-on{background:var(--blue-pale);color:var(--blue-text);}
-  .range-btn:focus-visible,.export-btn:focus-visible{outline:2px solid var(--blue-text);outline-offset:1px;}
-  .export-btn{border:1px solid var(--grey-line);border-radius:7px;color:var(--blue-text);background:var(--surface);}
+  /* v0.3196: history controls are a true two-choice switch, matching Wind/Solar.
+     Fixed dimensions prevent the controls moving when 24h changes to 7d. */
+  .panel-tools{display:flex;align-items:center;gap:6px;margin-left:auto;flex-wrap:nowrap;justify-content:flex-end;min-width:max-content;}
+  .panel-head .panel-tools{padding-top:7px;}
+  .range-switch{position:relative;display:inline-flex;align-items:stretch;flex:0 0 78px;width:78px;height:27px;
+    border:1px solid var(--blue-line);border-radius:6px;overflow:hidden;background:var(--surface);
+    padding:0;margin:0;}
+  .range-switch::before{content:"";position:absolute;z-index:0;top:0;bottom:0;left:0;width:50%;
+    background:var(--accent);border-radius:5px;transition:transform .22s cubic-bezier(.4,0,.2,1);pointer-events:none;}
+  .range-switch[data-active="7d"]::before{transform:translateX(100%);}
+  @media (prefers-reduced-motion:reduce){.range-switch::before{transition:none;}}
+  .range-btn{position:relative;z-index:1;appearance:none;flex:1 0 50%;width:50%;min-width:0;
+    border:0;background:none !important;color:var(--ink-dim);font:700 9px var(--sans);
+    letter-spacing:.03em;padding:4px 6px;cursor:pointer;text-align:center;}
+  .range-btn.is-on{color:var(--head-ink);}
+  .range-btn:focus-visible{outline:2px solid var(--blue-text);outline-offset:1px;border-radius:4px;}
+  .export-btn{appearance:none;flex:0 0 102px;width:102px;height:27px;border:1px solid var(--blue-line);
+    border-radius:7px;color:var(--blue-text);font:700 9px var(--sans);letter-spacing:.02em;
+    padding:4px 8px;background:var(--surface);cursor:pointer;text-align:center;white-space:nowrap;}
+  .export-btn:hover{background:var(--blue-pale);}
+  .export-btn:focus-visible{outline:2px solid var(--blue-text);outline-offset:1px;}
   .livewrap.stale{color:var(--warn);}
   .livewrap.err{color:var(--bad);}
   .legend-key{appearance:none;border:0;background:none;color:inherit;font:inherit;padding:1px 2px;margin:-1px -2px;display:inline-flex;align-items:center;gap:5px;cursor:pointer;border-radius:3px;}
@@ -1462,7 +1479,7 @@
     var(--red) calc(100% - var(--red-tail)) 100%);}
   /* Two blocks, pushed apart: what the page IS on the left, what this COPY of it is on the
      right. They wrap into a stack on a narrow screen rather than compressing into one line. */
-  footer.foot .wrap{display:flex;align-items:flex-end;justify-content:space-between;
+  footer.foot .wrap{display:flex;align-items:center;justify-content:space-between;
     gap:10px 24px;flex-wrap:wrap;}
   .foot-left{display:flex;flex-direction:column;gap:2px;min-width:0;}
   .foot-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
@@ -1527,33 +1544,6 @@
   @media (max-width:620px){ .srcs{grid-template-columns:1fr;} }
   @media (max-width:620px){ .modal-body.scroll{max-height:none;} }
   .skeleton{color:var(--ink-mute);}
-
-  /* ================= LCCC PANELS (v0.3191) ================= */
-  .lccc-meta{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px;}
-  .lccc-statgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:11px;}
-  .lccc-stat{padding:8px 9px;border:1px solid var(--grey-line);border-radius:7px;background:var(--page);min-width:0;}
-  .lccc-stat .k{font-size:8px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-mute);}
-  .lccc-stat .v{font-size:18px;font-weight:800;line-height:1.05;margin-top:4px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .lccc-stat .s{font-size:8.5px;color:var(--ink-dim);margin-top:3px;line-height:1.2;}
-  .lccc-rows{display:grid;gap:5px;}
-  .lccc-row{display:grid;grid-template-columns:minmax(100px,1.2fr) minmax(60px,2fr) 66px;gap:8px;align-items:center;}
-  .lccc-row .name{font-size:10.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .lccc-row .bar{height:10px;border-radius:999px;background:var(--grey-fill);overflow:hidden;}
-  .lccc-row .bar i{display:block;height:100%;width:0;background:var(--blue-text);border-radius:inherit;}
-  .lccc-row .val{text-align:right;font-size:10px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;}
-  .lccc-foot{margin-top:10px;padding-top:8px;border-top:1px solid var(--grey-line);font-size:9.5px;line-height:1.4;color:var(--ink-dim);}
-  .lccc-foot b{color:var(--ink);}
-  .lccc-empty{font-size:11px;color:var(--ink-dim);padding:10px 0;}
-  .lccc-link{color:var(--blue-text);text-decoration:underline;text-underline-offset:2px;}
-  body[data-density="simple"] #sec-lccc{display:none;}
-  @media (max-width:620px){
-    .lccc-statgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;}
-    .lccc-stat{padding:7px 7px;}
-    .lccc-stat .v{font-size:15px;}
-    .lccc-row{grid-template-columns:minmax(86px,1.1fr) minmax(50px,2fr) 58px;gap:6px;}
-    .lccc-row .name{font-size:10px;}
-    .lccc-row .val{font-size:9.5px;}
-  }
 
   /* ================= Responsive =================
      Breakpoints mirror the Wiki's own (760px), with an extra tier at 1080/620 for the
@@ -1811,7 +1801,6 @@
           <span class="unitbtn is-on" data-unit="MW">MW</span>
           <span class="unitbtn" data-unit="GW">GW</span>
         </button>
-        <button class="toolbtn" id="btn-refresh" title="Fetch the latest data now">↻ Refresh</button>
         <button class="theme-switch" id="btn-theme" role="switch" aria-checked="false" aria-label="Dark mode">
           <svg class="theme-icon sun" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7"/></svg>
           <span class="switch-track"><span class="switch-knob"></span></span>
@@ -2028,11 +2017,11 @@
         <h2 id="stack-title">Last 24 hours</h2>
         <span class="note" id="stack-note">Half-hourly outturn</span>
         <div class="panel-tools" aria-label="Generation history controls">
-          <div class="range-switch" role="group" aria-label="Generation history range">
+          <div class="range-switch" data-active="24h" role="group" aria-label="Generation history range">
             <button type="button" class="range-btn is-on" data-history="24h" aria-pressed="true">24h</button>
             <button type="button" class="range-btn" data-history="7d" aria-pressed="false">7d</button>
           </div>
-          <button type="button" class="export-btn" id="export-stack" title="Download the selected generation history as CSV">CSV</button>
+          <button type="button" class="export-btn" id="export-stack" title="Download the selected generation history as CSV">Download as CSV</button>
         </div>
         <button class="panelbtn xp" data-panel="stack" aria-expanded="false"
           aria-label="Expand view" title="Expand view">
@@ -2069,11 +2058,11 @@
         <h2>Interconnector flows</h2>
         <span class="note" id="ic-note"><span class="term ds" data-term="INTOUTHH">INTOUTHH</span> · half-hourly</span>
         <div class="panel-tools" aria-label="Interconnector history controls">
-          <div class="range-switch" role="group" aria-label="Interconnector history range">
+          <div class="range-switch" data-active="24h" role="group" aria-label="Interconnector history range">
             <button type="button" class="range-btn is-on" data-ic-history="24h" aria-pressed="true">24h</button>
             <button type="button" class="range-btn" data-ic-history="7d" aria-pressed="false">7d</button>
           </div>
-          <button type="button" class="export-btn" id="export-ic" title="Download the selected interconnector history as CSV">CSV</button>
+          <button type="button" class="export-btn" id="export-ic" title="Download the selected interconnector history as CSV">Download as CSV</button>
         </div>
         <button class="panelbtn xp" data-panel="ic" aria-expanded="false"
           aria-label="Expand view" title="Expand view">
@@ -2218,55 +2207,6 @@
 
 
 
-  <!-- ================= LCCC: CfD DATA ================= -->
-  <section class="grid g-2a" id="sec-lccc">
-
-    <div class="panel" id="panel-lccc-generation">
-      <div class="panel-head">
-        <h2>CfD generation</h2>
-        <span class="note">LCCC · daily</span>
-        <button class="panelbtn xp" data-panel="lccc-generation" aria-expanded="false"
-          aria-label="Expand view" title="Expand view">
-          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
-          </svg>
-        </button>
-      </div>
-      <div class="panel-body" id="lccc-generation-body">
-        <div class="lccc-statgrid">
-          <div class="lccc-stat"><div class="k">Generation</div><div class="v" id="lccc-gen-total">—</div><div class="s" id="lccc-gen-date">latest settlement date</div></div>
-          <div class="lccc-stat"><div class="k">CfD payments</div><div class="v" id="lccc-pay-total">—</div><div class="s">nominal £</div></div>
-          <div class="lccc-stat"><div class="k">Technologies</div><div class="v" id="lccc-tech-count">—</div><div class="s">represented in latest day</div></div>
-        </div>
-        <div class="lccc-rows" id="lccc-gen-rows"></div>
-        <div class="lccc-foot" id="lccc-gen-foot">Waiting for LCCC data.</div>
-      </div>
-    </div>
-
-    <div class="panel" id="panel-lccc-portfolio">
-      <div class="panel-head">
-        <h2>CfD contract portfolio</h2>
-        <span class="note">LCCC · portfolio status</span>
-        <button class="panelbtn xp" data-panel="lccc-portfolio" aria-expanded="false"
-          aria-label="Expand view" title="Expand view">
-          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
-          </svg>
-        </button>
-      </div>
-      <div class="panel-body" id="lccc-portfolio-body">
-        <div class="lccc-statgrid">
-          <div class="lccc-stat"><div class="k">Contracts</div><div class="v" id="lccc-contract-count">—</div><div class="s">portfolio units</div></div>
-          <div class="lccc-stat"><div class="k">Contract capacity</div><div class="v" id="lccc-cap-total">—</div><div class="s">maximum contracted MW</div></div>
-          <div class="lccc-stat"><div class="k">Post-start</div><div class="v" id="lccc-live-count">—</div><div class="s">units past start date</div></div>
-        </div>
-        <div class="lccc-rows" id="lccc-port-rows"></div>
-        <div class="lccc-foot" id="lccc-port-foot">Waiting for LCCC data.</div>
-      </div>
-    </div>
-
-  </section>
-
   <!-- ================= "About this Dashboard" =================
        Kept in a <template> rather than written inline in the dialog, so the prose is authored
        as ordinary markup here and cloned once on first open. -->
@@ -2289,7 +2229,7 @@
         The code stays mapped so a residual could never be dropped silently, and the table view still shows the raw
         zero — but naming it in a label would imply the grid has an option it no longer has.
         Storage (pumped) and interconnectors go negative when pumping or exporting, and are excluded from the
-        low-carbon denominator. No API key is required. Elexon, NESO and Sheffield Solar feeds are read by the browser; LCCC data is fetched server-side by the dashboard's same-origin proxy because the LCCC CKAN API is not relied on for browser CORS.
+        low-carbon denominator. No API key is required. Elexon, NESO and Sheffield Solar feeds are read by the browser.
       </p>
 
       <h4>&ldquo;Other&rdquo; is a residual, and cannot be broken down</h4>
@@ -2470,8 +2410,6 @@
         <span>carbonintensity.org.uk GET /intensity</span>
         <span>carbonintensity.org.uk GET /intensity/factors</span>
         <span>carbonintensity.org.uk GET /intensity/{from}/pt24h</span>
-        <span>Dashboard proxy GET /api/lccc · LCCC CfD actuals</span>
-        <span>Dashboard proxy GET /api/lccc · LCCC CfD portfolio</span>
       </div>
 
       <h4>Data sources and attribution</h4>
@@ -2493,18 +2431,9 @@
         <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>.
         <a href="https://www.solar.sheffield.ac.uk/pvlive/" target="_blank" rel="noopener noreferrer">solar.sheffield.ac.uk/pvlive</a>
       </p>
-      <p class="attrib">
-        <b>LCCC data</b> is provided by the Low Carbon Contracts Company through the
-        <a href="https://dp.lowcarboncontracts.uk/" target="_blank" rel="noopener noreferrer">LCCC Data Portal</a>.
-        The CfD datasets used here are marked as licensed under the
-        <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener noreferrer">UK Open Government Licence (OGL)</a>.
-        Use of the LCCC Data Portal and its contents is also subject to the
-        <a href="https://www.lowcarboncontracts.uk/terms-of-use/" target="_blank" rel="noopener noreferrer">LCCC Terms of Use</a>.
-        The portal's disclaimer states that its content is provided without warranty as to accuracy, completeness or currency and is used at the user's own risk.
-      </p>
       <p>
         <b>GB Electricity is an independent, non-commercial personal project.</b> It is not
-        affiliated with, endorsed by, or an official product of Elexon Limited, NESO, LCCC, or the
+        affiliated with, endorsed by, or an official product of Elexon Limited or NESO, or the
         University of Sheffield. No logos or trade marks of any of them are used here.
       </p>
       <p>
@@ -2556,8 +2485,7 @@
       <span class="rights">&copy; 2026 <a href="https://www.linkedin.com/in/kyle-barnard/"
         target="_blank" rel="noopener noreferrer">Kyle Barnard</a> &middot; GB Electricity</span>
       <span>Data provided via <a href="https://bmrs.elexon.co.uk/" target="_blank"
-        rel="noopener noreferrer">Elexon Insights APIs</a>, <a href="https://dp.lowcarboncontracts.uk/" target="_blank"
-        rel="noopener noreferrer">LCCC Data Portal</a>, <a href="https://carbonintensity.org.uk/" target="_blank"
+        rel="noopener noreferrer">Elexon Insights APIs</a>, <a href="https://carbonintensity.org.uk/" target="_blank"
         rel="noopener noreferrer">NESO Carbon Intensity API</a> &amp; <a href="https://www.solar.sheffield.ac.uk/pvlive/" target="_blank"
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
@@ -2613,10 +2541,12 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.3193";
+const APP_VERSION = "v0.3196";
 // v0.3193: LCCC same-origin proxy; fixed 7-day FUELHH grouping/history; permanent embedded-solar estimate; chart cross-highlighting; control padding; footer typography; dark-mode polish.
 // v0.3192: 24h/7d generation and interconnector history with CSV export; acronym tooltips; keyboard-accessible chart legends; explicit stale/reconnection status; embedded-solar visibility control.
 // v0.3190: SEO title/description/canonical, crawlable favicon, simplified Other label, and release metadata polish.
+// v0.3194: remove redundant manual Refresh control; fix LCCC proxy calls; vertically centre footer release controls.
+// v0.3195: remove LCCC panels/references; fix overlapping 7-day history requests that double-counted a settlement day; add 7-day imbalance-price history.
 // v0.315: remove the personal "Built by Kyle Barnard" credit from the masthead; attribution remains in About.
 
 const BASE = "https://data.elexon.co.uk/bmrs/api/v1";
@@ -2641,15 +2571,6 @@ const proxied = (u)=> PVLIVE_PROXY
    sends Access-Control-Allow-Origin: *, so it is readable from a page opened off disk with no
    proxy in the way. That is the whole reason this panel could be added without hosting first. */
 const CARBON = "https://api.carbonintensity.org.uk";
-
-/* LCCC Data Portal CKAN Data Store API. The browser calls our same-origin Pages Function,
-   which resolves the current JSON resource and queries LCCC server-side. This avoids relying on
-   LCCC's browser CORS policy and also means a future resource-ID change does not break the page. */
-const LCCC_API = "/api/lccc";
-const LCCC_RES = {
-  actualCfd: "actual-cfd-generation-and-avoided-ghg-emissions",
-  portfolio: "cfd-contract-portfolio-status"
-};
 
 /* THE BANDS ARE REVISED EVERY YEAR, AND THAT IS THE INTERESTING PART.
    NESO re-cuts the very low / low / moderate / high / very high thresholds each 1 January as
@@ -3299,9 +3220,9 @@ function seriesFor(code){
    STATE
    ============================================================ */
 const S = { fuelinst:null, summary:null, demand:null, ic:null, ic7d:null, fuelhh:null, windfor:null, price:null, icLatest:null, temp:null,
-            pxToday:null, pxYday:null,
+            pxToday:null, pxYday:null, px7d:null,
             prices:null, lcExplainer:null, tempExplainer:null,
-            pvlive:null, agws:null, agwsHistory:null, solarSource:null, ciNow:null, ci24:null, ciFact:null, freq:null, winEarly:null, winLate:null, dgws:null, windView:"wind", health:null, lcccActual:null, lcccPortfolio:null, lcccUpdated:null,
+            pvlive:null, agws:null, agwsHistory:null, solarSource:null, ciNow:null, ci24:null, ciFact:null, freq:null, winEarly:null, winLate:null, dgws:null, windView:"wind", health:null,
             historyWindow:"24h", icHistoryWindow:"24h", historyLoaded:false, selectedFuel:null, errors:[] };
 
 /* FIRST-LOAD PROGRESS. Returns a tick function and arms itself only once — every later refresh
@@ -3332,40 +3253,38 @@ function loadProgress(total){
 /* ============================================================
    FETCH
    ============================================================ */
-async function getLCCC(dataset, params="", {timeout=25000}={}){
-  const ctl = new AbortController();
-  const t = setTimeout(()=>ctl.abort(), timeout);
-  try{
-    const url = LCCC_API + "?dataset=" + encodeURIComponent(dataset) + (params ? "&" + params : "");
-    const res = await fetch(url, {signal:ctl.signal, headers:{"Accept":"application/json"}});
-    if(!res.ok) throw new Error("HTTP "+res.status+" on LCCC Data Portal");
-    const j = await res.json();
-    if(!j || !j.success || !j.result || !Array.isArray(j.result.records)) throw new Error("Invalid LCCC API response");
-    return j.result;
-  } finally { clearTimeout(t); }
-}
-
 let historyLoading=false;
 async function loadHistoryData(){
   if(historyLoading || S.historyLoaded) return;
   historyLoading=true;
   const now=new Date();
+  /*
+     Elexon's settlementDateTo is inclusive. The old two-range split used
+     [D-6..D-3] + [D-3..D], which fetched D-3 twice. That made every FUELHH
+     record on the boundary day appear twice and produced the large false
+     generation spike seen in the 7-day chart. The ranges below are deliberately
+     non-overlapping: [D-6..D-3] + [D-2..D].
+  */
   const days=[
     [new Date(now.getTime()-6*86400000), new Date(now.getTime()-3*86400000)],
-    [new Date(now.getTime()-3*86400000), now]
+    [new Date(now.getTime()-2*86400000), now]
   ];
+  const priceDates=Array.from({length:7},(_,i)=>londonDate(new Date(now.getTime()-(6-i)*86400000)));
   try{
     const fuelJobs=days.map(([a,b])=>
       getJSON(`/datasets/FUELHH?settlementDateFrom=${londonDate(a)}&settlementDateTo=${londonDate(b)}`));
     const icJobs=days.map(([a,b])=>
       getJSON(`/generation/outturn/interconnectors?settlementDateFrom=${londonDate(a)}&settlementDateTo=${londonDate(b)}`));
-    const [fuelParts,icParts,agws7]=await Promise.all([
+    const priceJobs=priceDates.map(d=>getJSON(`/balancing/settlement/system-prices/${d}`));
+    const [fuelParts,icParts,priceParts,agws7]=await Promise.all([
       Promise.all(fuelJobs),
       Promise.all(icJobs),
+      Promise.all(priceJobs),
       getJSON(`/generation/actual/per-type/wind-and-solar?from=${encodeURIComponent(iso(new Date(now.getTime()-7*86400000)))}&to=${encodeURIComponent(iso(now))}`)
     ]);
     S.fuelhh=fuelParts.flatMap(rows);
     S.ic7d=icParts.flatMap(rows);
+    S.px7d=priceParts.flatMap(rows);
     S.agwsHistory=rows(agws7);
     S.historyLoaded=true;
     S.errors=(S.errors||[]).filter(x=>!/^history:/.test(x));
@@ -3428,11 +3347,6 @@ async function loadAll(){
            is why the solar view says so rather than letting a reader assume it is metered the way
            the wind series is. */
     dgws    : ()=>getJSON(`/forecast/generation/wind-and-solar/day-ahead?from=${encodeURIComponent(iso(new Date(now-26*3600*1000)))}&to=${encodeURIComponent(iso(new Date(now.getTime()+2*3600*1000)))}&processType=${encodeURIComponent("day ahead")}`),
-    /* LCCC: latest actual CfD generation/payments. Sorted newest-first so the client only
-       needs the latest slice, then isolates the newest settlement date. */
-    lcccActual: ()=>getLCCC(LCCC_RES.actualCfd, "limit=5000&sort=Settlement_Date%20desc"),
-    /* LCCC: current CfD contract portfolio snapshot. */
-    lcccPortfolio: ()=>getLCCC(LCCC_RES.portfolio, "limit=5000"),
     /* Carbon intensity, two calls rather than one. The range endpoint matches on each period's
        END timestamp, so the period currently in progress can fall outside it; /intensity always
        returns the current half hour. Cheaper to ask twice than to reason about the boundary. */
@@ -3470,8 +3384,6 @@ async function loadAll(){
          and the single record is unwrapped where it is used. */
       S[k] = (k==="health")
         ? (r.value || null)                      /* an object, not rows — never run through rows() */
-        : (k==="lcccActual" || k==="lcccPortfolio")
-        ? ((r.value && Array.isArray(r.value.records)) ? r.value.records : [])
         : (k==="pvlive")
         ? (r.value && Array.isArray(r.value.data)
             ? r.value.data.map(a=>({t:a[1], mw:a[2]})).filter(x=>x.t && x.mw!=null)
@@ -3490,13 +3402,11 @@ async function loadAll(){
       /* A health endpoint that cannot be reached is not evidence of ill health — it is the same
          network problem the error bar already reports. Silence rather than a second alarm. */
       else if(k==="health") S.health = null;
-      else if(k==="lcccActual" || k==="lcccPortfolio") S[k] = null;
       else S.errors.push(k+": "+((r.reason && r.reason.message) || r.reason));
     }
   });
   S.solarSource = (S.pvlive && S.pvlive.length) ? "pvlive"
                 : ((S.agws && S.agws.some(r=>r.psrType==="Solar")) ? "agws" : null);
-  S.lcccUpdated = new Date().toISOString();
 
   S.prices = [].concat(S.pxYday||[], S.pxToday||[])
     .filter(r=>r && r.systemSellPrice!=null && r.startTime)
@@ -3590,13 +3500,27 @@ function stackSeries(){
   const source=S.historyWindow==="7d" ? S.fuelhh : S.summary;
   if(!source || !source.length) return [];
   if(S.historyWindow==="7d"){
-    /* FUELHH is one record per fuel type per half hour, unlike the summary endpoint.
-       Group by start time before drawing; otherwise every fuel becomes a separate near-zero
-       point and the seven-day stack collapses into a blank chart. */
-    const groups=new Map();
+    /*
+       FUELHH is one aggregated record per fuel category per half hour. Keep only the
+       latest published row for each start-time + fuel-type combination before grouping.
+       This is a second line of defence against duplicate/superseded messages: the
+       history loader already avoids overlapping settlement-date ranges, but FUELHH can
+       still expose more than one published record for the same logical observation.
+    */
+    const latestByFuel=new Map();
     source.forEach(p=>{
       const t=p.startTime || p.StartTime;
       if(!t) return;
+      const code=p.fuelType ?? p.fuelTypeCode ?? p.fuelTypeDescription ?? p.FuelType;
+      const k=new Date(t).toISOString()+"|"+String(code);
+      const prev=latestByFuel.get(k);
+      const pt=new Date(p.publishTime || p.PublishTime || 0).getTime();
+      const prevPt=prev ? new Date(prev.publishTime || prev.PublishTime || 0).getTime() : -1;
+      if(!prev || pt>=prevPt) latestByFuel.set(k,p);
+    });
+    const groups=new Map();
+    latestByFuel.forEach(p=>{
+      const t=p.startTime || p.StartTime;
       const k=new Date(t).toISOString();
       let g=groups.get(k);
       if(!g){
@@ -4727,9 +4651,10 @@ function renderStack(){
 function renderPrice(){
   const svg=$("price"), tip=$("pricetip"), box=$("pricebox");
   const stack = stackSeries();
-  if(!S.prices || !S.prices.length || !stack.length){ svg.innerHTML=""; return; }
+  const priceSource = S.historyWindow==="7d" ? S.px7d : S.prices;
+  if(!priceSource || !priceSource.length || !stack.length){ svg.innerHTML=""; return; }
   const t0 = new Date(stack[0].t).getTime(), t1 = new Date(stack[stack.length-1].t).getTime();
-  const pts = S.prices.filter(r=>{ const t=new Date(r.startTime).getTime(); return t>=t0 && t<=t1; });
+  const pts = priceSource.filter(r=>{ const t=new Date(r.startTime).getTime(); return t>=t0 && t<=t1; });
   if(pts.length < 2){ svg.innerHTML=""; return; }
 
   const geom = chartGeom(box, {sm:120, md:140, lg:150});
@@ -5852,95 +5777,6 @@ function renderWindSolar(){
 })();
 
 /* ============================================================
-   RENDER — LCCC
-   The two panels use LCCC's public CKAN Data Store resources. They deliberately aggregate the
-   latest data in-browser rather than copying a snapshot into the page, so the panels update when
-   LCCC updates the underlying datasets.
-   ============================================================ */
-function lcccNum(v){
-  const n = Number(String(v ?? "").replace(/,/g,""));
-  return Number.isFinite(n) ? n : 0;
-}
-function lcccDateKey(v){
-  if(!v) return "";
-  const s = String(v);
-  return s.length >= 10 ? s.slice(0,10) : s;
-}
-function lcccFmtDate(v){
-  if(!v) return "—";
-  const d = new Date(v + (String(v).length===10 ? "T00:00:00Z" : ""));
-  if(Number.isNaN(d.getTime())) return String(v);
-  return new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"short",year:"numeric",timeZone:"UTC"}).format(d);
-}
-function lcccFmtMW(v){
-  const n=lcccNum(v);
-  return n>=1000 ? (n/1000).toFixed(2)+" GW" : Math.round(n).toLocaleString("en-GB")+" MW";
-}
-function lcccFmtGWh(v){
-  const n=lcccNum(v)/1000;
-  return n>=1000 ? (n/1000).toFixed(2)+" TWh" : n.toFixed(1)+" GWh";
-}
-function lcccFmtGBP(v){
-  const n=Math.abs(lcccNum(v));
-  if(n>=1e9) return "£"+(n/1e9).toFixed(2)+"bn";
-  if(n>=1e6) return "£"+(n/1e6).toFixed(1)+"m";
-  if(n>=1e3) return "£"+(n/1e3).toFixed(0)+"k";
-  return "£"+Math.round(n).toLocaleString("en-GB");
-}
-function lcccBarRows(el, groups, formatter, cssVar="var(--blue-text)"){
-  const arr=[...groups.entries()].sort((a,b)=>b[1]-a[1]);
-  const top=arr.slice(0,7), rest=arr.slice(7).reduce((a,[,v])=>a+v,0);
-  if(rest>0) top.push(["Other",rest]);
-  const max=top[0]?.[1]||1;
-  el.innerHTML=top.map(([name,val])=>
-    `<div class="lccc-row"><div class="name" title="${esc(name)}">${esc(name)}</div>`+
-    `<div class="bar"><i style="width:${Math.max(1,val/max*100).toFixed(1)}%;background:${cssVar}"></i></div>`+
-    `<div class="val">${formatter(val)}</div></div>`).join("");
-}
-function renderLCCC(){
-  const gen=S.lcccActual, port=S.lcccPortfolio;
-  const genFoot=$("lccc-gen-foot"), portFoot=$("lccc-port-foot");
-  if(!gen || !gen.length){
-    $("lccc-gen-total").textContent="—"; $("lccc-pay-total").textContent="—"; $("lccc-tech-count").textContent="—";
-    $("lccc-gen-rows").innerHTML=`<div class="lccc-empty">LCCC CfD generation data is temporarily unavailable.</div>`;
-    genFoot.innerHTML=`Source: <a class="lccc-link" href="https://dp.lowcarboncontracts.uk/dataset/actual-cfd-generation-and-avoided-ghg-emissions" target="_blank" rel="noopener noreferrer">LCCC Data Portal</a>.`;
-  } else {
-    const dates=gen.map(r=>lcccDateKey(r.Settlement_Date)).filter(Boolean).sort();
-    const latest=dates[dates.length-1];
-    const rows=gen.filter(r=>lcccDateKey(r.Settlement_Date)===latest);
-    const tech=new Map(); let totalGen=0,totalPay=0;
-    rows.forEach(r=>{
-      const t=String(r.Technology||"Other");
-      const g=lcccNum(r.CFD_Generation_MWh), p=lcccNum(r.CFD_Payments_GBP);
-      totalGen+=g; totalPay+=p; tech.set(t,(tech.get(t)||0)+g);
-    });
-    $("lccc-gen-total").textContent=lcccFmtGWh(totalGen);
-    $("lccc-pay-total").textContent=lcccFmtGBP(totalPay);
-    $("lccc-tech-count").textContent=tech.size.toLocaleString("en-GB");
-    lcccBarRows($("lccc-gen-rows"),tech,v=>lcccFmtGWh(v));
-    genFoot.innerHTML=`Actual CfD generation eligible for CfD payments on <b>${esc(lcccFmtDate(latest))}</b>. `+
-      `Payments are nominal. LCCC API data is retrieved through the dashboard proxy. <a class="lccc-link" href="https://dp.lowcarboncontracts.uk/dataset/actual-cfd-generation-and-avoided-ghg-emissions" target="_blank" rel="noopener noreferrer">LCCC dataset ↗</a>`;
-  }
-  if(!port || !port.length){
-    $("lccc-contract-count").textContent="—"; $("lccc-cap-total").textContent="—"; $("lccc-live-count").textContent="—";
-    $("lccc-port-rows").innerHTML=`<div class="lccc-empty">LCCC CfD portfolio data is temporarily unavailable.</div>`;
-    portFoot.innerHTML=`Source: <a class="lccc-link" href="https://dp.lowcarboncontracts.uk/dataset/cfd-contract-portfolio-status" target="_blank" rel="noopener noreferrer">LCCC Data Portal</a>.`;
-  } else {
-    const rows=port.filter(r=>String(r.CFD_ID||r.Name_of_CfD_Unit||"").trim());
-    const ids=new Set(rows.map(r=>String(r.CFD_ID||r.Name_of_CfD_Unit)));
-    const cap=rows.reduce((a,r)=>a+lcccNum(r.Maximum_Contract_Capacity_MW),0);
-    const live=rows.filter(r=>/post[- ]?start|operational|operating/i.test(String(r.Status||""))).length;
-    const tech=new Map();
-    rows.forEach(r=>{ const t=String(r.Technology_Type||"Other"); tech.set(t,(tech.get(t)||0)+lcccNum(r.Maximum_Contract_Capacity_MW)); });
-    $("lccc-contract-count").textContent=ids.size.toLocaleString("en-GB");
-    $("lccc-cap-total").textContent=lcccFmtMW(cap);
-    $("lccc-live-count").textContent=live.toLocaleString("en-GB");
-    lcccBarRows($("lccc-port-rows"),tech,v=>lcccFmtMW(v),"var(--c-wind)");
-    portFoot.innerHTML=`Maximum contract capacity by technology. LCCC API data is retrieved through the dashboard proxy. <a class="lccc-link" href="https://dp.lowcarboncontracts.uk/dataset/cfd-contract-portfolio-status" target="_blank" rel="noopener noreferrer">LCCC portfolio dataset ↗</a>`;
-  }
-}
-
-/* ============================================================
    RENDER
    ============================================================ */
 function render(){
@@ -5951,7 +5787,6 @@ function render(){
   renderTemp();
   renderStack(); renderPrice(); renderIC(); renderWind();
   renderCarbon(); renderFreq(); renderEmissions();
-  renderLCCC();
   attachTerms();
 }
 
@@ -5960,13 +5795,28 @@ function render(){
    v0.3192: generation mix and interconnector flows can now be inspected over 24h or 7d.
    The 7-day feeds are fetched only when first requested. */
 function setHistoryWindow(w){
-  S.historyWindow=w;document.querySelectorAll("[data-history]").forEach(b=>{const on=b.dataset.history===w;b.classList.toggle("is-on",on);b.setAttribute("aria-pressed",String(on));});
+  S.historyWindow=w;
+  document.querySelectorAll("[data-history]").forEach(b=>{
+    const on=b.dataset.history===w;
+    b.classList.toggle("is-on",on);
+    b.setAttribute("aria-pressed",String(on));
+  });
+  const sw=document.querySelector(".range-switch[aria-label=\"Generation history range\"]");
+  if(sw) sw.dataset.active=w;
   if(w==="7d"&&!S.historyLoaded){$("stack-note").textContent="Loading FUELHH history…";loadHistoryData();}
   renderStack();renderPrice();
 }
 function setICHistoryWindow(w){
-  S.icHistoryWindow=w;document.querySelectorAll("[data-ic-history]").forEach(b=>{const on=b.dataset.icHistory===w;b.classList.toggle("is-on",on);b.setAttribute("aria-pressed",String(on));});
-  if(w==="7d"&&!S.historyLoaded)loadHistoryData();renderIC();
+  S.icHistoryWindow=w;
+  document.querySelectorAll("[data-ic-history]").forEach(b=>{
+    const on=b.dataset.icHistory===w;
+    b.classList.toggle("is-on",on);
+    b.setAttribute("aria-pressed",String(on));
+  });
+  const sw=document.querySelector(".range-switch[aria-label=\"Interconnector history range\"]");
+  if(sw) sw.dataset.active=w;
+  if(w==="7d"&&!S.historyLoaded)loadHistoryData();
+  renderIC();
 }
 function csvCell(v){const x=String(v??"");return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x;}
 function downloadCSV(name,rows){
@@ -5986,7 +5836,14 @@ function exportICCSV(){
 document.addEventListener("click",e=>{
   const h=e.target.closest("[data-history]");if(h){setHistoryWindow(h.dataset.history);return;}
   const i=e.target.closest("[data-ic-history]");if(i){setICHistoryWindow(i.dataset.icHistory);return;}
-  if(e.target.closest("#export-stack")){exportStackCSV();return;}if(e.target.closest("#export-ic")){exportICCSV();return;}
+  if(e.target.closest("#export-stack")){
+    if(window.confirm("Download as CSV?\n\nThis will download the currently selected generation history ("+S.historyWindow+").")) exportStackCSV();
+    return;
+  }
+  if(e.target.closest("#export-ic")){
+    if(window.confirm("Download as CSV?\n\nThis will download the currently selected interconnector history ("+S.icHistoryWindow+").")) exportICCSV();
+    return;
+  }
 });
 
 /* ============================================================
@@ -6477,7 +6334,6 @@ document.addEventListener("keydown",(e)=>{
   });
 })();
 
-$("btn-refresh").addEventListener("click", ()=>{ $("livetext").textContent="refreshing…"; loadAll(); });
 /* The collapse is a CLASS ON THE LIST, not state held in script — so a re-render every five
    minutes cannot silently close a list the reader opened. renderMix only rewrites the button's
    label, and reads the open state back off the element that holds it. */
