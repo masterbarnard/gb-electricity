@@ -2272,6 +2272,224 @@
     .seo-chevron{width:38px;}
   }
 
+
+  /* v0.3200 — generation-history controls stay fixed between 24h and 7d.
+     The title/note can change width, but the controls occupy one fixed row. */
+  #panel-stack .panel-head{
+    align-items:flex-start;
+  }
+  #panel-stack .panel-tools{
+    display:flex !important;
+    align-items:center;
+    justify-content:flex-end !important;
+    gap:6px;
+    margin-left:auto !important;
+    padding-top:7px !important;
+    width:220px !important;
+    min-width:220px !important;
+    flex:0 0 220px !important;
+    flex-wrap:nowrap !important;
+  }
+  #panel-stack .panel-tools .range-switch{
+    flex:0 0 78px !important;
+    width:78px !important;
+    height:28px !important;
+  }
+  #panel-stack .panel-tools .export-btn{
+    flex:0 0 102px !important;
+    width:102px !important;
+    height:28px !important;
+    box-sizing:border-box;
+  }
+  #panel-stack .panel-tools .stack-expand{
+    flex:0 0 34px !important;
+    width:34px !important;
+    height:34px !important;
+    margin:0 !important;
+  }
+
+  /* Every part of each half of the range control is its own full-size button.
+     No text-only click targets or gaps. */
+
+  @media (max-width:760px){
+    #panel-stack .panel-head{
+      flex-wrap:wrap;
+    }
+    #panel-stack .panel-head .panel-tools{
+      width:220px !important;
+      min-width:220px !important;
+      flex:0 0 220px !important;
+      margin-left:auto !important;
+      padding-top:6px !important;
+      justify-content:flex-end !important;
+      align-self:flex-start;
+    }
+  }
+
+
+  /* v0.3201 — all 24h/7d controls use the same single-target switch behaviour
+     as MW/GW. The whole control is one keyboard/touch target; the moving blue
+     half communicates the selected state. */
+  .range-switch{
+    position:relative;
+    display:inline-flex;
+    align-items:stretch;
+    flex:0 0 78px;
+    width:78px;
+    height:28px;
+    border:1px solid var(--grey-line);
+    border-radius:6px;
+    overflow:hidden;
+    background:var(--surface);
+    padding:0;
+    margin:0;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    box-sizing:border-box;
+  }
+  .range-switch::before{
+    content:"";
+    position:absolute;
+    z-index:0;
+    top:0; bottom:0; left:0;
+    width:50%;
+    background:var(--blue-2);
+    border-radius:5px;
+    transition:transform .22s cubic-bezier(.4,0,.2,1);
+    pointer-events:none;
+  }
+  .range-switch[data-active="7d"]::before{transform:translateX(100%);}
+  .range-switch .range-btn{
+    position:relative;
+    z-index:1;
+    flex:1 0 50%;
+    width:50%;
+    min-width:0;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-sizing:border-box;
+    border:0;
+    background:none !important;
+    color:var(--ink-dim);
+    font:700 9px var(--sans);
+    letter-spacing:.03em;
+    padding:0 6px;
+    text-align:center;
+    pointer-events:none;
+    user-select:none;
+  }
+  .range-switch .range-btn.is-on{color:var(--head-ink);}
+  .range-switch:focus-visible{
+    outline:2px solid var(--blue-text);
+    outline-offset:2px;
+  }
+  .range-switch:hover{border-color:var(--blue-text);}
+  @media (prefers-reduced-motion:reduce){.range-switch::before{transition:none;}}
+  @media (pointer:coarse){
+    .range-switch{height:44px;min-height:44px;}
+    .range-switch .range-btn{height:44px;min-height:44px;padding:0 7px;}
+  }
+
+
+  /* v0.3202 — 24h/7d switches use the same colour contract as Simplified/Detailed:
+     active = white text on solid blue; inactive = grey text on white. */
+  .range-switch{
+    border-color:var(--blue-line);
+    background:var(--surface);
+  }
+  .range-switch::before{
+    background:var(--accent);
+  }
+  .range-switch .range-btn{
+    color:var(--ink-dim);
+  }
+  .range-switch .range-btn.is-on{
+    color:var(--head-ink);
+  }
+
+
+  /* v0.3203 — history-panel controls are one fixed group. The note may change
+     between 24h and 7d, but the controls cannot move with it. */
+  #panel-ic .panel-tools,
+  #panel-stack .panel-tools{
+    display:flex !important;
+    align-items:center;
+    justify-content:flex-end !important;
+    gap:6px !important;
+    margin-left:auto !important;
+    flex:0 0 220px !important;
+    width:220px !important;
+    min-width:220px !important;
+    flex-wrap:nowrap !important;
+  }
+
+  #panel-ic .panel-tools .range-switch,
+  #panel-stack .panel-tools .range-switch{
+    flex:0 0 78px !important;
+    width:78px !important;
+  }
+
+  #panel-ic .panel-tools .export-btn,
+  #panel-stack .panel-tools .export-btn{
+    flex:0 0 102px !important;
+    width:102px !important;
+    box-sizing:border-box;
+  }
+
+  #panel-ic .panel-tools .panelbtn.xp,
+  #panel-stack .panel-tools .panelbtn.xp{
+    flex:0 0 34px !important;
+    width:34px !important;
+    height:34px !important;
+    margin:0 !important;
+  }
+
+  @media (max-width:760px){
+    #panel-ic .panel-tools,
+    #panel-stack .panel-tools{
+      flex:0 0 220px !important;
+      width:220px !important;
+      min-width:220px !important;
+      margin-left:auto !important;
+      gap:6px !important;
+    }
+  }
+
+
+  /* v0.3204 — keep Wind/Solar switch exactly the same height as the 24h/7d switch. */
+  #wind-controls .wind-range,
+  #wind-controls .viewswitch{
+    height:27px;
+    min-height:27px;
+    box-sizing:border-box;
+    align-self:center;
+  }
+  #wind-controls .wind-range .range-btn,
+  #wind-controls .viewswitch .viewbtn{
+    height:25px;
+    min-height:25px;
+    box-sizing:border-box;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+  }
+  @media (pointer:coarse){
+    #wind-controls .wind-range,
+    #wind-controls .viewswitch{
+      height:44px;
+      min-height:44px;
+    }
+    #wind-controls .wind-range .range-btn,
+    #wind-controls .viewswitch .viewbtn{
+      height:44px;
+      min-height:44px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+  }
 </style>
 </head>
 <body data-density="simple">
@@ -2545,18 +2763,18 @@
         <h2 id="stack-title">Last 24 hours</h2>
         <span class="note" id="stack-note">Half-hourly outturn</span>
         <div class="panel-tools" aria-label="Generation history controls">
-          <div class="range-switch" data-active="24h" role="group" aria-label="Generation history range">
-            <button type="button" class="range-btn is-on" data-history="24h" aria-pressed="true">24h</button>
-            <button type="button" class="range-btn" data-history="7d" aria-pressed="false">7d</button>
+          <div class="range-switch" data-active="24h" role="switch" aria-checked="true" tabindex="0" aria-label="Generation history range">
+            <span class="range-btn is-on" data-range="24h">24h</span>
+            <span class="range-btn" data-range="7d">7d</span>
           </div>
           <button type="button" class="export-btn" id="export-stack" title="Download the selected generation history as CSV">Download as CSV</button>
+          <button class="panelbtn xp stack-expand" data-panel="stack" aria-expanded="false"
+            aria-label="Expand view" title="Expand view">
+            <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
+            </svg>
+          </button>
         </div>
-        <button class="panelbtn xp" data-panel="stack" aria-expanded="false"
-          aria-label="Expand view" title="Expand view">
-          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
-          </svg>
-        </button>
       </div>
       <div class="panel-body">
         <div class="chartbox" id="stackbox">
@@ -2586,18 +2804,18 @@
         <h2>Interconnector flows</h2>
         <span class="note" id="ic-note"><span class="term ds" data-term="INTOUTHH">INTOUTHH</span> · half-hourly</span>
         <div class="panel-tools" aria-label="Interconnector history controls">
-          <div class="range-switch" data-active="24h" role="group" aria-label="Interconnector history range">
-            <button type="button" class="range-btn is-on" data-ic-history="24h" aria-pressed="true">24h</button>
-            <button type="button" class="range-btn" data-ic-history="7d" aria-pressed="false">7d</button>
+          <div class="range-switch" data-active="24h" role="switch" aria-checked="true" tabindex="0" aria-label="Interconnector history range">
+            <span class="range-btn is-on" data-range="24h">24h</span>
+            <span class="range-btn" data-range="7d">7d</span>
           </div>
           <button type="button" class="export-btn" id="export-ic" title="Download the selected interconnector history as CSV">Download as CSV</button>
+          <button class="panelbtn xp ic-expand" data-panel="ic" aria-expanded="false"
+            aria-label="Expand view" title="Expand view">
+            <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
+            </svg>
+          </button>
         </div>
-        <button class="panelbtn xp" data-panel="ic" aria-expanded="false"
-          aria-label="Expand view" title="Expand view">
-          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
-          </svg>
-        </button>
       </div>
       <div class="panel-body" id="ic-body">
         <div id="icrows"></div>
@@ -2621,9 +2839,9 @@
              identical must not behave differently. Click anywhere to flip. -->
         <span class="note" id="wind-note"><span class="term ds" data-term="FUELHH">FUELHH</span> vs <span class="term ds" data-term="WINDFOR">WINDFOR</span></span>
         <div class="panel-tools" id="wind-controls" aria-label="Wind chart controls">
-          <div class="range-switch wind-range" data-active="24h" role="group" aria-label="Wind history range">
-            <button type="button" class="range-btn is-on" data-wind-history="24h" aria-pressed="true">24h</button>
-            <button type="button" class="range-btn" data-wind-history="7d" aria-pressed="false">7d</button>
+          <div class="range-switch wind-range" data-active="24h" role="switch" aria-checked="true" tabindex="0" aria-label="Wind history range">
+            <span class="range-btn is-on" data-range="24h">24h</span>
+            <span class="range-btn" data-range="7d">7d</span>
           </div>
           <button type="button" class="viewswitch" id="wind-view" data-view="wind" data-flip="0"
                   role="switch" aria-checked="false" aria-label="Show the solar forecast instead of wind">
@@ -3142,7 +3360,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.31999";
+const APP_VERSION = "v0.3203";
  // v0.31993: aligned Simplified/Detailed view controls and headline tile geometry; centered the view switch; upgraded the homepage methodology disclosure styling.
 // v0.31994: restored v0.31992 Detailed headline geometry; left-aligned main view switch; independent Wind 24h/7d range; shared readable 7-day date/time axis; clarified embedded-generation and BESS accounting.
 // v0.31998: restored the original Simplified/Detailed switch size; made every 24h/7d segment fully clickable; matched Wind/Solar control top padding to Interconnector controls; right-aligned standalone Detailed expand/close controls; added an explicit About info icon with right-aligned chevrons.
@@ -6579,13 +6797,12 @@ function setWindHistoryWindow(w){
   if(w==="7d" && S.windView==="solar") w="24h";
   const changed=S.windHistoryWindow!==w;
   S.windHistoryWindow=w;
-  document.querySelectorAll("[data-wind-history]").forEach(b=>{
-    const on=b.dataset.windHistory===w;
-    b.classList.toggle("is-on",on);
-    b.setAttribute("aria-pressed",String(on));
-  });
   const sw=document.querySelector(".wind-range");
-  if(sw) sw.dataset.active=w;
+  if(sw){
+    sw.dataset.active=w;
+    sw.setAttribute("aria-checked",String(w==="7d"));
+    sw.querySelectorAll(".range-btn").forEach(b=>b.classList.toggle("is-on",b.dataset.range===w));
+  }
   if(w==="7d"&&!S.historyLoaded){
     const n=$("wind-note");
     if(n) n.textContent="Loading seven-day wind history…";
@@ -6596,25 +6813,23 @@ function setWindHistoryWindow(w){
 }
 function setHistoryWindow(w){
   S.historyWindow=w;
-  document.querySelectorAll("[data-history]").forEach(b=>{
-    const on=b.dataset.history===w;
-    b.classList.toggle("is-on",on);
-    b.setAttribute("aria-pressed",String(on));
-  });
   const sw=document.querySelector(".range-switch[aria-label=\"Generation history range\"]");
-  if(sw) sw.dataset.active=w;
+  if(sw){
+    sw.dataset.active=w;
+    sw.setAttribute("aria-checked",String(w==="7d"));
+    sw.querySelectorAll(".range-btn").forEach(b=>b.classList.toggle("is-on",b.dataset.range===w));
+  }
   if(w==="7d"&&!S.historyLoaded){$("stack-note").textContent="Loading FUELHH history…";loadHistoryData();}
   renderStack();renderPrice();
 }
 function setICHistoryWindow(w){
   S.icHistoryWindow=w;
-  document.querySelectorAll("[data-ic-history]").forEach(b=>{
-    const on=b.dataset.icHistory===w;
-    b.classList.toggle("is-on",on);
-    b.setAttribute("aria-pressed",String(on));
-  });
   const sw=document.querySelector(".range-switch[aria-label=\"Interconnector history range\"]");
-  if(sw) sw.dataset.active=w;
+  if(sw){
+    sw.dataset.active=w;
+    sw.setAttribute("aria-checked",String(w==="7d"));
+    sw.querySelectorAll(".range-btn").forEach(b=>b.classList.toggle("is-on",b.dataset.range===w));
+  }
   if(w==="7d"&&!S.historyLoaded)loadHistoryData();
   renderIC();
 }
@@ -6633,10 +6848,35 @@ function exportICCSV(){
     .map(r=>({startTime:r.startTime,settlementDate:r.settlementDate,settlementPeriod:r.settlementPeriod,interconnector:r.interconnectorName,generationMW:r.generation}));
   downloadCSV(`gb-electricity-interconnectors-${S.icHistoryWindow}.csv`,rows);
 }
+document.querySelectorAll(".range-switch").forEach(sw=>{
+  sw.addEventListener("keydown",e=>{
+    if(e.key===" " || e.key==="Enter"){
+      e.preventDefault();
+      sw.click();
+    } else if(e.key==="ArrowLeft" || e.key==="ArrowUp"){
+      e.preventDefault();
+      const current=sw.dataset.active==="7d"?"7d":"24h";
+      if(sw.classList.contains("wind-range")) setWindHistoryWindow("24h");
+      else if(sw.getAttribute("aria-label")==="Interconnector history range") setICHistoryWindow("24h");
+      else setHistoryWindow("24h");
+    } else if(e.key==="ArrowRight" || e.key==="ArrowDown"){
+      e.preventDefault();
+      if(sw.classList.contains("wind-range")) setWindHistoryWindow("7d");
+      else if(sw.getAttribute("aria-label")==="Interconnector history range") setICHistoryWindow("7d");
+      else setHistoryWindow("7d");
+    }
+  });
+});
 document.addEventListener("click",e=>{
-  const wh=e.target.closest("[data-wind-history]");if(wh){setWindHistoryWindow(wh.dataset.windHistory);return;}
-  const h=e.target.closest("[data-history]");if(h){setHistoryWindow(h.dataset.history);return;}
-  const i=e.target.closest("[data-ic-history]");if(i){setICHistoryWindow(i.dataset.icHistory);return;}
+  const range=e.target.closest(".range-switch");
+  if(range){
+    const current=range.dataset.active==="7d"?"7d":"24h";
+    const next=current==="24h"?"7d":"24h";
+    if(range.classList.contains("wind-range")) setWindHistoryWindow(next);
+    else if(range.getAttribute("aria-label")==="Interconnector history range") setICHistoryWindow(next);
+    else setHistoryWindow(next);
+    return;
+  }
   if(e.target.closest("#export-stack")){
     if(window.confirm("Download as CSV?\n\nThis will download the currently selected generation history ("+S.historyWindow+").")) exportStackCSV();
     return;
