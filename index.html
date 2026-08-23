@@ -264,7 +264,11 @@
      The scrollbar appeared after live data populated because the final rendered
      content became a few pixels taller than the viewport. Keep Detailed as a
      normal scrolling document; only Simplified desktop gets a fixed viewport. */
-  @media (min-width:901px){
+  /* v0.33: gated on WINDOW HEIGHT as well as width. Ungated, a 1200x640 window clipped the
+     methodology disclosure under the footer with no way to scroll to it — measured, not
+     supposed. Below 760px of height the lock stands down and Simplified scrolls normally,
+     which is the honest behaviour when the viewport cannot hold the page. */
+  @media (min-width:901px) and (min-height:760px){
     html:has(body[data-density="simple"]){
       overflow:hidden;
     }
@@ -1680,7 +1684,11 @@
   .seo-details summary::before{content:"+";display:inline-grid;place-items:center;width:17px;height:17px;
     border:1px solid var(--blue-line);border-radius:50%;font-weight:800;line-height:1;}
   .seo-details[open] summary::before{content:"−";}
-  .seo-details summary:focus-visible{outline:2px solid rgba(255,255,255,.82);outline-offset:-3px;border-radius:8px;}
+  /* v0.33: this outline was white — drawn on the bar's original blue fill, invisible once
+     v0.31998 restyled the bar to a white surface. And the later focus rules removed the outline
+     entirely, which left the disclosure with NO keyboard focus indicator at all. A control a
+     keyboard user cannot see they are on is a control they cannot use. */
+  .seo-details summary:focus-visible{outline:2px solid var(--blue-text);outline-offset:-3px;border-radius:8px;}
   .seo-details{
     margin-top:8px;
     border:1px solid var(--blue-line);
@@ -1721,7 +1729,7 @@
     width:44px;
     height:100%;
     display:block;
-    background:var(--red);
+    background:var(--accent);
     border-radius:0 8px 8px 0;
     box-shadow:inset 1px 0 rgba(255,255,255,.16);
   }
@@ -2208,9 +2216,11 @@
     text-align:center;
     vertical-align:middle;
   }
-  .seo-details summary:focus,
-  .seo-details summary:active,
-  .seo-details:focus-within{
+  /* v0.33: was a blanket outline:none on :focus, :active AND :focus-within, which erased the
+     keyboard indicator along with the mouse one. :focus-visible draws only for keyboard focus,
+     so suppressing the rest is now safe — that distinction is the entire job of the selector. */
+  .seo-details summary:focus:not(:focus-visible),
+  .seo-details summary:active{
     outline:none;
     box-shadow:none;
   }
@@ -2218,10 +2228,17 @@
     content:none;
     display:none;
   }
+  /* v0.33: this cell was RED, and it is a click affordance — the part of the bar that says
+     "this opens". The project's red rule has been explicit since rev 18: structural end caps
+     and the hero accent only, never buttons or interactive states, and the harness caps the
+     largest single red instance at 400px² precisely so the device cannot creep. A 42px-tall
+     action cell is ~1,500px² of red doing a button's job. The affordance keeps its shape and
+     its white chevron; it wears the chrome blue, which is what every other "this opens"
+     treatment on the page already wears. */
   .seo-details summary::after{
     width:42px;
     height:100%;
-    background:var(--red);
+    background:var(--accent);
     border-radius:0 7px 7px 0;
     box-shadow:none;
   }
@@ -3310,7 +3327,7 @@
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" id="version-label" title="Dashboard version">v0.3206</span> &middot;
+      <span class="version-label" id="version-label" title="Dashboard version">v0.33</span> &middot;
       <button type="button" id="btn-about" class="footer-link">About this Dashboard</button>
     </div>
   </div>
@@ -3361,7 +3378,13 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.3206";
+const APP_VERSION = "v0.33";
+// v0.33: release check of the v0.3206 ChatGPT build — CSV export cell join fixed (newline -> comma);
+// dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
+// restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
+// (red stays reserved for the structural end caps); the Simplified viewport lock gated on window
+// height so short windows scroll instead of clipping; the Wind 7d-disable wired to the element it
+// actually targets. Full record in the changelog.
  // v0.3206: removed the Buy Me a Coffee footer link and clarified independent-project status in About this Dashboard.
 // v0.31993: aligned Simplified/Detailed view controls and headline tile geometry; centered the view switch; upgraded the homepage methodology disclosure styling.
 // v0.31994: restored v0.31992 Detailed headline geometry; left-aligned main view switch; independent Wind 24h/7d range; shared readable 7-day date/time axis; clarified embedded-generation and BESS accounting.
@@ -4521,10 +4544,10 @@ function renderStatus(snap){
     const ageMin=(Date.now()-new Date(snap.publishTime).getTime())/60000,stale=ageMin>20;
     dot.className="livedot"+(stale?" stale":"");live.classList.toggle("stale",stale);live.classList.remove("err");
     txt.textContent=(stale?"Stale · ":"Live · ")+"updated "+fmtTime(snap.publishTime)+" · SP"+(snap.settlementPeriod??"–");
-    live.title=stale?"The latest live snapshot is more than 20 minutes old. Use Refresh to try again.":"Latest Elexon live generation snapshot: "+fmtTime(snap.publishTime)+" · settlement period "+(snap.settlementPeriod??"–");
+    live.title=stale?"The latest live snapshot is more than 20 minutes old. The page refreshes automatically every five minutes.":"Latest Elexon live generation snapshot: "+fmtTime(snap.publishTime)+" · settlement period "+(snap.settlementPeriod??"–");
   }
   const eb=$("errbar");
-  if(S.errors.length){eb.style.display="block";eb.innerHTML="<b>Some feeds didn't load.</b> "+S.errors.map(esc).join(" · ")+"<br>Use <b>Refresh</b> to retry. If you opened this file directly and the browser reports a CORS or network error, serve the folder over http (e.g. <b class='ds'>python3 -m http.server</b>) and reload.";}
+  if(S.errors.length){eb.style.display="block";eb.innerHTML="<b>Some feeds didn't load.</b> "+S.errors.map(esc).join(" · ")+"<br>The page retries automatically every five minutes. If you opened this file directly and the browser reports a CORS or network error, serve the folder over http (e.g. <b class='ds'>python3 -m http.server</b>) and reload.";}
   else eb.style.display="none";
 }
 
@@ -5570,7 +5593,7 @@ function renderPrice(){
   const geom = chartGeom(box, {sm:120, md:140, lg:150});
   if(!geom) return;
   const {W,ml,mr} = geom;
-  const H = null || (box.closest(".panel")||{}).classList?.contains("is-expanded")
+  const H = (box.closest(".panel")||{}).classList?.contains("is-expanded")
     ? Math.min(260, geom.H) : geom.H;
   const mt=10, mb=20, iw=W-ml-mr, ih=H-mt-mb;
   svg.setAttribute("viewBox",`0 0 ${W} ${H}`); svg.setAttribute("height",H);
@@ -6714,10 +6737,15 @@ function renderWindSolar(){
     $("wind-legend").innerHTML = view==="solar" ? SOLAR_LEGEND : WIND_LEGEND;
     const wc=$("wind-controls");
     const wr=wc?.querySelector(".wind-range");
-    const w7=wc?.querySelector('[data-wind-history="7d"]');
+    /* v0.33: this queried [data-wind-history="7d"], an attribute nothing in the markup carries,
+       so the whole disable branch was dead — the CSS for a disabled 7d segment could never
+       fire. The segments are spans, so the DISABLED ATTRIBUTE is set, not the property: the
+       CSS [disabled] selector matches attributes, and el.disabled on a span sets neither. */
+    const w7=wc?.querySelector('.wind-range .range-btn[data-range="7d"]');
     if(wc) wc.classList.remove("solar-active");
     if(w7){
-      w7.disabled = view==="solar";
+      if(view==="solar") w7.setAttribute("disabled","");
+      else w7.removeAttribute("disabled");
       if(view==="solar" && S.windHistoryWindow!=="24h"){
         setWindHistoryWindow("24h");
       }
@@ -6838,7 +6866,10 @@ function setICHistoryWindow(w){
 function csvCell(v){const x=String(v??"");return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x;}
 function downloadCSV(name,rows){
   if(!rows.length)return;const keys=[...new Set(rows.flatMap(r=>Object.keys(r)))];
-  const csv=[keys.map(csvCell).join(","),...rows.map(r=>keys.map(k=>csvCell(r[k])).join("\n"))].join("\n");
+  /* v0.33: the data cells were joined with "\n" — every exported row arrived as one cell per
+     line, so the header was the only valid CSV row in the file. Cells join with commas; rows
+     with newlines. Found by opening an export, which is the test the feature never got. */
+  const csv=[keys.map(csvCell).join(","),...rows.map(r=>keys.map(k=>csvCell(r[k])).join(","))].join("\n");
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=name;document.body.appendChild(a);a.click();
   setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},0);
 }
@@ -6879,14 +6910,13 @@ document.addEventListener("click",e=>{
     else setHistoryWindow(next);
     return;
   }
-  if(e.target.closest("#export-stack")){
-    if(window.confirm("Download as CSV?\n\nThis will download the currently selected generation history ("+S.historyWindow+").")) exportStackCSV();
-    return;
-  }
-  if(e.target.closest("#export-ic")){
-    if(window.confirm("Download as CSV?\n\nThis will download the currently selected interconnector history ("+S.icHistoryWindow+").")) exportICCSV();
-    return;
-  }
+  /* v0.33: the confirm() dialogs are gone. Each asked "Download as CSV?" after a click on a
+     button labelled "Download as CSV" — a confirmation that restates the button is not a
+     safeguard, it is a second click. A CSV download is also harmless and instantly reversible,
+     which is the class of action confirmations exist NOT to guard. The filename still names
+     the selected window, so what was downloaded is never ambiguous. */
+  if(e.target.closest("#export-stack")){ exportStackCSV(); return; }
+  if(e.target.closest("#export-ic")){ exportICCSV(); return; }
 });
 
 /* ============================================================
