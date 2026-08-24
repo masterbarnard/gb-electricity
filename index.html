@@ -906,22 +906,69 @@
 
   /* Expanded: one panel occupies the dashboard's available viewport.
      This is intentionally not browser fullscreen: the site header remains visible and the
-     panel becomes a full-width, full-height reading surface with its own scrollable body. */
+     panel becomes a full-width, full-height reading surface with its own scrollable body.
+
+     v0.38: THE GEOMETRY IS MEASURED, NOT ASSUMED. The old rule sized the panel to
+     100dvh - 24px — the height of a viewport the panel did not start at the top of. Everything
+     left standing above it (the view switch, the glance band, and on a scrolled page the frozen
+     scroll offset itself) pushed the panel's bottom that many pixels past the viewport edge,
+     with page scrolling locked: the bottom was unreachable on EVERY window, catastrophically on
+     short ones, and a page scrolled down before expanding stranded the panel head above the
+     fold. Reported by a reader as "stuck", measured at 91-313px of unreachable panel.
+     Three changes, together:
+     - every sibling section hides while a panel is expanded (the expanded state now truly owns
+       the space it claimed to own; the masthead stays);
+     - the page scrolls to the top on expand and the position is restored on close (in JS);
+     - the height is SET IN JS from the panel's measured top edge, on expand and on resize —
+       no assumption survives about what stands above. */
   body[data-expanded]{overflow:hidden;}
   body[data-expanded] .grid > :not(.is-expanded){display:none;}
+  body[data-expanded] #main > section:not(:has(.panel.is-expanded)){display:none;}
+  body[data-expanded] .viewbar-strip{display:none;}
   body[data-expanded] .grid{grid-template-columns:minmax(0,1fr) !important;margin-top:12px;}
   body[data-expanded] footer.foot{display:none;}
   .panel.is-expanded{
     grid-column:1/-1;
-    min-height:calc(100dvh - 24px);
-    height:calc(100dvh - 24px);
     margin-top:12px;
+    display:flex;
+    flex-direction:column;
+    min-height:0;
   }
   .panel.is-expanded .panel-body{
+    flex:1;
+    min-height:0;
     overflow:auto;
     -webkit-overflow-scrolling:touch;
     overscroll-behavior:contain;
     touch-action:pan-y;
+  }
+  /* The way out is visible: an "esc" chip beside the close button, because a keyboard exit
+     nobody can see is a fire door behind a curtain. Decorative for pointer users, so it never
+     intercepts a click. */
+  .panelbtn.is-close{position:relative;}
+  .panelbtn.is-close::before{
+    content:"esc";position:absolute;right:calc(100% + 8px);top:50%;transform:translateY(-50%);
+    font:700 9px/1.6 ui-monospace,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--ink-mute);border:1px solid var(--grey-line);border-radius:4px;padding:0 5px;
+    pointer-events:none;white-space:nowrap;
+  }
+  /* v0.38: THE EXPANDED MIX PANEL FILLS ITS SURFACE. The charts already earn their height from
+     the window in chartGeom; the ranking rows did not, so the expanded fuel panel was a third
+     of content over two-thirds of blank card. The rows now share the leftover height equally
+     and the bars thicken with their rows, capped so nine fuels on a tall monitor stay bars
+     rather than becoming slabs. */
+  #panel-mix.is-expanded .panel-body{display:flex;flex-direction:column;}
+  /* #mixrows lives inside the #mixhover tooltip wrapper (v0.20), so the flex chain has to pass
+     through it — flexing the grid inside a content-sized parent flexes nothing, which is how
+     the first draft of this rule produced 3px bars on a 900px window. */
+  #panel-mix.is-expanded #mixhover{flex:1;min-height:0;display:flex;flex-direction:column;}
+  #panel-mix.is-expanded #mixrows{
+    flex:1;min-height:0;
+    grid-auto-rows:minmax(0,1fr);
+    align-items:center;
+  }
+  #panel-mix.is-expanded #mixrows .track{
+    align-self:stretch;height:auto;max-height:42px;margin:clamp(4px,1.2vh,12px) 0;
   }
 
   /* ================= Stat tiles ================= */
@@ -1261,7 +1308,8 @@
              margin-top:5px;gap:10px;}
   .subchart{margin-top:14px;padding-top:12px;border-top:1px solid var(--grey-line);}
   .subchart-title{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--ink-dim);margin-bottom:6px;}
+    color:var(--ink-dim);margin-bottom:6px;display:flex;align-items:center;}
+  .subchart-title .export-btn{text-transform:none;letter-spacing:0;}
   .subchart-title span{font-weight:400;letter-spacing:0;text-transform:none;
     font-size:10px;color:var(--ink-mute);margin-left:6px;}
 
@@ -2192,9 +2240,9 @@
   @media (max-width:760px){
     body[data-expanded]{overflow:hidden;}
     body[data-expanded] .wrap{padding-left:8px;padding-right:8px;}
+    /* v0.38: the phone variant carried the same 100dvh assumption and loses it the same way —
+       the JS measurement owns the height at every width. */
     .panel.is-expanded{
-      min-height:calc(100dvh - 18px);
-      height:calc(100dvh - 18px);
       margin-top:9px;
       border-radius:9px;
     }
@@ -2853,6 +2901,7 @@
       <div class="panel-head">
         <h2>Generation by fuel type</h2>
         <span class="note" id="mix-note">5-min</span>
+        <button type="button" class="export-btn" id="export-mix" title="Download the current generation mix as CSV">Download as CSV</button>
         <button class="panelbtn xp" data-panel="mix" aria-expanded="false"
           aria-label="Expand view" title="Expand view">
           <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -2907,7 +2956,8 @@
         </div>
         <div class="legend" id="stacklegend"></div>
         <div class="subchart">
-          <div class="subchart-title">Imbalance price <span>system sell / buy price, <span class="term ds" data-term="DISEBSP">DISEBSP</span></span></div>
+          <div class="subchart-title">Imbalance price <span>system sell / buy price, <span class="term ds" data-term="DISEBSP">DISEBSP</span></span>
+            <button type="button" class="export-btn" id="export-price" style="margin-left:auto;" title="Download the imbalance price series as CSV">Download as CSV</button></div>
           <div class="chartbox" id="pricebox">
             <svg class="chart" id="price" role="img"
                  aria-label="Line chart of the imbalance price over the last 24 hours"></svg>
@@ -2972,6 +3022,7 @@
             <span class="viewbtn is-on" data-view="wind">Wind</span>
             <span class="viewbtn" data-view="solar">Solar</span>
           </button>
+          <button type="button" class="export-btn" id="export-wind" title="Download the selected wind outturn and forecasts as CSV">Download as CSV</button>
           <button class="panelbtn xp wind-expand" data-panel="wind" aria-expanded="false"
             aria-label="Expand view" title="Expand view">
             <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -3013,6 +3064,7 @@
       <div class="panel-head">
         <h2>Carbon intensity</h2>
         <span class="note" id="ci-note">NESO · half-hourly</span>
+        <button type="button" class="export-btn" id="export-ci" title="Download the last 24 hours of carbon intensity as CSV">Download as CSV</button>
         <button class="panelbtn xp" data-panel="ci" aria-expanded="false"
           aria-label="Expand view" title="Expand view">
           <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -3050,6 +3102,7 @@
       <div class="panel-head">
         <h2>System frequency</h2>
         <span class="note"><span class="term ds" data-term="FREQ">FREQ</span> · 15-second</span>
+        <button type="button" class="export-btn" id="export-freq" title="Download the last hour of system frequency as CSV">Download as CSV</button>
         <button class="panelbtn xp" data-panel="freq" aria-expanded="false"
           aria-label="Expand view" title="Expand view">
           <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -3433,7 +3486,7 @@
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" id="version-label" title="Dashboard version">v0.37</span> &middot;
+      <span class="version-label" id="version-label" title="Dashboard version">v0.38</span> &middot;
       <button type="button" id="btn-about" class="footer-link">About this Dashboard</button>
     </div>
   </div>
@@ -3484,7 +3537,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.37";
+const APP_VERSION = "v0.38";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -7055,6 +7108,54 @@ function exportICCSV(){
     .map(r=>({startTime:r.startTime,settlementDate:r.settlementDate,settlementPeriod:r.settlementPeriod,interconnector:r.interconnectorName,generationMW:r.generation}));
   downloadCSV(`gb-electricity-interconnectors-${S.icHistoryWindow}.csv`,rows);
 }
+/* v0.38: EVERY DATA PANEL EXPORTS, at a reader's request. Each exporter reads the same state
+   the panel rendered from — never a re-fetch, never a re-derivation — so the file can only
+   ever say what the screen said. Columns carry their units in the header, because a CSV
+   outlives the page that explains it. */
+function exportMixCSV(){
+  const snap=latestSnapshot(); if(!snap) return;
+  const k=snap.byKey, sol=latestSolar();
+  const rows=SERIES.map(s=>({fuel:s.label, elexonCodes:s.codes?s.codes.join(" "):"INT (all)",
+    megawatts:Math.round(k[s.key]||0), basis:"metered (FUELINST)"}));
+  if(sol) rows.push({fuel:"Solar (embedded)", elexonCodes:"AGWS/PV_Live",
+    megawatts:Math.round(Math.max(0,sol.mw)), basis:"estimated"});
+  const total=rows.reduce((a,r)=>a+Math.max(0,r.megawatts),0)||1;
+  rows.forEach(r=>r.sharePct=(Math.max(0,r.megawatts)/total*100).toFixed(1));
+  rows.forEach(r=>r.snapshotStart=snap.startTime);
+  downloadCSV("gb-electricity-fuel-mix.csv",rows);
+}
+function exportPriceCSV(){
+  const src=S.historyWindow==="7d"?S.px7d:S.prices;
+  const rows=(src||[]).filter(r=>r&&r.startTime&&r.systemSellPrice!=null)
+    .map(r=>({startTime:r.startTime,settlementPeriod:r.settlementPeriod,
+      priceGBPperMWh:r.systemSellPrice,netImbalanceVolumeMWh:r.netImbalanceVolume}));
+  downloadCSV(`gb-electricity-imbalance-price-${S.historyWindow}.csv`,rows);
+}
+function exportCarbonCSV(){
+  const rows=(S.ci24||[]).map(r=>{const rd=ciRead(r);return {from:r.from,to:r.to,
+    forecastgCO2perkWh:r.intensity&&r.intensity.forecast!=null?r.intensity.forecast:"",
+    actualgCO2perkWh:rd&&rd.settled?rd.g:"",
+    band:r.intensity&&r.intensity.index?r.intensity.index:""};});
+  downloadCSV("gb-electricity-carbon-intensity-24h.csv",rows);
+}
+function exportFreqCSV(){
+  const rows=(S.freq||[]).filter(r=>r&&r.measurementTime&&r.frequency!=null&&isFinite(r.frequency))
+    .map(r=>({measurementTime:r.measurementTime,frequencyHz:r.frequency}));
+  downloadCSV("gb-electricity-frequency-1h.csv",rows);
+}
+function exportWindCSV(){
+  const win=S.windHistoryWindow;
+  const sumByHH=(src)=>{const m=new Map();(src||[]).forEach(r=>{
+    if(!r||!r.startTime||r.quantity==null)return;
+    const key2=halfHourKey(r.startTime);m.set(key2,(m.get(key2)||0)+(+r.quantity||0));});return m;};
+  const late=sumByHH(win==="7d"?S.windfor7:S.windfor);
+  const early=sumByHH(win==="7d"?S.winEarly7:S.winEarly);
+  const rows=windOutturnSeries(win).filter(p=>p&&p.t&&p.v!=null).map(p=>{const key2=halfHourKey(p.t);
+    return {startTime:p.t,outturnMW:Math.round(p.v),
+      latestForecastMW:late.has(key2)?Math.round(late.get(key2)):"",
+      firstForecastMW:early.has(key2)?Math.round(early.get(key2)):""};});
+  downloadCSV(`gb-electricity-wind-${win}.csv`,rows);
+}
 document.querySelectorAll(".range-switch").forEach(sw=>{
   sw.addEventListener("keydown",e=>{
     if(e.key===" " || e.key==="Enter"){
@@ -7091,6 +7192,11 @@ document.addEventListener("click",e=>{
      the selected window, so what was downloaded is never ambiguous. */
   if(e.target.closest("#export-stack")){ exportStackCSV(); return; }
   if(e.target.closest("#export-ic")){ exportICCSV(); return; }
+  if(e.target.closest("#export-mix")){ exportMixCSV(); return; }
+  if(e.target.closest("#export-price")){ exportPriceCSV(); return; }
+  if(e.target.closest("#export-ci")){ exportCarbonCSV(); return; }
+  if(e.target.closest("#export-freq")){ exportFreqCSV(); return; }
+  if(e.target.closest("#export-wind")){ exportWindCSV(); return; }
 });
 
 /* ============================================================
@@ -7507,16 +7613,39 @@ const EXPAND_ICON = `<svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="t
   <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
 </svg>`;
 
+/* v0.38: the expanded panel's height is MEASURED from where it actually starts, on expand and
+   on every resize — the 100dvh CSS assumption stranded 91-313px of panel below a locked
+   viewport (more, if the page was scrolled down first, which also stranded the close button
+   above it). The page scrolls to the top on expand so the panel head sits under the masthead,
+   and closing returns the reader to the panel in its page context. */
+let lastExpandedKey = null;
+function sizeExpandedPanel(){
+  const p = document.querySelector(".panel.is-expanded");
+  if(!p){ return; }
+  p.style.height = Math.max(220, window.innerHeight - p.getBoundingClientRect().top - 12) + "px";
+}
+window.addEventListener("resize", ()=>{ if(expandedPanel){ sizeExpandedPanel(); } });
+
 function setExpanded(key){
   expandedPanel = key;
-  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("is-expanded"));
+  document.querySelectorAll(".panel").forEach(p=>{ p.classList.remove("is-expanded"); p.style.height=""; });
 
   if(key){
+    lastExpandedKey = key;
     const panel = document.getElementById("panel-"+key);
     if(panel) panel.classList.add("is-expanded");
     document.body.setAttribute("data-expanded", key);
+    window.scrollTo(0, 0);
+    sizeExpandedPanel();
   } else {
     document.body.removeAttribute("data-expanded");
+    /* Closing lands the reader back AT THE PANEL, in its page context. A pixel-exact scroll
+       restore was tried and lost every race: the browser scrolls the still-focused close
+       button into view as the hidden sections return, on its own schedule. That instinct is
+       right — the panel you just left IS where you are — so it is made deterministic here
+       rather than fought. Keyboard focus stays on the button it was on. */
+    const back = document.getElementById("panel-"+lastExpandedKey);
+    if(back) requestAnimationFrame(()=>back.scrollIntoView({block:"nearest"}));
   }
 
   document.querySelectorAll(".panelbtn.xp").forEach(b=>{
