@@ -415,7 +415,13 @@
   .masthead{background:var(--surface);position:sticky;top:0;z-index:60;}
   .header-top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
     padding-top:15px;padding-bottom:11px;}
-  .brand{display:flex;align-items:center;gap:12px;margin-right:auto;min-width:0;}
+  .brand{display:flex;align-items:center;margin-right:auto;min-width:0;}
+  /* The brand button inherits the row's whole look — no chrome of its own, because the mark
+     and wordmark ARE the affordance. Focus ring for keyboards; the cursor for everyone else. */
+  .brand-reset{appearance:none;background:none;border:0;padding:0;margin:0;
+    display:flex;align-items:center;gap:12px;min-width:0;
+    font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:8px;}
+  .brand-reset:focus-visible{outline:2px solid var(--blue-text);outline-offset:4px;}
   .mark{width:34px;height:34px;flex-shrink:0;}
   .wordmark{display:flex;flex-direction:column;line-height:1.02;min-width:0;}
   .wordmark .name{font-size:21px;font-weight:700;color:var(--ink);letter-spacing:-0.01em;}
@@ -942,16 +948,23 @@
     overscroll-behavior:contain;
     touch-action:pan-y;
   }
-  /* The way out is visible: an "esc" chip beside the close button, because a keyboard exit
-     nobody can see is a fire door behind a curtain. Decorative for pointer users, so it never
-     intercepts a click. */
-  .panelbtn.is-close{position:relative;}
-  .panelbtn.is-close::before{
-    content:"esc";position:absolute;right:calc(100% + 8px);top:50%;transform:translateY(-50%);
+  /* The way out is visible: an "esc" chip beside the controls, because a keyboard exit nobody
+     can see is a fire door behind a curtain. Decorative for pointer users, so it never
+     intercepts a click.
+     v0.40: the chip hangs off the TOOLS GROUP, not the close button. Its first home —
+     absolutely positioned just left of the X — was exactly where v0.39 anchored the CSV
+     button, and the chip printed straight through it ("Download as CSVC", reported with
+     screenshots of every panel). Left of the whole group is the head's empty middle, which
+     nothing else occupies; being outside the group's box, it can never overlap a control
+     that lives inside it. Hidden on touch widths, where there is no Escape key to advertise. */
+  .panel.is-expanded .panel-tools{position:relative;}
+  .panel.is-expanded .panel-tools::before{
+    content:"esc";position:absolute;right:calc(100% + 10px);top:50%;transform:translateY(-50%);
     font:700 9px/1.6 ui-monospace,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase;
     color:var(--ink-mute);border:1px solid var(--grey-line);border-radius:4px;padding:0 5px;
     pointer-events:none;white-space:nowrap;
   }
+  @media (max-width:760px){ .panel.is-expanded .panel-tools::before{display:none;} }
   /* v0.38: THE EXPANDED MIX PANEL FILLS ITS SURFACE. The charts already earn their height from
      the window in chartGeom; the ranking rows did not, so the expanded fuel panel was a third
      of content over two-thirds of blank card. The rows now share the leftover height equally
@@ -1364,8 +1377,10 @@
      means either a gap of page showing through or the switch sliding under the rule.
      Its own background is the page colour, because a sticky element with no ground lets the
      content it is covering read straight through it. */
+  /* v0.40: the strip's bottom padding eased 10px -> 5px at Kyle's request — the switch and
+     the first row of cards read as one region, not two. */
   .viewbar-strip{position:relative; z-index:1;
-    background:var(--page); padding:9px 0 10px;}
+    background:var(--page); padding:9px 0 5px;}
   .viewbar{display:flex; align-items:center; justify-content:flex-start;}
   .viewbar .viewswitch{margin-left:0; align-self:auto; margin-top:0;}
   .viewbar .viewbtn{font-size:10.5px; padding:5px 12px; min-width:62px;}
@@ -1718,6 +1733,11 @@
   /* v0.3196: history controls are a true two-choice switch, matching Wind/Solar.
      Fixed dimensions prevent the controls moving when 24h changes to 7d. */
   .panel-tools{display:flex;align-items:center;gap:6px;margin-left:auto;flex-wrap:nowrap;justify-content:flex-end;min-width:max-content;}
+  /* v0.39: the expand button carries a 5px top margin from its days as the head's lone control.
+     Inside a centred tools group that margin shoves it off the shared axis — which is why the
+     stack and interconnector groups (whose overrides zero it) centred while the three panels
+     wrapped at v0.39 did not. Inside .panel-tools, the group's centring is the only authority. */
+  .panel-tools .panelbtn{margin:0;}
   .panel-head .panel-tools{padding-top:7px;}
   .range-switch{position:relative;display:inline-flex;align-items:stretch;flex:0 0 78px;width:78px;height:27px;
     border:1px solid var(--blue-line);border-radius:6px;overflow:hidden;background:var(--surface);
@@ -2158,7 +2178,8 @@
 
     /* Masthead: keep identity and controls compact without horizontal overflow. */
     .header-top{padding:9px 0 7px;gap:8px;}
-    .brand{gap:9px;min-width:0;width:100%;margin-right:0;}
+    .brand{min-width:0;width:100%;margin-right:0;}
+    .brand-reset{gap:9px;}
     .mark{width:28px;height:28px;}
     .wordmark .name{font-size:18px;white-space:nowrap;}
     .wordmark .sub,.byline{display:none;}
@@ -2173,7 +2194,7 @@
     .theme-switch{flex:0 0 auto;}
 
     /* The view selector is a normal scrolling control, not a sticky navigation element. */
-    .viewbar-strip{padding:7px 0 8px;}
+    .viewbar-strip{padding:7px 0 4px;}
     .viewbar .viewbtn{font-size:11px;min-width:62px;padding:8px 12px;}
 
     /* Headline figures: one card per row. This is the key fix for the clipped mobile
@@ -2665,12 +2686,20 @@
              The lesson is the project's own and had to be learned twice: A MARK IS JUDGED AT THE
              SIZE IT HAS TO SURVIVE, BY RENDERING IT AT THAT SIZE. An argument about a favicon is
              not evidence about a favicon. -->
+        <!-- v0.40: the brand is a control — mark, name and strapline together reset the page
+             to its opening state: Simplified, nothing expanded, no dialog, top of page. The
+             convention every site trained readers into: the logo goes home. A BUTTON rather
+             than a link, because it navigates nowhere. -->
+        <button type="button" class="brand-reset" id="brand-home"
+                title="Back to the Simplified view"
+                aria-label="Reset the dashboard to the Simplified view">
         <svg class="mark" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
              style="color:var(--blue-text)"><polyline points="3,22 12,22 16,8 21,24" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="21,24 29,16" fill="none" stroke="var(--mark-red)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <div class="wordmark">
           <span class="name">GB Electricity</span>
           <span class="sub">Live GB generation &amp; demand</span>
         </div>
+        </button>
       </div>
       <div class="header-actions">
         <span class="livewrap" id="live-status" title="Waiting for the latest live data"><span class="livedot" id="livedot"></span><span id="livetext" aria-live="polite">connecting…</span></span>
@@ -2901,13 +2930,17 @@
       <div class="panel-head">
         <h2>Generation by fuel type</h2>
         <span class="note" id="mix-note">5-min</span>
-        <button type="button" class="export-btn" id="export-mix" title="Download the current generation mix as CSV">Download as CSV</button>
-        <button class="panelbtn xp" data-panel="mix" aria-expanded="false"
-          aria-label="Expand view" title="Expand view">
-          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
-          </svg>
-        </button>
+        <!-- v0.39: export and expand ride together in .panel-tools, like every panel that has
+             both — a control that floats free of its siblings reads as belonging to nothing. -->
+        <div class="panel-tools" aria-label="Generation mix controls">
+          <button type="button" class="export-btn" id="export-mix" title="Download the current generation mix as CSV">Download as CSV</button>
+          <button class="panelbtn xp" data-panel="mix" aria-expanded="false"
+            aria-label="Expand view" title="Expand view">
+            <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
+            </svg>
+          </button>
+        </div>
       </div>
       <div class="panel-body">
         <!-- v0.20: the strip and the rows share one positioned wrapper, because they now share
@@ -3064,13 +3097,15 @@
       <div class="panel-head">
         <h2>Carbon intensity</h2>
         <span class="note" id="ci-note">NESO · half-hourly</span>
-        <button type="button" class="export-btn" id="export-ci" title="Download the last 24 hours of carbon intensity as CSV">Download as CSV</button>
-        <button class="panelbtn xp" data-panel="ci" aria-expanded="false"
-          aria-label="Expand view" title="Expand view">
-          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
-          </svg>
-        </button>
+        <div class="panel-tools" aria-label="Carbon intensity controls">
+          <button type="button" class="export-btn" id="export-ci" title="Download the last 24 hours of carbon intensity as CSV">Download as CSV</button>
+          <button class="panelbtn xp" data-panel="ci" aria-expanded="false"
+            aria-label="Expand view" title="Expand view">
+            <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
+            </svg>
+          </button>
+        </div>
       </div>
       <div class="panel-body">
         <div class="chartbox" id="cibox">
@@ -3102,13 +3137,15 @@
       <div class="panel-head">
         <h2>System frequency</h2>
         <span class="note"><span class="term ds" data-term="FREQ">FREQ</span> · 15-second</span>
-        <button type="button" class="export-btn" id="export-freq" title="Download the last hour of system frequency as CSV">Download as CSV</button>
-        <button class="panelbtn xp" data-panel="freq" aria-expanded="false"
-          aria-label="Expand view" title="Expand view">
-          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
-          </svg>
-        </button>
+        <div class="panel-tools" aria-label="System frequency controls">
+          <button type="button" class="export-btn" id="export-freq" title="Download the last hour of system frequency as CSV">Download as CSV</button>
+          <button class="panelbtn xp" data-panel="freq" aria-expanded="false"
+            aria-label="Expand view" title="Expand view">
+            <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M8 3H3v5M3 3l6 6M16 3h5v5M21 3l-6 6M8 21H3v-5M3 21l6-6M16 21h5v-5M21 21l-6-6"/>
+            </svg>
+          </button>
+        </div>
       </div>
       <div class="panel-body">
         <div class="chartbox" id="freqbox">
@@ -3486,7 +3523,7 @@
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" id="version-label" title="Dashboard version">v0.38</span> &middot;
+      <span class="version-label" id="version-label" title="Dashboard version">v0.40</span> &middot;
       <button type="button" id="btn-about" class="footer-link">About this Dashboard</button>
     </div>
   </div>
@@ -3537,7 +3574,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.38";
+const APP_VERSION = "v0.40";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -7794,6 +7831,9 @@ window.__dash = Object.freeze({ ciBand, ciRead, CI_BANDS, CI_SCALE_MAX, ciScaleP
    that goes, because six is the most a headline row should carry and that one is the most
    specialist of the seven.
    The choice is remembered, because a reader who wanted the simple view last time wants it now. */
+/* v0.40: the density setter is shared with the brand-home reset, which must change mode
+   through the SAME path the switch uses — persistence, aria, status line, chart redraw. */
+let setDensityMode = ()=>{};
 (function(){
   const sw = $("view-mode");
   if(!sw) return;
@@ -7817,6 +7857,7 @@ window.__dash = Object.freeze({ ciBand, ciRead, CI_BANDS, CI_SCALE_MAX, ciScaleP
        which is what the frame wait is for. */
     if(redraw) requestAnimationFrame(()=>requestAnimationFrame(redrawCharts));
   }
+  setDensityMode = (mode)=>apply(mode, true);
   sw.addEventListener("click", ()=>apply(document.body.dataset.density === "simple" ? "full" : "simple", true));
   sw.addEventListener("keydown", (e)=>{
     /* v0.3199: keyboard direction follows the visual order — Simplified, then Detailed. */
@@ -7854,6 +7895,21 @@ window.__dash = Object.freeze({ ciBand, ciRead, CI_BANDS, CI_SCALE_MAX, ciScaleP
    boundary for as long as the page is open. */
 favPulse();
 favSchedule();
+
+/* v0.40: the logo goes home. One click returns the page to its opening state — expanded view
+   closed, any dialog closed, Simplified selected (and remembered, exactly as if the switch had
+   been used), scrolled to the top. Resetting THROUGH the same setters the controls use means
+   this cannot drift from what those controls do. */
+(function(){
+  const home = $("brand-home");
+  if(!home) return;
+  home.addEventListener("click", ()=>{
+    if(document.body.hasAttribute("data-expanded")) setExpanded(null);
+    closeModal();
+    setDensityMode("simple");
+    requestAnimationFrame(()=>window.scrollTo(0,0));
+  });
+})();
 
 loadAll();
 })();
