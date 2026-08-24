@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="Live GB electricity generation and demand dashboard showing the GB electricity generation mix, power demand, wind and solar output, interconnector flows, carbon intensity and system frequency using Elexon and NESO data.">
+<meta name="description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
 <link rel="canonical" href="https://gbelectricity.uk/">
 <script type="application/ld+json">
 {
@@ -11,11 +11,11 @@
   "@type": "WebSite",
   "name": "GB Electricity",
   "url": "https://gbelectricity.uk/",
-  "description": "Live GB electricity generation and demand dashboard covering the generation mix, demand, wind, solar, interconnector flows, carbon intensity and system frequency."
+  "description": "Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes."
 }
 </script>
 <meta property="og:title" content="GB Electricity — Live Generation &amp; Demand">
-<meta property="og:description" content="Live GB electricity generation and demand dashboard showing the GB electricity generation mix, power demand, wind and solar output, interconnector flows, carbon intensity and system frequency using Elexon and NESO data.">
+<meta property="og:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
 <meta property="og:url" content="https://gbelectricity.uk/">
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
@@ -27,7 +27,7 @@
 <meta property="og:image:alt" content="GB Electricity — Live GB generation and demand dashboard">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
-<meta name="twitter:description" content="Live GB electricity generation and demand dashboard showing the GB electricity generation mix, power demand, wind and solar output, interconnector flows, carbon intensity and system frequency using Elexon and NESO data.">
+<meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
 <meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview.png?v=36">
 <meta name="twitter:image:alt" content="GB Electricity — Live GB generation and demand dashboard">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
@@ -708,6 +708,15 @@
     font-weight:700;display:inline-flex;align-items:center;gap:5px;cursor:pointer;
     padding:1px 4px;margin:-1px -2px;border-radius:4px;-webkit-tap-highlight-color:transparent;}
   .driver-key i{width:9px;height:9px;border-radius:2px;display:inline-block;flex:0 0 9px;}
+  /* v0.37: ON TOUCH WIDTHS THE CHIPS GROW A REAL HIT BOX. At the desktop padding the chips
+     measured ~17px tall on a phone — under the 24px accessibility minimum for a tap target
+     (WCAG 2.5.8; inline text links are exempt, buttons are not). The padding grows the hit
+     area and the negative margin gives most of it back to the layout, so the sentence keeps
+     its rhythm while the finger gets its 24 pixels. Desktop keeps the compact chip: a mouse
+     needs no such allowance and the tighter chip reads better in a line of prose. */
+  @media (max-width:560px){
+    .driver-key{padding:5px 7px;margin:-4px -4px;min-height:24px;}
+  }
   .driver-key:hover,.driver-key.is-on{background:var(--blue-2);}
   .driver-key:focus-visible{outline:2px solid var(--blue-text);outline-offset:1px;}
   .insight-driver .mv{color:var(--ink);font-weight:700;}
@@ -3424,7 +3433,7 @@
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" id="version-label" title="Dashboard version">v0.36</span> &middot;
+      <span class="version-label" id="version-label" title="Dashboard version">v0.37</span> &middot;
       <button type="button" id="btn-about" class="footer-link">About this Dashboard</button>
     </div>
   </div>
@@ -3475,7 +3484,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.36";
+const APP_VERSION = "v0.37";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
