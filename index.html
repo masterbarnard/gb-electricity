@@ -19,8 +19,8 @@
 <meta property="og:url" content="https://gbelectricity.uk/">
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview.png?v=35">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview.png?v=35">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview.png?v=36">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview.png?v=36">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -28,7 +28,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity generation and demand dashboard showing the GB electricity generation mix, power demand, wind and solar output, interconnector flows, carbon intensity and system frequency using Elexon and NESO data.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview.png?v=35">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview.png?v=36">
 <meta name="twitter:image:alt" content="GB Electricity — Live GB generation and demand dashboard">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -939,6 +939,17 @@
      A rule that kept "some metas" would have to decide which ones every time something moved.
      It appears in SIMPLIFIED ONLY: in Detailed the `.meta` below it says the same thing with the
      live numbers in it, and printing both would be the page saying it twice. */
+  /* ================= TILE ICONS (v0.30; redrawn v0.36) =================
+     v0.36: the three headline marks went TWO-AND-A-HALF-D. A subject keeps its flat,
+     recognisable silhouette wherever rotation would cost identity — the pylon's horizontal
+     arms, the GB coastline's jagged upright profile — and the third dimension arrives only
+     where it adds meaning: the pylon stands on an isometric ground tile, the Underlying house
+     is drawn in isometric with SOLAR PANELS on the roof and a WALL BATTERY by the door (the
+     sun is gone — the panel says it, and the battery says "behind the meter"), and National
+     is the upright island with three extruded buildings standing where the cities are. Full
+     isometric was tried for the pylon and rejected at size: rotating a pylon turns its
+     identity-carrying horizontals into diagonals and it reads as a derrick. Judged at 46px,
+     as ever. */
   /* ================= TILE ICONS (v0.30) =================
      ONE MARK PER CARD, and only on the three that are a physical thing: what the grid is
      carrying, what the country is using, and what the transmission system can see of it.
@@ -2705,7 +2716,7 @@
            about. The affordance is the same dotted-underlined label the rest of the page uses. -->
       <div class="label"><button class="labelbtn" id="gen-info"
         aria-expanded="false">Electricity on the grid</button></div>
-      <svg class="tileicon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 7 11.5 42M24 7 36.5 42M24 7v35"/><path d="M19.4 20h9.2M16.8 28h14.4M14.2 36h19.6"/><path d="M7 15h34M11 24h26"/><path d="M9 15v3.4M16 15v3.4M32 15v3.4M39 15v3.4M13 24v3M35 24v3"/></svg>
+      <svg class="tileicon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24,38.9 L37,42.2 L24,45.5 L11,42.2 Z"/><path d="M24 6 12.5 42.2M24 6 35.5 42.2M24 6v36.2"/><path d="M19.7 18.4h8.6M17.3 26.4h13.4M14.9 34.4h18.2"/><path d="M8 13.6h32M11.8 22.4h24.4"/><path d="M9.8 13.6v3.2M16.4 13.6v3.2M31.6 13.6v3.2M38.2 13.6v3.2M13.6 22.4v2.8M34.4 22.4v2.8"/></svg>
       <div class="value" id="t-gen"><span class="skeleton">—</span><span class="unit">MW</span></div>
       <div class="essential">Generation <b>+</b> net interconnector imports</div>
       <div class="meta" id="t-gen-meta">GB generation (including embedded solar) + net interconnector imports</div>
@@ -2713,7 +2724,7 @@
     <div class="tile" id="tile-und">
       <div class="label"><button class="labelbtn" id="und-info"
         aria-expanded="false">Underlying demand</button></div>
-      <svg class="tileicon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="34" cy="12" r="4.6"/><path d="M34 4.2v1.8M34 18v1.8M26.2 12h1.8M40 12h1.8M28.5 6.5l1.3 1.3M38.2 16.2l1.3 1.3M39.5 6.5l-1.3 1.3M29.8 16.2l-1.3 1.3"/><path d="M6 26 20 15l14 11"/><path d="M9.5 23.4V40h21V23.4"/><path d="M16.5 40v-9h7v9"/></svg>
+      <svg class="tileicon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.4,33.3 L24.0,44.0 L24.0,30.8 L14.7,14.7 L5.4,20.1 Z"/><path d="M24.0,44.0 L42.6,33.3 L42.6,20.1 L24.0,30.8"/><path d="M24.0,30.8 L14.7,14.7 L33.3,4.0 L42.6,20.1"/><path d="M12.0,37.1 L12.0,28.8 L17.1,31.8 L17.1,40.0"/><path d="M17.9,41.9 L21.3,43.9 L21.3,37.0 L17.9,35.0 Z"/><path d="M19.1,34.3 L17.9,35.0 L21.3,37.0 L22.6,36.2"/><path d="M18.7,37.3 L20.4,38.3"/><path d="M32.6,8.0 L38.6,18.4 L26.3,25.5 L20.3,15.1 Z"/><path d="M35.6,13.2 L23.3,20.3"/><path d="M26.5,11.6 L32.5,21.9"/><path d="M20.3,15.1 L19.4,15.6"/><path d="M38.6,18.4 L37.7,18.9"/></svg>
       <div class="value" id="t-und"><span class="skeleton">—</span><span class="unit">MW</span></div>
       <div class="essential">National demand <b>+</b> embedded generation</div>
       <div class="meta" id="t-und-meta">INDO plus embedded solar — the demand the country actually has</div>
@@ -2724,7 +2735,7 @@
            nothing — and it is the acronym doing the work that the plain words should do. -->
       <div class="label"><button class="labelbtn" id="dem-info"
         aria-expanded="false">National demand</button></div>
-      <svg class="tileicon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 25 24 12l16 13"/><path d="M11.8 22V39h24.4V22"/><path d="M20 39v-9.5h8V39"/><path d="M31.5 15.5V10h4v8.8"/></svg>
+      <svg class="tileicon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.0,4.8 L25.3,6.2 L21.8,10.4 L27.5,12.6 L25.3,16.8 L29.6,20.4 L31.7,25.3 L35.3,30.3 L33.9,33.9 L36.0,37.4 L28.9,41.7 L20.4,41.0 L11.9,43.1 L16.8,38.8 L17.5,36.7 L12.6,33.9 L14.7,30.3 L19.0,28.9 L19.7,25.3 L16.1,23.2 L13.3,21.1 L17.5,18.9 L14.0,15.4 L16.8,13.3 L14.0,9.7 Z"/><rect x="27.5" y="30.9" width="4.2" height="6.5"/><path d="M27.5,30.9 L28.8,30.0 L33.0,30.0 L31.7,30.9"/><path d="M33.0,30.0 L33.0,36.5 L31.7,37.4"/><rect x="20.4" y="25.0" width="3.4" height="4.6"/><path d="M20.4,25.0 L21.7,24.1 L25.1,24.1 L23.8,25.0"/><path d="M25.1,24.1 L25.1,28.7 L23.8,29.6"/><rect x="16.0" y="9.6" width="3.0" height="3.8"/><path d="M16.0,9.6 L17.3,8.7 L20.3,8.7 L19.0,9.6"/><path d="M20.3,8.7 L20.3,12.5 L19.0,13.4"/></svg>
       <div class="value" id="t-dem"><span class="skeleton">—</span><span class="unit">MW</span></div>
       <div class="essential">Transmission-system demand</div>
       <div class="meta" id="t-dem-meta">Initial Demand Outturn, latest settlement period</div>
@@ -3413,7 +3424,7 @@
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" id="version-label" title="Dashboard version">v0.35</span> &middot;
+      <span class="version-label" id="version-label" title="Dashboard version">v0.36</span> &middot;
       <button type="button" id="btn-about" class="footer-link">About this Dashboard</button>
     </div>
   </div>
@@ -3464,7 +3475,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.35";
+const APP_VERSION = "v0.36";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
