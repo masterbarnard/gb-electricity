@@ -19,16 +19,17 @@
 <meta property="og:url" content="https://gbelectricity.uk/">
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview.png?v=53">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview.png?v=53">
+<meta property="og:site_name" content="GB Electricity">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v54.png">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v54.png">
 <meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1260">
 <meta property="og:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview.png?v=53">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v54.png">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -3761,6 +3762,158 @@
     border-color:var(--blue-text);
   }
 
+
+  /* ============================================================================
+     THE INSIGHT ROW  (v0.54) — replaces the grey `.callout` box under six charts
+     Panel typography, a hairline instead of a fill, and the metadata on its own line. The whole
+     row is the disclosure trigger where there is more to say; where there is not, it is a plain
+     block with no chevron rather than an empty control.
+     ⚠ NO FILL, NO RADIUS, NO SECOND CARD. The brief was that the boxes "visually separate the
+     explanatory content from the actual data" — a filled panel inside a panel is a second object,
+     and the eye reads it as belonging to something else. A divider joins; a card interrupts.
+     ============================================================================ */
+  .insight{
+    display:block;
+    margin-top:10px;
+    padding-top:9px;
+    border-top:1px solid var(--blue-line);
+    background:none;
+    border-radius:0;
+    color:var(--ink);
+  }
+  .insight > summary{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    list-style:none;
+    cursor:pointer;
+    border-radius:7px;
+    outline:none;
+  }
+  .insight > summary::-webkit-details-marker{display:none;}
+  /* `min-width:0` or a long insight refuses to shrink and pushes the chevron out of the row —
+     the same `max-content` trap that overflowed the Wind panel's header at rev 47. */
+  .ins-text{ flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap:3px; }
+  /* Normal panel prose. The finding is the sentence, so it is set like one. */
+  .ins-line{ font-size:12px; line-height:1.45; color:var(--ink); }
+  .ins-line b{ font-weight:700; color:var(--ink); }
+  /* The qualifying facts. A list, so it is punctuated as one — and tabular, because most of the
+     parts are figures and they should not shift as the numbers change. */
+  .ins-meta{
+    font-size:10.5px; line-height:1.4; color:var(--ink-mute);
+    font-variant-numeric:tabular-nums; letter-spacing:.01em;
+  }
+  .ins-meta b{ color:var(--ink-dim); font-weight:700; }
+  /* The state word carries the page's own status colour rather than a word in a sentence. */
+  .ins-meta .st-ok{ color:var(--teal-text); font-weight:700; }
+  .ins-meta .st-warn{ color:var(--warn); font-weight:700; }
+  .ins-meta .st-est{ color:var(--solar-line); font-weight:700; }
+  /* A 7px chip of the series the sentence is about — the same marker the proof key and the hero
+     equation use, so a reader who has learned it once has learned it everywhere. */
+  .ins-mark{
+    display:inline-block; width:7px; height:7px; border-radius:2px;
+    margin-right:6px; background:var(--mark, var(--ink-mute)); flex:0 0 auto;
+  }
+  .ins-mark.is-est{
+    background:var(--solar-fill); background-image:var(--hatch-est-sm);
+    box-shadow:inset 0 0 0 1px var(--solar-line);
+  }
+  /* The chevron: the shared control size and border, exactly as the About disclosure and every
+     panel control. Never shrinks, so a long insight wraps rather than squeezing it. */
+  .ins-chev{
+    flex:0 0 var(--ctl-h); width:var(--ctl-h); height:var(--ctl-h);
+    display:flex; align-items:center; justify-content:center;
+    box-sizing:border-box; border:1px solid var(--ctl-border); border-radius:var(--ctl-r);
+    background:var(--surface); pointer-events:none;
+    transition:background-color .14s ease, border-color .14s ease;
+  }
+  .ins-chev::before{
+    content:""; width:6px; height:6px;
+    border-right:2px solid var(--blue-text); border-bottom:2px solid var(--blue-text);
+    transform:rotate(45deg) translateY(-1px);
+    transition:transform .18s ease;
+  }
+  .insight[open] .ins-chev::before{ transform:rotate(225deg) translateY(-1px); }
+  .insight > summary:hover .ins-chev{ background:var(--blue-2); border-color:var(--blue-text); }
+  .insight > summary:focus-visible .ins-chev{
+    background:var(--blue-2); border-color:var(--blue-text);
+    outline:2px solid var(--blue-text); outline-offset:2px;
+  }
+  @media (prefers-reduced-motion:reduce){
+    .ins-chev, .ins-chev::before{ transition:none; }
+  }
+  .ins-more{
+    margin-top:8px; padding-top:8px;
+    border-top:1px dotted var(--blue-line);
+    font-size:11.5px; line-height:1.55; color:var(--ink-dim);
+  }
+  .ins-more b{ color:var(--ink); }
+  @media (max-width:430px){
+    .ins-line{ font-size:11.5px; }
+    .ins-meta{ font-size:10px; }
+  }
+
+
+  /* ============================================================================
+     THE DATA-STATUS VOCABULARY  (v0.54)
+     Six states, declared once, so that "how do I know this figure is modelled" has ONE answer
+     everywhere on the page instead of a sentence in each panel.
+
+         measured     solid chip            BM-metered outturn — the default, and unmarked
+         estimated    hatched chip          modelled: embedded solar, AGWS, PV_Live
+         forecast     dashed outline chip   published ahead of the period it describes
+         calculated   bracket mark          derived here from other figures on this page
+         stale        clock + age           a real reading, older than its refresh period
+         unavailable  slashed chip          the feed did not answer
+
+     ⚠ MEASURED IS THE UNMARKED CASE, DELIBERATELY. Most of this dashboard is metered outturn; a
+     chip on every one of those figures would be a page of chips saying "ordinary", and the four
+     states that matter would lose the contrast that makes them readable. A mark is worth having
+     only where it is the exception — so the absence of a mark IS the measured state, which the
+     About dialog states in words so it is learnable rather than merely inferable.
+     ⚠ AND THE HATCH IS NOT A NEW INVENTION. `--hatch-est` has meant "estimated" on the solar
+     band, the proof bar and the glance card since v0.45. This block gives the other five states
+     the same treatment it already had, rather than introducing a sixth vocabulary beside it.
+     ============================================================================ */
+  .dstat{
+    display:inline-block; width:8px; height:8px; border-radius:2px;
+    margin-right:5px; vertical-align:baseline; flex:0 0 auto;
+    box-sizing:border-box;
+  }
+  .dstat-measured{ background:var(--mark, var(--ink-dim)); }
+  .dstat-estimated{
+    background:var(--solar-fill); background-image:var(--hatch-est-sm);
+    box-shadow:inset 0 0 0 1px var(--solar-line);
+  }
+  /* Dashed OUTLINE rather than a dashed fill: a forecast is the shape of a thing that has not
+     happened, so the chip is drawn and empty. Matches the dashed forecast strokes already on the
+     wind and carbon charts. */
+  .dstat-forecast{
+    background:none; border:1px dashed var(--ink-mute);
+  }
+  /* Calculated: two half-height rules, the mark an equation is written under, at chip scale.
+     Not a colour — a derived figure is no less trustworthy than a measured one, it simply came
+     from somewhere else on this page, and colouring it would imply a warning. */
+  .dstat-calculated{
+    background:none; border:0;
+    border-top:1.5px solid var(--ink-mute); border-bottom:1.5px solid var(--ink-mute);
+    height:7px; border-radius:0;
+  }
+  .dstat-stale{ background:var(--warn); }
+  /* Unavailable: a chip with a line through it. The one state that must never be mistaken for a
+     value, so it is the only one whose mark reads as a negation. */
+  .dstat-unavailable{
+    background:none; border:1px solid var(--ink-mute); position:relative; overflow:hidden;
+  }
+  .dstat-unavailable::after{
+    content:""; position:absolute; left:-2px; right:-2px; top:50%;
+    height:1px; background:var(--ink-mute); transform:rotate(-45deg);
+  }
+  /* The words that go with them, for the metadata rows. */
+  .ins-meta .st-est,
+  .ins-meta .st-fc{ color:var(--solar-line); font-weight:700; }
+  .ins-meta .st-calc{ color:var(--ink-dim); font-weight:700; }
+
   /* ============================================================================
      THE AGE MARK DROPS BELOW THE FIGURE WHEN THE ROW IS TIGHT  (v0.52)
      ⚠ THIS IS A DEFECT THIS RELEASE INTRODUCED, FOUND BY MEASURING RATHER THAN BY LOOKING.
@@ -4745,6 +4898,32 @@
         an absence.
       </p>
 
+      <h4>How a figure says where it came from</h4>
+      <p>
+        Separately from whether a figure has arrived, there is the question of what kind of figure
+        it is. Six states, marked the same way everywhere on the page:
+      </p>
+      <ul>
+        <li><b>Measured</b> — BM-metered outturn. <b>Unmarked</b>, because most of this dashboard
+          is measured and a chip on every one of those would be a page of chips saying "ordinary".
+          The absence of a mark is the statement.</li>
+        <li><b>Estimated</b> — a hatched chip, and hatched fill on the charts. Modelled rather than
+          metered: embedded solar throughout, and the AGWS fallback.</li>
+        <li><b>Forecast</b> — a dashed outline, matching the dashed forecast strokes on the wind
+          and carbon charts. Published ahead of the period it describes.</li>
+        <li><b>Calculated</b> — a bracket mark, as under the hero figure's total. Derived here from
+          other figures on this page rather than read from a feed. It carries no colour: a derived
+          figure is not less trustworthy than a measured one, it simply came from somewhere else.</li>
+        <li><b>Stale</b> — a clock and an age. A real reading, older than the refresh period it
+          belongs to.</li>
+        <li><b>Unavailable</b> — a struck-through chip and the word. The only mark that reads as a
+          negation, because it is the one state that must never be mistaken for a value.</li>
+      </ul>
+      <p>
+        The point of fixing the vocabulary is that provenance stops being something each panel
+        explains in its own words. <b>Where a mark can say it, the prose does not have to.</b>
+      </p>
+
       <h4>What this deliberately does not show</h4>
       <p>
         <b>Battery storage.</b> Elexon reports storage <i>discharging</i> but not charging. Showing
@@ -4963,7 +5142,7 @@
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" id="version-label" title="Dashboard version">v0.53</span> &middot;
+      <span class="version-label" id="version-label" title="Dashboard version">v0.54</span> &middot;
       <button type="button" id="btn-about" class="footer-link">About this Dashboard</button>
     </div>
   </div>
@@ -5014,7 +5193,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.53";
+const APP_VERSION = "v0.54";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -6550,13 +6729,15 @@ function renderTiles(snap){
   $("t-gen-meta").innerHTML =
     eqRow('', '', 'GB generation', uv(domestic), U()) +
     (solMW ? eqRow('', 'ge-of',
-        '<i class="ge-chip ge-chip-emb" aria-hidden="true"></i>of which embedded solar',
+        '<i class="dstat dstat-estimated" title="Estimated, not metered"></i>of which embedded solar',
         uv(solMW), U()) : '') +
     eqRow(impPositive ? '+' : '−', '',
-        '<i class="ge-chip ge-chip-ic" aria-hidden="true"></i>' +
+        '<i class="dstat dstat-measured" style="--mark:var(--c-imports)" title="Metered"></i>' +
         (impPositive ? 'Net imports' : 'Net exports'),
         uv(Math.abs(k.imports)), U()) +
-    eqRow('=', 'ge-total', 'Electricity on the grid', uv(total), U());
+    eqRow('=', 'ge-total',
+        '<i class="dstat dstat-calculated" title="Calculated from the two figures above"></i>' +
+        'Electricity on the grid', uv(total), U());
 
   /* The headline is a SUM of two things measured in different ways, and that is the whole of
      what a reader needs to know to trust it — so the explainer leads with the arithmetic using
@@ -7200,9 +7381,17 @@ function renderMix(snap){
     if(x){
       /* The two sources disagreeing is the sentence that changes how the figure is read, so it
          stays on screen. The arithmetic behind it folds away. */
-      xc.innerHTML = detailNote(
-        `${HATCH} <b>Hatched = embedded, estimated.</b> Two sources disagree about it — the figure
-         above is <b>PV_Live</b>, shown rather than reconciled.`,
+      /* ⚠ v0.54: THE HATCH LEGEND MOVES TO THE METADATA ROW. "Hatched = embedded, estimated" is
+         provenance, not a finding, and it opened every one of these lines — so the sentence a
+         reader saw first was a key rather than news. The finding here is that two sources
+         disagree; the hatch, the source and the lag are what qualify it. */
+      xc.innerHTML = insightRow(
+        `<i class="ins-mark is-est"></i><b>Two solar sources disagree</b> — the figure above is
+         <b>PV_Live</b>, shown rather than reconciled.`,
+        insightMeta(`<span class="st-est">estimated</span>`, "hatched = embedded",
+          `<b class="ds">PV_LIVE</b> vs <b class="ds">AGWS</b>`,
+          `gap <b>${uv(Math.abs(x.diff))} ${U()}</b>`,
+          sol.night ? "sun down" : (sol.stale ? `<span class="st-warn">${Math.round(sol.ageMin)}m old</span>` : null)),
         `Solar is counted in every total on this page,
         but it is modelled rather than BM-metered, so it is always drawn this way.` +
         (sol.night ? ` <b>The sun is down, so solar is zero</b> — the feed's newest row is still a daylight half
@@ -7222,22 +7411,32 @@ function renderMix(snap){
          figure above is read; the reason it is a floor folds away. */
       const night = sol.night ? `<b>The sun is down, so solar is zero.</b> ` : "";
       xc.innerHTML = (S.solarSource==="agws")
-        ? detailNote(
-            `${HATCH} <b>Hatched = embedded, estimated.</b> ${night}Running on Elexon AGWS, so ` +
+        ? insightRow(
+            `<i class="ins-mark is-est"></i>${night}Running on Elexon AGWS, so ` +
             `<b>treat the solar figure as a floor, not a reading.</b>`,
+            insightMeta(`<span class="st-est">estimated</span>`, "hatched = embedded",
+              `<b class="ds">AGWS</b> fallback`, "lags ~2h45m",
+              `<span class="st-warn">PV_Live unavailable</span>`),
             `<b>PV_Live unavailable in this browser</b> — ` + (PVLIVE_PROXY
                ? `the configured proxy did not return a reading, so PV_Live could not be reached this refresh.`
                : `its API does not send CORS headers, so a page opened directly from disk cannot read it.`) +
             ` AGWS lags about 2h45m and has read 16–29% below PV_Live, which is why the figure
               above is a floor rather than a reading.`)
-        : `<div class="callout">${HATCH} <b>Hatched = embedded, estimated.</b> ${night}` +
-          `Only one solar source responded, so no cross-check is available this refresh.</div>`;
+        : insightRow(
+            `<i class="ins-mark is-est"></i>${night}<b>Only one solar source responded</b>, so no ` +
+            `cross-check is available this refresh.`,
+            insightMeta(`<span class="st-est">estimated</span>`, "hatched = embedded",
+              `<b class="ds">PV_LIVE</b>`, "no cross-check"));
     }
     xc.style.display="";
   } else {
-    xc.innerHTML = '<div class="callout"><b>No embedded solar figure.</b> Neither PV_Live nor Elexon AGWS '+
-      "returned data — the percentages above therefore describe BM-metered generation only, and "+
-      'underlying demand is unavailable.</div>';
+    /* The unavailable state is an insight row too, so a failure reads in the same shape as a
+       success rather than reverting to an unstyled paragraph. */
+    xc.innerHTML = insightRow(
+      `<b>No embedded solar figure.</b> The percentages above therefore describe BM-metered ` +
+      `generation only, and underlying demand is unavailable.`,
+      insightMeta(`<span class="st-warn">unavailable</span>`,
+        `<b class="ds">PV_LIVE</b> and <b class="ds">AGWS</b> both silent`));
     xc.style.display="";
   }
 
@@ -7845,8 +8044,11 @@ function renderCarbon(){
   const recs = (S.ci24||[]).map(r=>({...r, read:ciRead(r)})).filter(r=>r.read);
   if(!recs.length){
     svg.innerHTML=""; svg.removeAttribute("height");
-    sum.innerHTML = "<b>Carbon intensity unavailable.</b> The NESO Carbon Intensity API did not "+
-      "respond this refresh. Every other figure on this page comes from Elexon and is unaffected.";
+    sum.innerHTML = insightRow(
+      `<b>Carbon intensity unavailable.</b> Every other figure on this page comes from Elexon and ` +
+      `is unaffected.`,
+      insightMeta(`<span class="st-warn">unavailable</span>`,
+        "NESO Carbon Intensity API", "no response this refresh"));
     return;
   }
   const geom = chartGeom(box, {sm:150, md:180, lg:200});
@@ -7978,12 +8180,30 @@ function renderCarbon(){
   const lastSettled = settled.length ? settled[settled.length-1] : null;
   const b = cur && cur.band;
   const mismatch = cur && cur.apiIndex && b && cur.apiIndex !== b.name;
-  const ciLead = cur
-    ? `<b>${Math.round(cur.g)} gCO₂/kWh</b>, <b>${b?b.name:"unbanded"}</b> to ${fmtTime(cur.to)} — and it is `+
-      `<b>${cur.settled ? "a settled actual" : "a forecast"}</b>.` +
-      (mismatch ? ` <b>The feed's own label disagrees.</b>` : "")
+  /* ⚠ v0.54: THE FINDING AND ITS PROVENANCE ARE NOW TWO THINGS. The old line read "98 gCO₂/kWh,
+     moderate to 17:30 — and it is a settled actual", which makes a reader parse a clause about
+     settlement to reach a number. The INSIGHT says what the reading means; the META lists the
+     facts that qualify it. The mismatch warning stays in the insight, because a feed disagreeing
+     with its own label is a finding, not a piece of metadata. */
+  const ciInsight = cur
+    ? `The grid is running at <b>${b ? b.name : "an unbanded level"}</b> carbon intensity` +
+      (cur.settled ? `.` : ` on the current forecast.`) +
+      (mismatch ? ` <b>The feed's own label disagrees with this band.</b>` : "")
     : "No current reading.";
-  sum.innerHTML = detailNote(ciLead,
+  const ciMeta = cur
+    ? insightMeta(
+        `<b>${Math.round(cur.g)} gCO₂/kWh</b>`,
+        /* ⚠ THE COLOUR COMES FROM THE BAND, NOT FROM A NUMBER I CHOSE. The first draft coloured
+           this on `g <= 150`, which is a constant invented at the keyboard sitting next to a
+           band table NESO re-cuts every January — exactly the kind of second opinion §"the bands
+           are computed, not read" exists to prevent. Low and very low read as good, high and very
+           high as a warning, and moderate is neither, so it takes no colour at all. */
+        b ? `<span class="${/low/i.test(b.name) ? "st-ok" : /high/i.test(b.name) ? "st-warn" : ""}">`
+            + `${esc(b.name.toUpperCase())}</span>` : null,
+        cur.settled ? "settled actual" : `<span class="st-est">forecast</span>`,
+        `to ${fmtTime(cur.to)}`)
+    : null;
+  sum.innerHTML = insightRow(ciInsight, ciMeta,
     (cur
       ? `${Math.round(cur.g)} gCO₂/kWh for the half hour to `+
         `${fmtTime(cur.to)}, and it is ${cur.settled
@@ -8079,14 +8299,22 @@ function renderEmissions(){
   const gShare = worst.mw/genTot*100, cShare = worst.co2/co2Tot*100;
   const avg = co2Tot/genTot;   // gCO2/kWh, generation-weighted
 
-  const emLead = `<b>${esc(worst.label)}</b> is <b>${gShare.toFixed(0)}%</b> of what is generating ` +
-    `and <b>${cShare.toFixed(0)}%</b> of what is being emitted.`;
+  /* The sentence keeps the comparison, which is the whole point of the strip above it; the
+     chip in front binds it to the band of the bar it is describing. */
+  const emLead = `<i class="ins-mark${worst.est ? " is-est" : ""}"` +
+    (worst.est ? `` : ` style="--mark:var(${esc(worst.css)})"`) + `></i>` +
+    `<b>${esc(worst.label)}</b> is <b>${gShare.toFixed(0)}%</b> of generation ` +
+    `and <b>${cShare.toFixed(0)}%</b> of emissions.`;
+  const emMeta = insightMeta(
+    `mix averages <b>${Math.round(avg)} gCO₂/kWh</b>`,
+    live ? "live factors" : `<span class="st-est">published defaults</span>`,
+    `<b class="ds">/intensity/factors</b>`);
   el.innerHTML =
     `<div class="emhead"><span>Generation vs emissions</span>
        <span class="src">${live?"live factors":"published defaults"} · <b class="ds">/intensity/factors</b></span></div>` +
     strip(p=>p.mw, genTot, "Share of generation", "gen") +
     strip(p=>p.co2, co2Tot, "Share of emissions", "co2") +
-    detailNote(emLead,
+    insightRow(emLead, emMeta,
      `Weighted across the mix that is <b>${Math.round(avg)} gCO₂/kWh</b> —
       close to, but not the same as, the headline figure above, which NESO computes on its own
       basis and over the settlement half hour rather than this five-minute snapshot.
@@ -8107,8 +8335,10 @@ function renderFreq(){
   if(pts.length < 2){
     svg.innerHTML=""; svg.removeAttribute("height");
     setStat("fq-range","—"); setStat("fq-inband","—"); setStat("fq-dev","—");
-    sum.innerHTML = "<b>Frequency unavailable.</b> Elexon's <b class=\"ds\">FREQ</b> feed returned "+
-      "nothing for the last hour.";
+    sum.innerHTML = insightRow(
+      `<b>Frequency unavailable.</b> The feed returned nothing for the last hour.`,
+      insightMeta(`<span class="st-warn">unavailable</span>`, `<b class="ds">FREQ</b>`,
+        "no readings this refresh"));
     return;
   }
   const geom = chartGeom(box, {sm:150, md:180, lg:200});
@@ -8223,12 +8453,26 @@ function renderFreq(){
   setStat("fq-dev", fqHz(meanDev), `from 50.000 Hz · ${fqmHz(meanDev)}`);
 
   const outStat = vals.filter(v=>Math.abs(v-FQ_NOMINAL)>FQ_STAT).length;
-  const freqLead =
-    `<b>${last.frequency.toFixed(3)} Hz</b> at ${fmtTime(last.measurementTime)}, `+
-    `${Math.abs(last.frequency-FQ_NOMINAL)<=FQ_OP?"inside":"<b>outside</b>"} the ±0.2 Hz band. `+
-    (outStat ? `<b>${outStat} of ${vals.length} readings this hour were outside the statutory range.</b>`
-             : `All ${vals.length} readings this hour were within statutory limits.`);
-  sum.innerHTML = detailNote(freqLead,
+  /* ⚠ v0.54: THE FINDING IS THE STATE OF THE SYSTEM, NOT THE READING. The old line opened on
+     "49.918 Hz at 19:23" and reached the meaningful part — whether anything left the statutory
+     range — at the end of a second clause. The reading, the time and the in-band percentage are
+     all facts that qualify a state, so they go in the metadata row and the sentence says the
+     state. The AUTHOR'S example for this panel is the shape being followed:
+         49.98 Hz · within operating range
+         100% inside ±0.2 Hz · last hour */
+  const inOp = Math.abs(last.frequency-FQ_NOMINAL) <= FQ_OP;
+  const freqLead = outStat
+    ? `<b>${outStat} of ${vals.length} readings this hour were outside the statutory range.</b>`
+    : (inOp
+        ? `The system is <b>within its operating range</b>, and every reading this hour was inside statutory limits.`
+        : `The system is <b>outside the ±0.2 Hz operating band</b>, though still within statutory limits.`);
+  const freqMeta = insightMeta(
+    `<b>${last.frequency.toFixed(3)} Hz</b>`,
+    `<span class="${inOp ? "st-ok" : "st-warn"}">${inOp ? "within operating range" : "outside operating band"}</span>`,
+    `<b>${inBand.toFixed(0)}%</b> inside ±0.2 Hz`,
+    `${vals.length} readings · last hour`,
+    fmtTime(last.measurementTime));
+  sum.innerHTML = insightRow(freqLead, freqMeta,
     `<b>The two limits are not the same kind of thing.</b> 49.5 and 50.5 Hz are `+
     `<b>statutory</b> — the ESQCR 2002 ±1% rule, restated in Grid Code CC.6.1.2. `+
     `49.8 and 50.2 Hz are <b>operational</b>: the band NESO works to by its own standard, not a `+
@@ -8385,6 +8629,37 @@ function detailNote(lead, body){
   return `<details class="callout"><summary><span>${lead}</span><span class="chev">&#9654;</span></summary>` +
          `<div class="more">${body}</div></details>`;
 }
+
+/* ============================================================================
+   THE INSIGHT ROW  (v0.54)
+   Replaces the grey `callout` box under six charts. The author's brief: the boxes "feel dated and
+   visually separate the explanatory content from the actual data", and the shape wanted is
+       chart → compact insight row → metadata/status row
+   rather than a chart followed by two filled cards.
+
+   ⚠ THE INFORMATION IS UNCHANGED; WHAT CHANGES IS WHICH OF IT IS A SENTENCE. The old box merged
+   a finding and its provenance into one line — "98 gCO₂/kWh, moderate to 17:30 — and it is a
+   settled actual" — so a reader wanting the number had to read a clause about settlement to get
+   to it. Split: the INSIGHT is the thing worth saying in words, the META is the row of facts that
+   qualify it, middot-separated because they are a list and not prose.
+
+   ⚠ AND IT IS THE ABOUT DISCLOSURE'S STRUCTURE, DELIBERATELY. Text column with `min-width:0`,
+   chevron as a flex item at the shared control size, nothing absolutely positioned. That shape
+   was proved at rev 48 after three releases of the alternative escaping its container; reusing it
+   here means six more instances that cannot develop the same fault.
+   `body` is optional — a panel with nothing further to say renders no chevron and no disclosure,
+   rather than an empty one. */
+function insightRow(insight, meta, body){
+  const metaHTML = meta ? `<span class="ins-meta">${meta}</span>` : "";
+  const text = `<span class="ins-text"><span class="ins-line">${insight}</span>${metaHTML}</span>`;
+  if(!body) return `<div class="insight">${text}</div>`;
+  return `<details class="insight"><summary>${text}` +
+         `<span class="ins-chev" aria-hidden="true"></span></summary>` +
+         `<div class="ins-more">${body}</div></details>`;
+}
+/* A middot-joined metadata row, with empty parts dropped so a missing feed does not leave a
+   dangling separator — the one bug every string-joined status line eventually has. */
+const insightMeta = (...parts) => parts.filter(x => x != null && x !== "").join(" · ");
 
 /* ============================================================
    RENDER — the expanded interconnector history  (v0.46)
@@ -8836,13 +9111,32 @@ function renderWind(){
   if(pairs.length){
     const mae = pairs.reduce((s,p)=>s+Math.abs(p.a-p.f),0)/pairs.length;
     const bias = pairs.reduce((s,p)=>s+(p.a-p.f),0)/pairs.length;
-    $("wind-summary").innerHTML = detailNote(
-      `Latest forecast out by <b>${uv(mae)} ${U()}</b> on average over ${pairs.length} periods in the selected ${S.windHistoryWindow} window. ` +
-      `All three series are BM-metered — <b>embedded wind is in none of them.</b>`,
+    /* ⚠ v0.54: THE AUTHOR'S EXAMPLE FOR THIS PANEL, followed as given —
+           Current outturn 10,418 MW · Forecast 13,200 MW
+           Forecast error −2,782 MW (−21.1%) · issued 11:30
+       The error and its direction are the finding; the two figures it is derived from, the
+       window it is scored over and the metering caveat are what qualify it. The caveat is
+       demoted from the sentence to the row deliberately: "embedded wind is in none of them" is
+       a fact about the series, and it was competing with the finding for the reader's first
+       glance every single refresh. */
+    const errPct = pairs.length ? (bias / (pairs.reduce((s,p)=>s+p.f,0)/pairs.length) * 100) : 0;
+    $("wind-summary").innerHTML = insightRow(
+      `Outturn is running <b>${bias>=0?"above":"below"}</b> forecast by ` +
+      `<b>${uv(Math.abs(bias))} ${U()}</b> on average` +
+      (isFinite(errPct) && Math.abs(errPct) >= 0.5 ? ` (<b>${errPct>=0?"+":"−"}${Math.abs(errPct).toFixed(1)}%</b>).` : `.`),
+      insightMeta(
+        `mean error <b>${uv(mae)} ${U()}</b>`,
+        `${pairs.length} periods · ${esc(S.windHistoryWindow)}`,
+        `<b class="ds">FUELHH</b> vs <b class="ds">WINDFOR</b>`,
+        `BM-metered — <span class="st-warn">embedded wind excluded</span>`),
       `Outturn ran <b>${bias>=0?"above":"below"}</b> forecast by <b>${uv(Math.abs(bias))} ${U()}</b> on
        average.` + convergence);
   } else {
-    $("wind-summary").textContent = "No overlapping forecast periods returned.";
+    $("wind-summary").innerHTML = insightRow(
+      `<b>No overlapping forecast periods returned.</b> Outturn and forecast do not share a
+       settlement period in this window, so no error can be scored.`,
+      insightMeta(`<span class="st-warn">unavailable</span>`, `<b class="ds">WINDFOR</b>`,
+        `${esc(S.windHistoryWindow)} window`));
   }
 }
 
@@ -8958,9 +9252,14 @@ function renderWindSolar(){
     setW("w-early", `${uv(mae)} ${U()}`, `over ${pairs.length} daylight periods`);
     setW("w-late",  `${uv(peakA.v)} ${U()}`, fmtTime(peakA.t));
     setW("w-gain",  peakF ? `${uv(peakF.v)} ${U()}` : "—", peakF ? fmtTime(peakF.t) : "no forecast");
-    $("wind-summary").innerHTML = detailNote(
-      `Day-ahead forecast out by <b>${uv(mae)} ${U()}</b> on average across ${pairs.length} daylight periods. ` +
-      `<b>Neither series here is metered</b> — both are GB-wide estimates that include embedded solar.`,
+    $("wind-summary").innerHTML = insightRow(
+      `Outturn is running <b>${bias>=0?"above":"below"}</b> the day-ahead forecast by ` +
+      `<b>${uv(Math.abs(bias))} ${U()}</b> on average.`,
+      insightMeta(
+        `mean error <b>${uv(mae)} ${U()}</b>`,
+        `${pairs.length} daylight periods`,
+        `<b class="ds">DGWS</b> day-ahead`,
+        `<span class="st-est">both series estimated</span> — includes embedded`),
       `Outturn ran <b>${bias>=0?"above":"below"}</b> forecast by <b>${uv(Math.abs(bias))} ${U()}</b> on average. ` +
       `The forecast is Elexon's <span class="term ds" data-term="DGWS">DGWS</span> day-ahead run, published around 16:45 the ` +
       `previous afternoon and covering one settlement day; the outturn is ` +
