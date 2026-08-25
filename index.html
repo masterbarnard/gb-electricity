@@ -19,8 +19,8 @@
 <meta property="og:url" content="https://gbelectricity.uk/">
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview.png?v=47">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview.png?v=47">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview.png?v=53">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview.png?v=53">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -28,7 +28,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview.png?v=47">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview.png?v=53">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -1328,6 +1328,22 @@
        overflow; the figure has to actually fit. Nowrap as well, so the next thing that narrows
        this card fails loudly rather than quietly re-wrapping. */
     .flowband .tile.hero .value{font-size:36px;white-space:nowrap;}
+  }
+  /* ⚠ MEASURED, AND IT WAS WORSE THAN A PHONE PROBLEM. `#t-gen` — the page's headline figure —
+     overflowed its own card by 62px at 844, 49px at 900 and 11px at 1024, and the DOCUMENT
+     reported no overflow at any of them, because the tile does not scroll. The same trap rev 40
+     and rev 45 both paid for: walk the children.
+     The supply column is a fraction of a five-track grid, so its width falls fastest exactly
+     where the band still refuses to stack. Two more steps rather than one, because a single
+     value that fits at 900 is needlessly small at 1180. */
+  @media (max-width:1080px) and (min-width:821px){
+    .flowband .tile.hero .value{font-size:31px;}
+    .flowband .tile.hero .value .unit{font-size:14px;}
+  }
+  @media (max-width:940px) and (min-width:821px){
+    .flowband .tile.hero .value{font-size:27px;}
+  }
+  @media (max-width:1180px){
     /* Two rows: the result across the top, then `= main + term` beneath it. Both operators stay
        BETWEEN the things they operate on, which a plain three-card column would not do — it
        would leave `=` and `+` stranded as decoration between unrelated boxes.
@@ -1588,7 +1604,28 @@
      - the page scrolls to the top on expand and the position is restored on close (in JS);
      - the height is SET IN JS from the panel's measured top edge, on expand and on resize —
        no assumption survives about what stands above. */
-  body[data-expanded]{overflow:hidden;}
+  /* ⚠ v0.52: WAS `overflow:hidden`, WHICH MADE THE SCROLLBAR TRACK VANISH AND COME BACK.
+     Reported as "a scroll bar appears for a brief moment and the content judders". The page is
+     long, so a desktop reader always has a scrollbar; expanding removed it outright and closing
+     put it back, which on Windows is a full-height stripe blinking out of the right edge twice
+     per visit to an expanded panel.
+     ⚠ `scrollbar-gutter:stable` DOES NOT COVER THIS, and that is the part worth recording: the
+     gutter keeps the CONTENT still — measured, the masthead's left edge does not move by a
+     pixel — but it does not keep the TRACK drawn. Two different symptoms, one of which the
+     existing fix was never addressing.
+     `overflow-y:scroll` keeps the track where it already was. It is the same declaration §"the
+     column re-centres itself" rejected for the IDLE page, and the objection does not carry
+     here: that was about forcing a permanent track onto a page that might not need one, on
+     platforms whose scrollbars take no space. This is scoped to a state that only exists on a
+     page already showing a track, in a gutter already reserved.
+     ⚠ IT ONLY WORKS IF THERE IS NOTHING LEFT TO SCROLL. `overflow:hidden` was clipping a real
+     32px of residual document height; turning the clip into a scroller would have handed that
+     32px back as live scroll, which is precisely the "stuck panel" defect v0.38 fixed. So
+     `sizeExpandedPanel` now measures the residue and takes it off the panel. The two changes
+     are one change and must not be separated.
+     ⚠ MOBILE KEEPS `overflow:hidden` (see the ≤760px block): touch platforms draw overlay
+     scrollbars, so there is no track to preserve and a forced scroller would only add one. */
+  body[data-expanded]{overflow-y:scroll;overflow-x:hidden;}
   body[data-expanded] .grid > :not(.is-expanded){display:none;}
   body[data-expanded] #main > section:not(:has(.panel.is-expanded)){display:none;}
   body[data-expanded] .viewbar-strip{display:none;}
@@ -1678,11 +1715,25 @@
   #panel-mix.is-expanded #mixhover{flex:1;min-height:0;display:flex;flex-direction:column;}
   #panel-mix.is-expanded #mixrows{
     flex:1;min-height:0;
-    grid-auto-rows:minmax(0,1fr);
+    /* ⚠ v0.53: THE FLOOR WAS ZERO, AND ON A PHONE THAT IS WHAT THE ROWS TOOK. `minmax(0,1fr)`
+       shares the leftover height equally and permits a row to be nothing at all when there is no
+       leftover height — measured at 390×844, the expanded fuel panel rendered NINE BARS OF ZERO
+       PIXELS. Found while fixing the table view, which is the same rule failing the same way with
+       a different cause taking the space.
+       `min-content` is the floor that cannot be wrong: a row is never smaller than the label and
+       bar inside it, and still grows to fill a tall window. Where nine rows at their natural
+       height exceed the panel, the body scrolls — which it is already set up to do. */
+    grid-auto-rows:minmax(min-content,1fr);
     align-items:center;
   }
   #panel-mix.is-expanded #mixrows .track{
-    align-self:stretch;height:auto;max-height:42px;margin:clamp(4px,1.2vh,12px) 0;
+    /* ⚠ AND THE BAR NEEDS ITS OWN FLOOR, not just the row's. With `height:auto` the track takes
+       whatever the row has left after the label, and on a phone that was 3px — a bar that is
+       present, correct and invisible. `min-height` is the ordinary collapsed height, so the
+       expanded view can never render a THINNER bar than the collapsed one it came from, which is
+       the property that was actually being violated. */
+    align-self:stretch;height:auto;min-height:14px;max-height:42px;
+    margin:clamp(2px,1.2vh,12px) 0;
   }
 
   /* ================= Stat tiles ================= */
@@ -1740,26 +1791,28 @@
      digit has the same advance by definition — so the cell shrink-wraps its digit and the
      figure measures exactly what plain text would. Asserted against a plain-text twin. */
   .odo-c.d{text-align:center;}
-  /* ⚠ THE SEPARATOR IS SCALED 30%, and the reason is a property of the typeface rather than of
-     the page. Inter's comma is a short near-vertical wedge with very little tail: at a headline
-     size it renders as a tick just under the baseline and reads as a full stop, which on a
-     figure like 29,256 is a three-orders-of-magnitude misreading. Measured against a rendered
-     full stop at 1.0, 1.2, 1.3 and 1.45 — 1.3 is where the descender becomes unmistakable and
-     1.45 starts to look like a mistake. `line-height:0` keeps the enlarged glyph from adding to
-     the cell's box, so nothing moves. Scoped to the odometer, which is exactly the set of large
-     figures the report was about; body-size commas are legible as they are and are untouched. */
-  /* ⚠ SCALED WITH A TRANSFORM, NOT WITH font-size, and the first draft proved why. The cell's
-     height, line-height and baseline nudge are all expressed in `em` — so enlarging the cell's
-     own font-size rescaled its box underneath it and the comma floated up to mid-height, which
-     looked worse than the problem it was fixing. A transform changes the painted glyph and
-     nothing else: the box, the baseline and the tabular advance are all untouched, so the digits
-     either side do not move by a pixel. Separators never roll (only digits get a previous
-     value), so this cannot collide with the roll's own transform.
-     ⚠ THE ORIGIN IS THE BASELINE (95% of a .8em line box, from Inter's own ascent/descent), not
-     the box centre. A comma sits entirely BELOW the baseline, so scaling about that point grows
-     the tail downward and leaves the top exactly where the digits expect it. Scaling about the
-     middle — the first attempt — moved the whole glyph down and turned it into a subscript. */
-  .odo-c.sep .odo-r{transform:scale(1.3);transform-origin:50% 95%;}
+  /* ============================================================================
+     ⚠ THE SEPARATOR IS NO LONGER SCALED AT ALL, AND THAT IS THE FIX (v0.52).
+     From v0.4x to v0.51 this rule enlarged the comma — 1.3, then briefly 1.45 and 1.6, then a
+     non-uniform 1.3 × 1.9 — against a report that it "reads as a full stop". Every one of those
+     was treating a symptom. THE COMMA WAS BEING CUT OFF: `.odo-c` carries `overflow:hidden`, the
+     cell is `.8em` tall, and a comma is the one character in a figure that descends BELOW the
+     baseline — so the cell was slicing the tail off and leaving a tick that does look like a full
+     stop. Scaling it up only made a bigger glyph for the same box to cut, which is why each
+     increase bought less than the last and why 1.6 read as a slab rather than as a comma.
+     Remove the clip and Inter's own comma is a perfectly good comma. The correct treatment is
+     therefore NO TREATMENT: the typeface is not at fault, the box was.
+     ⚠ THE CLIP IS REMOVED ONLY ON THE SEPARATOR. `overflow:hidden` is what hides the OUTGOING
+     digit during a roll — the `::before` twin parked one line-box above — and digit cells still
+     need it. Separators never roll, because only digits are given a previous value, so on a
+     separator the clip has nothing to do except damage the glyph.
+     ⚠ THE LESSON, WHICH THIS PROJECT HAS NOW PAID FOR THREE TIMES ON ONE CHARACTER: when a
+     rendered mark looks wrong, check what is PAINTING it before changing what is DRAWN. Three
+     releases of typographic reasoning about Inter's comma were reasoning about a glyph nobody
+     had seen whole. The author diagnosed it in one sentence — "the bottom of the comma is being
+     cut off" — after three attempts at redrawing it.
+     ============================================================================ */
+  .odo-c.sep{overflow:visible;}
   .odo-r{display:block;}
   .odo-r::before{content:attr(data-p);position:absolute;left:0;right:0;
     top:calc(0em - var(--odo-h));height:var(--odo-h);line-height:var(--odo-h);}
@@ -1849,7 +1902,20 @@
             border-bottom:1px dotted var(--ink-mute);}
   .labelbtn:hover{color:var(--ink);border-bottom-color:var(--ink);}
   .labelbtn:focus-visible{outline:2px solid var(--blue-text);outline-offset:3px;border-radius:2px;}
-  @media (pointer:coarse){ .labelbtn{padding:10px 0;margin:-10px 0;} }
+  /* ⚠ v0.52: THE INLINE TARGETS, AND WHY THEY ARE NOT FORCED TO 24px BOXES.
+     Measured across the ladder, `.labelbtn` renders 13px tall, `.legend-key` 16px and
+     `.driver-key` 17px. WCAG 2.5.8 exempts targets in a sentence or block of text — these are
+     inline words inside a label, a legend and a prose line, and giving them 24px boxes would
+     put visible gaps through the legend and the what-is-changing sentence to satisfy a rule
+     that does not apply to them.
+     What DOES apply is that a finger has to hit them. The padding/negative-margin pair grows
+     the hit area without moving a pixel of layout — the target becomes 24px+ while the text
+     stays where the design put it. It was on `.labelbtn` only; the legend and driver keys are
+     the same kind of control and get the same treatment. */
+  @media (pointer:coarse){
+    .labelbtn{padding:10px 0;margin:-10px 0;}
+    .legend-key,.driver-key{padding:5px 4px;margin:-5px -4px;}
+  }
 
   .infobtn{font:inherit;font-size:10px;line-height:1;color:var(--ink-dim);background:none;
     border:1px solid var(--grey-line);border-radius:50%;width:15px;height:15px;padding:0;cursor:pointer;
@@ -2638,113 +2704,10 @@
      It also stops leaking into the expanded view — see the data-expanded rule. */
   /* v0.42's `.foot-seo` row and its divider are gone with the move back into #main at v0.44.
      The disclosure now takes its spacing from `.seo-details` again, like any other block in the
-     content column, and #main's own bottom padding is the air above the footer. */
-  .seo-details{margin-top:12px;padding:0 0 2px;color:var(--ink);}
-  .seo-details summary{cursor:pointer;color:var(--blue-text);font-weight:700;font-size:11px;
-    list-style:none;display:inline-flex;align-items:center;gap:6px;padding:4px 0;}
-  .seo-details summary::-webkit-details-marker{display:none;}
-  .seo-details summary::before{content:"+";display:inline-grid;place-items:center;width:17px;height:17px;
-    border:1px solid var(--blue-line);border-radius:50%;font-weight:700;line-height:1;}
-  .seo-details[open] summary::before{content:"−";}
-  /* v0.33: this outline was white — drawn on the bar's original blue fill, invisible once
-     v0.31998 restyled the bar to a white surface. And the later focus rules removed the outline
-     entirely, which left the disclosure with NO keyboard focus indicator at all. A control a
-     keyboard user cannot see they are on is a control they cannot use. */
-  .seo-details summary:focus-visible{outline:2px solid var(--blue-text);outline-offset:-3px;border-radius:8px;}
-  .seo-details{
-    margin-top:8px;
-    border:1px solid var(--blue-line);
-    border-radius:10px;
-    background:var(--surface);
-    overflow:hidden;
-    box-shadow:0 1px 2px rgba(20,28,50,.04);
-  }
-  /* v0.31995: the homepage methodology disclosure is a single GB-branded control.
-     Blue is continuous across the bar; the final 3% is a restrained red brand accent. */
-  .seo-details summary{
-    position:relative;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    list-style:none;
-    cursor:pointer;
-    padding:10px 14px 10px 16px;
-    color:#fff;
-    background:linear-gradient(90deg,var(--accent) 0 97%,var(--red) 97% 100%);
-    border:0;
-    font-size:12px;
-    font-weight:700;
-    letter-spacing:.01em;
-  }
-  .seo-details summary::-webkit-details-marker{display:none;}
-  .seo-details summary span{display:inline-block;}
-  .seo-details .seo-summary-sub{
-    font-weight:400;
-    color:rgba(255,255,255,.78);
-    margin-left:2px;
-  }
-  .seo-details summary::after{
-    content:"";
-    position:absolute;
-    top:0;
-    right:0;
-    width:44px;
-    height:100%;
-    display:block;
-    background:var(--accent);
-    border-radius:0 8px 8px 0;
-    box-shadow:inset 1px 0 rgba(255,255,255,.16);
-  }
-  .seo-details summary::after{
-    /* The red cell is the action target; the chevron itself is a centred CSS mark so it remains
-       crisp at every scale instead of relying on a text glyph whose shape varies by platform. */
-    clip-path:polygon(0 0,100% 0,100% 100%,0 100%);
-  }
-  .seo-details summary::before{
-    /* keep the information marker on the left */
-  }
-  .seo-details summary{background:linear-gradient(90deg,var(--accent) 0 97%,var(--red) 97% 100%);}
-  .seo-chevron{
-    position:absolute;
-    right:0; top:0;
-    width:44px; height:100%;
-    display:flex !important; align-items:center; justify-content:center;
-    z-index:2;
-  }
-  .seo-chevron::before{
-    content:""; width:8px; height:8px;
-    border-right:2px solid #fff; border-bottom:2px solid #fff;
-    transform:rotate(45deg) translate(-1px,-1px);
-    transition:transform .18s ease;
-  }
-  .seo-details[open] .seo-chevron::before{transform:rotate(225deg) translate(-1px,-1px);}
-  .seo-details .seo-chevron{margin-left:0;}
-  .seo-details summary{padding-right:58px;}
-  .seo-details summary span{position:relative;z-index:1;}
-  .seo-details summary::before{position:relative;z-index:1;}
-  .seo-details summary .seo-summary-sub{position:relative;z-index:1;}
-  .seo-details summary:after{ /* visual cell; chevron is painted by the child marker below */ }
-  .seo-details[open] summary::after{
-    background-position:18px 20px,22px 20px;
-    transform:none;
-  }
-  .seo-details{margin-bottom:12px;}
-  .seo-details summary::before{
-    content:"i";
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:19px;
-    height:19px;
-    flex:0 0 19px;
-    border:1px solid rgba(255,255,255,.9);
-    border-radius:50%;
-    background:rgba(255,255,255,.12);
-    color:#fff;
-    font-size:11px;
-    font-weight:700;
-    font-style:normal;
-  }
+     content column, and #main's own bottom padding is the air above the footer.
+     ⚠ THE HEADER'S CHROME IS NOT HERE ANY MORE — see the consolidated block at the end of this
+     sheet. What is left in this region is the BODY's typography, which is a different subject
+     and was never part of the positioning problem. */
   .seo-copy{
     max-width:820px;
     margin:0 auto;
@@ -2759,8 +2722,29 @@
   .seo-copy p{margin:0 0 8px;}
   .seo-copy ul{margin:4px 0 10px 18px;padding:0;}
   .seo-copy li{margin:2px 0;}
+  /* v0.52: the opening sentence carries the piece, so it is set a step up and a shade darker —
+     the only typographic emphasis in a block that is otherwise deliberately even. */
+  .seo-copy .seo-lede{font-size:14px;line-height:1.55;color:var(--ink);margin-bottom:10px;}
+  /* The capability list is the part a reader scans rather than reads, so it loses the bullet
+     glyph and gains a rule down its left edge — a shape the eye can enter at any point. */
+  .seo-copy .seo-points{list-style:none;margin:8px 0 12px;padding:2px 0 2px 13px;
+    border-left:2px solid var(--blue-line);}
+  .seo-copy .seo-points li{margin:0 0 6px;line-height:1.5;}
+  .seo-copy .seo-points li:last-child{margin-bottom:0;}
+  .seo-copy .seo-points b{color:var(--ink);}
+  @media (max-width:620px){
+    .seo-copy .seo-lede{font-size:13px;}
+    .seo-copy .seo-points{padding-left:11px;}
+  }
   .seo-copy a{color:var(--blue-text);}
-  .seo-details:focus-within{outline:2px solid var(--blue-text);outline-offset:2px;}
+  /* ⚠ v0.52: WAS A 2px OUTLINE AROUND THE WHOLE BOX, which is a heavier focus treatment than
+     anything else on the page and fired whenever anything inside was focused — including a link
+     in the open body, so reading the methodology drew a ring round the entire section. The
+     panels' treatment is a border-colour change on the container, and the summary keeps its own
+     `:focus-visible` ring; that is enough for a keyboard user and invisible to a mouse one. */
+  /* `:focus-within` on the container is gone — see the consolidated block at the end. It fired
+     whenever anything inside was focused, INCLUDING a link in the open body, so reading the
+     methodology drew a ring round the whole section. Focus belongs to the control that has it. */
 
   .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;
     margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;}
@@ -2818,7 +2802,52 @@
     margin:4px 0 14px;font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);}
   @media (max-width:620px){ .srcs{grid-template-columns:1fr;} }
   @media (max-width:620px){ .modal-body.scroll{max-height:none;} }
+  /* ============================================================================
+     ⚠ v0.52 — THE FOUR DATA STATES, AND WHY THIS IS A CORRECTNESS FEATURE
+
+     Until now a figure had two states: a number, or an em-dash in `.skeleton` grey. Everything
+     else — a feed that failed, a reading half an hour past its refresh, and a genuine zero —
+     arrived looking like one of those two. That matters most in the direction nobody notices:
+     **a missing value must never look like a genuine zero.** Coal really does run at 0 MW for
+     weeks at a time on this system, and solar really is 0 MW at night. If a failed fetch can
+     also print 0, then every true zero on the page becomes unreliable — the reader cannot tell
+     "there is none of this" from "we could not find out", and the honest zeros lose their
+     meaning along with the dishonest ones.
+
+     Four states, one treatment each:
+       LOADING       an em-dash, muted. The data has not arrived yet and may still.
+       UNAVAILABLE   an em-dash with a dotted underline and a title naming the feed. It was
+                     asked for and did not come.
+       STALE         the real figure, at full weight, with a small clock mark beside it. The
+                     number is genuine; its age is not what a reader assumes.
+       ZERO          an ordinary figure, styled exactly like any other. `0` is a reading.
+
+     ⚠ THE STALE STATE KEEPS ITS NUMBER AT FULL STRENGTH ON PURPOSE. Dimming a stale figure is
+     the obvious move and is wrong: the value is correct, it is simply older than the refresh
+     period, and greying it invites the reader to discount a true measurement. The age is an
+     annotation on a good number, not a defect in it.
+
+     ⚠ AND NONE OF THESE IS ALARMING. No red, no icons with exclamation marks, no borders. An
+     unavailable figure on a dashboard of twenty figures is a normal Tuesday — a feed blinks and
+     recovers on the next five-minute poll. A state treatment loud enough to be noticed from
+     across the room would be wrong about how often this happens. */
   .skeleton{color:var(--ink-mute);}
+  /* UNAVAILABLE. The dotted rule is the page's existing "there is more here" mark, which is
+     exactly right: the title attribute names the feed that did not answer. */
+  .figstate-unavailable{color:var(--ink-mute);border-bottom:1px dotted var(--ink-mute);
+    cursor:help;}
+  /* STALE. A clock glyph at the figure's own baseline, in the warn tone the live chip already
+     uses for the same meaning — so "older than expected" looks the same wherever it appears. */
+  .figstate-age{display:inline-flex;align-items:center;gap:3px;margin-left:6px;
+    font-size:.38em;font-weight:700;letter-spacing:.02em;color:var(--warn);
+    vertical-align:middle;white-space:nowrap;cursor:help;}
+  .figstate-age svg{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;
+    stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+  /* On the smallest figures the words would be longer than the number they annotate, so the
+     glyph carries it alone and the title tells the rest. */
+  .tile .value .figstate-age .figstate-age-t,
+  .balancebox .value .figstate-age .figstate-age-t{display:inline;}
+  @media (max-width:560px){ .figstate-age .figstate-age-t{display:none;} }
 
   /* ================= Responsive =================
      Breakpoints mirror the Wiki's own (760px), with an extra tier at 1080/620 for the
@@ -2880,10 +2909,6 @@
     .tile .value{font-size:28px;}
   }
   @media (max-width:620px){
-    .seo-details{margin-bottom:10px;}
-    .seo-details summary{padding-right:52px;}
-    .seo-details summary::after{width:40px;background-position:16px 15px,20px 15px;}
-    .seo-details[open] summary::after{background-position:16px 19px,20px 19px;}
     /* ⚠ v0.45: THE CONDITION CARDS STAY 2×2 ON A PORTRAIT PHONE, at the author's direction.
        They dropped to one column here when this row still contained the 44px hero figure and a
        two-up layout would have broken it across two lines. The hero moved into the flow band at
@@ -3147,112 +3172,6 @@
     gap:6px;
   }
   #wind-controls .wind-range{width:78px;flex-basis:78px;height:27px;}
-  #wind-controls .viewswitch{width:78px;flex-basis:78px;height:27px;}
-
-  /* Methodology disclosure: supporting information, not a dominant dashboard bar. */
-  .seo-details{
-    margin-top:8px;
-    margin-bottom:12px;
-    border:1px solid var(--grey-line);
-    border-radius:8px;
-    background:var(--surface);
-    overflow:hidden;
-    box-shadow:none;
-  }
-  .seo-details summary{
-    position:relative;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    min-height:35px;
-    box-sizing:border-box;
-    padding:8px 56px 8px 13px;
-    color:var(--ink);
-    background:var(--surface);
-    border:0;
-    border-radius:7px;
-    font-size:11.5px;
-    font-weight:700;
-    cursor:pointer;
-    outline:none;
-  }
-  .seo-details .seo-summary-sub{color:var(--ink-dim);font-weight:400;}
-  .seo-info-icon{
-    position:relative;
-    z-index:1;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:18px;
-    height:18px;
-    flex:0 0 18px;
-    box-sizing:border-box;
-    border:1px solid var(--blue-line);
-    border-radius:50%;
-    color:var(--blue-text);
-    background:var(--surface);
-    font:700 11px/18px var(--sans);
-    line-height:18px;
-    text-align:center;
-    vertical-align:middle;
-  }
-  /* v0.33: was a blanket outline:none on :focus, :active AND :focus-within, which erased the
-     keyboard indicator along with the mouse one. :focus-visible draws only for keyboard focus,
-     so suppressing the rest is now safe — that distinction is the entire job of the selector. */
-  .seo-details summary:focus:not(:focus-visible),
-  .seo-details summary:active{
-    outline:none;
-    box-shadow:none;
-  }
-  .seo-details summary::before{
-    content:none;
-    display:none;
-  }
-  /* v0.33: this cell was RED, and it is a click affordance — the part of the bar that says
-     "this opens". The project's red rule has been explicit since rev 18: structural end caps
-     and the hero accent only, never buttons or interactive states, and the harness caps the
-     largest single red instance at 400px² precisely so the device cannot creep. A 42px-tall
-     action cell is ~1,500px² of red doing a button's job. The affordance keeps its shape and
-     its white chevron; it wears the chrome blue, which is what every other "this opens"
-     treatment on the page already wears. */
-  .seo-details summary::after{
-    width:42px;
-    height:100%;
-    background:var(--accent);
-    border-radius:0 7px 7px 0;
-    box-shadow:none;
-  }
-  /* ⚠ THE CHEVRON HAD BEEN INVISIBLE SINCE THE BAR WAS RESTYLED TO A WHITE SURFACE.
-     `.seo-details summary span` (0,2,1) sets position:relative on every span in the bar, and
-     the chevron is a span — so it beat the `.seo-chevron` (0,1,0) rule that made the mark an
-     absolutely-positioned 42px cell. The chevron collapsed into a 10px-tall box in the text
-     flow, painting a white mark on the white bar while the blue action cell to its right stayed
-     empty. `display:flex !important` was the tell: the previous fix reached for !important on
-     the one property it noticed rather than for the specificity the whole rule needed.
-     Selecting through the summary settles it at (0,3,0) with no !important anywhere. */
-  .seo-details summary .seo-chevron{
-    position:absolute;
-    right:0;
-    top:0;
-    width:42px;
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:2;
-  }
-  .seo-chevron::before{
-    width:8px;
-    height:8px;
-    border-right:2px solid #fff;
-    border-bottom:2px solid #fff;
-    transform:rotate(45deg);
-  }
-  .seo-details[open] .seo-chevron::before{
-    transform:rotate(225deg);
-  }
-
-  @media (min-width:761px){
     .panel-head .panel-tools{
       width:auto;
       min-width:max-content;
@@ -3274,9 +3193,6 @@
     }
   }
   @media (max-width:620px){
-    .seo-details summary{padding-right:48px;}
-    .seo-details summary::after,
-    .seo-chevron{width:38px;}
   }
 
 
@@ -3285,35 +3201,13 @@
   #panel-stack .panel-head{
     align-items:flex-start;
   }
-  #panel-stack .panel-tools{
-    display:flex !important;
-    align-items:center;
-    justify-content:flex-end !important;
-    gap:6px;
-    margin-left:auto !important;
-    padding-top:7px !important;
-    width:220px !important;
-    min-width:220px !important;
-    flex:0 0 220px !important;
-    flex-wrap:nowrap !important;
-  }
-  #panel-stack .panel-tools .range-switch{
-    flex:0 0 78px !important;
-    width:78px !important;
-    height:28px !important;
-  }
-  #panel-stack .panel-tools .export-btn{
-    flex:0 0 102px !important;
-    width:102px !important;
-    height:28px !important;
-    box-sizing:border-box;
-  }
-  #panel-stack .panel-tools .stack-expand{
-    flex:0 0 34px !important;
-    width:34px !important;
-    height:34px !important;
-    margin:0 !important;
-  }
+  /* ⚠ v0.52 REMOVED FOUR `!important` GEOMETRY BLOCKS HERE. They forced 220px tool groups, 34px
+     buttons and 102px export buttons on #panel-stack and #panel-ic past general rules that were
+     trying to set different values — the two sides had been fighting since v0.3201, and the
+     `!important`s were the sound of that fight rather than a decision. The consolidated control
+     block at the end of this sheet gives every control one height and one width, so the group
+     measures itself and there is nothing left to force. ⚠ A fixed group width is also what made
+     these headers overflow a narrow phone: 220px of controls in a 160px space cannot wrap. */
 
   /* Every part of each half of the range control is its own full-size button.
      No text-only click targets or gaps. */
@@ -3321,15 +3215,6 @@
   @media (max-width:760px){
     #panel-stack .panel-head{
       flex-wrap:wrap;
-    }
-    #panel-stack .panel-head .panel-tools{
-      width:220px !important;
-      min-width:220px !important;
-      flex:0 0 220px !important;
-      margin-left:auto !important;
-      padding-top:6px !important;
-      justify-content:flex-end !important;
-      align-self:flex-start;
     }
   }
 
@@ -3438,30 +3323,8 @@
     width:78px !important;
   }
 
-  #panel-ic .panel-tools .export-btn,
-  #panel-stack .panel-tools .export-btn{
-    flex:0 0 102px !important;
-    width:102px !important;
-    box-sizing:border-box;
-  }
-
-  #panel-ic .panel-tools .panelbtn.xp,
-  #panel-stack .panel-tools .panelbtn.xp{
-    flex:0 0 34px !important;
-    width:34px !important;
-    height:34px !important;
-    margin:0 !important;
-  }
 
   @media (max-width:760px){
-    #panel-ic .panel-tools,
-    #panel-stack .panel-tools{
-      flex:0 0 220px !important;
-      width:220px !important;
-      min-width:220px !important;
-      margin-left:auto !important;
-      gap:6px !important;
-    }
   }
 
 
@@ -3482,20 +3345,504 @@
     align-items:center;
     justify-content:center;
   }
-  @media (pointer:coarse){
-    #wind-controls .wind-range,
-    #wind-controls .viewswitch{
-      height:44px;
-      min-height:44px;
+
+  /* ============================================================================
+     ⚠ v0.52 — ONE CONTROL SET FOR EVERY PANEL. THIS BLOCK IS THE AUTHORITY.
+
+     Reported as the controls looking "added on afterwards", and the cause is measurable rather
+     than a matter of taste: their geometry had accumulated across roughly twenty override
+     blocks over eleven releases, carrying FIVE different heights — 27, 28, 32, 34 and 36px —
+     plus a 44px coarse-pointer tier, and a run of `!important` declarations on #panel-stack and
+     #panel-ic forcing widths that the general rules were fighting. Two controls sitting side by
+     side in one header were sized by different rules written months apart. Nothing was going to
+     look deliberate while that was true.
+
+     So this is a CONSOLIDATION, not a restyle. Every control in a panel header now takes its
+     height and its border from two custom properties declared once, here, at the end of the
+     sheet where source order settles every earlier disagreement without a single `!important`.
+
+     ⚠ THE BORDER IS THE PANEL'S OWN, WHICH IS THE FIX FOR "FLOATING". The expand button wore
+     `--blue-text` — the strongest blue on the page, heavier than the frame around it — so it
+     read as a control sitting ON the panel rather than part of it. It takes `--blue-line`, the
+     frame's own colour, exactly as the brief asked. What distinguishes it is now its ICON and
+     its hover, not a heavier outline than its container.
+
+     ⚠ AND THE 24px TAP-TARGET RULE IS UNTOUCHED. The coarse-pointer tier stays at 44px, which
+     is well above the WCAG 2.5.8 minimum this project has honoured since rev 32; the desktop
+     height rises from 27 to 28 so every control matches, and none of them shrinks.
+     ============================================================================ */
+  :root{
+    --ctl-h:28px;            /* one height for every control in a panel header */
+    --ctl-r:7px;             /* one radius */
+    --ctl-border:var(--blue-line);
+    /* ⚠ v0.52 — THE SELECTED SEGMENT IS NO LONGER A SATURATED SLAB. The contract since v0.31991
+       was "active = white text on solid blue", inherited from the masthead's Simplified/Detailed
+       control back when that WAS the loudest thing on the page and had to be. It has outlived
+       that: on a panel header the same treatment puts `--blue` (#0000A8, the most saturated ink
+       in the palette) next to a chart, and the reader's eye goes to the switch. Reported as
+       "the content should stand out more than the buttons", which is the correct hierarchy
+       stated plainly — a control that says which of two views you are in is not more important
+       than the view.
+       Level 2 of the same blue instead, with the label in `--blue-text`. That is a pairing the
+       page already uses and has already validated — `.legend-key.is-on` and `.driver-key.is-on`
+       both fill with `--blue-2` — so this is a control adopting the house treatment rather than
+       a new colour being invented for it.
+       ⚠ SELECTION IS STILL NOT CARRIED BY COLOUR ALONE. The fill is a filled HALF of a bordered
+       track, so its position states the answer; `aria-checked` states it to a screen reader;
+       and the two labels still differ in ink. Softening the fill removes weight, not meaning. */
+    --ctl-on-bg:var(--blue-2);
+    --ctl-on-ink:var(--blue-text);
+  }
+  @media (pointer:coarse){ :root{ --ctl-h:44px; } }
+
+  /* The group: centred on the header's title row, never wrapping mid-control. */
+  .panel-tools{display:flex;align-items:center;gap:6px;margin-left:auto;
+    flex-wrap:nowrap;justify-content:flex-end;min-width:max-content;padding-top:0;}
+  .panel-head > .panel-tools{align-self:center;padding-top:0;}
+
+  /* Every control, one height, one radius, one border. */
+  .panel-tools .panelbtn,
+  .panel-tools .export-btn,
+  .panel-tools .range-switch,
+  .panel-tools .viewswitch,
+  #wind-controls .wind-range,
+  #wind-controls .viewswitch,
+  #wind-controls .wind-expand{
+    height:var(--ctl-h);
+    min-height:var(--ctl-h);
+    box-sizing:border-box;
+    margin:0;
+    align-self:center;
+    border-radius:var(--ctl-r);
+    border:1px solid var(--ctl-border);
+  }
+  /* Square controls stay square at whatever the shared height is. */
+  .panel-tools .panelbtn,
+  #wind-controls .wind-expand{
+    width:var(--ctl-h);
+    min-width:var(--ctl-h);
+    flex:0 0 var(--ctl-h);
+    padding:0;
+  }
+  /* The two segmented switches share one width so a panel with both reads as a pair. */
+  .panel-tools .range-switch,
+  .panel-tools .viewswitch,
+  #wind-controls .wind-range,
+  #wind-controls .viewswitch{ flex:0 0 78px; width:78px; }
+  .panel-tools .export-btn{ flex:0 0 102px; width:102px; }
+
+  /* The inner halves fill their switch exactly, so there is no dead strip to tap. */
+  .panel-tools .range-btn,
+  .panel-tools .viewbtn,
+  #wind-controls .range-btn,
+  #wind-controls .viewbtn{
+    height:100%;min-height:0;display:inline-flex;align-items:center;justify-content:center;
+  }
+
+  /* One resting appearance and one hover, so the three control TYPES differ by what they say
+     rather than by how loudly they say it. */
+  .panel-tools .panelbtn,
+  .panel-tools .export-btn,
+  #wind-controls .wind-expand{
+    background:var(--surface);color:var(--blue-text);
+  }
+  .panel-tools .panelbtn:hover,
+  .panel-tools .export-btn:hover,
+  #wind-controls .wind-expand:hover{ background:var(--blue-2);border-color:var(--blue-text); }
+  .panel-tools .panelbtn:active,
+  .panel-tools .export-btn:active{ background:var(--blue-2); }
+  .panel-tools .panelbtn:focus-visible,
+  .panel-tools .export-btn:focus-visible,
+  #wind-controls .wind-expand:focus-visible{
+    outline:2px solid var(--blue-text);outline-offset:2px;
+  }
+  /* The icon carries the button, so it grows a little now that the outline is quiet. */
+  .panel-tools .panelbtn .expand-icon,
+  #wind-controls .wind-expand .expand-icon{width:15px;height:15px;}
+
+  /* ⚠ THE PER-PANEL `!important` OVERRIDES ARE GONE, and they have to be: they existed to force
+     220px tool groups and 34px buttons past the general rules, and a fixed group width is what
+     stops a header adapting when a control changes size. With one height and one width per
+     control type, the group measures itself. */
+  #panel-stack .panel-tools,
+  #panel-ic .panel-tools{
+    width:auto;min-width:max-content;flex:0 0 auto;padding-top:0;
+  }
+  #wind-controls{padding-top:0;display:flex;align-items:center;gap:6px;}
+
+  /* ⚠ MOBILE: THE GROUP WRAPS TO ITS OWN ROW, WHICH IT ALREADY DID — what changes is that it no
+     longer carries a fixed 220px width there, so it can use the room it actually has instead of
+     overflowing a 360px screen by the difference. */
+  @media (max-width:760px){
+    /* ⚠ `min-width:0` IS THE LINE THAT MAKES THE OTHERS WORK. The desktop rule above gives every
+       tools group `min-width:max-content` so it never wraps mid-control — and `max-content` on a
+       flex container is its ONE-LINE width, which outranks both `width:100%` and `flex-wrap:wrap`.
+       So the wrap rule in the next block was declared, computed, and did nothing: measured at
+       320px, `#wind-controls` reported `flex-wrap:wrap` and a width of 317px in a 288px column.
+       Two of the five groups already carried the release; the generic rule did not, which is why
+       the Wind panel overflowed and the stack and interconnector panels did not.
+       ⚠ AND THE WIND PANEL IS THE ONE THAT EXPOSES IT because it carries FOUR controls, not the
+       three this was previously reasoned about: a 78px range switch, a 78px Wind/Solar switch, a
+       102px CSV button and a 44px expand — 302px of control before any gap. Counting the group's
+       contents from the CSS rather than from the markup is what hid the fourth. */
+    .panel-tools{width:100%;min-width:0;justify-content:flex-start;margin-left:0;margin-top:4px;}
+    #panel-stack .panel-tools,
+    #panel-ic .panel-tools{width:100%;min-width:0;flex:1 1 auto;justify-content:flex-start;}
+    #wind-controls{width:100%;min-width:0;justify-content:flex-start;margin-top:4px;}
+  }
+  /* Below 400px three controls will not fit on one row at full width; they wrap rather than
+     shrink, because a squeezed 44px target is the one thing that must not give. */
+  /* ⚠ MEASURED AT 320px: the Wind panel's header overflowed by 32px, because that panel carries
+     TWO 78px switches plus a 44px expand button — 206px of controls plus gaps in a 296px
+     content column. `#wind-controls` is its own container and was not covered by the
+     `.panel-tools` wrap rule above, which is the kind of gap a container that "is a tools group
+     but is not .panel-tools" always produces. Both wrap now. */
+  @media (max-width:400px){
+    .panel-tools,#wind-controls{flex-wrap:wrap;gap:5px;}
+    .panel-tools .export-btn{flex:1 1 auto;width:auto;min-width:102px;}
+  }
+
+  /* ============================================================================
+     THE SEGMENTED SWITCHES TAKE THE SOFTENED ACTIVE STATE  (v0.52)
+     Stated LAST, and that placement is the whole reason this works. Both switches carry a
+     `.is-on` colour declared twice already — `.viewbtn.is-on` up at the original control block
+     and `.range-switch .range-btn.is-on` twice more in the v0.3202 restyle — and this project
+     has now paid three times for the rule that A LATER DECLARATION AT EQUAL SPECIFICITY
+     SILENTLY DISCARDS THE EARLIER ONE. Rather than hunt and edit three scattered rules and hope
+     a fourth is not hiding, the token is defined once at the top of this block and applied once
+     here, after everything. If a future rule re-hardcodes the old colour it will be visible as
+     a rule that comes after this one, which is a thing that can be found.
+     ============================================================================ */
+  .range-switch::before,
+  .viewswitch .slider{ background:var(--ctl-on-bg); }
+  .range-switch .range-btn.is-on,
+  .viewswitch .viewbtn.is-on{ color:var(--ctl-on-ink); }
+
+  /* ⚠ `--blue-pale` WAS NEVER DEFINED, IN EITHER THEME. Two rules ask for it — the CSV button's
+     hover and the stack legend's selected key — and an invalid `var()` computes to `unset`,
+     which for `background` means `transparent`. So neither had the hover ground it was written
+     to have, silently, for as long as the token has been referenced. (The same trap the harness
+     hit at rev 46 from the other side: an invalid var() cannot be detected by looking at the
+     rendered value, because the rendered value is a legal one.)
+     Defined here as the tint the palette already carries for exactly this job, so both themes
+     get it from a value that has been through the contrast work rather than a new guess. */
+  :root{ --blue-pale:var(--accent-tint); }
+
+  /* ============================================================================
+     THE ABOUT DISCLOSURE IS A PANEL HEADER  (v0.52)
+     Stated last for the same cascade reason as the switches above: `.seo-details summary` is
+     declared in three separate places across two earlier blocks, and the last one wins. The
+     values here are the panel header's own — 10px / 700 / .08em / uppercase / --blue-text for
+     the title, 10px / 400 / --ink-dim for the line beneath, 7px 13px of padding — quoted rather
+     than shared, exactly as `.panel-head h2` quotes `.insight-head h2` and for the same reason:
+     the two live in different structures, and a merged rule would make one's layout the other's
+     problem. The harness asserts that they AGREE.
+     ⚠ THE SUBTITLE IS NOT SET IN MONO. Every panel's second line is a dataset identifier and
+     takes `.ds`; this one is a sentence about what the section contains. Mono is for machine
+     identifiers and nothing else, so the shape matches and the typeface does not — which is the
+     correct reading of the rule rather than a lapse in applying it.
+     ============================================================================ */
+
+  /* ============================================================================
+     THE ABOUT / METHODOLOGY DISCLOSURE — ONE DECLARATION  (v0.53)
+
+     ⚠ THIS COMPONENT'S CHROME HAD BEEN DECLARED IN FOUR SEPARATE REGIONS OF THIS SHEET, across
+     three generations of treatment, and every one of them was still live: a `+`/`−` circle from
+     v0.31, a full-bar blue gradient with a 3% red terminal from v0.31995, a filled 44px action
+     cell from v0.32 (red) and v0.33 (blue), a background-position sprite for its chevron, and a
+     bordered icon button from v0.52. Around forty declarations, of which the last dozen won. The
+     author reported the control mispositioned three times and each report was answered with
+     another override on top — which is how a component ends up with four positioning models
+     arguing with each other. All of it is deleted; this is the whole component now.
+
+     ⚠ AND THE FAILURE MODE WAS STRUCTURAL, NOT NUMERIC. The chevron was ABSOLUTELY POSITIONED
+     against the summary, inside a container carrying `overflow:hidden`. That placement depended
+     on three separate things staying true — an ancestor keeping `position:relative`, the
+     summary's height being what `top:50%` assumed, and nothing clipping the result — none of
+     which are visible in the rule that placed it. Tuning any of those numbers again would have
+     left all three dependencies in place.
+
+     THE CHEVRON IS A FLEX ITEM. It sits in the same row as the text, in normal flow, at the
+     shared control size. There is no absolute positioning in this component, no `top`, no
+     `translate`, and nothing for a container to clip: a flex row cannot put its own child
+     outside itself. `min-width:0` on the text column is the one property that has to be stated —
+     without it a long title refuses to shrink and pushes the control out of the row, which is
+     the same `max-content` trap that overflowed the Wind panel's header at rev 47.
+     ============================================================================ */
+  .seo-details{
+    margin:8px 0 12px;
+    border:1px solid var(--blue-line);
+    border-radius:9px;
+    background:var(--surface);
+    color:var(--ink);
+  }
+  /* The whole row is the control: `<summary>` is focusable and clickable across its full box, so
+     the target is the header rather than the mark at the end of it. */
+  .seo-details summary{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:7px 13px;
+    min-height:calc(var(--ctl-h) + 14px);
+    box-sizing:border-box;
+    list-style:none;
+    cursor:pointer;
+    border-radius:8px;
+    background:none;
+    border:0;
+    outline:none;
+  }
+  .seo-details summary::-webkit-details-marker{display:none;}
+  .seo-details summary::before,
+  .seo-details summary::after{content:none;}
+  /* ⚠ `min-width:0` — see the note above. `flex:1 1 auto` alone is not enough: a flex item's
+     default `min-width` is `auto`, which resolves to its max-content size. */
+  .seo-details .seo-summary-text{
+    flex:1 1 auto;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:2px;
+  }
+  /* The panel header's own five values for the title, and the note's two for the line beneath —
+     quoted rather than shared, exactly as `.panel-head h2` quotes `.insight-head h2`, because
+     the two live in different structures. `panelFrameMatchesTheGlanceBand` asserts they agree. */
+  .seo-details .seo-summary-title{
+    font-size:10px; font-weight:700; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--blue-text); line-height:1.25;
+  }
+  .seo-details .seo-summary-sub{
+    font-size:10px; font-weight:400; letter-spacing:normal; text-transform:none;
+    color:var(--ink-dim); line-height:1.3;
+  }
+  /* The mark. Same size, radius and border as every other control in a panel header, and it
+     never shrinks — `flex:0 0 auto` with an explicit width, so a long title wraps rather than
+     squeezing the control. `pointer-events:none` keeps the click on the summary itself. */
+  .seo-details .seo-chevron{
+    flex:0 0 var(--ctl-h);
+    width:var(--ctl-h);
+    height:var(--ctl-h);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-sizing:border-box;
+    border:1px solid var(--ctl-border);
+    border-radius:var(--ctl-r);
+    background:var(--surface);
+    pointer-events:none;
+    transition:background-color .14s ease, border-color .14s ease;
+  }
+  @media (prefers-reduced-motion:reduce){ .seo-details .seo-chevron{transition:none;} }
+  /* ⚠ `--blue-text`, NOT white. A white mark only ever worked on the solid slab this component
+     used to carry; on the surface it is white on white — the fault this element shipped with for
+     nine releases before rev 42 found it. */
+  .seo-details .seo-chevron::before{
+    content:"";
+    width:7px; height:7px;
+    border-right:2px solid var(--blue-text);
+    border-bottom:2px solid var(--blue-text);
+    transform:rotate(45deg) translateY(-1px);
+    transition:transform .18s ease;
+  }
+  @media (prefers-reduced-motion:reduce){ .seo-details .seo-chevron::before{transition:none;} }
+  .seo-details[open] .seo-chevron::before{ transform:rotate(225deg) translateY(-1px); }
+  /* Hover and focus in the panels' own language: the control fills with level-2 blue and takes
+     the blue edge, exactly as `.panelbtn` and `.export-btn` do. Nothing paints the whole bar. */
+  .seo-details summary:hover .seo-chevron{ background:var(--blue-2); border-color:var(--blue-text); }
+  .seo-details summary:focus-visible .seo-chevron{
+    background:var(--blue-2);
+    border-color:var(--blue-text);
+    outline:2px solid var(--blue-text);
+    outline-offset:2px;
+  }
+
+
+  /* ============================================================================
+     THE HERO TILE'S EQUATION  (v0.53)
+     Three columns — operator, label, value — so the figures land in one right-aligned tabular
+     column and the arithmetic reads down it. Everything here is subordinate by construction:
+     10px against a 33px headline, dimmed labels, full ink reserved for the figures.
+     ⚠ The value column is `max-content` and the label column is `minmax(0,1fr)`, not the other
+     way round. The figures must never wrap or shrink — a sum whose terms have been re-wrapped by
+     the layout is not a sum any more — so the label is the part that gives way on a phone.
+     ============================================================================ */
+  .tile .meta .ge-row{
+    display:grid;
+    grid-template-columns:11px minmax(0,1fr) max-content;
+    column-gap:6px;
+    align-items:baseline;
+    padding:1px 0;
+  }
+  .tile .meta .ge-op{
+    color:var(--ink-mute); font-weight:700; text-align:center;
+    font-variant-numeric:tabular-nums;
+  }
+  .tile .meta .ge-lab{ color:var(--ink-dim); min-width:0; }
+  .tile .meta .ge-val{
+    color:var(--ink-dim); text-align:right; white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+  .tile .meta .ge-val b{ color:var(--ink); font-weight:700; }
+  /* "of which" — a component of the line above, not a term of the sum. Indented, quieter, and
+     with no operator, because giving it one would make the arithmetic wrong. */
+  .tile .meta .ge-of .ge-lab{ color:var(--ink-mute); padding-left:10px; }
+  .tile .meta .ge-of .ge-val{ color:var(--ink-mute); }
+  .tile .meta .ge-of .ge-val b{ color:var(--ink-dim); font-weight:600; }
+  /* The rule an equation is written under. */
+  .tile .meta .ge-total{
+    border-top:1px solid var(--blue-line);
+    margin-top:3px; padding-top:4px;
+  }
+  .tile .meta .ge-total .ge-lab{ color:var(--ink); }
+  .tile .meta .ge-total .ge-op{ color:var(--ink-dim); }
+  /* The two chips are the page's existing material, not new colour: the interconnector series
+     colour for the metered flow, and the estimated hatch for the modelled one. Same 7px chip the
+     proof key uses, so a reader who has learned it once has learned it everywhere. */
+  .tile .meta .ge-chip{
+    display:inline-block; width:7px; height:7px; border-radius:2px;
+    margin-right:5px; vertical-align:baseline; flex:0 0 auto;
+  }
+  .tile .meta .ge-chip-ic{ background:var(--c-imports); }
+  .tile .meta .ge-chip-emb{
+    background:var(--solar-fill);
+    background-image:var(--hatch-est-sm);
+    box-shadow:inset 0 0 0 1px var(--solar-line);
+  }
+  @media (max-width:430px){
+    .tile .meta .ge-row{ grid-template-columns:10px minmax(0,1fr) max-content; column-gap:5px; }
+  }
+
+
+  /* ============================================================================
+     THE TABLE VIEW COEXISTS WITH THE BARS  (v0.53)
+     Reported: opening "Table view — every fuel type" inside the EXPANDED fuel panel crushed the
+     ranking rows into an unreadable stack of overlapping labels.
+
+     ⚠ IT WAS THE v0.38 FILL RULE DOING EXACTLY WHAT IT WAS ASKED. That release made the expanded
+     panel's rows share the leftover height equally — `flex:1` on the wrapper, `min-height:0`,
+     `grid-auto-rows:minmax(0,1fr)` — because nine fuels over a third of a card was a third of
+     content over two-thirds of blank. `minmax(0,1fr)` has a floor of ZERO by construction, so
+     the moment a second block appears below it and takes the leftover height away, the rows
+     comply and collapse to nothing. The rule is right; its assumption — that the rows are the
+     only thing competing for that space — stopped being true when the table opened.
+
+     So the fill only applies while the rows ARE the content. With the table open the rows take
+     their natural height, the bars return to their ordinary 14px, and the panel body scrolls —
+     which it was already set up to do (`.panel.is-expanded .panel-body{overflow:auto}`), so this
+     introduces no new scrolling mechanism, it stops suppressing the one that exists.
+     ⚠ Keyed off the table's own `hidden` attribute rather than a class the script has to
+     remember to set, so the two cannot disagree: the state that drives the layout IS the state
+     that shows the table. */
+  #panel-mix.is-expanded:has(#mixtable:not([hidden])) #mixhover{
+    flex:0 0 auto;
+    min-height:0;
+  }
+  #panel-mix.is-expanded:has(#mixtable:not([hidden])) #mixrows{
+    flex:0 0 auto;
+    grid-auto-rows:auto;
+  }
+  #panel-mix.is-expanded:has(#mixtable:not([hidden])) #mixrows .track{
+    align-self:center;
+    height:14px;
+    max-height:none;
+    margin:0;
+  }
+
+  /* ⚠ AND THE TOGGLE TAKES THE MUTED CONTROL TREATMENT. `.toolbtn` filled with `--accent` and
+     white text on hover and while active — the same saturated contract the segmented switches
+     were moved off at rev 47, for the same reason: it is the loudest thing in a panel whose
+     subject is a chart. It now uses the shared control tokens, so every stateful control in a
+     panel says "selected" the same way. */
+  .toolbtn:hover,
+  .toolbtn.active{
+    background:var(--ctl-on-bg);
+    color:var(--ctl-on-ink);
+    border-color:var(--blue-text);
+  }
+
+  /* ============================================================================
+     THE AGE MARK DROPS BELOW THE FIGURE WHEN THE ROW IS TIGHT  (v0.52)
+     ⚠ THIS IS A DEFECT THIS RELEASE INTRODUCED, FOUND BY MEASURING RATHER THAN BY LOOKING.
+     The stale-data mark added earlier in this release sits INLINE after the value and its unit,
+     with no whitespace between them and `white-space:nowrap` on itself — so the line has no
+     break opportunity and simply runs past the card. Measured: `#t-gen .value` overflowed by
+     18px at 320 and 8px at 844. It was invisible in review because the mark only appears when a
+     feed is late, which the desktop screenshots never showed.
+     ⚠ AND THE RULE THAT WAS SUPPOSED TO COVER THE PHONE COULD NOT FIRE. `@media (max-width:560px)
+     .figstate-age .figstate-age-t{display:none}` is (0,2,0) and the rule it has to beat —
+     `.tile .value .figstate-age .figstate-age-t{display:inline}` — is (0,4,0), declared earlier
+     and outside any query. A media query does not add specificity, which is the trap: the
+     narrow-screen rule read as the later, more specific instruction and was neither.
+     Both are answered by the same change. Below 1000px the mark becomes its own line under the
+     number — which is what an annotation on a figure should be anyway, and which cannot overflow
+     because it no longer shares a line with anything. The words then FIT at 320, so the rule
+     that was hiding them is not repaired, it is retired. */
+  @media (max-width:1000px){
+    .tile .value .figstate-age,
+    .balancebox .value .figstate-age{
+      display:flex;
+      width:max-content;
+      max-width:100%;
+      margin-left:0;
+      margin-top:3px;
     }
-    #wind-controls .wind-range .range-btn,
-    #wind-controls .viewswitch .viewbtn{
-      height:44px;
-      min-height:44px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-    }
+    .tile .value .figstate-age .figstate-age-t,
+    .balancebox .value .figstate-age .figstate-age-t{display:inline;}
+  }
+
+  /* ============================================================================
+     THE NARROW-WIDTH READABILITY STEPS  (v0.52, from the responsive sweep)
+     Every number below is the ratio of what the element needed to what its column gave it,
+     measured at the width named — not a round number chosen because it looked about right.
+
+     · THE GLANCE CARDS' EXPLANATORY LINE STOPS BEING TRUNCATED. `.insight-item .p` is
+       `nowrap` + `text-overflow:ellipsis`, so at 320 "93.8% of electricity on the grid" was
+       being served as "93.8% of electricity on the gr…". Ellipsis is the right answer for a
+       label that might be long; it is the wrong answer for the sentence that says what the
+       figure means, and the brief for this release was that the cards stay READABLE at these
+       widths, not merely that they stay inside their boxes. Below 561px the icon reserve is
+       already dropped (see the `min-width:561px` rule), so the full width is there and the
+       line simply wraps. Two lines at 9.5px is 25px in a card with 174px of height.
+     · THE EQUATION FIGURES STEP DOWN. `= NATIONAL + EMBEDDED` puts three figures across one
+       column, so each gets roughly a third of it, and 23px was 7px too wide for the box at 844
+       (105 needed, 98 given) and 10px too wide at 320 (98 needed, 88 given). 21px and 19px are
+       those two ratios applied and then rounded DOWN, so the fit is not marginal.
+       ⚠ The result figure is deliberately NOT stepped: it is the dominant term of the equation
+       and shrinking it with the others would flatten the hierarchy this band exists to state.
+     ============================================================================ */
+  @media (max-width:560px){
+    .insight-item .p{white-space:normal;overflow:visible;text-overflow:clip;}
+  }
+  @media (max-width:900px){
+    .flowband .fb-eq-main .value{font-size:21px;}
+    .flowband .fb-eq-term .value{font-size:18px;}
+  }
+  @media (max-width:400px){
+    .flowband .fb-eq-main .value{font-size:18px;}
+    .flowband .fb-eq-term .value{font-size:17px;}
+    /* ⚠ THE MIX ROW'S SECOND LINE WRAPS RATHER THAN SHRINKS, and the distinction matters. The
+       cell was 5px short of the longest of them at 320 with `white-space:nowrap` and no
+       ellipsis, so the text was simply cut. A font step was the first attempt and moved the
+       measurement by nothing, because the string that overflows is not a fuel code at all — it
+       is the SOLAR PROVENANCE STAMP, "PV_LIVE · GSP 0 · AS AT 17:00", which only appears when
+       the solar feed is late and is therefore three times the length the cell was sized for.
+       It has natural break points at its own separators, so it wraps: an identifier and its
+       timestamp are worth two lines, and half of either is worth nothing. */
+    .mixname .code{white-space:normal;}
+    /* ⚠ THE INTERCONNECTOR NAME COLUMN IS SIZED TO ITS LONGEST STRING, WHICH IS 180px.
+       `#icrows` is `max-content minmax(70px,1fr) 78px`, and a `max-content` track does not
+       shrink — so at 320 the three tracks and their gaps ask for 312px of a 298px body and the
+       rows run 34px past the panel. `minmax(0, max-content)` keeps the same preferred width and
+       lets it give way when there is not room, which is what the bare keyword cannot do.
+       ⚠ AND THE NAMES HAVE TO BE ALLOWED TO WRAP, or shrinking the track just moves the clip
+       inside it. "Northern Ireland(Moyle)" over two lines at 320 is legible; half of it is not.
+       ⚠ THIS ONE WAS INVISIBLE TO THE RESPONSIVE SWEEP AND FOUND BY THE HARNESS, because the
+       sweep's fixtures leave this panel empty — a column sized to its content cannot overflow
+       when it has no content. The lesson is on the sweep, not on the panel: a layout probe is
+       only as wide as the data it renders. */
+    #icrows{grid-template-columns:minmax(0,max-content) minmax(38px,1fr) 66px;column-gap:7px;}
+    .icname{white-space:normal;}
   }
 </style>
 </head>
@@ -4194,6 +4541,20 @@
   <template id="about-tpl">
     <div class="about">
       <h4>What this is</h4>
+      <!-- ⚠ v0.53: THE PURPOSE PARAGRAPH. This section opened on what the dashboard READS, which
+           is provenance rather than purpose, and the author's brief for this release asked the
+           About dialog to carry the deeper explanation of what the tool is FOR. It is also the
+           one thing the page's short description at the foot of the page deliberately does not
+           try to say, now that the two have been split by question. -->
+      <p>
+        <b>Why it exists.</b> Nearly everything on this page is already public, and almost none of
+        it is readable. The figures arrive in separate feeds on different cadences, measured at
+        different boundaries, in formats built for settlement rather than for looking at — so the
+        work is not obtaining the data but joining it up without quietly changing what it means.
+        This dashboard does that joining in the open: where two datasets disagree it shows the
+        disagreement rather than averaging it away, and where a number is modelled rather than
+        measured it says so on the figure itself.
+      </p>
       <p>
         A live read of the GB transmission system built entirely on
         Elexon's Insights (BMRS) API — the same public dataset that sits behind GB electricity settlement.
@@ -4344,6 +4705,46 @@
         time would be claiming a currency it does not have.
       </p>
 
+      <h4>Why supply and demand never quite match</h4>
+      <p>
+        The band at the top of the page opens on the gap between supply and demand, because the gap
+        is the interesting part. The two sides are measured at different boundaries by different
+        datasets published on different cadences, so they disagree by a few hundred megawatts
+        almost all of the time — and that disagreement is a fact about measurement, not about the
+        grid running short of anything.
+      </p>
+      <p>
+        <b>Which two figures are compared is the whole correctness of it.</b> The balance
+        compares electricity on the grid with underlying demand — not with National Demand — and
+        the reason is that both include the same estimate of embedded solar, so it cancels. What
+        is left is metered generation plus net imports, less national demand, which is a real
+        quantity. Comparing the grid against National Demand instead would leave the embedded
+        estimate standing in the answer: several gigawatts on a sunny afternoon, and
+        <i>nothing at midnight</i> — which is exactly why the wrong pairing looks perfectly
+        correct in an evening screenshot.
+      </p>
+
+      <h4>Reading a figure that is not there</h4>
+      <p>
+        Feeds fail, and they fail in ways that matter differently. Every headline figure on this
+        page is in one of four states, and each is drawn distinctly so that none of them can be
+        mistaken for another:
+      </p>
+      <ul>
+        <li><b>A number</b> — a real reading, at full weight.</li>
+        <li><b>A dash</b> — either the figure has not arrived yet, or the feed did not answer on
+          the last refresh. Hovering it says which, and names the feed that failed.</li>
+        <li><b>A number with a clock beside it</b> — a real reading, but older than the refresh
+          period it belongs to. The mark carries its age.</li>
+        <li><b>Zero</b> — a genuine zero, which is a fact about the system rather than a gap in
+          the data. Coal has read zero every settlement period since September 2024.</li>
+      </ul>
+      <p>
+        The distinction the design is protecting is the last one: <b>a missing value must never
+        look like a real zero.</b> A dash cannot be read as "none", and a zero is never dressed as
+        an absence.
+      </p>
+
       <h4>What this deliberately does not show</h4>
       <p>
         <b>Battery storage.</b> Elexon reports storage <i>discharging</i> but not charging. Showing
@@ -4454,7 +4855,17 @@
        weighed, which is why it stays a disclosure rather than moving inside the About dialog,
        whose content is `hidden` and discounted accordingly. -->
   <details class="seo-details" id="seo-details">
-    <summary><span class="seo-info-icon" aria-hidden="true">i</span><span>About GB Electricity</span><span class="seo-summary-sub">Live generation, data sources &amp; methodology</span><span class="seo-chevron" aria-hidden="true"></span></summary>
+    <!-- ⚠ v0.52: THE LEADING "i" BADGE IS GONE, and the two lines are now a panel header.
+         The badge was the only element of its kind anywhere on the page — nothing else opens
+         with a circled glyph — so it read as a tooltip trigger that had wandered into a title
+         position, at 18px against an 11.5px title it was supposed to be subordinate to. Its
+         job was to say "information", which the words "About GB Electricity" were already
+         doing; a mark that repeats the label beside it is decoration.
+         What replaces it is the structure every panel now uses: title, dataset line beneath,
+         one control at the right. Same two-line head, same control height, same border. The
+         disclosure stops being a bar with a badge on one end and a button on the other, and
+         becomes the last panel in the column — which is what it is. -->
+    <summary><span class="seo-summary-text"><span class="seo-summary-title">What this dashboard shows</span><span class="seo-summary-sub">GB generation, demand, interconnectors and carbon intensity</span></span><span class="seo-chevron" aria-hidden="true"></span></summary>
     <!-- v0.41: the crawler-visible copy, rewritten by the author. ⚠ THE BOLD IS DELIBERATELY
          SPARSE — roughly four-fifths of it removed. Bold on every keyphrase was emphasis doing
          SEO's job rather than a reader's: when a dozen phrases in six paragraphs are bold, none
@@ -4462,80 +4873,52 @@
          switch's labels) and the one label that introduces a list. The headings still carry the
          search terms, and headings are what a crawler weighs anyway. -->
     <div class="seo-copy">
-      <h2>GB Electricity: live generation and demand</h2>
-      <p>
-        GB Electricity is a live dashboard showing the current state of Great Britain's electricity system.
-        It tracks generation, national demand, the generation mix by fuel type, wind and solar output,
-        interconnector flows, carbon intensity, system frequency and imbalance prices using public data from
-        Elexon and the National Energy System Operator (NESO).
-      </p>
-      <p>
-        The page opens with the balance between supply and demand: the electricity on the GB transmission
-        system, the two demand measures beside it, and the difference between them. Below that, every panel is
-        on one page — generation by fuel type, wind and solar against forecast, interconnector flows link by
-        link, carbon intensity and system frequency. Each panel can be expanded to fill the screen, and every
-        data window can be downloaded as a CSV.
-      </p>
-      <p>
-        The supply and demand figures come from different datasets measured at different boundaries, so they do
-        not match exactly. The balance figure compares electricity on the grid with underlying demand, because
-        both include the same estimate of embedded solar generation; the difference that remains is metered
-        generation plus net interconnector imports, less national demand.
-      </p>
-  
-      <h3>GB electricity generation</h3>
-      <p>
-        The dashboard shows GB electricity generation by fuel type, including gas, nuclear, wind, biomass,
-        hydro, pumped storage and other metered generation. Wind and solar are also shown as dedicated headline
-        measures, giving a clear view of the current generation mix.
-      </p>
-  
-      <h3>GB electricity demand</h3>
-      <p>
-        GB electricity demand is shown using Elexon's Initial National Demand Outturn (INDO), alongside an
-        underlying-demand estimate that adds embedded solar back to the transmission-system figure. This distinction
-        matters because much generation connected to distribution networks is not visible in transmission-metered
-        generation data.
-      </p>
-  
-      <h3>Wind, solar and interconnectors</h3>
-      <p>
-        The dashboard compares wind generation outturn with forecasts, reports solar output and shows whether
-        Great Britain is importing or exporting electricity through its interconnectors. Positive interconnector flow
-        represents imports into GB; negative flow represents exports from GB.
-      </p>
-  
-      <h3>Carbon intensity and system frequency</h3>
-      <p>
-        GB electricity carbon intensity is provided through the NESO Carbon Intensity API. The dashboard also
-        shows GB system frequency using Elexon's 15-second FREQ data, together with the relevant operating
-        range and recent frequency statistics.
-      </p>
-  
-      <h2>Data sources and methodology</h2>
-      <p>
-        The dashboard is a working data visualisation built from public datasets rather than an authoritative
-        settlement system. Its principal sources are Elexon Insights APIs for generation, demand,
-        interconnector, imbalance-price and frequency data; the NESO Carbon Intensity API for carbon
-        intensity; and Sheffield Solar PV_Live for the preferred estimate of GB photovoltaic generation.
-      </p>
-      <p>
-        The dashboard deliberately distinguishes metered generation from modelled embedded solar.
-        Embedded wind is not added to the headline generation or underlying-demand figures because NESO publishes a
-        forecast rather than a clean GB-wide outturn measure. Interconnector flows are signed consistently, so
-        imports increase the GB system total while exports reduce it.
-      </p>
-      <p>
-        Historical charts use the native resolution of the underlying datasets where practical. Generation and
-        interconnector history is based on Elexon's half-hourly outturn data, while system frequency is measured
-        every 15 seconds. Figures may be revised as Elexon settlement data is updated.
-      </p>
-      <p>
-        <b>Sources:</b>
-        <a href="https://bmrs.elexon.co.uk/" target="_blank" rel="noopener noreferrer">Elexon Insights</a>,
-        <a href="https://carbonintensity.org.uk/" target="_blank" rel="noopener noreferrer">NESO Carbon Intensity API</a>,
-        and <a href="https://www.solar.sheffield.ac.uk/pvlive/" target="_blank" rel="noopener noreferrer">Sheffield Solar PV_Live</a>.
-      </p>
+      <!-- ⚠ v0.53: THIS IS THE PAGE'S DESCRIPTION, NOT ITS DOCUMENTATION.
+           Until now the disclosure and the About dialog were answering the same question in two
+           places: this block carried "Why supply and demand never quite match", "GB electricity
+           generation and demand", "Wind, solar and interconnectors" and a "Data sources and
+           methodology" section, all of which the About dialog covers at greater length and with
+           the caveats attached. Two documents drifting apart is a maintenance problem; two
+           documents saying the same thing at different lengths is also a reader problem, because
+           neither one is obviously the authority.
+           The split is now by QUESTION. This answers "what is this and what does it show me",
+           in the fewest words that can be engaging and still crawlable. The About dialog answers
+           "how is each figure derived, what can it not see, and where will it mislead me", and
+           the last line here hands the reader to it explicitly rather than starting to answer it.
+           649 words to ~340, and five of the six sections gone rather than compressed. -->
+      <h2>GB Electricity — live generation, demand and carbon intensity for Great Britain</h2>
+      <p class="seo-lede">Every few minutes, Great Britain’s electricity system rearranges itself
+        — wind rises, gas throttles back, a cable to Norway reverses direction. This dashboard
+        shows that happening, from the public data, as it happens.</p>
+
+      <p>It puts the whole system on one page: what is generating and from what, how much the
+        country is actually using, which way each interconnector is flowing, how clean this half
+        hour is, and what it costs to be out of balance. Nothing is modelled that could be
+        measured, and everything that <em>is</em> modelled says so on the page.</p>
+
+      <h3>What you can see</h3>
+      <ul class="seo-points">
+        <li><b>Generation by fuel type</b> — gas, nuclear, wind, biomass, hydro, pumped storage
+          and the rest, ranked and shown as shares, updated every five minutes.</li>
+        <li><b>Two demand figures, not one</b> — what the transmission system can see, and what
+          the country actually used once rooftop solar is added back in.</li>
+        <li><b>Interconnectors link by link</b> — France, Norway, Denmark, the Netherlands,
+          Belgium and Ireland, each with its direction and its share of capacity.</li>
+        <li><b>Carbon intensity and system frequency</b> — how clean the mix is this half hour,
+          and the real-time balance of the whole system.</li>
+        <li><b>Every window downloadable</b> — any panel expands to fill the screen, and any data
+          window exports as a timestamped CSV.</li>
+      </ul>
+
+      <p>There is no account, no tracking and no server: it is a single HTML page that calls
+        public APIs from your browser and draws what comes back.</p>
+
+      <p><b>Sources:</b> <a href="https://bmrs.elexon.co.uk/" target="_blank" rel="noopener noreferrer">Elexon
+        Insights (BMRS)</a>, the <a href="https://carbonintensity.org.uk/" target="_blank" rel="noopener noreferrer">NESO
+        Carbon Intensity API</a> and <a href="https://www.solar.sheffield.ac.uk/pvlive/" target="_blank" rel="noopener noreferrer">Sheffield
+        Solar PV_Live</a>. How each figure is derived, what these feeds cannot see, and the places
+        this data is most often misread are set out in <em>About this dashboard</em>, in the
+        footer.</p>
     </div>
   </details>
 
@@ -4580,7 +4963,7 @@
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" id="version-label" title="Dashboard version">v0.51</span> &middot;
+      <span class="version-label" id="version-label" title="Dashboard version">v0.53</span> &middot;
       <button type="button" id="btn-about" class="footer-link">About this Dashboard</button>
     </div>
   </div>
@@ -4631,7 +5014,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.51";
+const APP_VERSION = "v0.53";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -5218,6 +5601,60 @@ function odoCell(ch, prev, up){
   return '<span class="'+cls+'"><span class="odo-r"'
        + (rolls ? ' data-p="'+esc(prev)+'"' : '') + '>' + esc(ch) + '</span></span>';
 }
+/* ============================================================================
+   THE FOUR DATA STATES  (v0.52)
+
+   `setFigure` is the one function every live figure on this page is written through, which is
+   what makes these states enforceable rather than aspirational: there is no second path where
+   a number can be printed without declaring what kind of number it is.
+
+   ⚠ THE RULE THIS EXISTS FOR: A MISSING VALUE MUST NEVER RENDER AS A GENUINE ZERO.
+   Coal sits at 0 MW for weeks on this system and solar is 0 MW every night, so the page prints
+   real zeros constantly. If a failed fetch can also print 0, every true zero becomes
+   unreadable — a reader cannot separate "there is none of this" from "we could not find out",
+   and the honest readings are devalued along with the dishonest one. `figLoading` and
+   `figUnavailable` therefore never emit a digit.
+
+   `figStale` is the opposite case and takes the opposite treatment: the number is CORRECT and
+   only its age is surprising, so it keeps full weight and gains an annotation. Dimming it would
+   invite a reader to discount a true measurement.
+   ============================================================================ */
+
+/* An em-dash placeholder, in one of two flavours. `why` distinguishes them for a reader:
+   loading says nothing (it may still arrive), unavailable names the feed that did not answer. */
+function figPlaceholder(el, tailHTML, why){
+  if(!el) return;
+  const tail = tailHTML || "";
+  const cls = why ? "skeleton figstate-unavailable" : "skeleton";
+  const t   = why ? ' title="' + esc(why) + '"' : "";
+  el.innerHTML = '<span class="' + cls + '"' + t + '>—</span>' + tail;
+  /* ⚠ THE ODOMETER STATE IS CLEARED. Leaving it means the next real value animates FROM the
+     last figure seen before the outage, rolling a number that was never on screen in between —
+     which is the odometer telling a story about data the page did not have. */
+  delete el.dataset.odo;
+  el.dataset.figstate = why ? "unavailable" : "loading";
+}
+const figLoading     = (el, tailHTML) => figPlaceholder(el, tailHTML, null);
+const figUnavailable = (el, tailHTML, why) =>
+  figPlaceholder(el, tailHTML, why || "This feed did not respond on the last refresh.");
+
+/* The clock annotation. Appended to the TAIL rather than the text, so it is outside the
+   odometer's character cells and cannot be mistaken for a digit to roll. */
+function figAgeMark(minutes, note){
+  const m = Math.round(minutes);
+  const label = m >= 90 ? Math.round(m/60) + "h old" : m + "m old";
+  return '<span class="figstate-age" title="' + esc(note || ("This reading is " + m +
+    " minutes old — older than the usual refresh.")) + '">' +
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/>' +
+    '<path d="M12 7v5l3 2"/></svg>' +
+    '<span class="figstate-age-t">' + esc(label) + '</span></span>';
+}
+/* A real reading that is older than its refresh period. Full weight, annotated. */
+function figStale(el, text, tailHTML, minutes, note){
+  setFigure(el, text, (tailHTML || "") + figAgeMark(minutes, note));
+  if(el) el.dataset.figstate = "stale";
+}
+
 function setFigure(el, text, tailHTML){
   if(!el) return;
   text = String(text);
@@ -5240,6 +5677,11 @@ function setFigure(el, text, tailHTML){
   }
   el.innerHTML = '<span class="odo">' + html + '</span>' + tail;
   el.dataset.odo = text;
+  /* ⚠ A GENUINE ZERO IS STAMPED AS ITS OWN STATE, not left to be inferred from the absence of
+     the others. It is what lets the harness ask the question that matters — "does a real 0
+     render differently from a missing value" — of the DOM rather than of the source. Callers
+     that mean stale overwrite this immediately after; nothing else needs to know. */
+  el.dataset.figstate = /^[−-]?0(\.0+)?$/.test(text.trim()) ? "zero" : "ok";
   if(el._odoTimer){ clearTimeout(el._odoTimer); el._odoTimer = null; }
   if(!animate) return;
   const armed = [...el.querySelectorAll(".odo-c.armed")];
@@ -5916,8 +6358,9 @@ function renderBalance(grid, underlying, solMW){
   const val = $("t-bal"), note = $("t-bal-note");
   if(!val) return;
   if(grid == null || underlying == null || !isFinite(grid) || !isFinite(underlying)){
-    val.innerHTML = '<span class="skeleton">—</span><span class="unit">'+UNIT+'</span>';
-    delete val.dataset.odo;
+    /* Not "unavailable": the balance is DERIVED, so it is waiting on its two inputs rather
+       than on a feed of its own. Naming a feed here would blame the wrong thing. */
+    figLoading(val, uUnit());
     note.textContent = "Waiting for both sides of the comparison.";
     S.balExplainer = "Not available until both the generation snapshot and the demand outturn "
       + "have loaded.";
@@ -5988,8 +6431,7 @@ function renderEquation(dem, sol){
   const und = $("t-und"), nat = $("t-dem"), emb = $("t-emb");
   const proof = $("t-und-proof"), stamp = $("t-dem-stamp"), sr = $("t-eq-sr");
   if(!und || !nat || !emb) return;
-  const blank = (el)=>{ el.innerHTML = '<span class="skeleton">—</span><span class="unit">'+UNIT+'</span>';
-    delete el.dataset.odo; };
+  const blank = (el)=>figLoading(el, uUnit());
 
   if(dem) stamp.textContent = fmtDate(dem.startTime) + " SP" + dem.settlementPeriod
     + " (" + fmtTime(dem.startTime) + ")";
@@ -6063,14 +6505,58 @@ function renderTiles(snap){
   const domestic = SERIES.filter(s=>s.key!=="imports").reduce((a,s)=>a+k[s.key],0) + solMW;
   const total = domestic + k.imports;
 
-  setFigure($("t-gen"), uv(total), uUnit());
+  /* ⚠ THE HEADLINE FIGURE CARRIES THE SNAPSHOT'S AGE, using the same 20-minute threshold the
+     masthead's live chip has used since v0.15 — one definition of "stale" for the whole page,
+     rather than a second opinion sitting next to the first. The chip says the PAGE is stale;
+     this says which number is. A reader looking at 28,000 MW is entitled to know it is an hour
+     old without first noticing a dot in the header. */
+  const snapAge = snap && snap.publishTime
+    ? (Date.now() - new Date(snap.publishTime).getTime())/60000 : null;
+  if(snapAge != null && isFinite(snapAge) && snapAge > 20)
+    figStale($("t-gen"), uv(total), uUnit(), snapAge,
+      "Elexon last published this generation snapshot " + Math.round(snapAge) +
+      " minutes ago — the figure is real but older than the five-minute refresh.");
+  else setFigure($("t-gen"), uv(total), uUnit());
   /* v0.29: written as the SUM it is. The middot version listed two quantities beside a third
      and left the reader to work out that the third was the first two added — which is exactly
      the trust a headline total should not require. Same numbers, an operator between them. */
-  $("t-gen-meta").innerHTML = "GB generation <b>"+uv(domestic)+" "+U()+"</b>"+
-    (solMW?" (incl. <b>"+uv(solMW)+" "+U()+"</b> embedded solar)":"")+
-    (k.imports>=0 ? " <b>+</b> net imports <b>" : " <b>−</b> net exports <b>")+
-    uv(Math.abs(k.imports))+" "+U()+"</b> <b>=</b> <b>"+uv(total)+" "+U()+"</b>";
+  /* ⚠ v0.53: THE SUM IS SET OUT AS A SUM. v0.29 already made it arithmetic rather than a list —
+     "GB generation X + net imports Y = Z" — and that was the right move, but it was still one
+     wrapping sentence, so the reader had to parse prose to find three quantities and an operator
+     while the figures themselves ran into the words around them. Reported as: make the
+     relationship between the components and the final figure much clearer.
+     One row per term, three columns: OPERATOR, LABEL, VALUE. The values are right-aligned and
+     tabular, so the digits line up in a column and the arithmetic can be read down it — which is
+     the single biggest gain here and costs nothing. A hairline above the total is the rule an
+     equation is written under.
+     ⚠ THE HEADLINE STAYS DOMINANT, which was the explicit constraint. Every row here is 10px
+     against the headline's 33px, the labels are dimmed ink and only the figures are full ink; no
+     row carries a fill, a border or an accent of its own. The one piece of colour is the chip in
+     front of the embedded-solar line, and it is not decoration — it is the page's own
+     estimated-data hatch, the same `--hatch-est-sm` the proof bar and the glance card use, so
+     the one modelled term in the sum is marked as modelled rather than described as such in
+     words.
+     ⚠ AND THE EMBEDDED LINE IS INDENTED RATHER THAN OPERATED ON. It is a component OF the
+     generation figure above it, not a fourth term — giving it a `+` would make the sum wrong by
+     six gigawatts. It sits in the label column with no operator, which is what "of which" looks
+     like in a column of arithmetic. */
+  const eqRow = (op, cls, label, value, unit) =>
+    '<div class="ge-row' + (cls ? ' ' + cls : '') + '">' +
+      '<span class="ge-op" aria-hidden="true">' + (op || '') + '</span>' +
+      '<span class="ge-lab">' + label + '</span>' +
+      '<span class="ge-val"><b>' + value + '</b> ' + unit + '</span>' +
+    '</div>';
+  const impPositive = k.imports >= 0;
+  $("t-gen-meta").innerHTML =
+    eqRow('', '', 'GB generation', uv(domestic), U()) +
+    (solMW ? eqRow('', 'ge-of',
+        '<i class="ge-chip ge-chip-emb" aria-hidden="true"></i>of which embedded solar',
+        uv(solMW), U()) : '') +
+    eqRow(impPositive ? '+' : '−', '',
+        '<i class="ge-chip ge-chip-ic" aria-hidden="true"></i>' +
+        (impPositive ? 'Net imports' : 'Net exports'),
+        uv(Math.abs(k.imports)), U()) +
+    eqRow('=', 'ge-total', 'Electricity on the grid', uv(total), U());
 
   /* The headline is a SUM of two things measured in different ways, and that is the whole of
      what a reader needs to know to trust it — so the explainer leads with the arithmetic using
@@ -6159,15 +6645,30 @@ function renderTiles(snap){
      and the embedded-wind caveat both moved to the embedded-generation card, which is where
      they belong now that it has a disclosure of its own; keeping them in two places was two
      copies of one caveat to keep in step. */
+  /* ⚠ v0.52: THE SUM NOW SHOWS BOTH OF ITS TERMS. The opening line states the equation in
+     words and the closing line gave a live figure for one side of it only, so a reader was
+     told what underlying demand is made of and then handed one of the two numbers — the
+     smaller one. Naming national demand as well lets the sentence be checked against the
+     three figures printed beside it, which is the point of putting an equation on the band at
+     all. Both terms are dynamic or neither is: if the demand feed is missing, the sentence
+     falls back to the embedded figure alone rather than printing half a sum. */
   S.undExplainer =
     "<b>Underlying demand = national demand + embedded generation.</b> It estimates electricity "
     + "being used across Great Britain, including generation produced behind the "
     + "transmission-system meter, such as rooftop solar. "
     + (()=>{ const sol = latestSolar();
-        return sol && sol.mw > 0
-          ? "Embedded generation adds <b>" + uv(Math.max(0, sol.mw)) + " " + U()
-            + "</b> right now."
-          : ""; })();
+        const d   = S.demand && S.demand.length ? S.demand[S.demand.length-1] : null;
+        const nat = d && isFinite(d.initialDemandOutturn) ? d.initialDemandOutturn : null;
+        const emb = sol && sol.mw > 0 ? Math.max(0, sol.mw) : null;
+        if(nat !== null && emb !== null)
+          return "National demand is <b>" + uv(nat) + " " + U()
+               + "</b> and embedded generation adds <b>" + uv(emb) + " " + U()
+               + "</b> right now.";
+        if(emb !== null)
+          return "Embedded generation adds <b>" + uv(emb) + " " + U() + "</b> right now.";
+        if(nat !== null)
+          return "National demand is <b>" + uv(nat) + " " + U() + "</b> right now.";
+        return ""; })();
   /* ⚠ v0.49: THE THIRD TERM GETS ITS OWN DISCLOSURE, AND IT CARRIES THE LABEL'S DEBT.
      The card says "Embedded generation", which is broader than what the number contains: this
      is Sheffield Solar's PV_Live estimate, so it is embedded SOLAR. The page has used the wider
@@ -6219,7 +6720,8 @@ function renderTiles(snap){
       " · NIV <b>"+num(p.netImbalanceVolume,1)+" MWh</b> ("+(p.netImbalanceVolume>=0?"short":"long")+")"+
       " · "+fmtDate(p.startTime)+" SP"+p.settlementPeriod;
   } else {
-    $("t-px").innerHTML = '<span class="skeleton">—</span><span class="unit">£/MWh</span>';
+    figUnavailable($("t-px"), '<span class="unit">£/MWh</span>',
+      "Elexon system prices did not respond on the last refresh.");
     $("t-px-meta").textContent = "No settled period returned a price yet.";
   }
   /* THE LAST 24 HOURS OF IMBALANCE PRICE — no new request.
@@ -6315,7 +6817,8 @@ function renderCarbonTile(){
   const cur = ciCurrent();
   const val=$("t-ci"), meta=$("t-ci-meta"), needle=$("ci-needle");
   if(!cur){
-    val.innerHTML = '<span class="skeleton">—</span><span class="unit">gCO<sub>2</sub>/kWh</span>';
+    figUnavailable(val, '<span class="unit">gCO<sub>2</sub>/kWh</span>',
+      "The NESO Carbon Intensity API did not respond on the last refresh.");
     meta.textContent = "NESO Carbon Intensity API unavailable this refresh.";
     if(needle) needle.style.left = "0%";
     S.ciExplainer = "Not available until the feed responds.";
@@ -6355,7 +6858,8 @@ function renderFreqTile(){
   const pts = (S.freq||[]).filter(r=>r && r.frequency!=null && isFinite(r.frequency));
   const val=$("t-fq"), meta=$("t-fq-meta");
   if(!pts.length){
-    val.innerHTML = '<span class="skeleton">—</span><span class="unit">Hz</span>';
+    figUnavailable(val, '<span class="unit">Hz</span>',
+      "Elexon FREQ did not respond on the last refresh.");
     meta.innerHTML = 'Elexon <span class="term ds" data-term="FREQ">FREQ</span> unavailable this refresh.';
     // The sparkline is cleared too, or a stale hour sits under a missing figure.
     sparkline($("fq-spark"), $("fq-spark-cap"), [], {label:"System frequency"});
@@ -6435,7 +6939,19 @@ function renderSystemInsight(snap){
 
   setFigure($("si-generation"), uv(domesticNow), " "+U());
   setFigure($("si-wind"), uv(Math.max(0,k.wind||0)), " "+U());
-  setFigure($("si-solar"), uv(solMW), " "+U());
+  /* ⚠ THE ONE FIGURE ON THIS PAGE THAT ALREADY KNEW IT COULD BE STALE, and had nowhere to say
+     so. `latestSolar()` has computed `stale` (a reading more than 40 minutes past its half hour)
+     since v0.02, and until now the only place it surfaced was a line inside the ⓘ — so a reader
+     who did not open the disclosure saw an hour-old solar figure presented exactly like a live
+     one. ⚠ It is NOT dimmed: PV_Live's number is correct, it is simply old.
+     Night is deliberately not stale. `latestSolar()` returns a hard 0 once the sun is down, and
+     that is a genuine zero rather than an ageing reading — the distinction this whole feature
+     exists to keep. */
+  if(sol && sol.stale && !sol.night && solMW > 0)
+    figStale($("si-solar"), uv(solMW), " "+U(), sol.ageMin,
+      "Sheffield Solar last published " + Math.round(sol.ageMin) +
+      " minutes ago — this figure is real but older than the five-minute refresh.");
+  else setFigure($("si-solar"), uv(solMW), " "+U());
   setFigure($("si-imports"), (k.imports>=0?"+":"−")+uv(Math.abs(k.imports||0)), " "+U());
 
   setCard("si-generation",domesticNow,maxGen);
@@ -9251,6 +9767,19 @@ function sizeExpandedPanel(){
   const p = document.querySelector(".panel.is-expanded");
   if(!p){ return; }
   p.style.height = Math.max(220, window.innerHeight - p.getBoundingClientRect().top - 12) + "px";
+  /* ⚠ v0.52: AND THEN CORRECT FOR WHATEVER STANDS BELOW IT. The line above reasons from the
+     panel's top edge, which is measured — and then assumes the only thing under the panel is
+     its own 12px. It is not: #main carries bottom padding of its own, and the result was a
+     document 32px taller than the window in a view whose entire premise is that it fits.
+     `overflow:hidden` hid that for four releases; it stops being invisible the moment the lock
+     becomes a scroller, which is why this correction ships with that change and not after it.
+     Measured rather than derived, for the same reason the top edge is: one reflow, one
+     subtraction, and no constant that can drift when the padding above or below it changes. */
+  const de = document.documentElement;
+  const residue = de.scrollHeight - de.clientHeight;
+  if(residue > 0){
+    p.style.height = Math.max(220, p.getBoundingClientRect().height - residue) + "px";
+  }
 }
 window.addEventListener("resize", ()=>{ if(expandedPanel){ placeCycleButtons(); sizeExpandedPanel(); } });
 
