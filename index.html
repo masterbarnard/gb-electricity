@@ -20,8 +20,8 @@
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v57.png">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v57.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v58.png">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v58.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -29,7 +29,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v57.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v58.png">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -596,10 +596,6 @@
   .unitswitch:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;}
 
   @media (max-width:760px){
-    .panel-head .panel-tools{padding-top:6px;}
-    .panel-tools{gap:5px;}
-    .range-switch{flex-basis:76px;width:76px;height:28px;}
-    .export-btn{flex-basis:96px;width:96px;height:28px;font-size:8.5px;}
  .unitbtn{padding:5px 8px;font-size:10px;} }
 
   /* PANEL VIEW SWITCH (v0.20). Same mechanism as the unit switch — a slider under two labels
@@ -1983,8 +1979,18 @@
     button.legend-key,button.driver-key{padding:6px 4px;margin:-6px -4px;}
     /* And the row gap grows with the padding it has to clear: 11px type plus 12px of gap puts
        two 25.8px targets exactly edge to edge, which the audit reads — correctly — as each one
-       obscuring the next. The gap and the hit area are one decision and are set together. */
-    .legend{row-gap:16px;}
+       obscuring the next. The gap and the hit area are one decision and are set together.
+       ⚠ v0.58: `div.legend`, NOT `.legend`, AND THE v0.57 VERSION OF THIS RULE WAS DEAD.
+       Written as a bare `.legend` it lost to `.legend{gap:12px 15px}` declared ~270 lines later
+       at equal specificity — the same trap, in the fix for the trap, written the same day. It
+       went unnoticed because the narrow-width blocks below set a 16px row gap of their own and
+       cover every width the audit ran at.
+       It is not harmless. Measured across twelve touch widths, the fuel legend wraps to two rows
+       from about 900px down, and between 760 and 900 the narrow blocks have not yet applied: row
+       gap 12px, targets 26px, clearance ZERO. A touch tablet in that band gets nine keys packed
+       edge to edge. Found by the dead-rule gate this release adds, which is the defect class it
+       was built for. */
+    div.legend{row-gap:16px;}
   }
 
   .infobtn{font:inherit;font-size:10px;line-height:1;color:var(--ink-dim);background:none;
@@ -2372,10 +2378,8 @@
      target so tapping a range or expanding a panel does not require precision. */
   @media (pointer:coarse){
     .panelbtn{width:44px;height:44px;min-width:44px;margin-top:0;}
-    .range-switch{height:44px;min-height:44px;}
-    .range-btn{height:44px;min-height:44px;padding:0 7px;display:inline-flex;align-items:center;justify-content:center;flex:1 0 50%;width:50%;}
-    .export-btn{height:44px;min-height:44px;}
-    .modal-close{min-width:44px;min-height:44px;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;}
+    .export-btn{min-height:44px;}
+    .modal-close{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;}
   }
 
   /* ================= SIMPLIFIED (v0.25) =================
@@ -2528,7 +2532,7 @@
        column whatever it is allowed to wrap to. It heads both of those tracks in meaning
        anyway: they are the same quantity drawn twice. */
     .ichead .h-flow{grid-column:2 / 4;}
-    .ichead .h-cap{grid-column:4 / -1;}
+    .ichead .h-cap{4 / -1;}
   }
   /* ---- the header row ----
      `display:contents` for the same reason the link rows use it: the cells are grid items of
@@ -2924,7 +2928,6 @@
   .range-switch::before{content:"";position:absolute;z-index:0;top:0;bottom:0;left:0;width:50%;
     background:var(--accent);border-radius:5px;transition:transform .22s cubic-bezier(.4,0,.2,1);pointer-events:none;}
   .range-switch[data-active="7d"]::before{transform:translateX(100%);}
-  @media (prefers-reduced-motion:reduce){.range-switch::before{transition:none;}}
   .range-btn{position:relative;z-index:1;appearance:none;flex:1 0 50%;width:50%;min-width:0;
     border:0;background:none !important;color:var(--ink-dim);font:700 9px var(--sans);
     letter-spacing:.03em;padding:4px 6px;cursor:pointer;text-align:center;}
@@ -2945,12 +2948,9 @@
   #wind-controls .wind-expand.is-close{font-size:23px;}
   @media (pointer:coarse){
     #wind-controls .wind-range,
-    #wind-controls .wind-range .range-btn{min-height:28px;}
   }
   @media (max-width:760px){
-    #wind-controls{width:auto; margin-left:auto; margin-top:4px; padding-top:2px;}
-    #wind-controls .wind-range{width:78px; flex-basis:78px;}
-    #wind-controls .wind-expand{width:34px; min-width:34px; height:32px;}
+    #wind-controls{width:auto; margin-left:auto; margin-top:4px;}
   }
   .export-btn{appearance:none;flex:0 0 102px;width:102px;height:27px;border:1px solid var(--blue-line);
     border-radius:7px;color:var(--blue-text);font:700 9px var(--sans);letter-spacing:.02em;
@@ -3191,10 +3191,10 @@
     /* ⚠ The tools drop to a full-width row of their own below 760px, which in a two-column
        grid means a THIRD row rather than a wrapped flex item. Stated as areas so the note keeps
        its place under the title and the tools sit beneath both. */
-    .panel-tools{width:100%;justify-content:flex-start;margin-left:0;margin-top:2px;padding-top:0;}
+    .panel-tools{width:100%;margin-top:2px;}
     .panel-head{grid-template-columns:minmax(0,1fr);
       grid-template-areas:"title" "note" "tools";}
-    .panel-head > .panel-tools{justify-self:stretch;}
+    .panel-head > .panel-tools{tretch;}
     .header-actions{flex-wrap:wrap;justify-content:flex-end;row-gap:6px;}
     /* 68px of red on a 360px rule would be 19% and would stop being an accent. */
     :root{ --red-tail:20px; }   /* the proportion holds across breakpoints, not the pixel count */
@@ -3303,15 +3303,14 @@
     .g-tiles > .tile.hero{grid-column:span 1 !important;}
     .panel,.panel-body,.panel-head,.panel-tools,.chartbox,
     svg.chart,.legend,.legend span,.mixrow,.icrow,.statrow{
-      min-width:0;
+      
       max-width:100%;
     }
     .chartbox{overflow:hidden;}
     svg.chart{width:100%;height:auto;}
     .legend{padding-right:2px;}
     .legend span,.legend .legend-key{white-space:normal;line-height:1.25;}
-    .panel-tools{flex-wrap:wrap;}
-    .range-switch{flex:0 0 78px;}
+    .range-switch{0 78px;}
     .export-btn{flex:0 0 102px;}
     .panel-head .note{max-width:100%;overflow-wrap:anywhere;}
   }
@@ -3365,7 +3364,7 @@
 
     /* The view selector is a normal scrolling control, not a sticky navigation element. */
     .viewbar-strip{padding:7px 0 4px;}
-    .viewbar .viewbtn{font-size:11px;min-width:62px;padding:8px 12px;}
+    .viewbar .viewbtn{x 12px;}
 
     /* Headline figures: one card per row. This is the key fix for the clipped mobile
        screenshot seen in v0.315. */
@@ -3517,14 +3516,9 @@
     }
     .panel-head > .panelbtn.xp{margin-left:auto;}
     #wind-controls{
-      width:100%;
-      padding-top:7px;
+      width:100%;x;
     }
   }
-  @media (max-width:620px){
-  }
-
-
   /* v0.3200 — generation-history controls stay fixed between 24h and 7d.
      The title/note can change width, but the controls occupy one fixed row. */
   #panel-stack .panel-head{
@@ -3650,10 +3644,6 @@
   #panel-stack .panel-tools .range-switch{
     flex:0 0 78px !important;
     width:78px !important;
-  }
-
-
-  @media (max-width:760px){
   }
 
 
@@ -5531,7 +5521,7 @@
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" id="version-label" title="Dashboard version">v0.57</span> &middot;
+      <span class="version-label" id="version-label" title="Dashboard version">v0.58</span> &middot;
       <button type="button" id="btn-about" class="footer-link">About this Dashboard</button>
     </div>
   </div>
@@ -5586,7 +5576,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.57";
+const APP_VERSION = "v0.58";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
