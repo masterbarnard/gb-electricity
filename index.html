@@ -20,8 +20,8 @@
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v58.png">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v58.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v59.png">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v59.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -29,7 +29,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v58.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v59.png">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -1673,10 +1673,8 @@
   body[data-expanded] .viewbar-strip{display:none;}
   body[data-expanded] .grid{grid-template-columns:minmax(0,1fr) !important;margin-top:12px;}
   body[data-expanded] footer.foot{display:none;}
-  /* Explicit, not incidental: the disclosure is inside the footer now and therefore already
-     hidden with it, but it leaked into the expanded view for four releases precisely because
-     its hiding was somebody else's side effect. Named rules survive a move. */
-  body[data-expanded] .seo-details{display:none;}
+  /* v0.59: the seo-details rule that stood here is gone with its element — the disclosure's
+     content is a real page at /methodology now, so there is nothing left to hide on expand. */
   .panel.is-expanded{
     grid-column:1/-1;
     margin-top:12px;
@@ -2633,6 +2631,17 @@
     color:var(--ink-mute);}
   .icfoot span{margin:0 7px;opacity:.7;}
   .icrow{display:contents;}
+  /* ⚠ v0.59: THE WHOLE ROW OPENS THE DETAIL DIALOG on a mouse click, on the author's report —
+     the tooltip promised "click to open" while only the name button delivered it. The hover
+     ground and cursor are the affordance that replaced that sentence, so they are scoped to
+     where the promise is true: fine pointers only (on touch, tap reads the tooltip and the
+     name button opens), and only rows that HAVE a dialog (`:has(.ic-open)` — an unmapped link
+     opens nothing and must not claim otherwise). `.icrow` is display:contents and paints no
+     box of its own, so the ground lands on the row's cells. Selector is unique in this sheet —
+     nothing later can silently beat it, which is the rule rev 53 built the gate for. */
+  @media (pointer:fine){
+    #icrows .icrow:has(.ic-open):hover > span{background:var(--blue-2);cursor:pointer;}
+  }
   /* The net row is a total, so it is separated the way a total is: a rule above it, heavier
      type, and the same three columns so its bar shares the ten links' zero line and scale.
      Drawing it on a scale of its own would make a 7,784 MW net look like a 1,808 MW link. */
@@ -3009,27 +3018,16 @@
   .footer-link:hover{text-decoration:underline;}
   .footer-link:focus-visible{outline:2px solid var(--blue-text);outline-offset:3px;border-radius:3px;}
 
-  /* v0.3199: crawlable homepage context without compromising the Simplified one-viewport default.
-     The copy is real, user-accessible content in a native <details> disclosure rather than hidden
-     keyword text. Opening it deliberately turns the page back into a normal scrolling document. */
-  /* ⚠ v0.42: THE DISCLOSURE MOVED INTO THE FOOTER, and it is worth saying why rather than
-     just where. Its job is real — a page made of numbers gives a crawler almost no prose, and
-     this block is ~420 words under proper headings, plus the three attribution links two of
-     the licences require. But it was a page-level element sitting in the content column
-     between the panels and the footer, so it read as a row of the dashboard that never showed
-     any data: in the way on every visit, for a benefit no reader gets.
-     The footer is where a page keeps its end-matter, and the provenance material — copyright,
-     the three data sources, the About dialog — is already there. Grouping it costs the reader
-     nothing and costs the crawler nothing either: a closed <details> is still in the DOM and
-     still weighed, which is why it stays a disclosure rather than moving inside the About
-     dialog, whose content is `hidden` and discounted accordingly.
-     It also stops leaking into the expanded view — see the data-expanded rule. */
-  /* v0.42's `.foot-seo` row and its divider are gone with the move back into #main at v0.44.
-     The disclosure now takes its spacing from `.seo-details` again, like any other block in the
-     content column, and #main's own bottom padding is the air above the footer.
-     ⚠ THE HEADER'S CHROME IS NOT HERE ANY MORE — see the consolidated block at the end of this
-     sheet. What is left in this region is the BODY's typography, which is a different subject
-     and was never part of the positioning problem. */
+  /* ⚠ v0.59: THESE RULES HAVE NO CONSUMER IN THIS DOCUMENT, AND THAT IS DELIBERATE — DO NOT
+     TIDY THEM AWAY. The seo-details disclosure is gone: its purpose text lives at /methodology
+     now, a real page generated from this file at release time by tools/pages59.mjs. That page
+     links this stylesheet (site/styles.css is extracted verbatim from this <style> block), and
+     `.seo-copy` is what styles its opening section. The disclosure's own chrome — `.seo-details`,
+     the summary, the chevron — went with the element, following the compensations rule; the
+     BODY typography stays because the body still renders, one URL away. A closed <details> was
+     hidden text and discounted; the same words on a real page are not, which is the whole
+     argument for the move (Rev53_Scope §1). History: introduced v0.3199, footer at v0.42, back
+     into #main at v0.44, page split at v0.59. */
   .seo-copy{
     max-width:820px;
     margin:0 auto;
@@ -3847,134 +3845,11 @@
      get it from a value that has been through the contrast work rather than a new guess. */
   :root{ --blue-pale:var(--accent-tint); }
 
-  /* ============================================================================
-     THE ABOUT DISCLOSURE IS A PANEL HEADER  (v0.52)
-     Stated last for the same cascade reason as the switches above: `.seo-details summary` is
-     declared in three separate places across two earlier blocks, and the last one wins. The
-     values here are the panel header's own — 10px / 700 / .08em / uppercase / --blue-text for
-     the title, 10px / 400 / --ink-dim for the line beneath, 7px 13px of padding — quoted rather
-     than shared, exactly as `.panel-head h2` quotes `.insight-head h2` and for the same reason:
-     the two live in different structures, and a merged rule would make one's layout the other's
-     problem. The harness asserts that they AGREE.
-     ⚠ THE SUBTITLE IS NOT SET IN MONO. Every panel's second line is a dataset identifier and
-     takes `.ds`; this one is a sentence about what the section contains. Mono is for machine
-     identifiers and nothing else, so the shape matches and the typeface does not — which is the
-     correct reading of the rule rather than a lapse in applying it.
-     ============================================================================ */
-
-  /* ============================================================================
-     THE ABOUT / METHODOLOGY DISCLOSURE — ONE DECLARATION  (v0.53)
-
-     ⚠ THIS COMPONENT'S CHROME HAD BEEN DECLARED IN FOUR SEPARATE REGIONS OF THIS SHEET, across
-     three generations of treatment, and every one of them was still live: a `+`/`−` circle from
-     v0.31, a full-bar blue gradient with a 3% red terminal from v0.31995, a filled 44px action
-     cell from v0.32 (red) and v0.33 (blue), a background-position sprite for its chevron, and a
-     bordered icon button from v0.52. Around forty declarations, of which the last dozen won. The
-     author reported the control mispositioned three times and each report was answered with
-     another override on top — which is how a component ends up with four positioning models
-     arguing with each other. All of it is deleted; this is the whole component now.
-
-     ⚠ AND THE FAILURE MODE WAS STRUCTURAL, NOT NUMERIC. The chevron was ABSOLUTELY POSITIONED
-     against the summary, inside a container carrying `overflow:hidden`. That placement depended
-     on three separate things staying true — an ancestor keeping `position:relative`, the
-     summary's height being what `top:50%` assumed, and nothing clipping the result — none of
-     which are visible in the rule that placed it. Tuning any of those numbers again would have
-     left all three dependencies in place.
-
-     THE CHEVRON IS A FLEX ITEM. It sits in the same row as the text, in normal flow, at the
-     shared control size. There is no absolute positioning in this component, no `top`, no
-     `translate`, and nothing for a container to clip: a flex row cannot put its own child
-     outside itself. `min-width:0` on the text column is the one property that has to be stated —
-     without it a long title refuses to shrink and pushes the control out of the row, which is
-     the same `max-content` trap that overflowed the Wind panel's header at rev 47.
-     ============================================================================ */
-  .seo-details{
-    margin:8px 0 12px;
-    border:1px solid var(--blue-line);
-    border-radius:9px;
-    background:var(--surface);
-    color:var(--ink);
-  }
-  /* The whole row is the control: `<summary>` is focusable and clickable across its full box, so
-     the target is the header rather than the mark at the end of it. */
-  .seo-details summary{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:7px 13px;
-    min-height:calc(var(--ctl-h) + 14px);
-    box-sizing:border-box;
-    list-style:none;
-    cursor:pointer;
-    border-radius:8px;
-    background:none;
-    border:0;
-    outline:none;
-  }
-  .seo-details summary::-webkit-details-marker{display:none;}
-  .seo-details summary::before,
-  .seo-details summary::after{content:none;}
-  /* ⚠ `min-width:0` — see the note above. `flex:1 1 auto` alone is not enough: a flex item's
-     default `min-width` is `auto`, which resolves to its max-content size. */
-  .seo-details .seo-summary-text{
-    flex:1 1 auto;
-    min-width:0;
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-    gap:2px;
-  }
-  /* The panel header's own five values for the title, and the note's two for the line beneath —
-     quoted rather than shared, exactly as `.panel-head h2` quotes `.insight-head h2`, because
-     the two live in different structures. `panelFrameMatchesTheGlanceBand` asserts they agree. */
-  .seo-details .seo-summary-title{
-    font-size:10px; font-weight:700; letter-spacing:.08em;
-    text-transform:uppercase; color:var(--blue-text); line-height:1.25;
-  }
-  .seo-details .seo-summary-sub{
-    font-size:10px; font-weight:400; letter-spacing:normal; text-transform:none;
-    color:var(--ink-dim); line-height:1.3;
-  }
-  /* The mark. Same size, radius and border as every other control in a panel header, and it
-     never shrinks — `flex:0 0 auto` with an explicit width, so a long title wraps rather than
-     squeezing the control. `pointer-events:none` keeps the click on the summary itself. */
-  .seo-details .seo-chevron{
-    flex:0 0 var(--ctl-h);
-    width:var(--ctl-h);
-    height:var(--ctl-h);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    box-sizing:border-box;
-    border:1px solid var(--ctl-border);
-    border-radius:var(--ctl-r);
-    background:var(--surface);
-    pointer-events:none;
-    transition:background-color .14s ease, border-color .14s ease;
-  }
-  @media (prefers-reduced-motion:reduce){ .seo-details .seo-chevron{transition:none;} }
-  /* ⚠ `--blue-text`, NOT white. A white mark only ever worked on the solid slab this component
-     used to carry; on the surface it is white on white — the fault this element shipped with for
-     nine releases before rev 42 found it. */
-  .seo-details .seo-chevron::before{
-    content:"";
-    width:7px; height:7px;
-    border-right:2px solid var(--blue-text);
-    border-bottom:2px solid var(--blue-text);
-    transform:rotate(45deg) translateY(-1px);
-    transition:transform .18s ease;
-  }
-  @media (prefers-reduced-motion:reduce){ .seo-details .seo-chevron::before{transition:none;} }
-  .seo-details[open] .seo-chevron::before{ transform:rotate(225deg) translateY(-1px); }
-  /* Hover and focus in the panels' own language: the control fills with level-2 blue and takes
-     the blue edge, exactly as `.panelbtn` and `.export-btn` do. Nothing paints the whole bar. */
-  .seo-details summary:hover .seo-chevron{ background:var(--blue-2); border-color:var(--blue-text); }
-  .seo-details summary:focus-visible .seo-chevron{
-    background:var(--blue-2);
-    border-color:var(--blue-text);
-    outline:2px solid var(--blue-text);
-    outline-offset:2px;
-  }
+  /* v0.59: the About/Methodology disclosure’s chrome — around fifty declarations across the
+     v0.52 header block and the v0.53 single-declaration rebuild — is gone with its element.
+     The content those rules dressed is a real page at /methodology now, generated from this
+     file at release time; only `.seo-copy` (the BODY typography, declared earlier in this
+     sheet) survives, because the generated page still consumes it via site/styles.css. */
 
 
   /* ============================================================================
@@ -5399,86 +5274,17 @@
 
 
 
-  <!-- ⚠ v0.44: THE METHODOLOGY DISCLOSURE IS BACK IN THE CONTENT COLUMN, at the end of it, at
-       the author's direction. It has now been in three places in three releases and the reasoning
-       for each is worth keeping straight, because they were answers to different questions.
-       Before v0.42 it sat between the last panel and the footer as a page-level element and read
-       as a dashboard row that never showed any data — that was a positioning fault. v0.42 moved
-       it into the footer, which fixed that but filed it as end-matter alongside the copyright.
-       It is neither: it is the page explaining itself, which belongs at the bottom of the thing
-       it explains rather than in the furniture underneath. So it closes #main.
-       What has NOT changed is why it exists at all: a page made of numbers gives a crawler
-       almost no prose, and this is ~420 words under real headings plus the three attribution
-       links two of the licences require. A closed <details> is still in the DOM and still
-       weighed, which is why it stays a disclosure rather than moving inside the About dialog,
-       whose content is `hidden` and discounted accordingly. -->
-  <details class="seo-details" id="seo-details">
-    <!-- ⚠ v0.52: THE LEADING "i" BADGE IS GONE, and the two lines are now a panel header.
-         The badge was the only element of its kind anywhere on the page — nothing else opens
-         with a circled glyph — so it read as a tooltip trigger that had wandered into a title
-         position, at 18px against an 11.5px title it was supposed to be subordinate to. Its
-         job was to say "information", which the words "About GB Electricity" were already
-         doing; a mark that repeats the label beside it is decoration.
-         What replaces it is the structure every panel now uses: title, dataset line beneath,
-         one control at the right. Same two-line head, same control height, same border. The
-         disclosure stops being a bar with a badge on one end and a button on the other, and
-         becomes the last panel in the column — which is what it is. -->
-    <summary><span class="seo-summary-text"><span class="seo-summary-title">What this dashboard shows</span><span class="seo-summary-sub">GB generation, demand, interconnectors and carbon intensity</span></span><span class="seo-chevron" aria-hidden="true"></span></summary>
-    <!-- v0.41: the crawler-visible copy, rewritten by the author. ⚠ THE BOLD IS DELIBERATELY
-         SPARSE — roughly four-fifths of it removed. Bold on every keyphrase was emphasis doing
-         SEO's job rather than a reader's: when a dozen phrases in six paragraphs are bold, none
-         of them is emphasised. What survives is the two words a reader must ACT on (the view
-         switch's labels) and the one label that introduces a list. The headings still carry the
-         search terms, and headings are what a crawler weighs anyway. -->
-    <div class="seo-copy">
-      <!-- ⚠ v0.53: THIS IS THE PAGE'S DESCRIPTION, NOT ITS DOCUMENTATION.
-           Until now the disclosure and the About dialog were answering the same question in two
-           places: this block carried "Why supply and demand never quite match", "GB electricity
-           generation and demand", "Wind, solar and interconnectors" and a "Data sources and
-           methodology" section, all of which the About dialog covers at greater length and with
-           the caveats attached. Two documents drifting apart is a maintenance problem; two
-           documents saying the same thing at different lengths is also a reader problem, because
-           neither one is obviously the authority.
-           The split is now by QUESTION. This answers "what is this and what does it show me",
-           in the fewest words that can be engaging and still crawlable. The About dialog answers
-           "how is each figure derived, what can it not see, and where will it mislead me", and
-           the last line here hands the reader to it explicitly rather than starting to answer it.
-           649 words to ~340, and five of the six sections gone rather than compressed. -->
-      <h2>GB Electricity — live generation, demand and carbon intensity for Great Britain</h2>
-      <p class="seo-lede">Every few minutes, Great Britain’s electricity system rearranges itself
-        — wind rises, gas throttles back, a cable to Norway reverses direction. This dashboard
-        shows that happening, from the public data, as it happens.</p>
-
-      <p>It puts the whole system on one page: what is generating and from what, how much the
-        country is actually using, which way each interconnector is flowing, how clean this half
-        hour is, and what it costs to be out of balance. Nothing is modelled that could be
-        measured, and everything that <em>is</em> modelled says so on the page.</p>
-
-      <h3>What you can see</h3>
-      <ul class="seo-points">
-        <li><b>Generation by fuel type</b> — gas, nuclear, wind, biomass, hydro, pumped storage
-          and the rest, ranked and shown as shares, updated every five minutes.</li>
-        <li><b>Two demand figures, not one</b> — what the transmission system can see, and what
-          the country actually used once rooftop solar is added back in.</li>
-        <li><b>Interconnectors link by link</b> — France, Norway, Denmark, the Netherlands,
-          Belgium and Ireland, each with its direction and its share of capacity.</li>
-        <li><b>Carbon intensity and system frequency</b> — how clean the mix is this half hour,
-          and the real-time balance of the whole system.</li>
-        <li><b>Every window downloadable</b> — any panel expands to fill the screen, and any data
-          window exports as a timestamped CSV.</li>
-      </ul>
-
-      <p>There is no account, no tracking and no server: it is a single HTML page that calls
-        public APIs from your browser and draws what comes back.</p>
-
-      <p><b>Sources:</b> <a href="https://bmrs.elexon.co.uk/" target="_blank" rel="noopener noreferrer">Elexon
-        Insights (BMRS)</a>, the <a href="https://carbonintensity.org.uk/" target="_blank" rel="noopener noreferrer">NESO
-        Carbon Intensity API</a> and <a href="https://www.solar.sheffield.ac.uk/pvlive/" target="_blank" rel="noopener noreferrer">Sheffield
-        Solar PV_Live</a>. How each figure is derived, what these feeds cannot see, and the places
-        this data is most often misread are set out in <em>About this dashboard</em>, in the
-        footer.</p>
-    </div>
-  </details>
+  <!-- ⚠ v0.59: THE METHODOLOGY DISCLOSURE IS A PAGE NOW. The ~340-word description that
+     lived here in a <details> is at https://gbelectricity.uk/methodology, a real URL generated
+     from this file at release time by tools/pages59.mjs — together with /about, which carries
+     the About dialog's fourteen sections split ten and four. The disclosure had been in three
+     places in three releases (page-level → footer at v0.42 → end of #main at v0.44) because
+     no position inside a dashboard suits a block of prose that shows no data; the fourth answer
+     is that it was never furniture, it was a page. A closed <details> is hidden text and
+     discounted by a crawler; the same words on an indexable URL with its own title, description
+     and canonical are not — that is the whole trade, and it costs this document nothing it
+     was using. The About dialog (#about-tpl above) is unchanged and remains the single source:
+     the pages are DERIVED from it, never edited directly. -->
 
 </main><!-- /.wrap -->
 
@@ -5521,7 +5327,15 @@
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" id="version-label" title="Dashboard version">v0.58</span> &middot;
+      <span class="version-label" id="version-label" title="Dashboard version">v0.59</span> &middot;
+      <!-- v0.59: an ABSOLUTE href, deliberately. This document opens by double-click from any
+           folder, so a relative link would 404 everywhere except the deployed root; the pages
+           exist only at the site. It is also the crawl path: the sitemap declares /methodology
+           and /about, but a page a crawler can only reach through a sitemap ranks as an orphan —
+           this link is the one that makes it part of the site. /about is linked from
+           /methodology and back, so one footer link covers discovery without stacking a second
+           "About" next to the button that opens the dialog. -->
+      <a href="https://gbelectricity.uk/methodology" class="footer-link">Methodology</a> &middot;
       <button type="button" id="btn-about" class="footer-link">About this Dashboard</button>
     </div>
   </div>
@@ -5576,7 +5390,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.58";
+const APP_VERSION = "v0.59";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -10319,18 +10133,20 @@ function icFlowLine(key){
         ? `<div class="t-row"><span class="n">Running at</span><span class="v">${
             f.v===0 ? "idle" : (Math.abs(f.v)/m.capMW*100).toFixed(0)+"% of capacity"}</span></div>`
         : "") +
-      /* Every link opens a dialog, but only a RATED one said so — its caveat happened to end
-         with "Open for detail." while BritNed and the rest offered no hint that the bar was
-         clickable at all. The affordance is now stated on every link, and the caveat keeps
-         its own line only where there is something to caveat. Same slot, so a rated tooltip
-         is no taller than before. */
       (m.capRated
         /* v0.26: "Click to open for detail" removed from the rating caveat. The row below it
            already says the tooltip opens, so the sentence appeared twice in one tooltip — and
            the caveat's job is to qualify the number, not to give an instruction. */
         ? `<div class="t-row t-cav">Rating only — working capacity is lower.</div>`
         : "") +
-      `<div class="t-row t-hint">Click to open — capacity, ownership and route.</div>` +
+      /* ⚠ v0.59: THE "Click to open" HINT LINE IS GONE, on the author's report. It said the
+         tooltip's OWNER was clickable while only the name button actually was — an instruction
+         that was wrong for four fifths of the row it appeared over is worse than no instruction.
+         The fix is the affordance, not the wording: the whole row now opens the dialog on a
+         mouse click (see the icrow delegation), the row shows a hover ground and a pointer
+         cursor where that is true, and a tooltip stops narrating what the cursor already says.
+         On touch nothing changes — tap reads, the name opens — so the hint would have stayed
+         wrong there anyway: the honest touch instruction is the name button itself. */
       `<div class="t-row t-tot"><span class="n">${fmtTime(f.t)} · SP${f.sp}</span></div>`;
     tip.classList.add("show");
     place(ev);
@@ -10726,6 +10542,24 @@ function openIC(key){
 document.addEventListener("click",(e)=>{
   const b = e.target.closest(".ic-open");
   if(b) openIC(b.dataset.ic);
+});
+/* ⚠ v0.59: THE WHOLE ROW IS A WAY INTO THE DIALOG — for a mouse. The tooltip used to say
+   "Click to open" over a row where only the name button opened anything; the sentence is gone
+   and the behaviour now matches what it promised. Touch is deliberately excluded: the panel's
+   contract since v0.49 is DRAG SCROLLS, TAP READS — a tap on the row shows the reading, and the
+   name button (a real button, in the tab order, announced by AT) remains the way in. `click`
+   arrives as a PointerEvent in Chromium but not everywhere, so the pointer type is taken from
+   the event when it carries one and from the last pointerdown when it does not — Safari's
+   MouseEvent click after a touch must not fall through to "mouse" and hijack the tap. */
+let lastPointerType = "mouse";
+document.addEventListener("pointerdown",(e)=>{ lastPointerType = e.pointerType || "mouse"; }, true);
+document.addEventListener("click",(e)=>{
+  const pt = (typeof e.pointerType === "string" && e.pointerType) ? e.pointerType : lastPointerType;
+  if(pt !== "mouse") return;
+  if(e.target.closest(".ic-open") || e.target.closest("[data-icsort]") || e.target.closest("a")) return;
+  const row = e.target.closest("#icrows .icrow");
+  const opener = row && row.querySelector(".ic-open");
+  if(opener) openIC(opener.dataset.ic);
 });
 
 /* ============================================================

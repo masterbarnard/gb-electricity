@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<!-- GENERATED FILE — do not edit. Produced by tools/pages59.mjs from
+     dash/GB_Electricity_v0.59.html (md5 5b750820e0c8a88d590f281bf1afd38e). Edit the dashboard, re-run the generator. -->
+<html lang="en-GB" data-page="about">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>About GB Electricity — Data Sources, Licences & Status</title>
+<meta name="description" content="Where GB Electricity’s live UK grid data comes from: Elexon Insights (BMRS), the NESO Carbon Intensity API and Sheffield Solar PV_Live — the endpoints called, the attribution and licences, and the source and status of the project.">
+<link rel="canonical" href="https://gbelectricity.uk/about">
+<meta name="generator" content="pages59.mjs — from GB Electricity v0.59">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "About GB Electricity — Data Sources, Licences & Status",
+  "url": "https://gbelectricity.uk/about",
+  "description": "Where GB Electricity’s live UK grid data comes from: Elexon Insights (BMRS), the NESO Carbon Intensity API and Sheffield Solar PV_Live — the endpoints called, the attribution and licences, and the source and status of the project.",
+  "isPartOf": { "@type": "WebSite", "name": "GB Electricity", "url": "https://gbelectricity.uk/" }
+}
+</script>
+<meta property="og:title" content="About GB Electricity — Data Sources, Licences & Status">
+<meta property="og:description" content="Where GB Electricity’s live UK grid data comes from: Elexon Insights (BMRS), the NESO Carbon Intensity API and Sheffield Solar PV_Live — the endpoints called, the attribution and licences, and the source and status of the project.">
+<meta property="og:url" content="https://gbelectricity.uk/about">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GB Electricity">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v59.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="About GB Electricity — Data Sources, Licences & Status">
+<meta name="twitter:description" content="Where GB Electricity’s live UK grid data comes from: Elexon Insights (BMRS), the NESO Carbon Intensity API and Sheffield Solar PV_Live — the endpoints called, the attribution and licences, and the source and status of the project.">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v59.png">
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" sizes="64x64" href="/favicon.png">
+<meta name="color-scheme" content="light dark">
+<script>/* Applied before first paint so a dark-mode reader never gets a white flash.
+  The storage key is extracted from the dashboard at generation time, so the two
+  cannot disagree about where the preference lives. */
+(function(){try{var t=localStorage.getItem("nd-theme");
+if(t!=="dark"&&t!=="light")t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";
+document.documentElement.setAttribute("data-theme",t);}catch(e){
+document.documentElement.setAttribute("data-theme","light");}})();</script>
+<link rel="stylesheet" href="/styles.css">
+<style>
+  /* ---- generated page shell (pages59.mjs) ---- */
+  .page-main{max-width:880px;margin:0 auto;padding:22px 18px 46px;}
+  .page-crumb{margin:0 0 4px;font-size:12.5px;}
+  .page-crumb a{color:var(--blue-text);text-decoration:none;}
+  .page-crumb a:hover{text-decoration:underline;}
+  .page-h1{margin:6px 0 6px;font-size:26px;line-height:1.15;color:var(--ink);}
+  .page-lede{margin:0 0 22px;font-size:15px;line-height:1.6;color:var(--ink-dim);max-width:74ch;}
+  a.brand-reset{text-decoration:none;color:inherit;display:flex;}
+  /* The section headings are h2 on a page (a real h1 sits above them); the
+     treatment is .about h4's, re-emitted from the same declarations. */
+  .page-article h2{margin:30px 0 9px;font-size:12.5px;font-weight:700;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--blue-text);scroll-margin-top:10px;
+    padding-top:14px;border-top:1px solid var(--grey-line);}
+  .page-article h2:first-of-type{margin-top:4px;padding-top:0;border-top:none;}
+  /* The purpose text reuses the dashboard's own .seo-copy typography, but as a
+     full-width opening section rather than a boxed disclosure body. */
+  .page-article .seo-lede{font-size:16px;line-height:1.6;color:var(--ink);margin:0 0 12px;max-width:74ch;}
+  .page-article .seo-points{list-style:none;margin:8px 0 14px;padding:2px 0 2px 13px;
+    border-left:2px solid var(--blue-line);max-width:74ch;}
+  .page-article .seo-points li{margin:0 0 6px;line-height:1.55;font-size:14.5px;}
+  .page-article .seo-points b{color:var(--ink);}
+  .page-article ul{max-width:74ch;}
+  .page-article li{font-size:14.5px;line-height:1.6;margin:0 0 6px;}
+  .page-next{margin:34px 0 0;padding-top:16px;border-top:1px solid var(--grey-line);
+    font-size:13.5px;display:flex;gap:18px;flex-wrap:wrap;}
+  .page-next a{color:var(--blue-text);}
+  @media (max-width:620px){ .page-h1{font-size:22px;} }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="header-top">
+      <div class="brand">
+        <!-- On a page, the logo goes home the way every site trained readers to expect —
+             and home is the live dashboard, so this is an <a>, not the dashboard's reset
+             button, which resets state a static page does not have. -->
+        <a class="brand-reset" href="/" title="Back to the live dashboard">
+        <svg class="mark" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+             style="color:var(--blue-text)"><polyline points="3,22 12,22 16,8 21,24" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="21,24 29,16" fill="none" stroke="var(--mark-red)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="wordmark">
+          <span class="name">GB Electricity</span>
+          <span class="sub">Real-time insight into Great Britain’s electricity system</span>
+        </div>
+        </a>
+      </div>
+      <div class="header-actions">
+        <button class="theme-switch" id="btn-theme" role="switch" aria-checked="false" aria-label="Dark mode">
+          <svg class="theme-icon sun" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7"/></svg>
+          <span class="switch-track"><span class="switch-knob"></span></span>
+          <svg class="theme-icon moon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <hr class="rule">
+</header>
+
+<main class="wrap page-main" id="main">
+  <article class="about page-article">
+    <p class="page-crumb"><a href="/">&larr; Live dashboard</a></p>
+    <h1 class="page-h1">About GB Electricity</h1>
+    <p class="page-lede">The provenance of the data, every endpoint the page calls, the licences that come with them, and where the project stands.</p>
+<h2>Inspired by</h2>
+      <p>
+        GB Electricity takes inspiration from existing public GB grid dashboards, particularly
+        <a href="https://gridwatch.co.uk/" target="_blank" rel="noopener noreferrer">GridWatch</a>
+        and <a href="https://www.kilowatts.io/" target="_blank" rel="noopener noreferrer">Kilowatts.io</a>.
+        Their live generation, demand and interconnector views helped shape the scope of this dashboard.
+      </p>
+      <p>
+        The <a href="https://commercial.nationalgrid.co.uk/our-network/ecr-dashboard" target="_blank" rel="noopener noreferrer">National Grid ECR Dashboard</a>
+        is a useful reference for a different kind of data product: clear filtering, explicit data coverage,
+        connected versus accepted capacity, geographic breakdowns and downloadable data.
+        Those ideas may inform future GB Electricity capacity and network views rather than the live system page itself.
+      </p>
+
+      
+<h2>Endpoints called</h2>
+      <div class="srcs">
+        <span>GET /generation/outturn/summary</span>
+        <span>GET /datasets/FUELINST</span>
+        <span>GET /demand/outturn</span>
+        <span>GET /generation/outturn/interconnectors</span>
+        <span>GET /forecast/generation/wind</span>
+        <span>GET /forecast/generation/wind/earliest</span>
+        <span>GET /forecast/generation/wind/latest</span>
+        <span>GET /balancing/settlement/system-prices/{date}</span>
+        <span>GET /generation/actual/per-type/wind-and-solar</span>
+        <span>GET /temperature</span>
+        <span>GET /system/frequency</span>
+        <span>pvlive.uk GET /pvlive/api/v4/gsp/0</span>
+        <span>carbonintensity.org.uk GET /intensity</span>
+        <span>carbonintensity.org.uk GET /intensity/factors</span>
+        <span>carbonintensity.org.uk GET /intensity/{from}/pt24h</span>
+      </div>
+
+      
+<h2>Data sources and attribution</h2>
+      <p class="attrib">
+        <b>Contains BMRS data © Elexon Limited copyright and database right 2026.</b>
+        Used under Elexon's
+        <a href="https://www.elexon.co.uk/bsc/data/balancing-mechanism-reporting-agent/copyright-licence-bmrs-data/"
+           target="_blank" rel="noopener noreferrer">Licence to use BMRS open data</a>.
+      </p>
+      <p class="attrib">
+        Carbon intensity data by the <b>National Energy System Operator (NESO)</b>, from the
+        <a href="https://carbonintensity.org.uk/" target="_blank" rel="noopener noreferrer">Carbon
+        Intensity API</a>, licensed under
+        <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>
+        (<a href="https://github.com/carbon-intensity/terms" target="_blank" rel="noopener noreferrer">terms of use</a>).
+      </p>
+      <p class="attrib">
+        <b>PV_Live by Sheffield Solar</b> is licensed under
+        <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>.
+        <a href="https://www.solar.sheffield.ac.uk/pvlive/" target="_blank" rel="noopener noreferrer">solar.sheffield.ac.uk/pvlive</a>
+      </p>
+      <p>
+        <b>GB Electricity is an independent personal project.</b> It is not affiliated with,
+        endorsed by, or an official product of Elexon Limited, EMR Settlement Ltd (EMRS), NESO, or the
+        University of Sheffield.
+        It uses publicly available data and is maintained independently. No logos or trade marks
+        of these organisations are used here.
+      </p>
+      <p>
+        All data is provided by its sources <b>as-is and without warranty of accuracy</b>. Solar
+        figures are <b>modelled estimates</b> and are revised after publication; Sheffield Solar
+        describe PV_Live as live research whose estimates may be inaccurate, and offer no
+        guarantee of availability.
+      </p>
+
+      
+<h2>Source and status</h2>
+      <p>
+        <a href="https://bmrs.elexon.co.uk/" target="_blank" rel="noopener noreferrer">Elexon Insights Solution (BMRS)</a>,
+        base <b class="ds">https://data.elexon.co.uk/bmrs/api/v1</b>.
+        Times are shown in Europe/London and settlement periods are on the BSC day.
+        Built by <a href="https://www.linkedin.com/in/kyle-barnard/" target="_blank"
+        rel="noopener noreferrer">Kyle Barnard</a>.
+      </p>
+    
+    <nav class="page-next" aria-label="Related pages">
+      <a href="/">&larr; Live dashboard</a>
+      <a href="/methodology">Methodology &rarr;</a>
+    </nav>
+  </article>
+</main>
+
+<div id="infopop" role="tooltip" aria-label="Explanation" hidden></div>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-left">
+      <span class="rights">&copy; <span id="copyright-year">2026</span> <a href="https://www.linkedin.com/in/kyle-barnard/"
+        target="_blank" rel="noopener noreferrer">Kyle Barnard</a> &middot; GB Electricity</span>
+      <span>Data provided via <a href="https://bmrs.elexon.co.uk/" target="_blank"
+        rel="noopener noreferrer">Elexon Insights APIs</a>, <a href="https://carbonintensity.org.uk/" target="_blank"
+        rel="noopener noreferrer">NESO Carbon Intensity API</a> &amp; <a href="https://www.solar.sheffield.ac.uk/pvlive/" target="_blank"
+        rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
+    </div>
+    <div class="foot-right">
+      <span class="version-label" title="Generated from GB Electricity v0.59">v0.59</span> &middot;
+      <a href="/methodology" class="footer-link">Methodology</a> &middot;
+      <a href="/about" class="footer-link">About</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+
+/* ---- generated page runtime (pages59.mjs) — the minimum the static pages
+   need: theme, year, glossary. Everything content-bearing is extracted from
+   the dashboard at generation time. ---- */
+const $ = (id)=>document.getElementById(id);
+const esc = (s)=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store = {
+  get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+};
+function setTheme(dark){
+  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+  $("btn-theme").setAttribute("aria-checked", String(dark));
+  store.set("nd-theme", dark ? "dark" : "light");
+}
+$("btn-theme").setAttribute("aria-checked",
+  String(document.documentElement.getAttribute("data-theme")==="dark"));
+$("btn-theme").addEventListener("click", ()=>{
+  setTheme(document.documentElement.getAttribute("data-theme")!=="dark");
+});
+const copyrightYear = $("copyright-year");
+if(copyrightYear) copyrightYear.textContent = String(new Date().getFullYear());
+
+/* Glossary — extracted verbatim from the dashboard by pages59.mjs. */
+const termDefs={
+  INDO:"Initial National Demand Outturn — the transmission-system demand figure published by Elexon.",
+  DISEBSP:"System Sell Price / System Buy Price — the imbalance price dataset used for the settlement price chart.",
+  INTOUTHH:"Half-hourly interconnector outturn — measured flow into or out of Great Britain.",
+  FUELHH:"Half-hourly generation outturn by fuel type — Elexon’s 30-minute average generation dataset.",
+  FUELINST:"Instantaneous generation outturn by fuel type — Elexon’s near-real-time fuel mix feed.",
+  WINDFOR:"Wind generation forecast — Elexon’s forecast of GB wind output.",
+  DGWS:"Day-ahead generation forecast for wind and solar — Elexon’s DGWS feed.",
+  AGWS:"Actual generation for wind and solar — Elexon’s AGWS outturn feed.",
+  PV_LIVE:"PV_Live — Sheffield Solar’s modelled estimate of GB photovoltaic generation, including embedded solar.",
+  FREQ:"System frequency — measured GB system frequency, published at 15-second resolution.",
+  B1610:"B1610 — an Elexon embedded-generation dataset used in demand and embedded-generation analysis.",
+  PSRTYPE:"psrType — the technology classification used by Elexon’s wind-and-solar endpoint.",
+  OTHER:"OTHER — Elexon’s residual fuel category for generation not assigned to the named fuel categories."
+};
+function attachTerms(){
+  const pop=$("infopop");
+  document.querySelectorAll(".term[data-term]").forEach(el=>{
+    if(el.dataset.termBound)return;el.dataset.termBound="1";el.setAttribute("tabindex","0");
+    const show=()=>{
+      pop.innerHTML=`<b>${esc(el.dataset.term)}</b> — ${esc(termDefs[el.dataset.term]||"Dataset identifier.")}`;
+      const r=el.getBoundingClientRect();pop.hidden=false;const w=pop.offsetWidth,h=pop.offsetHeight;
+      let left=Math.min(r.left,innerWidth-w-10),top=r.bottom+7;if(top+h>innerHeight-8)top=Math.max(8,r.top-h-7);
+      pop.style.left=Math.max(8,left)+"px";pop.style.top=top+"px";el.setAttribute("aria-describedby","infopop");
+    };
+    const hide=()=>{pop.hidden=true;};
+    el.addEventListener("mouseenter",()=>{if(matchMedia("(pointer:fine)").matches)show();});
+    el.addEventListener("mouseleave",()=>{if(matchMedia("(pointer:fine)").matches)hide();});
+    el.addEventListener("focus",()=>{if(el.matches(":focus-visible"))show();});
+    el.addEventListener("blur",hide);
+    el.addEventListener("click",e=>{e.stopPropagation();pop.hidden?show():hide();});
+    el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pop.hidden?show():hide();}});
+  });
+}
+attachTerms();
+/* #infopop is position:fixed; on a scrolling document it must not ride along. */
+addEventListener("scroll", ()=>{ const p=$("infopop"); if(p) p.hidden=true; }, {passive:true});
+
+</script>
+</body>
+</html>
