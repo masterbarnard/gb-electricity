@@ -20,8 +20,8 @@
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v54.png">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v54.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v57.png">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v57.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -29,7 +29,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v54.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v57.png">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -173,7 +173,18 @@
        said every hue belongs to the data; the new one is narrower and sharper: THE CHROME MAY
        BE BLUE, BUT NOTHING THAT PLOTS A NUMBER MAY WEAR THE CHROME COLOUR. */
     --mark:#111827;
-    --ink:#111827; --ink-dim:#4B5563; --ink-mute:#77839A;
+    /* ⚠ v0.57: `--ink-mute` DARKENED FROM #77839A, AND IT IS A CONTRAST FIX, NOT A TASTE ONE.
+       A PageSpeed accessibility audit put the page at 87; an axe run against this build named
+       the cause exactly — 74 of the 77 contrast failures were this one token. #77839A on the
+       panel surface is 3.82:1 and on the page ground 3.53:1, against a WCAG AA floor of 4.5 for
+       text under 18.66px. Every muted line on this page is under 18.66px, so every one of them
+       failed: the provenance stamps, the axis labels, the metadata rows, the footer.
+       ⚠ THE VALUE IS THE MINIMUM THAT CLEARS THE FLOOR ON BOTH GROUNDS — solved rather than
+       eyeballed, and 4.54:1 on the page ground is deliberately barely past 4.5 so the token
+       stays as quiet as the design intends. The hue and saturation are unchanged; only lightness
+       moved. "Quiet" is a job for size, weight and position, and it cannot be bought with
+       contrast a reader needs to read the words at all. */
+    --ink:#111827; --ink-dim:#4B5563; --ink-mute:#657189;
     --page:#F4F6FA; --grey-bg:#EDF0F7; --grey-line:#DDE4FF; --surface:#FFFFFF;
     /* CARBON RAMP. Green through yellow to orange, the family NESO uses on its own carbon
        intensity dashboard — so a reader arriving from the official tool reads this the same
@@ -255,7 +266,17 @@
     --c-storage:#8A3362; --c-imports:#7386D5; --c-gas:#9B1111;   --c-other:#BC7C40;
 
     /* ---- Diverging pair for interconnector flow (import / export) ---- */
-    --flow-in:#0F6F70; --flow-out:#8C2E1F; --flow-zero:#D9D9D9;
+    /* ⚠ v0.57: `--flow-out-ink` IS A SECOND TOKEN, NOT A CHANGE TO THE FIRST.
+       In dark, `--flow-out` on the panel surface is 4.01:1 — under the 4.5 floor for the five
+       places it colours TEXT (the export figures in the link table, and the EXPORTS FROM GB
+       label). The obvious fix, lightening `--flow-out`, would also lighten the export BARS, and
+       a fill has no business changing to satisfy a rule about text: WCAG asks 3:1 of a
+       non-text mark and the bars clear that comfortably. Worse, moving a series colour is the
+       one change this project has a standing rule against, because the palette is ordered for
+       colour-blindness safety and a nudged red is a nudged red everywhere.
+       So the MARK keeps its colour and the WORDS get their own, lightened only as far as 4.5
+       requires. In light they are the same value, because light already passes. */
+    --flow-in:#0F6F70; --flow-out:#8C2E1F; --flow-out-ink:#8C2E1F; --flow-zero:#D9D9D9;
 
     /* ---- Embedded solar: NOT a 9th categorical hue ----
        Gold cannot be one. At any lightness where it still reads as gold it sits outside the
@@ -319,7 +340,9 @@
     --foot-bg:#DFE5F2;
 
     --head-ink:#FFFFFF;
-    --ok:#0A7A3C; --warn:#A9721E; --bad:#8C2E1F;
+    /* `--warn` was 4.11:1 on the surface — the amber used by the data-status vocabulary's
+       `st-warn` chip, which is the one mark on the page that exists to be noticed. */
+    --ok:#0A7A3C; --warn:#98671B; --bad:#8C2E1F;
     --bad-bg:#FBE9E5;
   }
   html[data-theme="dark"]{
@@ -347,7 +370,9 @@
        near-white in dark mode is legible but glares. A raised dark bar reads as a header
        against the panel body without shouting. */
     --head-bg:var(--blue);
-    --ink:#E9EBF4; --ink-dim:#A0A8BC; --ink-mute:#727C93;
+    /* Same fix, other direction: #727C93 on the dark surface was 4.19:1. Lightened to the
+       minimum that clears 4.5 on both the surface and the page ground. */
+    --ink:#E9EBF4; --ink-dim:#A0A8BC; --ink-mute:#788298;
     --page:#0F111A; --grey-bg:#1C2030; --grey-line:#272E44; --surface:#171922;
     /* v0.48: the floor under the balance arrows' fade. See .fb-arrow linearGradient below —
        0 in light, where a hairline running out into white still reads as a line; .3 here,
@@ -380,7 +405,7 @@
     --teal-text:#35C8C9;
     /* --bal-pos:#39C08D; --bal-neg:#F2807A;  (retired v0.51 — see the light block) */
     --c-storage:#94436D; --c-imports:#6F87F9; --c-gas:#B3241F;   --c-other:#C28246;
-    --flow-in:#2FA3A4; --flow-out:#C4574A; --flow-zero:#383846;
+    --flow-in:#2FA3A4; --flow-out:#C4574A; --flow-out-ink:#C86458; --flow-zero:#383846;
     --solar-line:#E3BE4A; --solar-fill:#4A3F1A;
     --daylight:#252325; --night:#1A1D28;
     --foot-bg:#080A11;
@@ -824,18 +849,38 @@
      number.
 
      ⚠ v0.48: THESE ARE SUPPLIED IMAGE FILES, NOT DRAWINGS IN THIS DOCUMENT. Four approved PNGs
-     — gb-generation.png, wind.png, solar.png, net-imports.png — shipped beside this file and
-     referenced by relative path at the author's explicit instruction. They are byte-identical
-     to what he supplied; do NOT redraw, trace, re-export or substitute them, and do not
-     "optimise" them into SVG. If a future release needs a variant, ask for a new file.
+     — gb-generation.png, wind.png, solar.png, net-imports.png — are byte-identical to what the
+     author supplied; do NOT redraw, trace, re-export or substitute them, and do not "optimise"
+     them into SVG. If a future release needs a variant, ask for a new file.
 
-     ⚠ AND THAT COSTS THIS DOCUMENT ITS SELF-CONTAINED PROPERTY, WHICH IS A REAL TRADE.
-     Every other asset here — the font, the favicon, every mark — is inlined precisely so the
-     page works double-clicked off a disk with nothing beside it. These four do not. The PNGs
-     are shipped into BOTH `dash/` and `site/` and referenced as bare siblings, so the page
-     works in either home as long as the folder travels together; what it no longer survives is
-     the HTML being moved or emailed ALONE. Base64 data URIs would keep that property with the
-     same bytes and was the alternative offered; relative paths were the instruction.
+     ⚠ v0.57: THEY ARE INLINED AS BASE64 DATA URIs, AND THE DOCUMENT IS SELF-CONTAINED AGAIN.
+     v0.48 referenced them by relative path at the author's instruction, and recorded the cost in
+     as many words: every other asset here — the font, the marks, the favicon frames — is inlined
+     precisely so the page works double-clicked off a disk with nothing beside it, and these four
+     did not. The page worked in `dash/` or in `site/` as long as the folder travelled together;
+     what it did not survive was the HTML being moved or emailed alone. The author has now asked
+     for the property back.
+
+     ⚠ THIS IS NOT A SUBSTITUTION, WHICH IS THE THING THE v0.48 INSTRUCTION FORBIDS. The bytes
+     are the supplied files, base64-encoded — nothing redrawn, re-exported or re-compressed.
+     Verified by decoding what is in this document and hashing it:
+         gb-generation.png  13,772 bytes  md5 9c1972c559b30f46672b84549648ee76
+         wind.png           12,507 bytes  md5 15ee14bbf0518b1e7c3b5bc0ca28fb50
+         solar.png          15,570 bytes  md5 819985c03e407cfc7be4f44690d9fc78
+         net-imports.png     8,098 bytes  md5 123dcd510aef7b8d140b67b27886787e
+     The harness decodes them and checks those hashes, so a future "optimisation" that re-encodes
+     the pictures fails the release rather than passing quietly.
+
+     Cost: about 67 KB of base64 for 49 KB of PNG, an 8% document. The four files STAY in `dash/`
+     and `site/` as the provenance copies and as the source the harness hashes against — they are
+     simply no longer load-bearing, so `site/` needs no commit for them and losing them does not
+     break the page.
+
+     ⚠ The only remaining external references are the two favicon `<link>`s, and they are
+     deliberate: `/favicon.png` and `/favicon.svg` are site-root paths for search crawlers. A
+     double-clicked file finds neither and does not care — `favPulse()` replaces the SVG link's
+     href with a generated data URI on the first tick, so nothing a reader can see depends on a
+     sibling file.
 
      Two changes the swap forces, both deliberate:
      - OPACITY IS 1, not the .26 these cards carried. That figure was calibrated for a
@@ -1913,9 +1958,33 @@
      the hit area without moving a pixel of layout — the target becomes 24px+ while the text
      stays where the design put it. It was on `.labelbtn` only; the legend and driver keys are
      the same kind of control and get the same treatment. */
+  /* ⚠ v0.57: THE LEGEND KEYS GET THEIR HIT AREA AT EVERY POINTER, NOT ONLY ON A PHONE.
+     An accessibility audit flagged the nine fuel keys as 62×16px targets — below the 24px floor
+     — at desktop width as well. The note above is still right that 2.5.8 exempts targets inside
+     a sentence, and the driver line genuinely is one; a LEGEND is not, so the exemption was
+     being claimed for a control that does not qualify. And the argument against fixing it was
+     about visible gaps, which the padding/negative-margin pair does not create: the hit area
+     grows, the layout does not move by a pixel.
+     Vertical only in the base rule — 16px of text plus 5px each side is 26px, past the floor —
+     because horizontal padding at desktop would narrow the space between neighbouring keys for
+     no gain. The coarse-pointer rule keeps the wider box a finger wants. */
+  /* ⚠ AND IT IS ELEMENT-QUALIFIED, WHICH IS NOT A STYLE PREFERENCE.
+     `.legend-key{padding:1px 2px}` is declared ~970 lines further down this sheet. Equal
+     specificity, later wins — so the plain `.legend-key` form of both these rules lost to it
+     silently, and the v0.52 coarse-pointer tap-target fix has therefore NEVER APPLIED to the
+     fuel legend since the day it was written. Three years of this file's notes say a later rule
+     at equal specificity discards the earlier one, and it caught this one too. `button.` raises
+     the specificity so neither rule depends on where it sits. */
+  button.legend-key,button.driver-key{padding:5px 0;margin:-5px 0;}
   @media (pointer:coarse){
     .labelbtn{padding:10px 0;margin:-10px 0;}
-    .legend-key,.driver-key{padding:5px 4px;margin:-5px -4px;}
+    /* 6px, not 5. The phone step drops the legend to 11px type, so five pixels each side gave
+       23.8px — two tenths short of the floor, which is a fail like any other. */
+    button.legend-key,button.driver-key{padding:6px 4px;margin:-6px -4px;}
+    /* And the row gap grows with the padding it has to clear: 11px type plus 12px of gap puts
+       two 25.8px targets exactly edge to edge, which the audit reads — correctly — as each one
+       obscuring the next. The gap and the hit area are one decision and are set together. */
+    .legend{row-gap:16px;}
   }
 
   .infobtn{font:inherit;font-size:10px;line-height:1;color:var(--ink-dim);background:none;
@@ -1928,6 +1997,21 @@
     line-height:1.5;color:var(--ink-dim);box-shadow:0 8px 24px rgba(0,0,0,.18);}
   #infopop[hidden]{display:none;}
   #infopop b{color:var(--ink);}
+  /* ⚠ v0.56: THE LIVE READINGS INSIDE A GLANCE TOOLTIP.
+     Separated from the definition by a rule rather than by a blank line, because the two halves
+     are different KINDS of statement: above the rule is what the figure means and is true every
+     day; below it is what the figure is right now and is true for five minutes. Running them
+     together as one paragraph is how a reader ends up quoting a definition as a reading.
+     Each line is its own row, values right-aligned and tabular, so the four lines read as a
+     small table and not as a wrapped sentence. */
+  .tip-live{margin-top:8px;padding-top:7px;border-top:1px solid var(--grey-line);
+    display:flex;flex-direction:column;gap:3px;}
+  .tip-live > span{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+    font-size:11px;color:var(--ink-mute);}
+  .tip-live > span > b{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;}
+  /* A line with no value half — "the sun is down", "last published 62 minutes ago" — is prose,
+     not a row, so it spans and wraps normally instead of being stretched into two columns. */
+  .tip-live > span.wide{display:block;}
   @media (pointer:coarse){ .infobtn{width:26px;height:26px;font-size:12px;} }
   /* CARBON INTENSITY BAND SCALE — a computed ramp, and the reasoning is the point.
 
@@ -2163,7 +2247,12 @@
   .gridline{stroke:var(--grey-line);stroke-width:1;stroke-dasharray:2 3;}
   .crosshair{stroke:var(--ink-dim);stroke-width:1;stroke-dasharray:3 3;pointer-events:none;}
   .axlabel{font-size:10px;fill:var(--ink-dim);font-family:var(--sans);}
-  .legend{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:11px;}
+  /* ⚠ v0.57: THE ROW GAP CARRIES THE HIT AREAS. Once the fuel keys got their 26px targets the
+     audit still failed them as "partially obscured": a 5px row gap puts two 26px boxes 21px
+     apart, so on a wrapped legend each row's targets overlapped the row above. A target you
+     cannot land on cleanly is not 26px however it measures. 12px separates them, and the legend
+     reads no worse for a little air between its rows. */
+  .legend{display:flex;flex-wrap:wrap;gap:12px 15px;margin-top:11px;}
   /* ⚠ v0.44: `.legend-key` IS IN THIS SELECTOR NOW, and the bug it fixes had been shipping
      since the keys became buttons. A <button> does not inherit the page's font, so it carries
      `font:inherit` — which inherits from its PARENT, the 16px panel body, not from the 11.5px
@@ -2179,6 +2268,24 @@
   .legend i.night{background:var(--night);border:1px solid var(--grey-line);}
   .legend i.early{background:none;border-top:2px dotted var(--ink-mute);height:0;border-radius:0;
                   width:16px;}
+  /* ⚠ v0.56: THE MARKER GETS A KEY, because a reader asked what it was — and was right to.
+     The carbon chart draws ONE conspicuous object, a filled disc on the current half hour, and
+     the legend beside it named the line and the forecast and not the disc. Worse, the disc is
+     the only mark on the page whose COLOUR carries a value: it takes the intensity band, so it
+     is green on a clean afternoon and yellow at 102 gCO₂/kWh, which reads as a warning to
+     anyone who has not been told it is a scale. A mark whose colour means something, standing
+     in a legend that does not mention it, is a question the panel forces and refuses to answer.
+     Round, not square, so the key is the SHAPE on the chart rather than just its colour — the
+     two square swatches above it are a line and a dash, and a third square would say the marker
+     is a third line. */
+  .legend i.dot{border-radius:50%;width:9px;height:9px;
+                box-shadow:0 0 0 1.5px var(--surface),0 0 0 2.5px var(--grey-line);}
+  /* ⚠ AND THE CAPTION BESIDE IT IS INLINE, NOT A SECOND FLEX BOX. `.legend span` is an
+     inline-flex with a 6px gap, and it matches a nested span as readily as a top-level one — so
+     wrapping the words to keep `<b>152</b>` out of the outer flex simply made it a flex item of
+     the INNER one, and the gap opened around the figure exactly as before. A wrapper added to
+     escape a rule has to actually escape it. */
+  .legend .ln{display:inline;}
   /* Onshore/offshore split. Two segments of one metered total, so one strip on one scale -
      the same shape the interconnector net uses, for the same reason. */
   .splitwrap{margin-top:12px;padding-top:11px;border-top:1px solid var(--grey-line);}
@@ -2367,53 +2474,160 @@
     overflow:hidden;vertical-align:-1px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.22);}
   .cflag svg{display:block;width:100%;height:100%;}
   .icname .noflag{display:inline-block;width:18px;flex:0 0 18px;}
-  #icrows{display:grid;grid-template-columns:max-content minmax(70px,1fr) 78px;
-    column-gap:10px;row-gap:9px;align-items:center;}
-  /* ⚠ Placed AFTER the base rule on purpose. A container query participates in the normal
-     cascade, so this same block sitting above `#icrows` was overridden by it — equal
-     specificity, later wins — and the two columns silently never appeared. */
-  /* TWO COLUMNS WHEN THERE IS ROOM FOR TWO (v0.26).
-     In Detailed this panel is half the page and one column is right. In Simplified its partner
-     is hidden and it runs full width, where ten rows of name-plus-bar left a third of the panel
-     empty and the bars themselves stretched to a length that made small flows unreadable.
-     Driven by a CONTAINER QUERY on the panel's own body rather than by the view mode: the panel
-     should lay itself out according to how wide it actually is, and a rule keyed to the mode
-     would be wrong the moment the panel is expanded or the window is narrowed. It is also why
-     this is not a difference between the modes — it is the same rule answering a different width.
-     The rows are display:contents, so doubling the column template is all it takes.
+  /* ================================================================================
+     THE LINK TABLE  (v0.56, to the author's mock-up)
 
-     v0.27: THE ORDER FILLS DOWN EACH COLUMN, NOT ACROSS BOTH.
-     It filled left to right, which put the largest flow top-left and the second largest
-     top-right — so the ranking zig-zagged, and reading the list in order meant crossing the
-     gutter ten times. A newspaper does not set a column that way and neither should this. The
-     column-major order is applied by giving each row an explicit `grid-row`, computed in
-     `renderIC` from the row count: rows 1..ceil(n/2) take columns 1–3 and the rest take 4–6,
-     each on its own line. It is done in script rather than with :nth-child rules because the
-     number of links is whatever the feed returns, and a stylesheet that hard-codes five per
-     column is wrong the day a link is added or missing. */
+     ⚠ IT IS ONE COLUMN AGAIN, AND THAT UNDOES v0.26/v0.27 DELIBERATELY.
+     Those two releases split the ten links into two columns filling downward, because ten rows
+     of name-plus-bar left a third of a full-width panel empty. The mock answers the same
+     complaint differently and better: it spends the width on the ROW instead — a two-line name
+     with its route and code, a wider bar, and the MW figure and the capacity share as two
+     separate columns. A reader now gets more per row rather than more rows per screen, and the
+     ranking reads straight down without crossing a gutter. The column-major placement, the
+     `--r/--c1..c3` custom properties, the `.col2` gutter and the container query that switched
+     between them are all gone with it: one layout, one code path.
+
+     FOUR TRACKS: name · bar · flow · capacity share. The mock heads three of them — LINK,
+     FLOW (MW) centred over the bar, % CAPACITY — and leaves the MW figure unheaded because it
+     is the same quantity as the bar beside it. The unit in that header is written by the
+     renderer, not the markup, because this page has an MW/GW switch and a header that said MW
+     under GW figures would be the only wrong label on the panel.
+     ================================================================================ */
+  #icrows{display:grid;
+    grid-template-columns:minmax(0,max-content) minmax(80px,1fr) 62px 48px;
+    column-gap:14px;row-gap:10px;align-items:center;
+    /* The table is a second object below the headline block, so it is separated the way the
+       headline block is separated from the panel head: a rule and room. Without it the LINK
+       heading sat directly under "Left = Imports into GB" and read as a third caption on the
+       diverging bar rather than as the head of a new list. */
+    margin-top:15px;padding-top:14px;border-top:1px solid var(--grey-line);}
   #ic-body{container-type:inline-size;}
-  @container (min-width:720px){
-    #icrows{grid-template-columns:max-content minmax(70px,1fr) 78px
-                                  max-content minmax(70px,1fr) 78px;
-            column-gap:11px;}
-    /* The placement the script wrote. Outside this query the custom properties are ignored and
-       the rows flow normally down one column, which is exactly what a narrow panel wants — so
-       there is no second code path to keep in step, and no cleanup when the panel narrows. */
-    #icrows .icrow > *{grid-row:var(--r);}
-    #icrows .icrow > *:nth-child(1){grid-column:var(--c1);}
-    #icrows .icrow > *:nth-child(2){grid-column:var(--c2);}
-    #icrows .icrow > *:nth-child(3){grid-column:var(--c3);}
-    /* A visible gutter between the two halves, so the fourth column reads as a new row's name
-       and not as another figure belonging to the third.
-       v0.27: keyed to a class the renderer sets, not to :nth-child(even). With the rows filling
-       down each column the second half is no longer the even ones — under column-major order an
-       :nth-child rule would draw the gutter on alternating rows in BOTH columns. The rule and
-       the placement have to come from the same decision, so they come from the same line of
-       script. */
-    #icrows .icrow > *:nth-child(1){padding-left:0;}
-    #icrows .icrow.col2 > *:nth-child(1){padding-left:16px;
-      border-left:1px solid var(--grey-line);margin-left:5px;}
+  /* Below this the four tracks stop fitting: the name loses its `max-content` claim and the two
+     numeric columns tighten. The bar keeps a floor rather than being allowed to vanish — a bar
+     column narrower than about 60px cannot show the difference between 400 MW and 40. */
+  @container (max-width:520px){
+    #icrows{grid-template-columns:minmax(0,1.2fr) minmax(60px,1fr) 54px 40px;
+      column-gap:9px;row-gap:9px;}
+    /* ⚠ THE NAME MUST BE ALLOWED TO WRAP AS SOON AS ITS TRACK STOPS BEING max-content.
+       Above this width the track is sized to the longest name, so `white-space:nowrap` costs
+       nothing. Below it the track is a fraction — and nowrap content cannot shrink, so
+       "Northern Ireland → Scotland · INTIRL" ran 39px past the panel at 430px wide. The rule
+       that lets the column give way and the rule that lets its contents give way have to arrive
+       together; they were 1,700 lines apart, and only the second one was keyed to 370px. */
+    /* ⚠ ID-SCOPED, AND THAT IS NOT A STYLE CHOICE. `.icname{white-space:nowrap}` is declared
+       1,700 lines further down this sheet, and a container query participates in the normal
+       cascade like anything else — equal specificity, later wins — so the bare `.icname` form of
+       this rule lost to it silently and the names went on overflowing by 39px at 430. This file
+       already records the identical trap from v0.26, where the two-column container query sat
+       above the rule it was meant to override and never appeared. Specificity rather than
+       ordering, so it cannot come apart again when a rule moves. */
+    #icrows .icname{white-space:normal;}
+    #icrows .icname .icn-t{overflow-wrap:anywhere;}
+    /* ⚠ AND THE FLOW HEADING SPANS THE BAR AND THE FIGURE. At 320 the bar track is 38px and the
+       heading is a word, a bracketed unit and a sort arrow — its min-content is wider than the
+       column whatever it is allowed to wrap to. It heads both of those tracks in meaning
+       anyway: they are the same quantity drawn twice. */
+    .ichead .h-flow{grid-column:2 / 4;}
+    .ichead .h-cap{grid-column:4 / -1;}
   }
+  /* ---- the header row ----
+     `display:contents` for the same reason the link rows use it: the cells are grid items of
+     `#icrows`, so a header cell and the column it heads are laid out by ONE track definition
+     and cannot drift apart. A separate header grid above the rows is the classic way to get a
+     table whose headings no longer line up with anything. */
+  .ichead{display:contents;}
+  .ichead > *{font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--ink-mute);align-self:end;}
+  .ichead .h-flow{text-align:center;}
+  /* ⚠ THE CAPACITY HEADING SPANS THE LAST TWO TRACKS. Its column is 48px — the width of "63%" —
+     and "% CAPACITY ⇅" is more than twice that, so confined to its own track it wrapped onto
+     two lines and pushed the row 10px past the panel edge. The heading may be wider than the
+     figures it heads; what it may not do is make the column wider than the figures need. The
+     track to its left has no heading of its own, so spanning into it costs nothing. */
+  .ichead .h-cap{grid-column:3 / -1;text-align:right;}
+  /* ⚠ AND THE RULE UNDER THE HEADINGS IS ONE ELEMENT, NOT FOUR BORDERS. A border-bottom on each
+     heading cell leaves the column gaps unpainted, so the rule arrives as three dashes with two
+     holes in it — the same defect the zero line had before it was allowed to run through the
+     row gaps, five rules down. */
+  .icheadrule{grid-column:1 / -1;height:0;border-bottom:1px solid var(--grey-line);}
+  /* Sortable headings are buttons, and they are the size of a control rather than the size of
+     their words — WCAG 2.5.8 asks for 24px and a 12px-tall word inside a table header is the
+     easiest place on a page to forget it. The padding is negative-margined back out so the
+     header row is not visibly taller than the mock's. */
+  /* ⚠ THE PADDING IS VERTICAL ONLY, AND THE NEGATIVE MARGIN WITH IT. Written as `padding:6px 3px;
+     margin:-6px -3px` first, which is the usual way to buy tap-target height without moving the
+     text — and the 3px of negative RIGHT margin on the last heading put it 3px outside the grid
+     at every width the harness measures. A negative margin used to cancel padding cancels the
+     layout too, at whichever edge the element happens to sit against. Vertical padding buys the
+     height; the width is the label's own, which is comfortably past 24px for all three. */
+  button.icsort{font:inherit;font-size:9.5px;font-weight:700;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--ink-mute);background:none;border:none;cursor:pointer;
+    padding:6px 0;margin:-6px 0;display:inline-flex;align-items:center;gap:4px;
+    min-height:24px;max-width:100%;-webkit-tap-highlight-color:transparent;}
+  button.icsort:hover{color:var(--ink);}
+  button.icsort:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;border-radius:3px;}
+  .ichead .h-cap button.icsort{margin-left:auto;}
+  .ichead .h-flow button.icsort{margin-left:auto;margin-right:auto;}
+  /* The indicator says which state the column is in, not merely that it is clickable: the
+     inactive columns carry ⇅, the active one carries the direction it is actually sorted in.
+     ⚠ THIS IS THE ONE PLACE THE BUILD DEVIATES FROM THE MOCK, and it is deliberate. The mock
+     marks LINK and % CAPACITY with ⇅ and leaves FLOW bare — which is right, because FLOW is the
+     active sort. Making FLOW bare and unclickable would leave a reader who sorted by name with
+     no way back to the default order. So FLOW is sortable too, and shows an arrow rather than
+     ⇅ precisely because it is the active one. */
+  .icsort .sarr{font-size:9px;opacity:.55;line-height:1;}
+  button.icsort[data-sort="descending"],
+  button.icsort[data-sort="ascending"]{color:var(--ink);}
+  button.icsort[data-sort="descending"] .sarr,
+  button.icsort[data-sort="ascending"]  .sarr{opacity:1;color:var(--blue-text);}
+  /* ---- the import/export divider ----
+     A full-width dotted rule where the sign changes. It is drawn ONLY under the flow sort,
+     because under an alphabetical or a utilisation sort the two groups are interleaved and a
+     line between rows 6 and 7 would be claiming a boundary that is not there. */
+  .icsplit{grid-column:1 / -1;height:0;border-top:1px dotted var(--grey-line);}
+  /* ================================================================================
+     THE EXPANDED PANEL PUTS THE CHART BESIDE THE TABLE  (v0.56)
+
+     ⚠ THE SINGLE-COLUMN TABLE COST THE EXPANDED VIEW ITS ONE-PAGE PROPERTY, and this is what
+     buys it back. Ten links in one column are ~220px taller than the two columns of five they
+     replaced; stacked under a chart that has a 200px floor, the expanded panel overflowed a
+     1280×800 window by 232px even after the chart shrank as far as it is allowed to. The rule
+     since v0.318 is that expanding a panel shows all of it.
+     Two columns of ROWS is not the answer — that is the layout this release deliberately
+     removed, and re-introducing it only when expanded would mean the ranking reads down two
+     columns in one view and down one in the other. Two columns of CONTENT is: the expanded panel
+     is the full width of the window and the table only ever wants half of it, so the chart moves
+     into the space the table was already leaving empty. The reader gets both at once, which is
+     the point of expanding.
+     Placement is explicit — every child names its column and its row — because auto-placement
+     would fill the second column with whichever element happened to come next and rearrange
+     itself the day one is added. `chartGeom` now measures only the siblings that share the
+     chart's column, so the chart claims the height this layout actually leaves it.
+     ================================================================================ */
+  @media (min-width:1000px){
+    .panel.is-expanded > #ic-body{display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+      column-gap:28px;align-items:start;align-content:start;}
+    .panel.is-expanded > #ic-body > #icnet{grid-column:1 / -1;grid-row:1;}
+    /* ⚠ THE TABLE SPANS EVERY ROW THE RIGHT-HAND COLUMN USES. Placed in row 2 alone, the
+       legend, footer, summary and table-view button sat in rows 3 to 6 — which are rows of the
+       whole grid, so each one added its height BELOW the table even though column 1 is empty
+       there. The panel came out 190px taller than its tallest column. Spanning the table across
+       the same five rows makes the two columns two stacks whose heights are compared rather than
+       added, which is what a two-column layout is for. */
+    .panel.is-expanded > #ic-body > #icrows{grid-column:1;grid-row:2 / span 5;}
+    .panel.is-expanded > #ic-body > #icnetbox{grid-column:2;grid-row:2;margin-top:15px;}
+    .panel.is-expanded > #ic-body > .legend{grid-column:2;grid-row:3;}
+    .panel.is-expanded > #ic-body > .icfoot{grid-column:2;grid-row:4;}
+    .panel.is-expanded > #ic-body > #ic-summary{grid-column:2;grid-row:5;}
+    .panel.is-expanded > #ic-body > .ictablewrap{grid-column:2;grid-row:6;}
+    .panel.is-expanded > #ic-body > #ictable{grid-column:1 / -1;grid-row:7;}
+  }
+  /* The footer caption. Centred and quiet, because it is the panel's small print — a statement
+     that is true on every render and that a returning reader should be able to stop seeing. */
+  .icfoot{margin:9px 0 0;text-align:center;font-size:10.5px;line-height:1.5;
+    color:var(--ink-mute);}
+  .icfoot span{margin:0 7px;opacity:.7;}
   .icrow{display:contents;}
   /* The net row is a total, so it is separated the way a total is: a rule above it, heavier
      type, and the same three columns so its bar shares the ten links' zero line and scale.
@@ -2427,21 +2641,99 @@
      So it sits below a rule, as its own object, on its own stated denominator: gross flow.
      Import and export are drawn as two segments of one gross-flow strip, which means the NET
      IS THE VISIBLE ASYMMETRY between them rather than a bar whose length has to be trusted. */
-  .icnet{margin-top:13px;padding-top:11px;border-top:1px solid var(--ink-mute);}
-  .icnet-head{display:flex;align-items:baseline;gap:9px;}
-  .icnet-label{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-               color:var(--ink-dim);}
-  .icnet-val{margin-left:auto;font-size:17px;font-weight:700;letter-spacing:-.01em;
+  /* ⚠ v0.57: NO RULE ABOVE THE SUMMARY. It was there when the summary sat at the FOOT of the
+     panel, below the ten link rows, where a total needs separating from the things it totals.
+     v0.56 moved the summary to the top and carried the border with it — where it separates the
+     headline from the panel's own header, which is not two objects but one. The panel head
+     already ends in a rule; a second hairline eleven pixels under it made the summary read as a
+     third band rather than as the panel's answer.
+     The rule that still earns its place is the one under the link table's headings, and the one
+     above `#icrows` separating the table from the summary — those divide things that ARE
+     different objects. */
+  .icnet{margin-top:4px;}
+  /* ============================================================================
+     THE NET-POSITION SUMMARY  (v0.56, to the author's mock-up)
+     Three across — imports, net, exports — with net lifted out of the row by a card, then a
+     diverging bar on one scale with zero in the middle. The hierarchy is stated in type size:
+     the net figure at 30px, the two totals at 20px, their link counts at 9.5px.
+     ⚠ THE BAR IS DIVERGING, NOT ADDITIVE, and that distinction is the whole reason it is allowed
+     back. The strip this replaces laid imports and exports end to end, so its length was gross
+     flow under a figure that is net position. Here each side is drawn from a shared centre on a
+     shared scale, so the net position is the visible asymmetry about the zero line — which is
+     the claim the headline above it actually makes.
+     ⚠ EACH HALF IS SCALED TO max(imports, exports), NOT to gross. Scaling to gross would make a
+     day of 4,000 in and 200 out look like a nearly-full left bar and an invisible right one, and
+     a reader could not tell that from a day of 400 and 20. Against the larger of the two, the
+     dominant side always reaches the end and the other is read as a fraction of it — which is
+     the comparison the picture is for.
+     ============================================================================ */
+  .icnet-trio{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+    align-items:center;
+    gap:0 14px;
+  }
+  .icnet-term{display:flex;flex-direction:column;gap:2px;min-width:0;}
+  /* ⚠ v0.56: EXPORTS SIT LEFT AND IMPORTS SIT RIGHT, WHICH IS THE OPPOSITE OF THE MOCK.
+     Reported by the author, and it is the same fault the diverging bar was deleted for, one
+     level up. Every bar in the link table below extends RIGHT of the axis for an import and LEFT
+     for an export — the number line, and what the legend's (+) and (−) mean. The trio put
+     imports on the left, so the panel made two opposite spatial claims about the same two
+     directions twelve pixels apart. Removing the bar removed one instance of that; it did not
+     remove the cause.
+     The one argument for the old order is reading order — GB imports far more than it exports,
+     so the bigger figure came first. It is weak here: the answer is the net card and the net
+     card is in the middle either way. Agreement with the axis is worth more than a reading-order
+     preference, because a reader who mis-reads the axis mis-reads all ten rows.
+     So `.in` is now the right-hand term and takes the right alignment. */
+  .icnet-term.in{text-align:right;align-items:flex-end;}
+  .icnet-term .t-k,
+  .icnet-card .t-k{font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+  .icnet-term.in  .t-k{color:var(--flow-in);}
+  .icnet-term.out .t-k{color:var(--flow-out-ink);}
+  .icnet-card .t-k{color:var(--ink-dim);}
+  .icnet-term .t-v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;
+                   letter-spacing:-.015em;white-space:nowrap;line-height:1.1;}
+  .icnet-term .t-v .unit{font-size:11px;font-weight:700;color:var(--ink-dim);}
+  .icnet-term .t-n{font-size:9.5px;color:var(--ink-mute);font-variant-numeric:tabular-nums;}
+  .icnet-term.in  .t-v{color:var(--flow-in);}
+  .icnet-term.out .t-v{color:var(--flow-out-ink);}
+  /* The card is what lifts the answer out of the row. A tint and a hairline, not a fill: this is
+     still a panel, and the loudest thing in it should be the figure rather than its container. */
+  .icnet-card{
+    display:flex;flex-direction:column;align-items:center;gap:1px;
+    padding:9px 18px;border:1px solid var(--blue-line);border-radius:9px;
+    background:var(--accent-tint);text-align:center;
+  }
+  .icnet-val{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.05;
              font-variant-numeric:tabular-nums;}
-  .icnet-dir{font-size:9.5px;font-weight:700;letter-spacing:.06em;margin-left:5px;}
-  .grossstrip{display:flex;height:16px;border-radius:4px;overflow:hidden;margin-top:8px;gap:2px;
-              background:var(--grey-bg);}
-  .grossstrip i{display:block;height:100%;cursor:default;transition:filter .12s ease;}
-  .grossstrip:hover i{filter:brightness(1.1) saturate(1.05);}
-  .grossstrip i.in{background:var(--flow-in);}
-  .grossstrip i.out{background:var(--flow-out);}
-  .icnet-foot{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-mute);
-              margin-top:5px;gap:10px;}
+  .icnet-val .unit{font-size:13px;font-weight:700;color:var(--ink-dim);letter-spacing:0;}
+  .icnet-dir{font-size:10px;font-weight:700;letter-spacing:.07em;}
+  .icnet-card.in-c  .icnet-val,.icnet-card.in-c  .icnet-dir{color:var(--flow-in);}
+  .icnet-card.out-c .icnet-val,.icnet-card.out-c .icnet-dir{color:var(--flow-out-ink);}
+  .icnet-card.idle-c .icnet-val,.icnet-card.idle-c .icnet-dir{color:var(--ink-dim);}
+
+  /* ⚠ THE DIVERGING BAR'S RULES ARE DELETED, NOT COMMENTED OUT. `.icdiv`, `.icdiv-top`,
+     `.icdiv-l/-r/-zero`, `.icdiv-track`, `.icdiv-in/-out/-mid` and `.icdiv-foot` are gone with
+     the element they styled — see the renderer's note for why the bar went. Dead rules for an
+     element nothing emits are the cheapest thing in a stylesheet to leave behind and the most
+     expensive to read later: they say a feature exists. The one idea worth keeping from it is
+     already elsewhere in this file — a fill growing from a centred zero line is what every
+     `.icbar` in the link table does, on the axis the whole panel shares. */
+
+  /* ⚠ On a narrow column the trio stacks and the card leads, because the answer should not be
+     the middle of three things a reader scrolls past. */
+  @media (max-width:560px){
+    .icnet-trio{grid-template-columns:minmax(0,1fr);gap:10px 0;}
+    .icnet-card{order:-1;}
+    /* ⚠ AND THE STACK LEADS WITH IMPORTS AGAIN, DELIBERATELY. Left-and-right is an axis and has
+       to agree with the bars; above-and-below is not — a vertical list is reading order, and the
+       reading order that serves a GB reader puts the larger term first. So the horizontal
+       arrangement answers the axis and the stacked one answers the reader, and neither is a
+       compromise of the other. */
+    .icnet-term.in{order:0;text-align:left;align-items:flex-start;}
+    .icnet-term.out{order:1;text-align:left;align-items:flex-start;}
+  }
   .icname{font-size:12px;font-weight:700;color:var(--ink);white-space:nowrap;}
   button.ic-open{font:inherit;color:var(--blue-text);background:none;border:none;padding:0;cursor:pointer;
     text-align:left;border-bottom:1px dotted var(--blue-text);-webkit-tap-highlight-color:transparent;}
@@ -2503,12 +2795,31 @@
   /* The sub-line reads "Netherlands · INTNED". Only the second half is a machine identifier,
      so only the second half is mono — v0.17 set the whole line, country name included. */
   .icname .code{font-size:10px;color:var(--ink-mute);font-weight:400;display:block;}
-  /* After .code, so the flex row wins: .code sets display:block and is declared later in the
-     sheet, which is why the flag and the country name were touching. */
-  .icname .code.icwho{display:flex;align-items:center;gap:7px;}
+  /* ⚠ v0.56: THE FLAG SITS BESIDE THE WHOLE NAME, NOT INSIDE THE SUB-LINE.
+     It used to live in the sub-line's flex row, level with the country word — which put the one
+     graphic element on the row on its SECOND line, below the name it identifies. The mock has
+     it left of both lines and vertically centred against them, which is where a reader looks
+     for it: the flag is the row's mark, and a mark belongs at the row's edge.
+     The two lines are a block of their own so the flag can centre against their combined
+     height, and `min-width:0` on it because a nowrap name inside a `minmax(0,max-content)`
+     track will otherwise refuse to give the bar its width back at 320. */
+  .icname{display:flex;align-items:center;gap:9px;}
+  .icname .icn-t{min-width:0;}
+  .icname .code.icwho{display:block;}
   .icname .code .ds{font-size:9.5px;}
-  .icbar{position:relative;height:15px;}
-  .icbar .zero{position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--flow-zero);
+  /* ⚠ THE BAR TRACK IS CAPPED AND CENTRED IN ITS COLUMN. Left as a bare `1fr` it swallowed
+     every pixel the name column did not want, which on a wide panel pushed the MW figure most
+     of a screen away from the bar it belongs to — the mock spends that slack as white space
+     between the name and the bar instead, and reads better for it. Capped in px rather than as
+     a percentage so the panel looks the same at 1000px and at 1900px; below the cap the bar
+     simply fills what it is given. All ten bars share one width, so their zero lines stay on
+     one axis, which is the property the whole column depends on. */
+  .icbar{position:relative;height:15px;max-width:420px;margin-inline:auto;width:100%;}
+  /* ⚠ v0.56: THE ZERO LINE RUNS THROUGH THE ROW GAPS. Ten separate one-row segments with a
+     10px gap between each is a dashed line, not an axis — and this axis is the only thing that
+     says which side of nothing a bar is on. The overhang is half the row gap at each end, so
+     the segments meet. */
+  .icbar .zero{position:absolute;left:50%;top:-5px;bottom:-5px;width:1px;background:var(--flow-zero);
     z-index:2;}
   /* ================= CAPACITY TRACK (v0.27) =================
      The bars answered "how much is flowing"; they could not answer "how much COULD flow", which
@@ -2531,10 +2842,20 @@
   .icbar i{position:absolute;top:0;bottom:0;display:block;z-index:1;}
   .icbar i.in{border-radius:0 4px 4px 0;background:var(--flow-in);}
   .icbar i.out{border-radius:4px 0 0 4px;background:var(--flow-out);}
-  .icval{font-size:12px;font-weight:700;text-align:right;
-    font-variant-numeric:tabular-nums;}
-  .icval .dir{font-size:9px;font-weight:700;letter-spacing:.05em;display:block;text-transform:uppercase;}
-  .in-c{color:var(--flow-in);} .out-c{color:var(--flow-out);} .idle-c{color:var(--ink-mute);}
+  /* ⚠ v0.56: THE VALUE CELL IS A NUMBER AND NOTHING ELSE.
+     It carried three things — "+1,268 MW", the word "import", and "63% of capacity" — stacked
+     in one cell. The mock takes all three apart: the unit moves to the column heading (one
+     statement instead of ten), the direction is already said by the sign and the colour and by
+     the side of the axis the bar is on, and the capacity share becomes its own column, which is
+     the only way it can be scanned down or sorted on. What is left is the figure. */
+  .icval{font-size:12.5px;font-weight:700;text-align:right;
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+  /* The capacity share is deliberately NOT in the flow colours. It is a property of the cable,
+     not of the direction it happens to be running, and colouring it would make 82% on a small
+     export read as a warning about the export. */
+  .iccap{font-size:11.5px;font-weight:600;text-align:right;color:var(--ink-dim);
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .in-c{color:var(--flow-in);} .out-c{color:var(--flow-out-ink);} .idle-c{color:var(--ink-mute);}
 
   /* ================= Table view ================= */
   .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
@@ -2938,12 +3259,19 @@
     .mixname .code{font-size:8.5px;}
     .mixmw{font-size:11px;}
     .mixpc{font-size:10px;}
-    #icrows{grid-template-columns:max-content minmax(50px,1fr) 66px;column-gap:8px;}
+    /* v0.56: four tracks now — the extra one is the capacity share the mock split out of the
+       value cell. The container query in the base block handles the layout; this step is the
+       type scale only. */
     .icname{font-size:11.5px;}
     .icname .code{font-size:8.5px;}
-    .icval{font-size:10.5px;}
+    .icval{font-size:11px;}
+    .iccap{font-size:10px;}
     .compstrip{height:20px;}
-    .legend{gap:4px 12px;}
+    /* ⚠ v0.57: THE ROW GAP CANNOT DROP BELOW THE HIT AREA IT HAS TO CLEAR. This narrow step set
+       4px, which puts two 26px fuel-key targets 8px into each other on a wrapped legend — the
+       audit calls that partially obscured and it is right. The column gap tightens as it always
+       did; the row gap is now a floor set by the control, not by the width. */
+    .legend{gap:16px 12px;}
     .legend span,.legend .legend-key{font-size:11px;}
     .tip{min-width:150px;font-size:11px;}
   }
@@ -3083,7 +3411,7 @@
     .mixpc{font-size:9.5px;}
     #embrows{grid-template-columns:11px minmax(82px,max-content) minmax(40px,1fr) 54px 38px;
       column-gap:6px;}
-    .legend{gap:4px 9px;}
+    .legend{gap:16px 9px;}
     .legend span{font-size:10px;}
   }
 
@@ -3914,6 +4242,26 @@
   .ins-meta .st-fc{ color:var(--solar-line); font-weight:700; }
   .ins-meta .st-calc{ color:var(--ink-dim); font-weight:700; }
 
+
+  /* ============================================================================
+     THE TWO-COLUMN THRESHOLD IS WHERE THE CONTENT ACTUALLY FITS  (v0.55)
+     `.g-2a` went two-column at 1081px. The Wind panel's title — "WIND — OUTTURN VS FORECAST" —
+     wrapped to two lines from 1081 all the way to 1219, leaving its header 13px taller than its
+     neighbour's for a 140px band of widths. Measured, not estimated: it stops wrapping at 1220.
+
+     ⚠ THE BREAKPOINT WAS THE DEFECT, NOT THE TITLE. That number was chosen before this panel
+     carried FOUR controls (a 78px range switch, a 78px Wind/Solar switch, a 102px CSV button and
+     a 44px expand), which take 317px out of a 540px column and leave the title 214px of a string
+     that needs 250. The alternatives were shortening a title that had just been standardised, or
+     shaving its tracking to satisfy a threshold — and §"the panel header" already records that
+     tuning the page's primary visual device to satisfy a measurement is the wrong way round.
+     A two-column layout that does not fit its content is not a two-column layout; it is a squeeze.
+     The cost is accepted knowingly: between 1081 and 1219 these two panels stack instead of
+     sitting side by side, which is a taller page in that band and a correct one. */
+  @media (max-width:1219px){
+    .g-2a{grid-template-columns:minmax(0,1fr);}
+  }
+
   /* ============================================================================
      THE AGE MARK DROPS BELOW THE FIGURE WHEN THE ROW IS TIGHT  (v0.52)
      ⚠ THIS IS A DEFECT THIS RELEASE INTRODUCED, FOUND BY MEASURING RATHER THAN BY LOOKING.
@@ -3984,17 +4332,20 @@
        timestamp are worth two lines, and half of either is worth nothing. */
     .mixname .code{white-space:normal;}
     /* ⚠ THE INTERCONNECTOR NAME COLUMN IS SIZED TO ITS LONGEST STRING, WHICH IS 180px.
-       `#icrows` is `max-content minmax(70px,1fr) 78px`, and a `max-content` track does not
-       shrink — so at 320 the three tracks and their gaps ask for 312px of a 298px body and the
-       rows run 34px past the panel. `minmax(0, max-content)` keeps the same preferred width and
-       lets it give way when there is not room, which is what the bare keyword cannot do.
+       A bare `max-content` track does not shrink — so at 320 the tracks and their gaps asked
+       for 312px of a 298px body and the rows ran 34px past the panel. `minmax(0, max-content)`
+       keeps the same preferred width and lets it give way when there is not room, which is what
+       the bare keyword cannot do. It is written that way in the base rule now, so this block
+       only has to buy the last few pixels.
        ⚠ AND THE NAMES HAVE TO BE ALLOWED TO WRAP, or shrinking the track just moves the clip
-       inside it. "Northern Ireland(Moyle)" over two lines at 320 is legible; half of it is not.
+       inside it. "Northern Ireland → Scotland" over two lines at 320 is legible; half of it is
+       not.
        ⚠ THIS ONE WAS INVISIBLE TO THE RESPONSIVE SWEEP AND FOUND BY THE HARNESS, because the
        sweep's fixtures leave this panel empty — a column sized to its content cannot overflow
        when it has no content. The lesson is on the sweep, not on the panel: a layout probe is
        only as wide as the data it renders. */
-    #icrows{grid-template-columns:minmax(0,max-content) minmax(38px,1fr) 66px;column-gap:7px;}
+    #icrows{grid-template-columns:minmax(0,max-content) minmax(38px,1fr) 50px 36px;
+      column-gap:7px;}
     .icname{white-space:normal;}
   }
 </style>
@@ -4094,7 +4445,18 @@
 </div><!-- /.wrap -->
   <!-- The page itself. Named, because there are two `body > .wrap` elements — this one and the
        short one above the sticky strip — and rules meant for the content must not land on both. -->
-  <div class="wrap" id="main">
+  <!-- ⚠ v0.57: A LANDMARK AND A LEVEL-ONE HEADING, both from a PageSpeed accessibility audit.
+       This was a `<div class="wrap" id="main">`, so the document had no `main` landmark at all
+       and an assistive-technology user had no way to skip the masthead to the content — axe
+       reported 71 separate blocks of page content sitting outside any landmark. `<main>` carries
+       the same id and class, so every selector keyed to `#main` or `.wrap` is untouched.
+       ⚠ AND THE PAGE HAD NO `<h1>`. The wordmark reads as one but it lives inside the
+       brand-reset BUTTON, where a heading cannot go — a button's accessible name would swallow
+       it. So the heading is stated once, for screen readers and for search, at the top of the
+       content it names. It is not a duplicate of the wordmark: the wordmark is a control, this
+       is the document's title. -->
+  <main class="wrap" id="main">
+  <h1 class="sr-only">GB Electricity — real-time insight into Great Britain’s electricity system</h1>
 
   <div id="healthbar" style="display:none;margin-top:16px;" class="callout flag" role="status"></div>
   <div id="errbar" style="display:none;margin-top:16px;" class="callout flag" role="status"></div>
@@ -4380,13 +4742,13 @@
     <div class="insight-grid">
       <div class="insight-item fuel-generation" id="si-generation-card" tabindex="0"
         role="button" aria-expanded="false" aria-describedby="infopop" data-insight="generation">
-<img class="insight-icon" src="gb-generation.png" width="85" height="125" alt="" aria-hidden="true" decoding="async" draggable="false">
+<img class="insight-icon" src="data:image/png;base64,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" width="85" height="125" alt="" aria-hidden="true" decoding="async" draggable="false">
         <div class="k">GB generation</div><div class="v" id="si-generation">—</div>
         <div class="p" id="si-generation-pct"></div>
       </div>
       <div class="insight-item fuel-wind" id="si-wind-card" tabindex="0"
         role="button" aria-expanded="false" aria-describedby="infopop" data-insight="wind">
-<img class="insight-icon" src="wind.png" width="90" height="125" alt="" aria-hidden="true" decoding="async" draggable="false">
+<img class="insight-icon" src="data:image/png;base64,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" width="90" height="125" alt="" aria-hidden="true" decoding="async" draggable="false">
         <div class="k">Wind</div><div class="v" id="si-wind">—</div>
         <div class="p" id="si-wind-pct"></div>
       </div>
@@ -4411,13 +4773,13 @@
            made knowingly.
            The mark it replaces was a bare parallelogram with two loose diagonals, which at glance
            size read as an abstract shape rather than as anything photovoltaic. -->
-<img class="insight-icon" src="solar.png" width="100" height="125" alt="" aria-hidden="true" decoding="async" draggable="false">
+<img class="insight-icon" src="data:image/png;base64,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" width="100" height="125" alt="" aria-hidden="true" decoding="async" draggable="false">
         <div class="k">Solar</div><div class="v" id="si-solar">—</div>
         <div class="p" id="si-solar-pct"></div>
       </div>
       <div class="insight-item fuel-imports" id="si-imports-card" tabindex="0"
         role="button" aria-expanded="false" aria-describedby="infopop" data-insight="imports">
-<img class="insight-icon" src="net-imports.png" width="100" height="95" alt="" aria-hidden="true" decoding="async" draggable="false">
+<img class="insight-icon" src="data:image/png;base64,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" width="100" height="95" alt="" aria-hidden="true" decoding="async" draggable="false">
         <div class="k">Net imports</div><div class="v" id="si-imports">—</div>
         <div class="p" id="si-imports-pct"></div>
       </div>
@@ -4454,7 +4816,7 @@
             <div class="compstrip" id="compstrip" role="img" aria-label="Generation mix composition"></div>
           </div>
           <div id="mixrows"></div>
-          <div class="tip" id="comptip" role="tooltip"></div>
+          <div class="tip" id="comptip" role="tooltip" aria-label="Fuel mix composition detail"></div>
         </div>
         <div class="notewrap xcheck" id="solar-xcheck"></div>
         <div style="margin-top:13px;">
@@ -4526,8 +4888,13 @@
         </div>
       </div>
       <div class="panel-body" id="ic-body">
-        <div id="icrows"></div>
+        <!-- ⚠ v0.56: THE SUMMARY LEADS. It was below the ten link rows, which inverted the
+             hierarchy the author asked for — net position most prominent, then the two totals,
+             then the individual links. v0.55 rebuilt the summary's CONTENT correctly and left it
+             where the old one had been, so the panel still opened on its detail and closed on its
+             headline. Moving it is the point of the redesign, not a refinement of it. -->
         <div class="icnet" id="icnet"></div>
+        <div id="icrows"></div>
         <!-- ⚠ v0.46: EXPANDED-ONLY. The panel had a 24h/7d switch that changed nothing a reader
              could see — it swapped the bars between "latest settlement period" and "7-day mean"
              and otherwise governed only what the CSV contained. Expanded, the panel used about a
@@ -4540,15 +4907,32 @@
         <div class="chartbox icnetbox" id="icnetbox">
           <div class="icnet-cap" id="icnetcap"></div>
           <svg class="chart" id="icnetchart" role="img" aria-labelledby="icnetchart-t"><title id="icnetchart-t"></title></svg>
-          <div class="tip" id="icnettip" role="tooltip"></div>
+          <div class="tip" id="icnettip" role="tooltip" aria-label="Net interconnector position detail"></div>
         </div>
-        <div class="tip" id="ictip" role="tooltip"></div>
+        <div class="tip" id="ictip" role="tooltip" aria-label="Interconnector link detail"></div>
         <div class="legend" style="margin-top:12px;">
           <span><i style="background:var(--flow-in)"></i>Import into GB (+)</span>
           <span><i style="background:var(--flow-out)"></i>Export from GB (−)</span>
           <span><i class="captrack-key"></i>Capacity, both directions</span>
         </div>
+        <!-- ⚠ v0.56: THE MOCK'S FOOTER LINE, and it is a DEFINITION rather than a finding —
+             which is why it sits here as a plain caption and not as another insight row. Two
+             clauses, and the panel was missing both. The first states the arithmetic the
+             headline block performs: the trio shows imports, net and exports side by side and
+             never once says that the middle one is the difference of the other two, which is
+             the single most common thing to get wrong about an interconnector panel. The
+             second says what the numbers ARE — physical energy over a settlement period, not
+             capacity held, not a trade, not an instantaneous reading. -->
+        <p class="icfoot">Net position = Imports − Exports
+          <span aria-hidden="true">•</span>
+          All flows are physical energy in the last 30 minutes.</p>
         <div class="notewrap" id="ic-summary"></div>
+        <!-- Classed rather than left anonymous: the expanded two-column layout places every
+             child of the body explicitly, and a wrapper with no name cannot be named. -->
+        <div class="ictablewrap" style="margin-top:13px;">
+          <button class="toolbtn" id="btn-ictable" aria-expanded="false" aria-controls="ictable">▤ Table view — every interconnector</button>
+        </div>
+        <div id="ictable" hidden style="margin-top:11px;"></div>
       </div>
     </div>
 
@@ -4632,6 +5016,10 @@
         <div class="legend">
           <span><i style="background:var(--mark)"></i>Settled actual</span>
           <span><i style="background:var(--ink-mute);border-radius:1px;height:3px;width:16px;"></i>Forecast</span>
+          <!-- ⚠ v0.56: filled by renderCarbon, because both its colour and its figure are live.
+               Empty until then rather than a placeholder key describing a mark that may not be
+               on the chart — `ciCurrent()` returns nothing when NESO has not published. -->
+          <span id="ci-legend-now"></span>
         </div>
         <div class="statrow">
           <div class="statcell"><div class="k">Range, 24 hours</div><div class="v" id="ci-range">—</div>
@@ -4643,7 +5031,7 @@
         </div>
         <div class="emouter" style="position:relative;">
           <div class="emwrap" id="ci-emissions"></div>
-          <div class="tip" id="emtip" role="tooltip"></div>
+          <div class="tip" id="emtip" role="tooltip" aria-label="Generation and emissions detail"></div>
         </div>
         <div class="notewrap" id="ci-summary"></div>
       </div>
@@ -4995,7 +5383,8 @@
       </p>
       <p>
         <b>GB Electricity is an independent personal project.</b> It is not affiliated with,
-        endorsed by, or an official product of Elexon Limited, EMR Settlement Ltd (EMRS), or NESO.
+        endorsed by, or an official product of Elexon Limited, EMR Settlement Ltd (EMRS), NESO, or the
+        University of Sheffield.
         It uses publicly available data and is maintained independently. No logos or trade marks
         of these organisations are used here.
       </p>
@@ -5101,7 +5490,7 @@
     </div>
   </details>
 
-</div><!-- /.wrap -->
+</main><!-- /.wrap -->
 
 <!-- v0.28: THE FOOTER CREDIT IS GONE, and the masthead's is the one that stays.
      It had been the only credit on the page since v0.14, and putting a byline in the header at
@@ -5142,14 +5531,18 @@
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" id="version-label" title="Dashboard version">v0.54</span> &middot;
+      <span class="version-label" id="version-label" title="Dashboard version">v0.57</span> &middot;
       <button type="button" id="btn-about" class="footer-link">About this Dashboard</button>
     </div>
   </div>
 </footer>
 
 
-<div id="infopop" role="tooltip" hidden></div>
+<!-- ⚠ v0.57: NAMED. It is empty until something opens it, and a `role="tooltip"` with no
+     accessible name announces nothing — flagged by an accessibility audit alongside the four
+     panel tooltips. The label describes the container, not the content: what it holds changes
+     with whichever control opened it. -->
+<div id="infopop" role="tooltip" aria-label="Explanation" hidden></div>
 
 <div class="modal-back" id="about-modal" hidden>
   <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="about-modal-title">
@@ -5193,7 +5586,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.54";
+const APP_VERSION = "v0.57";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -7212,6 +7605,28 @@ function renderSystemInsight(snap){
     changes.push({key:"demand",d:d0.initialDemandOutturn-d1.initialDemandOutturn});
   }
 
+  /* ⚠ v0.56: THE GLANCE FACTS ARE STASHED HERE, NOT RECOMPUTED IN THE TOOLTIP.
+     The four "at a glance" explainers stopped being fixed definitions this release — each now
+     opens on the reading it is explaining. The figures have to come from the render that drew
+     the card, because a tooltip that recomputed them would be a second place deciding what "GB
+     generation" excludes and what solar's denominator is, and the two would drift the first
+     time either changed. It is the same reason `S.icNet` and `S.icLatest` exist in renderIC.
+     ⚠ AND IT IS STASHED BEFORE THE EARLY RETURN BELOW. `if(!ordered.length) return` fires on a
+     cold page with fewer than three half hours of history — which is exactly when a reader is
+     most likely to open a tooltip and ask what they are looking at. */
+  const span = a => { const v = a.filter(Number.isFinite);
+                      return v.length ? {lo:Math.min(...v), hi:Math.max(...v)} : null; };
+  const delta = key => { const c = changes.find(x=>x.key===key);
+                         return c && isFinite(c.d) ? c.d : null; };
+  S.glance = {
+    genMW: domesticNow,  genSpan: span(domesticHist),
+    windMW: Math.max(0,k.wind||0), windSpan: span(windHist), windD: delta("wind"),
+    solMW, solSpan: span(solarHist), solD: delta("solar"),
+    solStale: !!(sol && sol.stale), solNight: !!(sol && sol.night),
+    solAge: sol ? sol.ageMin : null,
+    netMW, gridMW, impD: delta("imports")
+  };
+
   const labels={
     solar:["Solar"],
     demand:["Demand"],
@@ -7568,9 +7983,29 @@ function chartGeom(box, tallness){
     while(host.parentElement && host.parentElement !== body) host = host.parentElement;
     const bs = getComputedStyle(body);
     let rest = parseFloat(bs.paddingTop) + parseFloat(bs.paddingBottom);
+    /* ⚠ v0.56: ONLY SIBLINGS THAT ACTUALLY SIT ABOVE OR BELOW THE CHART ARE SUBTRACTED.
+       The loop assumed a single-column body, where every child is stacked and every child's
+       height is height the chart cannot have. The interconnector panel now puts its link table
+       and its chart SIDE BY SIDE when expanded, and under the old sum the table's 439px was
+       deducted from a column it does not occupy — so the chart clamped to its floor beside 240px
+       of empty space.
+       Tested geometrically rather than by reading the grid, because the rule should hold for any
+       body that grows a second column later: a child is in the chart's column if their
+       horizontal boxes overlap. In a one-column body every child spans the full width and
+       overlaps, so this changes nothing there.
+       ⚠ AND ABSOLUTELY POSITIONED CHILDREN ARE SKIPPED. `#ictip` is a tooltip out of flow; it
+       consumes no height and was being charged 18px of it on every render. */
+    const hostRect = host.getBoundingClientRect();
+    const sharesTheChartsColumn = (el)=>{
+      const r = el.getBoundingClientRect();
+      if(r.width === 0) return true;                   // unmeasurable: charge it, do not risk overflow
+      return !(r.right <= hostRect.left + 1 || r.left >= hostRect.right - 1);
+    };
     for(const child of body.children){
       const cs = getComputedStyle(child);
       if(cs.display === "none") continue;
+      if(cs.position === "absolute" || cs.position === "fixed") continue;
+      if(child !== host && !sharesTheChartsColumn(child)) continue;
       rest += (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0);
       rest += (child === host)
         ? host.offsetHeight - box.offsetHeight          // wrapper chrome only, never the chart
@@ -7588,11 +8023,34 @@ function chartGeom(box, tallness){
     const residue = body.scrollHeight > body.clientHeight
       ? Math.max(0, body.scrollHeight - rest - box.offsetHeight)
       : 0;
-    const leftover = body.clientHeight - rest - residue - 2;   // 2px of rounding headroom
-    return leftover > 0 ? Math.round(leftover) : null;
+    /* ⚠ AND THE CHARTBOX'S OWN CHROME IS NOT THE CHART. `H` is the height given to the SVG, but
+       the box around it can carry more than the SVG — the interconnector net chart puts a
+       caption row inside its `.chartbox`, so the box came out 34px taller than the height this
+       function had budgeted and the expanded panel overflowed by exactly that. Measured as the
+       difference between the box and its SVG rather than assumed to be zero, which is what every
+       other panel's box happens to be. */
+    const svgEl = box.querySelector("svg.chart");
+    const boxChrome = svgEl
+      ? Math.max(0, box.offsetHeight - svgEl.getBoundingClientRect().height) : 0;
+    const leftover = body.clientHeight - rest - residue - boxChrome - 2;  // 2px rounding headroom
+    /* ⚠ v0.56: A MEASURED ZERO IS RETURNED AS ZERO, NOT AS null.
+       This returned null whenever the siblings left no room, and the caller wrote
+       `fitToPanel() || <58% of the window>` — so "there is no room" and "I could not measure"
+       took the same branch, and the panel with the LEAST room for a chart got the biggest one
+       the old fraction rule would ever have given it. Found on the interconnector panel once its
+       single-column table grew: the chart asked for 522px inside a body that had 17px spare, and
+       the expanded panel overflowed by 554.
+       ⚠ AND `|| ` COULD NOT HAVE BEEN SAVED BY A SMALLER FRACTION. The bug is the conflation,
+       not the number: any fallback is wrong here, because the measurement SUCCEEDED. null is now
+       reserved for the three cases that genuinely cannot be measured — no body, a chart with no
+       height yet, a secondary chart — and every one of those returns early above. */
+    return Math.round(leftover);
   };
+  const fitted = fitToPanel();
   const H = expanded
-    ? Math.max(200, fitToPanel() || Math.round(window.innerHeight * (W < 700 ? 0.54 : 0.58)))
+    ? Math.max(200, fitted == null
+        ? Math.round(window.innerHeight * (W < 700 ? 0.54 : 0.58))
+        : fitted)
     : (W < 430 ? tallness.sm : (W < 700 ? tallness.md : tallness.lg));
   return {W, H, ml: W<430?34:42, mr:3, mt:12, mb:31};
 }
@@ -7604,6 +8062,16 @@ function attachHover(box, svg, handler){
        highlight left behind after the pointer leaves is a chart lying about where you are. */
     svg.classList.remove("is-dim");
     svg.querySelectorAll(".on").forEach(el=>el.classList.remove("on"));
+    /* ⚠ v0.55: THE CROSSHAIR WAS NEVER HIDDEN — BY ANY CHART, SINCE IT WAS ADDED. Four charts
+       set `display:""` on their `.crosshair` as the pointer moves and nothing anywhere set it
+       back, so the dotted line stayed wherever the cursor last was and a reader returning to the
+       page found a chart pointing at a half hour they were no longer looking at.
+       ⚠ AND THE COMMENT DIRECTLY ABOVE PREDICTED IT, four releases early: the dimming was moved
+       into this shared helper at v0.26 "so the next one cannot forget — a highlight left behind
+       after the pointer leaves is a chart lying about where you are". The crosshair was then
+       added per-chart and forgot exactly as described. Clearing it here rather than in four
+       handlers is v0.26's fix applied to the thing that came after it. */
+    svg.querySelectorAll(".crosshair").forEach(el=>{ el.style.display = "none"; });
     setFuelHighlight(S.selectedFuel);
   };
   /* ⚠ v0.41: POINTERMOVE IS A MOUSE AFFORDANCE, AND TREATING IT AS UNIVERSAL MADE THE PHONE
@@ -8103,6 +8571,16 @@ function renderCarbon(){
     out += `<line class="gridline" x1="${ml}" y1="${yy.toFixed(1)}" x2="${W-mr}" y2="${yy.toFixed(1)}"/>`;
     out += `<text class="axlabel" x="${ml-7}" y="${(yy+3.5).toFixed(1)}" text-anchor="end">${Math.round(v)}</text>`;
   }
+  /* ⚠ v0.56: THE SCALE SAYS ITS UNIT. Every number on this chart was a bare integer — the axis
+     and, more to the point, the figure beside the current-half-hour marker. "102" next to a
+     coloured dot is a reading a reader cannot place, and that is exactly how it was reported.
+     One caption at the head of the scale covers all of them.
+     Inside the plot with the band names' halo, not outside it: the left margin is sized for
+     three digits, and a 45px caption anchored to the axis would hang off the SVG's own edge —
+     the same class of clipping that cut the frequency marker in half at v0.20. */
+  out += `<text class="axlabel" x="${(ml+3).toFixed(1)}" y="${(mt+8).toFixed(1)}"
+           style="font-size:9px;paint-order:stroke;stroke:var(--surface);stroke-width:3px;
+           stroke-linejoin:round">gCO₂/kWh</text>`;
   const ticks = iw < 260 ? 3 : 6;
   for(let i=0;i<=ticks;i++){
     const t = t0 + (t1-t0)*(i/ticks);
@@ -8133,6 +8611,24 @@ function renderCarbon(){
     const nearCarbon = recs.filter(r=>r.read.settled && xT(r.from) >= cx-40 && xT(r.from) <= cx)
                            .map(r=>y(r.read.g));
     out += endLabel(cx-8, cy, nearCarbon, String(Math.round(cur.g)), {mt, ih, gap:12});
+    /* ⚠ v0.56: AND THE LEGEND NAMES IT. Written here rather than in the markup because both
+       halves are live — the colour IS the band, so a hardcoded swatch would be a lie for
+       twenty-two hours a day. This is the answer to "what is the yellow dot?": it is now on
+       screen beside the chart instead of only in the tooltip a reader has to find first. */
+    const nowKey = $("ci-legend-now");
+    /* ⚠ THE WHOLE CAPTION IS ONE FLEX ITEM. `.legend span` is an inline-flex with a 6px gap, so
+       a bare `<b>` in the middle of the sentence becomes a flex item and the gap opens on both
+       sides of it — "152" floated clear of its own unit. Only the swatch is meant to be a
+       separate item; the words are one. */
+    if(nowKey) nowKey.innerHTML =
+      `<i class="dot" style="background:${curCol}"></i>` +
+      `<span class="ln">Current half hour · <b>${Math.round(cur.g)}</b> gCO₂/kWh` +
+      (cur.band ? ` · ${esc(String(cur.band.name).toLowerCase())}` : "") + `</span>`;
+  } else {
+    /* No current reading, no key. An empty swatch describing a mark that is not drawn is worse
+       than no key at all — it sends the reader looking for something that is not there. */
+    const nowKey = $("ci-legend-now");
+    if(nowKey) nowKey.innerHTML = "";
   }
   out += `<line class="crosshair" x1="0" y1="${mt}" x2="0" y2="${mt+ih}" style="display:none"/>`;
   svg.innerHTML = out;
@@ -8803,16 +9299,85 @@ function renderIC(){
      the data, the track is simply absent for that row. */
   const maxAbs = Math.max(...recs.map(r=>Math.abs(r.generation)), 1);
   const scale  = Math.max(IC_CAP_MAX, maxAbs);
-  /* COLUMN-MAJOR PLACEMENT (v0.27). Computed once for the whole set: the first half of the
-     ranking takes the left three tracks, the second half the right three, each row on the grid
-     line matching its position within its own half. An odd count puts the extra row on the
-     LEFT, so the longer column is the one holding the larger flows. */
-  const half = Math.ceil(recs.length/2);
-  $("icrows").innerHTML = recs.map((r,i)=>{
-    const col2 = i >= half;
-    const place = `--r:${(col2 ? i-half : i)+1};--c1:${col2?4:1};--c2:${col2?5:2};--c3:${col2?6:3}`;
+  /* ================================================================================
+     SORT ORDER, AND THE DIVIDER THAT DEPENDS ON IT  (v0.56)
+
+     The default is the mock's: imports first in descending size, then exports in descending
+     size. That is NOT a signed sort — a signed descending sort puts −138 above −412, and the
+     mock has the biggest export at the top of its group, because within a group the question is
+     "how much", not "how negative". So the comparison is direction first, magnitude second.
+
+     ⚠ THE DIVIDER IS DRAWN ONLY UNDER THIS SORT. Under the alphabetical or the utilisation
+     sort the two directions interleave, and a rule between rows six and seven would be
+     asserting a boundary that is not there — a divider is a claim about the data, not a
+     decoration on the sixth row. */
+  const dirRank = v => v > 0 ? 0 : (v === 0 ? 1 : 2);
+  const nameOf  = r => (IC_META[r.interconnectorName] || {}).name || r.interconnectorName;
+  const capOf   = r => (IC_META[r.interconnectorName] || {}).capMW || 0;
+  const utilOf  = r => capOf(r) > 0 ? Math.abs(r.generation) / capOf(r) : -1;
+  const sortBy  = S.icSort || (S.icSort = {key:"flow", dir:-1});
+  if(sortBy.key === "name"){
+    /* ⚠ dir > 0 IS ASCENDING, AND THE MULTIPLIER HAS TO AGREE WITH THAT. Written the other way
+       round first, so the first click on LINK announced `aria-sort="ascending"` and delivered
+       Z→A — a state and a behaviour that contradict each other, which is worse than either
+       being wrong on its own because the screen-reader announcement is then a lie. */
+    recs.sort((a,b) => nameOf(a).localeCompare(nameOf(b), "en") * (sortBy.dir < 0 ? -1 : 1));
+  } else if(sortBy.key === "cap"){
+    /* ⚠ A LINK WITH NO CAPACITY FIGURE SORTS LAST IN BOTH DIRECTIONS. `utilOf` returns −1 for
+       one, and letting that number into the comparison would float every unknown to the top of
+       the ascending sort as though it were the least-utilised cable on the system. Unknown is
+       not a low value; it is not a value. */
+    recs.sort((a,b) => {
+      const ua = utilOf(a), ub = utilOf(b);
+      if(ua < 0 && ub < 0) return 0;
+      if(ua < 0) return 1;
+      if(ub < 0) return -1;
+      return (ub - ua) * (sortBy.dir < 0 ? 1 : -1);
+    });
+  } else {
+    recs.sort((a,b) => (dirRank(a.generation) - dirRank(b.generation)) * (sortBy.dir < 0 ? 1 : -1)
+                       || Math.abs(b.generation) - Math.abs(a.generation));
+  }
+
+  /* The heading's unit is written, not typed. The page has an MW/GW switch, and "FLOW (MW)"
+     standing over GW figures would be the only wrong label on the panel — which is exactly the
+     trade being made by taking the unit off the ten rows and stating it once. */
+  const sArrow = k => sortBy.key === k ? (sortBy.dir < 0 ? "▼" : "▲") : "⇅";
+  const sState = k => sortBy.key === k ? (sortBy.dir < 0 ? "descending" : "ascending") : "none";
+  /* ⚠ v0.57: `aria-sort` IS NOT ALLOWED ON A BUTTON, and v0.56 put it on three of them.
+     Flagged critical by an accessibility audit. `aria-sort` belongs on a `columnheader` or
+     `rowheader`; this table is a CSS grid, not a `<table>`, so there is no element entitled to
+     carry it — and bolting a full table/row/cell role tree onto a grid whose rows are
+     `display:contents` is a bigger change with its own risks. An invalid ARIA attribute is not
+     merely ignored: a screen reader may expose it, and the state it announces would then be
+     coming from an element the specification says cannot have it.
+     The state moves into the accessible NAME, where it is valid, complete and already half
+     written — the label said "currently high to low" for the active column and nothing for the
+     others. It now also says what a click will DO, which is what a reader of a sort control
+     actually needs and which `aria-sort` never told them. `data-sort` keeps the machine-readable
+     state for the harness. */
+  const sortBtn = (k, label) => {
+    const active = sortBy.key === k;
+    const state = active ? (sortBy.dir < 0 ? "sorted high to low" : "sorted low to high") : "not sorted";
+    const next  = active ? (sortBy.dir < 0 ? "reverse to low to high" : "reverse to high to low")
+                         : "sort by this column";
+    return `<button type="button" class="icsort" data-icsort="${k}" data-sort="${sState(k)}"
+       aria-label="${esc(label)}, ${state}. Activate to ${next}."
+       >${esc(label)}<span class="sarr" aria-hidden="true">${sArrow(k)}</span></button>`;
+  };
+  const head =
+    `<div class="ichead">` +
+      `<span class="h-link">${sortBtn("name","Link")}</span>` +
+      `<span class="h-flow">${sortBtn("flow","Flow (" + U() + ")")}</span>` +
+      /* The MW figure's own column is deliberately unheaded: it is the same quantity as the bar
+         to its left, and heading it twice would imply two measurements. The capacity heading
+         spans into it rather than a spacer sitting there. */
+      `<span class="h-cap">${sortBtn("cap","% capacity")}</span>` +
+    `</div><div class="icheadrule" aria-hidden="true"></div>`;
+
+  let prevRank = null;
+  $("icrows").innerHTML = head + recs.map((r)=>{
     const v = r.generation, w = Math.abs(v)/scale*50;
-    const dir = v>0 ? "import" : (v<0 ? "export" : "idle");
     const cls = v>0 ? "in-c" : (v<0 ? "out-c" : "idle-c");
     const capMW = (IC_META[r.interconnectorName]||{}).capMW || null;
     const cw = capMW ? capMW/scale*50 : 0;
@@ -8825,18 +9390,31 @@ function renderIC(){
     const m = IC_META[r.interconnectorName] || {name:r.interconnectorName, cc:"", code:""};
     const key = esc(r.interconnectorName);
     const known = !!IC_META[r.interconnectorName];
-    return `<div class="icrow${col2?" col2":""}" style="${place}">
-      <span class="icname" data-ic="${key}">${known
-        ? `<button class="ic-open" data-ic="${key}">${esc(m.name)}</button>`
-        : esc(m.name)}<span class="code icwho">${
-          /* The flag identifies the far end; the words say which GB nation the cable lands in,
-             which is the fact almost nothing else shows. Where there is no flag a spacer of the
-             same width holds the column, so the ten rows stay aligned. */
+    let split = "";
+    if(sortBy.key === "flow"){
+      const rk = dirRank(v);
+      if(prevRank !== null && rk !== prevRank) split = `<div class="icsplit" aria-hidden="true"></div>`;
+      prevRank = rk;
+    }
+    return split + `<div class="icrow">
+      <span class="icname" data-ic="${key}">${
+          /* The flag identifies the far end and sits left of BOTH lines, which is where the
+             mock puts it and where a reader looks for a row's mark. Where there is no flag a
+             spacer of the same width holds the column, so the ten rows stay aligned. */
           m.cc ? (flagFor(m.cc, m.flag) || '<span class="noflag"></span>') : ''
-        }<span>${esc(m.cc)}${m.land?" → "+esc(m.land):""}${m.code?' · <b class="ds">'+esc(m.code)+"</b>":""}</span></span></span>
+        }<span class="icn-t">${known
+        ? `<button class="ic-open" data-ic="${key}">${esc(m.name)}</button>`
+        : esc(m.name)}<span class="code icwho">${esc(m.cc)}${
+          /* The words say which GB nation the cable lands in, which is the fact almost nothing
+             else shows. */
+          m.land ? " → " + esc(m.land) : ""
+        }${m.code ? ' · <b class="ds">' + esc(m.code) + "</b>" : ""}</span></span></span>
       <span class="icbar" data-ic="${key}">${track}<span class="zero"></span>${bar}</span>
-      <span class="icval ${cls}" data-ic="${key}">${v>0?"+":(v<0?"−":"")}${uv(Math.abs(v))}<span class="dir">${dir}</span>${
-        capMW ? `<span class="util">${(Math.abs(v)/capMW*100).toFixed(0)}% of capacity</span>` : ""}</span>
+      <span class="icval ${cls}" data-ic="${key}">${v>0?"+":(v<0?"−":"")}${uv(Math.abs(v))}</span>
+      <span class="iccap" data-ic="${key}">${
+        /* No capacity, no percentage — and an em dash rather than a number, because the guard
+           that invented a denominator is exactly the fault v0.55 had to unpick. */
+        capMW ? (Math.abs(v)/capMW*100).toFixed(0) + "%" : "—"}</span>
     </div>`;
   }).join("");
 
@@ -8857,35 +9435,152 @@ function renderIC(){
   /* Summed over the links ACTUALLY REPORTING, not over the whole table — otherwise a link
      missing from the feed would still contribute its capacity and the fleet utilisation would
      read low for a reason the panel never shows. */
-  const capTotal = recs.reduce((a,r)=>a + ((IC_META[r.interconnectorName]||{}).capMW||0), 0) || 1;
+  /* ⚠ v0.55: THE `|| 1` FALLBACK TURNED A MISSING DENOMINATOR INTO A CONFIDENT WRONG NUMBER.
+     If no link in the feed matches `IC_META` — which happens the moment Elexon changes a name,
+     and happened immediately under a fixture keyed by BMRS codes — the sum is 0, the guard made
+     it 1, and "net as a share of fleet capacity" rendered as **105,300%**. A guard that exists to
+     avoid a division by zero must not do so by inventing a denominator of one megawatt.
+     `capTotal` is now allowed to be 0 and every consumer checks it, so an unknown capacity
+     renders as a dash. Same rule as the four figure states: a missing value must never be dressed
+     as a real one. */
+  const capTotal = recs.reduce((a,r)=>a + ((IC_META[r.interconnectorName]||{}).capMW||0), 0);
+  const capPct = (v)=> capTotal > 0 ? `${(Math.abs(v)/capTotal*100).toFixed(0)}%` : "—";
+  /* ⚠ v0.55: THE ADDITIVE STRIP IS GONE, AND THE AUTHOR'S OBJECTION TO IT WAS CORRECT.
+     It drew imports and exports end to end as two segments of one total, which is GROSS FLOW —
+     and gross flow is not the net position. The old caption said so honestly, but a reader takes
+     the picture before the caption: a bar whose length is imports PLUS exports sitting directly
+     under a figure that is imports MINUS exports invites exactly the wrong reading, and no
+     amount of labelling fixes a picture that means something else.
+     What replaces it says the arithmetic instead of drawing a quantity nobody asked about:
+         NET POSITION   +3,647 MW · IMPORTING
+         imports 4,659 MW  −  exports 1,012 MW
+     Net first and largest, because it is the answer; the two terms beneath it, because they are
+     the derivation. Same three-column shape as the hero tile's equation, for the same reason —
+     a reader who has learned to read one sum on this page can read the other.
+     ⚠ IDLE LINKS ARE IN NEITHER COUNT, AND THE ROW SAYS SO. A link sitting at exactly 0 MW is
+     neither importing nor exporting; counting it as either is false, and silently dropping it
+     leaves "7 links" and "3 links" failing to add up to ten with nothing to explain the gap. */
+  const nIdle = recs.filter(r=>r.generation===0).length;
+  const dirWord = net>0 ? "IMPORTING" : (net<0 ? "EXPORTING" : "BALANCED");
+  const netCls  = net>0 ? "in-c" : (net<0 ? "out-c" : "idle-c");
+  /* ⚠ v0.56: THE THREE-ACROSS HEADLINE, TO THE AUTHOR'S MOCK-UP. v0.55 got the arithmetic and
+     the terminology right and then left them in a two-line stack at the foot of the panel; the
+     mock puts imports, net and exports on ONE row with net in the middle and lifted out of the
+     flow by a card, which is what makes the relationship readable at a glance rather than
+     reconstructable from three figures.
+     ⚠ AND THERE IS NO BAR UNDER IT. The mock had one — imports growing left of a zero tick,
+     exports growing right — and it was built to the mock and then removed, at the author's
+     direction, for three reasons that compounded.
+
+       1. IT POINTED THE OPPOSITE WAY TO THE TEN ROWS BENEATH IT. In the link table imports
+          extend RIGHT of the axis and exports LEFT: positive right, negative left, the number
+          line, unchanged since v0.27, and what the legend's (+) and (−) mean. The summary bar
+          said "Left = Imports into GB". Two axes in one panel pointing opposite ways is a worse
+          fault than any duplication, and neither the mock nor this build noticed it.
+       2. IT WAS NOT ACTUALLY A DIVERGING BAR. The two fills were flex items with auto margins,
+          which pushes them together and centres the PAIR — so the boundary between them floated
+          instead of sitting on the zero line, and the import fill crossed the "0 MW" tick. The
+          tick was labelling a point the picture did not have, which is exactly why the author
+          read it as unhelpful: true of the scale, false of the bar.
+       3. IT SAID EVERYTHING TWICE. Imports and exports appeared as figures in the trio and again
+          fourteen pixels below it, and "Left = / Right =" was a third statement of a direction
+          the trio's own colour and words already give.
+
+     What other dashboards do settles it. Elexon's BMRS, EirGrid's Smart Grid Dashboard and
+     Ember's European interconnection tool all state net position as ONE SIGNED NUMBER WITH A
+     DIRECTION WORD, and put a time series or a per-link breakdown beside it — Ember is explicit
+     that net position and gross flows are different encodings and are not overlaid. None of them
+     draws a static imports-versus-exports bar as a headline, because a per-link table already
+     shows both directions as lengths on a shared axis and does it with ten times the resolution.
+     The trio is the number; the rows are the picture. */
   $("icnet").innerHTML =
-    `<div class="icnet-head">
-       <span class="icnet-label">Net position — all ${recs.length} links</span>
-       <span class="icnet-val ${net>0?"in-c":(net<0?"out-c":"idle-c")}" role="status" aria-label="Net interconnector position: ${
-         net>0?"importing ":net<0?"exporting ":"balanced at "}${uv(Math.abs(net))} ${U()}">${
-         net>0?"+":(net<0?"−":"")}${uv(Math.abs(net))}<span class="unit" style="font-size:11px"> ${U()}</span
-         ><span class="icnet-dir">${dir.toUpperCase()}</span></span>
+    `<div class="icnet-trio" role="group" aria-label="Net position is imports minus exports">
+       <div class="icnet-term out" data-net="out">
+         <span class="t-k">Exports from GB</span>
+         <span class="t-v">${uv(exp)} <span class="unit">${U()}</span></span>
+         <span class="t-n">${nExp} link${nExp===1?"":"s"}</span>
+       </div>
+       <div class="icnet-card ${netCls}">
+         <span class="t-k">Net position</span>
+         <span class="icnet-val" role="status" aria-label="Net interconnector position: ${
+           net>0?"importing ":net<0?"exporting ":"balanced at "}${uv(Math.abs(net))} ${U()}">${
+           net>0?"+":(net<0?"−":"")}${uv(Math.abs(net))}<span class="unit"> ${U()}</span></span>
+         <span class="icnet-dir">${dirWord}</span>
+       </div>
+         <div class="icnet-term in" data-net="in">
+         <span class="t-k">Imports into GB</span>
+         <span class="t-v">${uv(imp)} <span class="unit">${U()}</span></span>
+         <span class="t-n">${nImp} link${nImp===1?"":"s"}</span>
+       </div>
      </div>
-     <div class="grossstrip" role="img" aria-label="Gross import ${num(imp)} megawatts against gross export ${num(exp)} megawatts">
-       ${imp>0?`<i class="in" data-net="in" style="width:${pIn.toFixed(2)}%"></i>`:""}
-       ${exp>0?`<i class="out" data-net="out" style="width:${pOut.toFixed(2)}%"></i>`:""}
-     </div>
-     <div class="icnet-foot">
-       <span>Import <b>${uv(imp)} ${U()}</b> · ${nImp} link${nImp===1?"":"s"}</span>
-       <span>${nExp} link${nExp===1?"":"s"} · <b>${uv(exp)} ${U()}</b> export</span>
      </div>`;
-  S.icNet = { net, imp, exp, gross, nImp, nExp, dir,
+  /* ⚠ v0.55: A TABLE VIEW, AS THE FUEL PANEL HAS. The bars answer "which way and how much";
+     a reader checking a specific link, or copying figures out, wants rows. Sorted by flow so the
+     two directions group themselves, and the footer states the subtraction the headline makes —
+     the one place on the page where imports, exports and net appear as three numbers that can be
+     checked against each other. */
+  $("ictable").innerHTML = `<div class="tablewrap"><table class="data">
+    <thead><tr><th>Code</th><th>Link</th><th>Route</th>
+      <th style="text-align:right">${U()}</th><th style="text-align:right">% capacity</th>
+      <th>Direction</th></tr></thead>
+    <tbody>${recs.slice().sort((a,b)=>b.generation-a.generation).map(r=>{
+      const m = IC_META[r.interconnectorName] || {};
+      const v = r.generation, capMW = m.capMW || 0;
+      const d = v>0 ? "Import" : (v<0 ? "Export" : "Idle");
+      return `<tr>
+        <td class="ds">${esc(m.code || r.interconnectorName)}</td>
+        <td style="font-weight:400">${esc(m.name || r.interconnectorName)}</td>
+        <td style="font-weight:400;color:var(--ink-dim)">${esc(m.cc||"")}${m.land?" → "+esc(m.land):""}</td>
+        <td class="num">${v>0?"+":(v<0?"−":"")}${num(Math.abs(Math.round(v)))}</td>
+        <td class="num">${capMW?((Math.abs(v)/capMW*100).toFixed(0)+"%"):"—"}</td>
+        <td style="font-weight:400">${d}</td></tr>`;}).join("")}
+    </tbody>
+    <tfoot>
+      <tr><td colspan="3">Imports into GB — ${nImp} link${nImp===1?"":"s"}</td>
+        <td class="num">+${num(Math.round(imp))}</td><td class="num"></td><td></td></tr>
+      <tr><td colspan="3">Exports from GB — ${nExp} link${nExp===1?"":"s"}</td>
+        <td class="num">−${num(Math.round(exp))}</td><td class="num"></td><td></td></tr>
+      ${nIdle?`<tr><td colspan="3" style="color:var(--ink-mute)">Idle — ${nIdle} link${nIdle===1?"":"s"}, in neither total</td>
+        <td class="num">0</td><td class="num"></td><td></td></tr>`:""}
+      <tr><td colspan="3"><b>Net position</b></td>
+        <td class="num"><b>${net>0?"+":(net<0?"−":"")}${num(Math.abs(Math.round(net)))}</b></td>
+        <td class="num"><b>${capPct(net)}</b></td>
+        <td><b>${dirWord.charAt(0)+dirWord.slice(1).toLowerCase()}</b></td></tr>
+    </tfoot>
+  </table></div>`;
+
+  S.icNet = { net, imp, exp, gross, nImp, nExp, nIdle, dir,
     inLinks:  recs.filter(r=>r.generation>0).sort((a,b)=>b.generation-a.generation),
     outLinks: recs.filter(r=>r.generation<0).sort((a,b)=>a.generation-b.generation) };
   /* The strip is scaled to GROSS flow, not to the link bars above, and the summary says so.
      Net is the difference between the two segments - which is why it is drawn as a split of
      one total rather than as a bar whose length would have to be taken on trust against a
      scale it does not share. */
-  $("ic-summary").innerHTML = detailNote(
+  /* ⚠ v0.55: THE LINE STOPS LEADING ON GROSS FLOW. It opened on that figure because the strip
+     underneath was scaled to it and the reader needed the denominator; with the strip gone,
+     gross is a fact about the fleet rather than the finding, so it moves to the metadata row and
+     the sentence carries the thing that actually changes how the panel is read — the lag. */
+  $("ic-summary").innerHTML = insightRow(
     S.icHistoryWindow==="7d"
-      ? `Seven-day average net position <b>${uv(Math.abs(net))} ${U()}</b> across the loaded interconnectors.`
-      : `Gross flow <b>${uv(gross)} ${U()}</b>. Half-hourly settlement-period values, so these
-     <b>lag the 5-minute fuel mix by up to 30 minutes.</b>`,
+      ? `GB has been a net <b>${net>0?"importer":net<0?"exporter":"neither"}</b> across the last
+         seven days, averaging <b>${uv(Math.abs(net))} ${U()}</b>.`
+      : `These are half-hourly settlement-period values, so they
+         <b>lag the five-minute fuel mix by up to 30 minutes.</b>`,
+    insightMeta(
+      `<b class="ds">INTOUTHH</b>`,
+      /* ⚠ v0.57: AN IDLE LINK IS NAMED, because otherwise the two counts do not add up and
+         nothing on the panel says why. The headline trio reports "6 links" importing and
+         "3 links" exporting; a reader counting ten rows is owed the tenth. A link sitting at
+         exactly 0 MW — on outage, or simply between periods — is in neither total by
+         definition, and "counted in neither" is the phrase that closes the arithmetic.
+         The harness asserted this and had been failing quietly since v0.56 moved the sentence
+         it used to live in: the check was right and the panel had lost the words. */
+      `${recs.length} links`,
+      (function(){ var n = recs.filter(function(r){ return r.generation === 0; }).length;
+        return n ? ('<b>' + n + '</b> idle, counted in neither') : null; })(),
+      `gross flow <b>${uv(gross)} ${U()}</b>`,
+      capTotal > 0 ? `<b>${capPct(net)}</b> of fleet capacity` : null,
+      S.icHistoryWindow==="7d" ? "7-day average" : `to ${fmtTime(latest)}`),
     `Import <b>${uv(imp)} ${U()}</b> across ${nImp} link${nImp===1?"":"s"}, export
      <b>${uv(exp)} ${U()}</b> across ${nExp}. The strip above is scaled to that gross figure,
      <b>not</b> to the individual link bars, because a net of ${uv(Math.abs(net))} ${U()} would not fit on
@@ -8894,7 +9589,7 @@ function renderIC(){
      <br><br>The pale track behind each bar is that link's <b>maximum capacity, drawn both
      ways on the same scale as the bar</b>, so the empty part of a track is headroom. Across
      the ten links that is <b>${uv(capTotal)} ${U()}</b> in each direction, and the fleet is
-     running at <b>${(gross/capTotal*100).toFixed(0)}%</b> of it. Capacity is
+     running at <b>${capPct(gross)}</b> of it. Capacity is
      <b>not published by Elexon</b> — no Insights endpoint carries it, and the per-BM-unit
      capacities in the reference data are registered per trading party rather than per cable,
      so they do not sum to a rating. These are NESO's NETS Status Report figures cross-checked
@@ -9669,7 +10364,6 @@ function icFlowLine(key){
     const isIn = side === "in";
     const mw = isIn ? n.imp : n.exp;
     const links = isIn ? n.inLinks : n.outLinks;
-    const share = n.gross>0 ? mw/n.gross*100 : 0;
     const rows = links.slice(0,4).map(r=>{
       const m = IC_META[r.interconnectorName] || {name:r.interconnectorName};
       return `<div class="t-row"><span class="n">${esc(m.name)}</span>
@@ -9680,39 +10374,191 @@ function icFlowLine(key){
       `<div class="t-head"><i style="background:var(--flow-${isIn?"in":"out"})"></i>${
         isIn ? "Importing into GB" : "Exporting from GB"}</div>` +
       `<div class="t-row"><span class="n">Total</span><span class="v">${uv(mw)} ${U()}</span></div>` +
-      `<div class="t-row"><span class="n">Share of gross flow</span><span class="v">${share.toFixed(1)}%</span></div>` +
       `<div class="t-row"><span class="n">Links</span><span class="v">${links.length}</span></div>` +
       (rows ? `<div class="t-row t-tot"><span class="n">Biggest</span><span class="v"></span></div>` + rows : "") +
       (more ? `<div class="t-row t-hint">and ${more} more.</div>` : "") +
-      /* The one sentence that stops the strip being misread: it is scaled to GROSS, so the two
-         segments are not "the net" — the net is the difference between them. */
-      `<div class="t-row t-hint">The strip is scaled to gross flow of ${uv(n.gross)} ${U()}.
-        The net position is the difference between the two segments.</div>`;
+      /* ⚠ v0.55: THE "SHARE OF GROSS FLOW" ROW AND THE STRIP SENTENCE ARE GONE WITH THE STRIP.
+         Both existed to stop a reader taking one segment of an additive bar for the net position.
+         With no additive bar there is nothing to misread, and a share of gross is a denominator
+         this panel no longer shows — quoting it would be answering a question the page has
+         stopped asking. What replaces it is the subtraction itself, which is what a reader
+         hovering one half of it wants confirmed. */
+      `<div class="t-row t-hint">Net position is imports − exports:
+        ${uv(n.imp)} − ${uv(n.exp)} = ${n.net>=0?"+":"−"}${uv(Math.abs(n.net))} ${U()}.</div>`;
     tip.classList.add("show");
     place(ev);
   }
-  body.addEventListener("pointermove",(ev)=>{
+  /* ⚠ v0.57: THIS PANEL'S TOOLTIPS WERE MOUSE-ONLY, AND HAD BEEN SINCE THEY WERE ADDED.
+     Found by giving `moyleTip-phone-360` a verdict — it had been recording `shown:false` and
+     an empty tooltip string for releases with nothing asserting it, which is the whole reason
+     the "results that compute no verdict" backlog item existed. On a phone, tapping any
+     interconnector row did nothing: `pointermove` is the only event this delegation listened
+     for, and a stationary tap does not reliably produce one.
+
+     Every chart on the page already had the answer — the shared hover helper adopted DRAG
+     SCROLLS, TAP READS at v0.49, and the fuel ranking and composition strip each got their own
+     `pointerdown` path. This panel is not a `.chartbox`, so it uses none of them and was simply
+     missed. The same contract is applied here rather than a fourth variation of it:
+       · pointermove reads for mouse and pen only — a finger dragging up the page must scroll,
+         not run the hit-test on every frame;
+       · pointerdown reads for touch and pen, so a tap gives the same reading a hover does;
+       · pointerleave hides for mouse only, because on touch it fires the instant the finger
+         lifts and would flash the tooltip and dismiss it in one gesture. */
+  const readAt = (ev)=>{
     const seg = ev.target.closest("[data-net]");
     if(seg){ showNet(ev, seg.dataset.net); return; }
     const cell = ev.target.closest("[data-ic]");
     if(cell) show(ev, cell.dataset.ic); else tip.classList.remove("show");
+  };
+  body.addEventListener("pointermove",(ev)=>{ if(ev.pointerType !== "touch") readAt(ev); });
+  body.addEventListener("pointerdown",(ev)=>{ if(ev.pointerType !== "mouse") readAt(ev); });
+  body.addEventListener("pointerleave",(ev)=>{
+    if(!ev || ev.pointerType === "mouse") tip.classList.remove("show");
   });
-  body.addEventListener("pointerleave", ()=>tip.classList.remove("show"));
+  /* A tap elsewhere on the page dismisses it, the same way the charts' shared helper does —
+     otherwise a touch reading stays on screen until the next refresh. */
+  document.addEventListener("pointerdown",(ev)=>{
+    if(ev.pointerType === "mouse") return;
+    if(!body.contains(ev.target)) tip.classList.remove("show");
+  }, true);
+  /* ⚠ v0.56: SORTING, BOUND ONCE BY DELEGATION ON A CONTAINER THE RENDER DOES NOT REPLACE.
+     `renderIC` rewrites `#icrows`'s innerHTML every refresh, so a listener attached to a header
+     button would be shed five minutes later and the column would silently stop sorting — the
+     same trap the driver line's fuel keys documented, and the reason both use delegation.
+     Clicking the ACTIVE column toggles its direction; clicking another switches to it at its
+     natural direction — A→Z for names, high-to-low for the two numeric columns, because that is
+     what a reader means by "sort by capacity" on the first click. */
+  body.addEventListener("click",(ev)=>{
+    const b = ev.target.closest("[data-icsort]");
+    if(!b) return;
+    const key = b.dataset.icsort;
+    const cur = S.icSort || {key:"flow", dir:-1};
+    S.icSort = (cur.key === key)
+      ? {key, dir: cur.dir < 0 ? 1 : -1}
+      : {key, dir: key === "name" ? 1 : -1};
+    renderIC();
+    /* Focus follows the control the reader used. The header is rebuilt by the render above, so
+       the button they clicked no longer exists — without this, a keyboard user is returned to
+       the top of the document every time they sort. */
+    const again = document.querySelector(`[data-icsort="${key}"]`);
+    if(again && document.activeElement !== document.body) again.focus();
+  });
 })();
 
 /* v0.319: At a glance tooltips. These are deliberately short definitions rather than
    another permanent paragraph: the panel is now labelled as live, and a reader can interrogate
    any of the four readings when the distinction matters. The same global popover component is
    used elsewhere on the dashboard, so behaviour is consistent across mouse, keyboard and touch. */
+/* ⚠ v0.56: THE DEFINITION NOW CARRIES THE READING, at the author's request.
+   These were four fixed sentences. A fixed sentence answers "what is this figure" and stops,
+   which leaves the reader who opened the tooltip BECAUSE of a number they could not place with
+   the one thing they already had — the label — and nothing about the number itself.
+   Each explainer is now a function returning the same definition followed by a short block of
+   live readings drawn from `S.glance`, the stash `renderSystemInsight` writes as it draws the
+   cards. Three rules hold the block honest:
+     · every figure comes from the render, never recomputed here (see the stash's own note);
+     · every percentage names its denominator, exactly as the share lines under the cards do —
+       wind and solar are shares of GB GENERATION, generation and net imports are shares of
+       ELECTRICITY ON THE GRID, and the two bases are not interchangeable;
+     · a row that has no value is omitted, not printed with a dash. On a cold page the tooltip
+       is the definition alone, which is what it was before this change, rather than a table of
+       em-dashes that looks like a fault.
+   ⚠ THE CONTENT IS A SNAPSHOT TAKEN WHEN THE TOOLTIP OPENS. A pinned tooltip left open across
+   a five-minute refresh shows the figures from the moment it was opened; it is not re-rendered
+   underneath the reader, because a number changing under a stationary cursor is worse than a
+   number that is five minutes old and was true when it was asked for. */
+const glanceRows = (...rows) => {
+  const kept = rows.filter(r => r);
+  return kept.length ? `<div class="tip-live">${kept.join("")}</div>` : "";
+};
+const gRow  = (label, value) => `<span>${label}<b>${value}</b></span>`;
+const gNote = (text) => `<span class="wide">${text}</span>`;
+/* Null rather than "0.0%" when the denominator is missing — the caller drops the whole row. */
+const gPct  = (part, whole) => {
+  if(!(whole > 0) || !isFinite(part)) return null;
+  const p = part / whole * 100;
+  return (p >= 99.95 ? "100" : Math.max(0, p).toFixed(1)) + "%";
+};
+/* Movement against roughly an hour ago, from the same deltas the "what is changing" line uses.
+   Under 1 MW is not a movement, it is rounding, and it is dropped rather than shown as "↑ 0". */
+const gMove = (d) => (d == null || !isFinite(d) || Math.abs(d) < 1)
+  ? null : `${d > 0 ? "↑" : "↓"} ${uv(Math.abs(d))} ${U()}`;
+
 const insightExplainers = {
-  generation:
-    "<b>GB generation</b> is the electricity currently generated within Great Britain, excluding net interconnector imports. It includes the embedded solar estimate used by this dashboard.",
-  wind:
-    "<b>Wind</b> is the current GB wind-generation outturn reported through the live Elexon generation data. It is shown here as a component of GB generation.",
-  solar:
-    "<b>Solar</b> is the current embedded solar-generation estimate used by this dashboard. It is modelled rather than directly metered through the transmission system, so it is kept visually distinct from the metered fuel categories.",
-  imports:
-    "<b>Net imports</b> is the current net electricity flow across GB's interconnectors. A positive value means GB is importing more electricity than it is exporting; a negative value means GB is a net exporter."
+  generation(){
+    const g = S.glance || {};
+    const def = "<b>GB generation</b> is the electricity currently generated within Great Britain, excluding net interconnector imports. It includes the embedded solar estimate used by this dashboard.";
+    if(!isFinite(g.genMW)) return def;
+    /* While GB exports, everything on the grid is domestic and the share is 100 — the same
+       arithmetic the share line under the card makes, and for the same reason: "104% of the
+       grid" is not something a reader should have to interpret. */
+    const share = g.netMW == null ? null
+      : (g.netMW >= 0 ? gPct(g.genMW, g.gridMW) : "100%");
+    return def + glanceRows(
+      gRow("Now", `${uv(g.genMW)} ${U()}`),
+      share ? gRow("Of electricity on the grid", share) : null,
+      g.solMW > 0 ? gRow("Of which embedded solar", `${uv(g.solMW)} ${U()}`) : null,
+      g.genSpan ? gRow("Last 24 hours", `${uv(g.genSpan.lo)}–${uv(g.genSpan.hi)} ${U()}`) : null
+    );
+  },
+  wind(){
+    const g = S.glance || {};
+    const def = "<b>Wind</b> is the current GB wind-generation outturn reported through the live Elexon generation data. It is shown here as a component of GB generation.";
+    if(!isFinite(g.windMW)) return def;
+    const share = gPct(g.windMW, g.genMW), mv = gMove(g.windD);
+    return def + glanceRows(
+      gRow("Now", `${uv(g.windMW)} ${U()}`),
+      share ? gRow("Of GB generation", share) : null,
+      g.windSpan ? gRow("Last 24 hours", `${uv(g.windSpan.lo)}–${uv(g.windSpan.hi)} ${U()}`) : null,
+      mv ? gRow("Against an hour ago", mv) : null
+    );
+  },
+  solar(){
+    const g = S.glance || {};
+    const src = S.solarSource === "pvlive" ? "Sheffield Solar PV_Live" : "Elexon AGWS";
+    const def = "<b>Solar</b> is the current embedded solar-generation estimate used by this dashboard. It is modelled rather than directly metered through the transmission system, so it is kept visually distinct from the metered fuel categories.";
+    /* ⚠ NIGHT IS NOT A MISSING READING, and the tooltip is where that distinction is worth
+       spelling out — a zero beside three live figures is the one number on this band a reader
+       is entitled to suspect. */
+    if(g.solNight) return def + glanceRows(
+      gRow("Now", `0 ${U()}`),
+      g.solSpan ? gRow("Peak, last 24 hours", `${uv(g.solSpan.hi)} ${U()}`) : null,
+      gNote(`The sun is down, so this is a <b>true zero</b> rather than a reading that failed to arrive. Source: ${esc(src)}.`)
+    );
+    if(!isFinite(g.solMW)) return def;
+    const share = gPct(g.solMW, g.genMW), mv = gMove(g.solD);
+    return def + glanceRows(
+      gRow("Now", `${uv(g.solMW)} ${U()}`),
+      share ? gRow("Of GB generation", share) : null,
+      g.solSpan ? gRow("Peak, last 24 hours", `${uv(g.solSpan.hi)} ${U()}`) : null,
+      mv ? gRow("Against an hour ago", mv) : null,
+      (g.solStale && g.solAge != null)
+        ? gNote(`${esc(src)} last published <b>${Math.round(g.solAge)} minutes ago</b> — this figure is real, but older than the five-minute refresh.`)
+        : gNote(`Source: ${esc(src)}.`)
+    );
+  },
+  imports(){
+    const g = S.glance || {};
+    const def = "<b>Net imports</b> is the current net electricity flow across GB's interconnectors. A positive value means GB is importing more electricity than it is exporting; a negative value means GB is a net exporter.";
+    if(g.netMW == null || !isFinite(g.netMW)) return def;
+    /* Per-link detail comes from the interconnector panel's own stash, so the two never
+       disagree about which links are flowing which way. Absent — panel not yet rendered, feed
+       down — the rows that need it are simply not built. */
+    const vals = (S.icLatest && S.icLatest.by) ? Object.entries(S.icLatest.by) : [];
+    const nImp = vals.filter(([,v]) => v > 0).length;
+    const nExp = vals.filter(([,v]) => v < 0).length;
+    const big  = vals.length ? vals.reduce((a,b)=> Math.abs(b[1]) > Math.abs(a[1]) ? b : a) : null;
+    const bigName = big ? ((IC_META[big[0]] || {}).name || big[0]) : null;
+    const mv = gMove(g.impD);
+    const word = g.netMW > 0 ? "net importer" : (g.netMW < 0 ? "net exporter" : "balanced");
+    return def + glanceRows(
+      gRow("Now", `${g.netMW >= 0 ? "+" : "−"}${uv(Math.abs(g.netMW))} ${U()}`),
+      vals.length ? gRow("Links flowing", `${nImp} in, ${nExp} out`) : null,
+      mv ? gRow("Against an hour ago", mv) : null,
+      big ? gNote(`Largest single flow: <b>${esc(bigName)} ${big[1] >= 0 ? "+" : "−"}${uv(Math.abs(big[1]))} ${U()}</b>.`) : null,
+      gNote(`GB is currently a <b>${word}</b>.`)
+    );
+  }
 };
 
 function attachInsightTooltip(card){
@@ -9731,7 +10577,12 @@ function attachInsightTooltip(card){
     pop.style.top = top+"px";
   }
   function show(pin=false){
-    pop.innerHTML = insightExplainers[card.dataset.insight] || "Not available until data loads.";
+    /* ⚠ v0.56: THE EXPLAINERS ARE FUNCTIONS NOW, evaluated at open time so the readings are the
+       ones on screen. A string is still accepted — an explainer added later as a plain sentence
+       must not silently render as "function generation(){…}". */
+    const ex = insightExplainers[card.dataset.insight];
+    pop.innerHTML = typeof ex === "function" ? ex()
+                  : (typeof ex === "string" ? ex : "Not available until data loads.");
     place();
     open = true;
     pinned = pin;
@@ -10140,7 +10991,29 @@ function redrawCharts(){ renderStack(); renderPrice(); renderWind(); renderCarbo
    one way, which is what makes two passes a convergence rather than a loop. */
 function redrawChartsSettled(){
   redrawCharts();
-  if(expandedPanel) requestAnimationFrame(redrawCharts);
+  /* ⚠ v0.57: THE SECOND PASS RUNS IN THE SAME TASK, NOT IN THE NEXT FRAME — and that one word
+     is the whole of the reported bug. The author: opening the expanded 24-hour and Carbon
+     Intensity views briefly shows a scrollbar on the right.
+
+     The two-pass convergence above was correct and the numbers in its note were right; what was
+     wrong was WHERE the second pass sat. `requestAnimationFrame` yields to the browser, so the
+     frame the first pass produced — the one with the over-sized chart — is PAINTED before the
+     correction arrives. Traced frame by frame: on the frame after the class flips the body has
+     its expanded height (731px) while the chart still carries the first pass's estimate, and the
+     body overflows by 121px on the 24-hour panel, 10px on Carbon Intensity and 26px on the
+     interconnector panel. One painted frame of overflow is one painted frame of scrollbar, and
+     on a classic-scrollbar platform it also reflows the content 15px sideways and back.
+
+     Layout is synchronous: the second `redrawCharts()` measures what the first one settled,
+     exactly as it did across the frame boundary, and neither intermediate state reaches the
+     compositor. Nothing about the convergence changes — only the moment it completes.
+
+     ⚠ AND IT WAS INVISIBLE TO THE HARNESS FOR THE USUAL REASON. Headless Chromium draws overlay
+     scrollbars, so the one bad frame reported a scrollbar width of zero; it is the body's
+     `scrollHeight − clientHeight` on that frame that gives it away, which is what the new
+     scenario samples. §6 already records that an instrument agreeing with you because it is
+     blind is worse than no instrument. */
+  if(expandedPanel) redrawCharts();
 }
 
 document.addEventListener("click",(e)=>{
@@ -10255,11 +11128,16 @@ $("btn-mixmore").addEventListener("click", (e)=>{
                                      : "+ " + n + " more fuel type" + (n===1?"":"s");
 });
 
-$("btn-table").addEventListener("click", (e)=>{
-  const t=$("mixtable"), open=t.hidden;
-  t.hidden=!open;
-  e.currentTarget.classList.toggle("active",open);
-  e.currentTarget.setAttribute("aria-expanded", String(open));
+/* One handler for both table toggles: the fuel panel's and, from v0.55, the interconnector
+   panel's. Two buttons doing the identical thing had no business being two functions. */
+[["btn-table","mixtable"],["btn-ictable","ictable"]].forEach(([btn,tbl])=>{
+  const b = $(btn); if(!b) return;
+  b.addEventListener("click", (e)=>{
+    const t=$(tbl), open=t.hidden;
+    t.hidden=!open;
+    e.currentTarget.classList.toggle("active",open);
+    e.currentTarget.setAttribute("aria-expanded", String(open));
+  });
 });
 
 /* Re-render charts on resize (they draw at true pixel size) — debounced, and only when the
