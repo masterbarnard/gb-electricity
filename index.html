@@ -20,8 +20,8 @@
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v61.png">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v61.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v64.png">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v64.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -29,7 +29,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v61.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v64.png">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -476,7 +476,25 @@
      other child of every grid, and the wrap then shrank to the width of one panel's text — the
      "expand" button made the panel NARROWER than it started. `width:100%` restores the stretch;
      `max-width` still caps it and the auto margins still centre it. */
-  .wrap{width:100%;max-width:1240px;margin:0 auto;padding:0 20px;}
+  /* ⚠ v0.62: 1240 → 1680, ON THE AUTHOR'S REPORT that the page wastes a large screen while
+     Kilowatts.io and Gridwatch use the whole of one. The old cap was not wrong, it was applied
+     to the wrong thing: 1240px is a READABLE MEASURE, which is a rule about prose, and this
+     document is charts, figures and tables with a few paragraphs in it. Every media query in
+     this sheet is a max-width, so a 1440px monitor and a 2560px one were being given the same
+     column — 65% of a 1900px screen, and some 660px of margin.
+     THE MEASURE RULE IS NOT ABANDONED, IT IS MOVED TO THE PROSE. `.homeintro` and every other
+     paragraph block carries its own 74ch cap, so widening the frame cannot produce a
+     200-character line; see `.homeintro p` and the insight rows.
+     1680 rather than "none": beyond about that, a two-column layout puts related figures far
+     enough apart that a reader is scanning across a room rather than a page, and the panels
+     stop reading as a set. A 2560px screen keeps a margin, deliberately. */
+  .wrap{width:100%;max-width:1680px;margin:0 auto;padding:0 20px;}
+  /* The measure, named once: `--measure` caps a line's length, which is a property of READING
+     and must never be re-derived from the frame's width.
+     ⚠ v0.64: `--measure-block` is gone with the centred block it capped. Two nested caps — an
+     820px box centred in the frame, holding 74ch paragraphs aligned left inside it — put the
+     text at neither the block's centre nor the page's left edge. One cap, one alignment. */
+  :root{ --measure:74ch; }
   html,body,.masthead,.panel,.tile,.btn,.track,.callout{
     transition:background-color .18s ease,border-color .18s ease,color .18s ease;}
   @media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;}}
@@ -1473,7 +1491,14 @@
     color:var(--ink-mute);}
   .icnet-cap b{color:var(--ink);font-weight:700;}
 
-  .g-2a{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);}
+  /* ⚠ v0.64: EQUAL COLUMNS, at the author's request. The 1.15/1 split was undocumented — no
+     comment anywhere says why — and the reason it plainly existed was that the fuel panel's row
+     is four tracks (swatch, name, bar, MW, share) against a chart that only needs a plot, so at
+     a 1240px frame the left column was the one under pressure. Rev 57 widened the frame and that
+     pressure went with it: both columns are now ~810px, where the fuel rows have room to spare.
+     An asymmetry kept past the constraint that caused it reads as a deliberate hierarchy between
+     two panels that do not have one. */
+  .g-2a{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
   /* PANEL HOVER. The border and the header rule come up to full accent and the panel lifts by a
      shadow only - nothing moves, nothing resizes, no layout is touched, so a hover cannot shift
      a chart under the pointer. What activates is the structure the panel already has, which is
@@ -1724,6 +1749,21 @@
     stroke-linecap:round;stroke-linejoin:round;}
   .panel-cycle.prev{left:10px;}
   .panel-cycle.next{right:10px;}
+  /* ⚠ v0.62: THE EXPANDED PANEL RESERVES THE CHEVRONS' ROOM, AND THE COMMENT ABOVE EXPLAINS
+     WHY IT HAS TO NOW. That note said the buttons "sit in clear gutter beside the 1240px
+     column" — true while the column was 1240px, and false the moment rev 57 widened it to
+     1680. At 1440px the column is now the full width less 20px of page padding, so a chevron
+     fixed 10px from the viewport edge lands ON the expanded chart rather than in a margin, and
+     `nothingHidesUnderTheButtons` caught it on the first run of the widened layout.
+     THE FIX DOES NOT DEPEND ON THERE BEING A MARGIN. Reserving the room inside the expanded
+     panel is true at every viewport width, where "position it in the gutter" is only true at
+     the widths that happen to have one — which is exactly the assumption that just expired.
+     Scoped above 760px because below that the chevrons stop floating and join the control row. */
+  @media (min-width:761px){
+    body[data-expanded] .panel.is-expanded > .panel-body{
+      padding-left:56px; padding-right:56px;
+    }
+  }
   /* ⚠ BELOW 760px THE ARROWS STOP FLOATING AND JOIN THE PANEL'S OWN CONTROL ROW, and the
      reason is measured rather than assumed: at 390px a floating chevron sat on top of the
      "20GW" axis label — an expanded panel fills a phone screen edge to edge, so there is no
@@ -2705,9 +2745,16 @@
   .icnet-term.in  .t-k{color:var(--flow-in);}
   .icnet-term.out .t-k{color:var(--flow-out-ink);}
   .icnet-card .t-k{color:var(--ink-dim);}
-  .icnet-term .t-v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;
+  /* ⚠ v0.63: 20 → 22px, AND THE NET CARD COMES DOWN TO MEET IT. The author asked for the three
+     figures to balance better, and the measurement says why they did not: 20px flanking a 30px
+     net is a 1.5:1 jump, which reads as a headline with two footnotes rather than one family
+     with a leader. THE EMPHASIS WAS ALREADY DOUBLE-ENCODED — the card lifts the net out of the
+     row with a tint and a hairline, so the type size was doing a job that was already done, and
+     paying for it in the legibility of the two gross figures a reader also came for. 22/27 is
+     about 1.23:1: still unmistakably the answer, without shrinking its terms. */
+  .icnet-term .t-v{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;
                    letter-spacing:-.015em;white-space:nowrap;line-height:1.1;}
-  .icnet-term .t-v .unit{font-size:11px;font-weight:700;color:var(--ink-dim);}
+  .icnet-term .t-v .unit{font-size:12px;font-weight:700;color:var(--ink-dim);}
   .icnet-term .t-n{font-size:9.5px;color:var(--ink-mute);font-variant-numeric:tabular-nums;}
   .icnet-term.in  .t-v{color:var(--flow-in);}
   .icnet-term.out .t-v{color:var(--flow-out-ink);}
@@ -2718,9 +2765,9 @@
     padding:9px 18px;border:1px solid var(--blue-line);border-radius:9px;
     background:var(--accent-tint);text-align:center;
   }
-  .icnet-val{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.05;
+  .icnet-val{font-size:27px;font-weight:700;letter-spacing:-.02em;line-height:1.05;
              font-variant-numeric:tabular-nums;}
-  .icnet-val .unit{font-size:13px;font-weight:700;color:var(--ink-dim);letter-spacing:0;}
+  .icnet-val .unit{font-size:12.5px;font-weight:700;color:var(--ink-dim);letter-spacing:0;}
   .icnet-dir{font-size:10px;font-weight:700;letter-spacing:.07em;}
   .icnet-card.in-c  .icnet-val,.icnet-card.in-c  .icnet-dir{color:var(--flow-in);}
   .icnet-card.out-c .icnet-val,.icnet-card.out-c .icnet-dir{color:var(--flow-out-ink);}
@@ -3031,15 +3078,26 @@
      Selectors are unique in this sheet and declared once, so the rev 53 gate has nothing to
      catch; the expanded-view rule names the element rather than relying on a parent's side
      effect, which is the fault the seo-details rule was written to fix at v0.44. */
-  .homeintro{max-width:820px;margin:14px auto 0;padding:15px 18px 2px;
+  /* ⚠ v0.64: THE BLOCK NO LONGER CENTRES ITSELF, AND THE REASON IS THE AUTHOR'S QUESTION.
+     It carried TWO nested caps: an 820px block centred in the frame, with 74ch paragraphs
+     left-aligned inside it. At 1240px those two were nearly the same width so the difference did
+     not show; at 1680px the paragraphs are ~595px sitting at the left of an 820px box that is
+     itself centred, which lands the text visibly left of centre — aligned to nothing, which is
+     exactly what it looked like.
+     ONE COLUMN, ONE ALIGNMENT. The rule spans the content column, and the text sits at the
+     measure against the same left edge every panel above it uses, so the eye returns to one
+     margin all the way down the page. The alternative — centring a measure-width column — is a
+     perfectly good pattern for a closing note, but it floats under full-width panels, and this
+     page has six of them. */
+  .homeintro{max-width:none;margin:16px 0 0;padding:16px 0 2px;
     border-top:1px solid var(--grey-line);
     font-size:12.5px;line-height:1.62;color:var(--ink-dim);}
-  .homeintro h2{margin:0 0 9px;font-size:13.5px;font-weight:700;line-height:1.3;
+  .homeintro h2{max-width:var(--measure);margin:0 0 9px;font-size:13.5px;font-weight:700;line-height:1.3;
     letter-spacing:0;text-transform:none;color:var(--ink);}
-  .homeintro p{margin:0 0 9px;max-width:74ch;}
+  .homeintro p{margin:0 0 9px;max-width:var(--measure);}
   .homeintro a{color:var(--blue-text);text-decoration:underline;text-underline-offset:2px;}
   .homeintro a:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;border-radius:2px;}
-  @media (max-width:620px){ .homeintro{padding-left:0;padding-right:0;} }
+
   /* Gone in the expanded view with everything else that is not the panel being read. */
   body[data-expanded] .homeintro{display:none;}
 
@@ -5332,7 +5390,7 @@
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" id="version-label" title="Dashboard version">v0.61</span> &middot;
+      <span class="version-label" id="version-label" title="Dashboard version">v0.64</span> &middot;
       <!-- ⚠ v0.60: THE MODAL IS GONE AND THESE ARE BOTH REAL LINKS, About first.
            Until now the footer offered "About this Dashboard", a button opening a dialog that
            cloned all fourteen sections — while /about, published at rev 54, carried four of
@@ -5389,7 +5447,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.61";
+const APP_VERSION = "v0.64";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -7854,7 +7912,19 @@ function chartGeom(box, tallness){
     ? Math.max(200, fitted == null
         ? Math.round(window.innerHeight * (W < 700 ? 0.54 : 0.58))
         : fitted)
-    : (W < 430 ? tallness.sm : (W < 700 ? tallness.md : tallness.lg));
+    /* ⚠ v0.62: A FOURTH BEHAVIOUR ABOVE 700px, BECAUSE WIDENING THE FRAME MADE EVERY CHART
+       FLATTER. The three tiers were chosen when the page capped at 1240px, where a two-column
+       panel gave a chart about 590px wide — the `lg` heights are drawn against that. At the new
+       1680px cap the same chart is about 810px, and a fixed height turns a 2.2:1 chart into a
+       2.7:1 one: the same data, read through a letterbox, with every gradient flattened.
+       So above the `lg` threshold the height grows WITH the width instead of standing still.
+       Deliberately gentle and capped at +35%: holding the aspect ratio exactly would make a
+       wide chart tall enough to push the panel below it off the screen, which trades one
+       reading problem for another. `chartAspect` in the harness asserts the result stays inside
+       a band rather than trusting these numbers — the band is the claim, the arithmetic is not. */
+    : (W < 430 ? tallness.sm
+      : (W < 700 ? tallness.md
+        : Math.round(tallness.lg * Math.min(1.35, 1 + (W - 700) / 700 * 0.35))));
   return {W, H, ml: W<430?34:42, mr:3, mt:12, mb:31};
 }
 function attachHover(box, svg, handler){
@@ -8247,7 +8317,16 @@ function renderPrice(){
   const pts = priceSource.filter(r=>{ const t=new Date(r.startTime).getTime(); return t>=t0 && t<=t1; });
   if(pts.length < 2){ svg.innerHTML=""; return; }
 
-  const geom = chartGeom(box, {sm:120, md:140, lg:150});
+  /* ⚠ v0.64: 120/140/150 → 126/148/160, AND THE CEILING IS WHY. Equalising the panel columns
+     widened the right-hand one, which carries this strip; at 1920px it reached 5.01:1 and
+     `noChartIsALetterbox` failed on a ceiling set one release earlier at the widest strip the
+     design then used. THE CHECK IS NOT THE THING TO CHANGE. A ceiling that gets raised each time
+     something drifts past it is a ratchet in the wrong direction, and rev 57 already recorded
+     the cost of a check that fails on a real design and gets softened instead of heeded — the
+     difference is that 5.01 here is a CONSEQUENCE of a layout change, not a decision anybody
+     made. So the strip gains about 7% of height and comes back to ~4.7:1, which is inside the
+     band and reads better besides. */
+  const geom = chartGeom(box, {sm:126, md:148, lg:160});
   if(!geom) return;
   const {W,ml,mr} = geom;
   const H = (box.closest(".panel")||{}).classList?.contains("is-expanded")
