@@ -20,8 +20,8 @@
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v59.png">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v59.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v60.png">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v60.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -29,7 +29,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v59.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v60.png">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -3088,29 +3088,16 @@
        · NAVIGATION. Nine sections is enough to get lost in, so the headings are listed at the
          top as jump links. It is generated from the headings themselves rather than typed, so
          a section added later cannot go missing from the list. */
-  .modal.wide{width:min(940px,100%);}
-  .modal-body.scroll{max-height:min(82vh,900px);overflow-y:auto;-webkit-overflow-scrolling:touch;
-    scroll-behavior:smooth;}
-  @media (prefers-reduced-motion:reduce){ .modal-body.scroll{scroll-behavior:auto;} }
+  /* v0.60: `.modal.wide`, `.modal-body.scroll` and `.aboutnav` went with the About dialog —
+     it was their only consumer. When an element goes, its compensations go with it. The
+     `.about` rules below STAY: the generated pages consume them through site/styles.css, which
+     is extracted from this stylesheet verbatim. */
   .about h4{margin:30px 0 9px;font-size:12.5px;font-weight:700;letter-spacing:.06em;
     text-transform:uppercase;color:var(--blue-text);scroll-margin-top:10px;
     padding-top:14px;border-top:1px solid var(--grey-line);}
   .about h4:first-of-type{margin-top:4px;padding-top:0;border-top:none;}
   .about p{margin:0 0 14px;font-size:14.5px;line-height:1.7;color:var(--ink);max-width:74ch;}
   .about p b{color:var(--ink);font-weight:700;}
-  /* The jump list. Two columns where there is room, because nine items in one column is a
-     scroll of its own before the reader has started. */
-  .aboutnav{margin:0 0 6px;padding:12px 14px;background:var(--grey-bg);border-radius:8px;
-    border:1px solid var(--grey-line);}
-  .aboutnav .k{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
-    color:var(--ink-mute);margin-bottom:8px;}
-  .aboutnav ol{margin:0;padding:0;list-style:none;columns:2;column-gap:26px;}
-  @media (max-width:700px){ .aboutnav ol{columns:1;} }
-  .aboutnav li{break-inside:avoid;margin:0 0 5px;}
-  .aboutnav a{font-size:12.5px;color:var(--ink-dim);text-decoration:none;
-    border-bottom:1px solid transparent;}
-  .aboutnav a:hover{color:var(--blue-text);border-bottom-color:var(--blue-text);}
-  .aboutnav a:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;border-radius:2px;}
   /* Attribution paragraphs are set tighter than the prose around them: they are a notice, not an
      argument, and grouping them visually stops them reading as three unrelated sentences. */
   .about p.attrib{margin:0 0 7px;padding-left:11px;border-left:2px solid var(--blue-line);}
@@ -3121,7 +3108,6 @@
   .srcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:5px 22px;
     margin:4px 0 14px;font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);}
   @media (max-width:620px){ .srcs{grid-template-columns:1fr;} }
-  @media (max-width:620px){ .modal-body.scroll{max-height:none;} }
   /* ============================================================================
      ⚠ v0.52 — THE FOUR DATA STATES, AND WHY THIS IS A CORRECTNESS FEATURE
 
@@ -4941,257 +4927,213 @@
 
 
 
-  <!-- ================= "About this Dashboard" =================
-       Kept in a <template> rather than written inline in the dialog, so the prose is authored
-       as ordinary markup here and cloned once on first open. -->
+  <!-- ================= THE SOURCE FOR /methodology AND /about =================
+       ⚠ v0.60: THIS TEMPLATE RENDERS NOWHERE IN THIS DOCUMENT, AND THAT IS DELIBERATE — DO NOT
+       DELETE IT AS DEAD MARKUP. It is the single source from which tools/pages60.mjs generates
+       site/methodology.html (the ten how-derived sections) and site/about.html (the four
+       provenance sections) at release time. The About dialog that used to render it was retired
+       at v0.60, because the same fourteen sections now have two addressable URLs and a dialog
+       calling itself "About" beside a page calling itself "About" could only confuse.
+       THE PROSE IS EDITED HERE AND NOWHERE ELSE. The generated files in site/ are outputs: a
+       change made there is overwritten by the next release, and the harness's `contentParity`
+       fails the release if the pages and this template stop agreeing.
+       A <template>'s content is inert — never rendered, never indexed — so this costs the
+       reader nothing and the crawler nothing; the words are indexed at their own URLs. -->
   <template id="about-tpl">
     <div class="about">
       <h4>What this is</h4>
-      <!-- ⚠ v0.53: THE PURPOSE PARAGRAPH. This section opened on what the dashboard READS, which
-           is provenance rather than purpose, and the author's brief for this release asked the
-           About dialog to carry the deeper explanation of what the tool is FOR. It is also the
-           one thing the page's short description at the foot of the page deliberately does not
-           try to say, now that the two have been split by question. -->
       <p>
-        <b>Why it exists.</b> Nearly everything on this page is already public, and almost none of
-        it is readable. The figures arrive in separate feeds on different cadences, measured at
-        different boundaries, in formats built for settlement rather than for looking at — so the
-        work is not obtaining the data but joining it up without quietly changing what it means.
-        This dashboard does that joining in the open: where two datasets disagree it shows the
-        disagreement rather than averaging it away, and where a number is modelled rather than
-        measured it says so on the figure itself.
+        A live read of the GB transmission system from Elexon's Insights (BMRS) API — no key, your
+        browser calls Elexon, NESO and Sheffield Solar directly. Every fuel row except solar is
+        <b>BM-metered</b>. Embedded (distribution-connected) generation is invisible to those feeds
+        and surfaces instead as suppressed National Demand: INDO on a sunny afternoon looks
+        implausibly low, and that is <b>the most common misreading of this data</b>. Embedded solar
+        is filled in from PV_Live and counted; embedded wind is not. Biomass counts as low-carbon
+        by UK convention despite being combustion. Pumped storage and interconnectors go negative
+        when pumping or exporting, and are excluded from the low-carbon denominator.
       </p>
       <p>
-        A live read of the GB transmission system built entirely on
-        Elexon's Insights (BMRS) API — the same public dataset that sits behind GB electricity settlement.
-        Every fuel row except solar is <b>BM-metered</b>. Embedded
-        (distribution-connected) generation is invisible to those feeds — it shows up instead as suppressed National
-        Demand, which is why INDO on a sunny afternoon looks implausibly low and is the single most common misreading
-        of this data. Embedded <i>solar</i> is filled in from PV_Live and counted (see below);
-        embedded <i>wind</i> still is not, because no clean GB figure is published, so a little generation remains
-        hidden inside demand.
-        Biomass is counted as low-carbon by UK convention despite being combustion-based.
-        <b>Coal is not named as a fuel here</b>: Ratcliffe-on-Soar, the last coal-fired
-        station in GB, closed on 30 September 2024, and Elexon has published <b class="ds">COAL</b> = 0 every
-        settlement period since.
-        The code stays mapped so a residual could never be dropped silently, and the table view still shows the raw
-        zero — but naming it in a label would imply the grid has an option it no longer has.
-        Storage (pumped) and interconnectors go negative when pumping or exporting, and are excluded from the
-        low-carbon denominator. No API key is required. Elexon, NESO and Sheffield Solar feeds are read by the browser.
+        <b>Coal is not named as a fuel.</b> Ratcliffe-on-Soar, GB's last coal station, closed on
+        30 September 2024 and <b class="ds">COAL</b> has read 0 every settlement period since. The
+        code stays mapped so a residual could never be dropped silently, and the table still shows
+        the raw zero — but naming it in a label would imply an option the grid no longer has.
       </p>
 
       <h4>&ldquo;Other&rdquo; is a residual, and cannot be broken down</h4>
       <p>
-        The row labelled <b>Other</b> is not a fuel. Elexon's own definition, in the
-        <i>BMRA and SAA Interface Specification</i>, is circular by design:
-        &ldquo;<i>The other category contains all generation that cannot be placed within any of the other
-        categories.</i>&rdquo; It is typically <b>0.2&ndash;3 GW</b>, a low single-digit percent of
-        transmission-connected output, and it peaks in the evening &mdash; at peak it can exceed hydro,
-        pumped storage, OCGT, oil and coal put together, so it is not a rounding error.
-        <b>It cannot be decomposed from published data, and this page checked.</b>
-        <b class="ds">FUELINST</b> and <span class="term ds" data-term="FUELHH">FUELHH</span> carry no BM unit field at all;
-        <b class="ds">B1610</b> gives half-hourly metered volumes per BM unit but its
-        <b class="ds">psrType</b> is the literal string &ldquo;Generation&rdquo; on every record, with no fuel
-        type; and <b class="ds">/reference/bmunits/all</b> does carry a fuel type, but it is
-        <b>self-declared at registration</b>, by a different body, over a different population &mdash; units
-        marked <b class="ds">OTHER</b> there include supplier units that are not transmission generators.
-        Joining those two would be inventing a mapping nobody publishes.
-        The richer ENTSO-E dataset <b class="ds">AGPT</b> splits wind onshore from offshore and adds solar,
-        and still keeps its own <i>Other</i> bucket.
-        <b>So this page does not say what is in it.</b> The usual guesses are worth naming as guesses:
-        waste-to-energy is largely distribution-connected and therefore outside this feed's scope entirely,
-        and Other never went negative on a day when pumped storage did &mdash; which is not what
+        <b>Other</b> is not a fuel. Elexon's own definition, in the <i>BMRA and SAA Interface
+        Specification</i>, is circular by design: &ldquo;<i>all generation that cannot be placed
+        within any of the other categories.</i>&rdquo; At <b>0.2&ndash;3 GW</b>, peaking in the
+        evening, it can exceed hydro, pumped storage, OCGT, oil and coal put together — not a
+        rounding error.
+      </p>
+      <p>
+        <b>It cannot be decomposed from published data, and this page checked.</b> The feeds that
+        carry these volumes carry no fuel type per BM unit, and the register that does carry one is
+        self-declared at registration, by a different body over a different population — joining
+        them would be inventing a mapping nobody publishes. The usual guesses are worth naming as
+        guesses: waste-to-energy is largely distribution-connected and outside this feed entirely,
+        and Other has never gone negative on a day when pumped storage did, which is not what
         net-charging batteries would look like.
       </p>
 
       <h4>Embedded solar, and why it is drawn differently</h4>
       <p>
-        GB solar is almost entirely distribution-connected, so it is absent from every Elexon metered feed. Two
-        sources publish it and they disagree, so <b>which one you are looking at depends on how you
-        opened this page</b> — the solar row names its own source, and the cross-check line under the fuel mix
-        states it in words. Read that before quoting a solar figure.
+        GB solar is almost entirely distribution-connected, so it is absent from every Elexon
+        metered feed. Two sources publish it and they disagree, so <b>which one you are looking at
+        depends on how you opened this page</b> — the solar row names its own source. Read that
+        before quoting a solar figure.
       </p>
       <p>
         <b>Preferred: Sheffield Solar's PV_Live</b>, the recognised measure of total GB PV outturn.
-        <b>In practice, usually Elexon <span class="ds">AGWS</span></b> — because PV_Live's API sends no CORS
-        headers, so a page opened by double-clicking the file off disk cannot read it at all and falls back. AGWS
-        is the ENTSO-E B1440 flow; it publishes each half hour about <b>2h30m late</b> and has read
-        <b>16–29% below PV_Live</b> at every half hour compared. So the fallback figure is best treated as a
-        <b>floor</b> rather than a reading, and it is the figure you will normally see. Serving the folder over
-        http does not fix it: only a server-side fetch does, and a single file with no build step cannot
-        perform one.
+        <b>In practice, usually Elexon <span class="ds">AGWS</span></b>: PV_Live sends no CORS
+        headers, so a page opened off disk cannot read it and falls back. AGWS is the ENTSO-E B1440
+        flow, published about <b>2h30m late</b>, and has read <b>16&ndash;29% below PV_Live</b> at
+        every half hour compared — treat it as a <b>floor</b>, not a reading.
       </p>
       <p>
-        What the file does instead is leave a door open. <b>An optional proxy</b> is read from a single
-        constant, <span class="ds">PVLIVE_PROXY</span>, empty by default. Left empty, the behaviour is exactly
-        as described above and the file stays double-clickable off disk. Set — once this is hosted somewhere
-        that can run one — PV_Live becomes readable without the file changing shape, and the fallback stays
-        underneath it, because a proxy that is down should look no different from CORS: AGWS, named on screen.
+        Embedded solar is <b>counted in every total</b>, because it is real generation powering the
+        country, but always drawn as a <b>hatched band</b>, because it is modelled rather than
+        metered. Provenance is carried by the fill, not by leaving real megawatts out of the
+        arithmetic; where both sources are readable, the gap between them is shown rather than
+        reconciled.
       </p>
       <p>
-        Whichever source supplies it, embedded solar is counted in every total on this page, because it is real
-        generation powering the country, but always drawn as a <b>hatched band</b> since it is
-        <i>modelled</i> rather than BM-metered. Provenance is carried by the fill, not by leaving real megawatts
-        out of the arithmetic. When both sources are readable the gap between them is
-        <b>shown rather than reconciled</b>. <b>Underlying demand</b> adds embedded
-        solar back to INDO; <b>embedded wind is not added</b>. Until v0.02 this page said that was because no
-        clean GB figure is published, which overstated it: NESO publishes an
-        <b>Embedded Wind and Solar Forecasts</b> dataset, and other tools use it. What it publishes is a
-        <i>forecast</i>, not an outturn — a modelled expectation of what distributed wind will do, not a
-        measurement of what it did. For a page built on metered outturn that is a different kind of number,
-        and mixing it into a demand figure without saying so would undo the distinction the rest of this
-        page is built on. So it stays out, and the gigawatts it represents stay hidden inside demand. The
-        honest position is that this is a <b>choice about what this tool is</b>, not an absence of data.
-        Daylight shading and the sunrise/sunset marks are <b>computed</b>, not fetched —
-        NOAA's solar-position algorithm for a PV-weighted GB point (52.4&deg;N, 1.5&deg;W, roughly the Midlands).
-        Sunset across GB spans about 45 minutes end to end, so read the marks as representative, not exact for
-        your postcode.
+        <b>Underlying demand</b> adds embedded solar back to INDO; <b>embedded wind is not
+        added</b>. NESO publishes an Embedded Wind and Solar dataset, but what it publishes is a
+        <i>forecast</i> rather than a measurement, and folding that into a demand figure would undo
+        the measured-versus-modelled distinction the rest of this page rests on. Those gigawatts
+        stay hidden inside demand: a <b>choice about what this tool is</b>, not an absence of data.
+      </p>
+      <p>
+        Daylight shading and the sunrise/sunset marks are <b>computed</b>, not fetched — NOAA's
+        solar-position algorithm for a PV-weighted GB point (52.4&deg;N, 1.5&deg;W). Sunset across
+        GB spans about 45 minutes end to end, so read them as representative rather than exact.
       </p>
 
       <h4>Carbon intensity, and a ruler that moves</h4>
       <p>
-        Carbon intensity comes from <b>NESO's Carbon Intensity API</b>, which is open, keyless and
-        licensed CC BY 4.0. Two things about it are worth knowing before quoting a figure.
-      </p>
-      <p>
         <b>The band names are re-cut every 1 January.</b> As the grid decarbonises NESO lowers the
         thresholds, so the same reading slides down the scale: 95&nbsp;gCO<sub>2</sub>/kWh was
-        <i>low</i> under 2025's cuts and is <i>moderate</i> under 2026's. The figure did not move — the
-        ruler did. This page bands each reading on <b>the row for the year that reading belongs to</b>, so a
-        2025 half hour is still judged by 2025's thresholds when you look at it today, and the panel says
-        which year it used. It computes the band from the figure rather than reading the API's own label,
-        because settlement reruns revise the figure without always recomputing the label; where the two
-        disagree, the panel says so instead of quietly choosing.
+        <i>low</i> under 2025's cuts and is <i>moderate</i> under 2026's. The figure did not move —
+        the ruler did. Each reading is banded on <b>the row for the year it belongs to</b>, and the
+        panel says which year it used. The band is computed from the figure rather than read from
+        the API's label, because settlement reruns revise the figure without always recomputing the
+        label; where the two disagree, the panel says so rather than quietly choosing.
       </p>
       <p>
-        <b>Half the time the headline number is a forecast.</b> The settled actual for a half hour in
-        progress does not exist yet, so any live carbon figure is a prediction until settlement catches up.
-        The tile carries an <b>actual</b> or <b>forecast</b> chip on the face of the number for that reason —
-        the same discipline the solar figure gets, for the same reason.
-      </p>
-      <p>
-        The band scale is drawn in <b>ink rather than green-to-red</b>, against the convention of every
-        comparable tool. Every hue on this page belongs to the data and the fuel palette already owns them,
-        so a green in a carbon ramp would read as biomass; and green-to-red is the worst possible ramp for
-        the two colour-vision deficiencies this project's palette is validated against. The band has a name,
-        the name is always written, and the tint only reinforces it.
+        <b>Half the time the headline number is a forecast.</b> The settled actual for a half hour
+        in progress does not exist yet, so any live carbon figure is a prediction until settlement
+        catches up — hence the <b>actual</b> or <b>forecast</b> chip on the face of the number.
       </p>
 
       <h4>System frequency, and two limits that are not the same</h4>
       <p>
-        Frequency is Elexon's <span class="term ds" data-term="FREQ">FREQ</span> dataset at its native <b>15-second</b> resolution — the
-        fastest-moving figure on this page by a wide margin, next to a fuel mix that updates every five
-        minutes and settlement data that updates every half hour.
+        Frequency is Elexon's <span class="term ds" data-term="FREQ">FREQ</span> dataset at its
+        native <b>15-second</b> resolution — by a wide margin the fastest-moving figure here.
       </p>
       <p>
-        The panel draws two pairs of lines and deliberately draws them differently.
-        <b>49.5 and 50.5&nbsp;Hz are statutory</b>: the Electricity Safety, Quality and Continuity
-        Regulations 2002 permit a variation not exceeding 1% either side of the declared frequency, and Grid
-        Code CC.6.1.2 restates it. <b>49.8 and 50.2&nbsp;Hz are operational</b> — the band NESO works to by
-        its own standard, which is not a legal limit. Drifting outside the operational band is ordinary and
-        happens most hours; leaving the statutory range is not. A dashboard that drew both pairs the same
-        way would be saying they mean the same thing.
+        The panel draws two pairs of lines, deliberately differently. <b>49.5 and 50.5&nbsp;Hz are
+        statutory</b>: the Electricity Safety, Quality and Continuity Regulations 2002 permit a
+        variation not exceeding 1% either side of the declared frequency, and Grid Code CC.6.1.2
+        restates it. <b>49.8 and 50.2&nbsp;Hz are operational</b> — NESO's own standard, not a
+        legal limit. Drifting outside the operational band is ordinary and happens most hours;
+        leaving the statutory range is not.
       </p>
 
       <h4>Forecast convergence, and the split</h4>
       <p>
         The wind panel draws <b>three</b> series, all BM-metered wind on one MW axis: outturn, the
-        <b>latest</b> forecast for each settlement period, and the <b>first</b> forecast ever published for
-        it — typically about two days ahead. The interesting question about a forecast is not only how
-        wrong it was but <b>when it stopped being wrong</b>, and the gap between the two dotted lines is
-        that answer. Both vintages are scored on the same periods, so the improvement figure is
-        like-for-like rather than an artefact of the two covering different windows. Some days the latest
-        forecast is <i>worse</i> than the first; the panel says so when it happens, because that is the
-        more interesting day.
+        <b>latest</b> forecast for each settlement period, and the <b>first</b> forecast ever
+        published for it, typically two days ahead. The interesting question is not only how wrong
+        a forecast was but <b>when it stopped being wrong</b>, and the gap between the two dotted
+        lines is that answer. Both vintages are scored on the same periods, so the improvement is
+        like-for-like. Some days the latest forecast is <i>worse</i> than the first, and the panel
+        says so.
       </p>
       <p>
-        The <b>onshore / offshore split</b> comes from the same <span class="ds">AGWS</span> call that
-        supplies the fallback solar figure — one endpoint, one request, three quantities. It carries its
-        own timestamp rather than the chart's, because AGWS lags and a split labelled with the current
-        time would be claiming a currency it does not have.
+        The <b>onshore / offshore split</b> comes from the same <span class="ds">AGWS</span> call
+        as the fallback solar figure, and carries its own timestamp rather than the chart's,
+        because AGWS lags.
       </p>
 
       <h4>Why supply and demand never quite match</h4>
       <p>
-        The band at the top of the page opens on the gap between supply and demand, because the gap
-        is the interesting part. The two sides are measured at different boundaries by different
-        datasets published on different cadences, so they disagree by a few hundred megawatts
-        almost all of the time — and that disagreement is a fact about measurement, not about the
-        grid running short of anything.
+        The band at the top of the dashboard opens on the gap between supply and demand, because
+        the gap is the interesting part. The two sides are measured at different boundaries, by
+        different datasets, on different cadences, so they disagree by a few hundred megawatts
+        almost all of the time — a fact about measurement, not about the grid running short.
       </p>
       <p>
-        <b>Which two figures are compared is the whole correctness of it.</b> The balance
-        compares electricity on the grid with underlying demand — not with National Demand — and
-        the reason is that both include the same estimate of embedded solar, so it cancels. What
-        is left is metered generation plus net imports, less national demand, which is a real
-        quantity. Comparing the grid against National Demand instead would leave the embedded
-        estimate standing in the answer: several gigawatts on a sunny afternoon, and
-        <i>nothing at midnight</i> — which is exactly why the wrong pairing looks perfectly
-        correct in an evening screenshot.
+        <b>Which two figures are compared is the whole correctness of it.</b> The balance compares
+        electricity on the grid with <b>underlying demand</b>, not with National Demand, because
+        both include the same estimate of embedded solar — so it cancels, leaving metered
+        generation plus net imports less national demand, which is a real quantity. Comparing
+        against National Demand would leave the embedded estimate standing in the answer: several
+        gigawatts on a sunny afternoon and <i>nothing at midnight</i>, which is why the wrong
+        pairing looks perfectly correct in an evening screenshot.
       </p>
 
       <h4>Reading a figure that is not there</h4>
       <p>
-        Feeds fail, and they fail in ways that matter differently. Every headline figure on this
-        page is in one of four states, and each is drawn distinctly so that none of them can be
-        mistaken for another:
+        Every headline figure is in one of four states, each drawn distinctly:
       </p>
       <ul>
         <li><b>A number</b> — a real reading, at full weight.</li>
-        <li><b>A dash</b> — either the figure has not arrived yet, or the feed did not answer on
-          the last refresh. Hovering it says which, and names the feed that failed.</li>
-        <li><b>A number with a clock beside it</b> — a real reading, but older than the refresh
-          period it belongs to. The mark carries its age.</li>
-        <li><b>Zero</b> — a genuine zero, which is a fact about the system rather than a gap in
-          the data. Coal has read zero every settlement period since September 2024.</li>
+        <li><b>A dash</b> — the figure has not arrived, or the feed did not answer on the last
+          refresh. Hovering says which, and names the feed that failed.</li>
+        <li><b>A number with a clock</b> — a real reading, older than the refresh period it belongs
+          to. The mark carries its age.</li>
+        <li><b>Zero</b> — a genuine zero: a fact about the system, not a gap in the data.</li>
       </ul>
       <p>
-        The distinction the design is protecting is the last one: <b>a missing value must never
-        look like a real zero.</b> A dash cannot be read as "none", and a zero is never dressed as
+        The distinction being protected is the last one: <b>a missing value must never look like a
+        real zero.</b> A dash cannot be read as &ldquo;none&rdquo;, and a zero is never dressed as
         an absence.
       </p>
 
       <h4>How a figure says where it came from</h4>
       <p>
-        Separately from whether a figure has arrived, there is the question of what kind of figure
-        it is. Six states, marked the same way everywhere on the page:
+        Separately from whether a figure has arrived: what kind of figure it is. Six states, marked
+        the same way everywhere.
       </p>
       <ul>
-        <li><b>Measured</b> — BM-metered outturn. <b>Unmarked</b>, because most of this dashboard
-          is measured and a chip on every one of those would be a page of chips saying "ordinary".
-          The absence of a mark is the statement.</li>
-        <li><b>Estimated</b> — a hatched chip, and hatched fill on the charts. Modelled rather than
-          metered: embedded solar throughout, and the AGWS fallback.</li>
-        <li><b>Forecast</b> — a dashed outline, matching the dashed forecast strokes on the wind
-          and carbon charts. Published ahead of the period it describes.</li>
-        <li><b>Calculated</b> — a bracket mark, as under the hero figure's total. Derived here from
-          other figures on this page rather than read from a feed. It carries no colour: a derived
-          figure is not less trustworthy than a measured one, it simply came from somewhere else.</li>
-        <li><b>Stale</b> — a clock and an age. A real reading, older than the refresh period it
-          belongs to.</li>
+        <li><b>Measured</b> — BM-metered outturn, and <b>unmarked</b>. Most of this dashboard is
+          measured; the absence of a mark is the statement.</li>
+        <li><b>Estimated</b> — hatched chip and hatched fill: modelled rather than metered.
+          Embedded solar, and the AGWS fallback.</li>
+        <li><b>Forecast</b> — a dashed outline, matching the dashed strokes on the wind and carbon
+          charts.</li>
+        <li><b>Calculated</b> — a bracket mark: derived from other figures here rather than read
+          from a feed. It carries no colour, because derived is not less trustworthy.</li>
+        <li><b>Stale</b> — a clock and an age.</li>
         <li><b>Unavailable</b> — a struck-through chip and the word. The only mark that reads as a
           negation, because it is the one state that must never be mistaken for a value.</li>
       </ul>
       <p>
-        The point of fixing the vocabulary is that provenance stops being something each panel
-        explains in its own words. <b>Where a mark can say it, the prose does not have to.</b>
+        <b>Where a mark can say it, the prose does not have to.</b>
       </p>
 
       <h4>What this deliberately does not show</h4>
       <p>
-        <b>Battery storage.</b> Elexon reports storage <i>discharging</i> but not charging. Showing
-        discharge alone would count the same energy twice — once when it was generated and again when it
-        came back out — so it is left out entirely rather than shown as a half-truth. This means BESS
-        discharge is not silently folded into &ldquo;Other&rdquo; or treated as new primary generation.
-        <b>History.</b> This page is a live read and holds 24 hours, an hour of frequency, and nothing
-        further back. That is a consequence of being one file with no server rather than a judgement that
-        history does not matter; tools that keep an archive answer questions this one cannot.
-        <b>Embedded wind</b>, as above — including in all three wind series and in the onshore/offshore
-        split, all of which are transmission-metered only.
-        <b>Wind curtailment.</b> There is no published GB curtailment figure; deriving one means
-        reconciling physical notifications, bid-offer acceptances and export limits per unit, integrating
-        piecewise ramps and resolving acceptance amendments. It is a research problem rather than a
-        panel, and a number this page could not defend is worse than no number.
+        <b>Battery storage.</b> Elexon reports storage discharging but not charging, and showing
+        discharge alone would count the same energy twice — once generated, again on the way out.
+        It is left out rather than shown as a half-truth, and is not folded into
+        &ldquo;Other&rdquo;.
+      </p>
+      <p>
+        <b>History.</b> 24 hours of most things, an hour of frequency, nothing further back — a
+        consequence of being one file with no server, not a judgement that history does not matter.
+      </p>
+      <p>
+        <b>Embedded wind</b>, as above, including all three wind series and the onshore/offshore
+        split, which are transmission-metered only.
+      </p>
+      <p>
+        <b>Wind curtailment.</b> No published GB figure exists, and deriving one means reconciling
+        physical notifications, bid-offer acceptances and export limits per unit. That is a
+        research problem rather than a panel, and a number this page could not defend is worse than
+        no number.
       </p>
 
       <h4>Inspired by</h4>
@@ -5327,16 +5269,20 @@
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" id="version-label" title="Dashboard version">v0.59</span> &middot;
-      <!-- v0.59: an ABSOLUTE href, deliberately. This document opens by double-click from any
-           folder, so a relative link would 404 everywhere except the deployed root; the pages
-           exist only at the site. It is also the crawl path: the sitemap declares /methodology
-           and /about, but a page a crawler can only reach through a sitemap ranks as an orphan —
-           this link is the one that makes it part of the site. /about is linked from
-           /methodology and back, so one footer link covers discovery without stacking a second
-           "About" next to the button that opens the dialog. -->
-      <a href="https://gbelectricity.uk/methodology" class="footer-link">Methodology</a> &middot;
-      <button type="button" id="btn-about" class="footer-link">About this Dashboard</button>
+      <span class="version-label" id="version-label" title="Dashboard version">v0.60</span> &middot;
+      <!-- ⚠ v0.60: THE MODAL IS GONE AND THESE ARE BOTH REAL LINKS, About first.
+           Until now the footer offered "About this Dashboard", a button opening a dialog that
+           cloned all fourteen sections — while /about, published at rev 54, carried four of
+           them. Two controls named About, one holding three and a half times the other, and no
+           way for a reader to predict which they would get. The dialog was the older answer to
+           a question the pages now answer better, so it goes rather than being renamed.
+           ABSOLUTE hrefs, deliberately: this document opens by double-click from any folder, so
+           a relative link would 404 everywhere except the deployed root. They are also the crawl
+           path — a page reachable only through a sitemap ranks as an orphan, and /about was
+           previously reachable only via /methodology, which is one hop too many for the page
+           carrying the licence attributions. -->
+      <a href="https://gbelectricity.uk/about" class="footer-link">About</a> &middot;
+      <a href="https://gbelectricity.uk/methodology" class="footer-link">Methodology</a>
     </div>
   </div>
 </footer>
@@ -5348,18 +5294,8 @@
      with whichever control opened it. -->
 <div id="infopop" role="tooltip" aria-label="Explanation" hidden></div>
 
-<div class="modal-back" id="about-modal" hidden>
-  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="about-modal-title">
-    <div class="modal-head">
-      <div>
-        <h3 id="about-modal-title">About this Dashboard</h3>
-        <div class="sub" id="about-modal-sub"></div>
-      </div>
-      <button class="modal-close" id="about-modal-close" aria-label="Close">&#10005;</button>
-    </div>
-    <div class="modal-body scroll" id="about-modal-body"></div>
-  </div>
-</div>
+<!-- v0.60: the About dialog stood here. Its content is /about and /methodology now;
+     #about-tpl above remains as the generator's source and renders nowhere in this document. -->
 
 <div class="modal-back" id="ic-modal" hidden>
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ic-modal-title">
@@ -5390,7 +5326,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.59";
+const APP_VERSION = "v0.60";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -8112,24 +8048,53 @@ function renderStack(){
      chart is the embedded-solar hatch, and a warm sun icon would offer itself as that series'
      key. The shape carries the meaning; the colour stays out of it.
      The label flips to the left of the line when the mark is close to the right edge, because
-     glyph plus time is about 52px and the old 8px guard only protected the line. */
+     glyph plus time is about 52px and the old 8px guard only protected the line.
+
+     ⚠ v0.60: THE FLIPPED SIDE PRINTED THE TIME THROUGH THE GLYPH, reported by the author on the
+     sunset mark — which is the one that flips, because sunset is the mark near the right edge.
+     The two offsets were not mirror images: the glyph went to `mx-31` (occupying mx-31…mx-17)
+     while the end-anchored label ended at `mx-14`, so a five-character time reaching back about
+     25px covered the glyph completely. The unflipped side had always been correct — glyph at
+     mx+3, label starting at mx+20 — so the fix is to make the flipped side the actual mirror of
+     it: glyph hard against the line on the left, label ending clear of the glyph. Stated as one
+     offset pair rather than four numbers, so the two sides cannot drift apart again.
+     `sunLabelsDoNotCollide` measures the rendered boxes; the arithmetic was what went wrong
+     here, and arithmetic is exactly what a check should not be asked to take on trust. */
   const sun = sunMarks(T0,T1);
-  let lastSunLabelX=-Infinity;
+  /* ⚠ v0.60: THE SPACING GUARD MEASURES LABEL BOXES NOW, NOT MARK POSITIONS — and that is the
+     second half of the author's report. The old guard asked whether two MARKS were 62px apart,
+     which is only the same question while every label sits on the same side of its mark. A
+     flipped label is drawn about 60px to the LEFT of its own mark, so two marks a comfortable
+     69px apart put their labels 8px apart and printed through each other at the right edge of
+     the 7-day chart. Comparing the boxes that are actually drawn cannot make that mistake.
+     PER ROW, because sunrise and sunset are drawn 11px apart vertically and a 7.5px label is
+     about 9px tall: two labels on different rows cannot overlap however close their x, so
+     charging them against one another only suppressed labels that were never in conflict. */
+  const lastRight = [-Infinity, -Infinity];
+  const SUN_GLYPH_W = 14, SUN_GAP = 3, SUN_LABEL_W = 26, SUN_LABEL_CLEAR = 6;
   for(let si=0; si<sun.length; si++){
     const m=sun[si], mx=xTime(m.t);
     if(mx < ml+10 || mx > W-mr-10) continue;
     const flip = mx > W-mr-58;
     const row = m.kind==="sunset" ? 1 : 0;
     const labelY = mt + 9 + row*11;
-    const gx = flip ? mx-31 : mx+3;
-    const tx = flip ? mx-14 : mx+20;
+    /* Mirror image about the line: line, gap, glyph, gap, label — outward in both directions. */
+    const gx = flip ? mx-SUN_GAP-SUN_GLYPH_W : mx+SUN_GAP;
+    const tx = flip ? gx-SUN_GAP : mx+SUN_GAP+SUN_GLYPH_W+SUN_GAP;
     out += `<line x1="${mx.toFixed(1)}" y1="${mt}" x2="${mx.toFixed(1)}" y2="${mt+ih}"
              stroke="var(--ink-mute)" stroke-width="1" stroke-dasharray="2 4"/>`;
     out += sunGlyph(m.kind, gx, mt+row*11);
-    if(mx-lastSunLabelX>62 || si===sun.length-1){
+    /* The box this label will occupy, on the side it will actually be drawn.
+       ⚠ `|| si===sun.length-1` was also removed here: it forced the final label to draw however
+       close it was to its neighbour, which is an escape hatch that defeats the guard for exactly
+       the instance most likely to need it — the last one on screen. The first mark still always
+       draws, because each row's `lastRight` starts at -Infinity. */
+    const lx0 = flip ? tx - SUN_LABEL_W : tx;
+    const lx1 = flip ? tx : tx + SUN_LABEL_W;
+    if(lx0 - lastRight[row] > SUN_LABEL_CLEAR){
       out += `<text class="axlabel" x="${tx.toFixed(1)}" y="${labelY.toFixed(1)}"
                text-anchor="${flip?"end":"start"}" style="font-size:7.5px">${fmtTime(m.t)}</text>`;
-      lastSunLabelX=mx;
+      lastRight[row] = lx1;
     }
   }
 
@@ -10609,50 +10574,10 @@ const copyrightYear = $("copyright-year");
 if(copyrightYear) copyrightYear.textContent = String(new Date().getFullYear());
 document.querySelector(".wordmark .name").textContent = APP_NAME;
 document.title = APP_NAME + " \u2014 Live Generation & Demand";
-$("about-modal-title").textContent = "About this Dashboard";
-$("about-modal-sub").textContent = APP_VERSION + " \u00b7 provenance, method and endpoints";
-/* The section list is GENERATED from the headings rather than typed alongside them, so a
-   section added later cannot be missing from it and one removed cannot leave a dead link —
-   the failure mode of every hand-maintained contents list. IDs are derived from the heading
-   text and made unique defensively, because two headings could one day agree. */
-function buildAboutNav(body){
-  const about = body.querySelector(".about") || body;
-  const heads = [...about.querySelectorAll("h4")];
-  if(heads.length < 4) return;
-  const seen = new Set();
-  const items = heads.map((h,i)=>{
-    let id = "about-" + (h.textContent||("s"+i)).toLowerCase()
-      .replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,44);
-    while(seen.has(id)) id += "-x";
-    seen.add(id); h.id = id;
-    return `<li><a href="#${id}" data-jump="${id}">${esc(h.textContent)}</a></li>`;
-  }).join("");
-  const nav = document.createElement("div");
-  nav.className = "aboutnav";
-  nav.innerHTML = `<div class="k">In this section — ${heads.length} parts</div><ol>${items}</ol>`;
-  about.insertBefore(nav, about.firstChild);
-  /* Scroll the dialog's own scroll container, not the window: the anchor default would move
-     the page behind the modal and leave the dialog where it was. */
-  nav.addEventListener("click",(e)=>{
-    const a = e.target.closest("[data-jump]");
-    if(!a) return;
-    e.preventDefault();
-    const t = document.getElementById(a.dataset.jump);
-    const sc = body;
-    if(t) sc.scrollTo({top: t.offsetTop - sc.firstElementChild.offsetTop - 6,
-                       behavior: matchMedia("(prefers-reduced-motion:reduce)").matches ? "auto" : "smooth"});
-  });
-}
-
-$("btn-about").addEventListener("click", ()=>{
-  const body = $("about-modal-body");
-  if(!body.childElementCount){
-    body.appendChild($("about-tpl").content.cloneNode(true));
-    buildAboutNav(body);
-  }
-  openModal($("about-modal"));
-});
-
+/* v0.60: `buildAboutNav` and the #btn-about listener stood here. The generated pages carry
+   their own section nav, built by tools/pages60.mjs from the same headings — static anchors
+   rather than a scroll handler, because a page can use ordinary anchor navigation where a
+   dialog's own scroll container could not. */
 /* Expand view. The panel becomes the full-width, full-height reading surface; the same
    button then becomes an X that closes the expanded view. No browser fullscreen API is used. */
 let expandedPanel = null;

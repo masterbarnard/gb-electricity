@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- GENERATED FILE — do not edit. Produced by tools/pages59.mjs from
-     dash/GB_Electricity_v0.59.html (md5 5b750820e0c8a88d590f281bf1afd38e). Edit the dashboard, re-run the generator. -->
+<!-- GENERATED FILE — do not edit. Produced by tools/pages60.mjs from
+     dash/GB_Electricity_v0.60.html (md5 f72422d73c77f6ed86bb4b26106d5818). Edit the dashboard, re-run the generator. -->
 <html lang="en-GB" data-page="about">
 <head>
 <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 <title>About GB Electricity — Data Sources, Licences & Status</title>
 <meta name="description" content="Where GB Electricity’s live UK grid data comes from: Elexon Insights (BMRS), the NESO Carbon Intensity API and Sheffield Solar PV_Live — the endpoints called, the attribution and licences, and the source and status of the project.">
 <link rel="canonical" href="https://gbelectricity.uk/about">
-<meta name="generator" content="pages59.mjs — from GB Electricity v0.59">
+<meta name="generator" content="pages60.mjs — from GB Electricity v0.60">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -24,11 +24,11 @@
 <meta property="og:url" content="https://gbelectricity.uk/about">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v59.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v60.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="About GB Electricity — Data Sources, Licences & Status">
 <meta name="twitter:description" content="Where GB Electricity’s live UK grid data comes from: Elexon Insights (BMRS), the NESO Carbon Intensity API and Sheffield Solar PV_Live — the endpoints called, the attribution and licences, and the source and status of the project.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v59.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v60.png">
 <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" sizes="64x64" href="/favicon.png">
@@ -42,7 +42,7 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){
 document.documentElement.setAttribute("data-theme","light");}})();</script>
 <link rel="stylesheet" href="/styles.css">
 <style>
-  /* ---- generated page shell (pages59.mjs) ---- */
+  /* ---- generated page shell (pages60.mjs) ---- */
   .page-main{max-width:880px;margin:0 auto;padding:22px 18px 46px;}
   .page-crumb{margin:0 0 4px;font-size:12.5px;}
   .page-crumb a{color:var(--blue-text);text-decoration:none;}
@@ -68,6 +68,22 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
   .page-next{margin:34px 0 0;padding-top:16px;border-top:1px solid var(--grey-line);
     font-size:13.5px;display:flex;gap:18px;flex-wrap:wrap;}
   .page-next a{color:var(--blue-text);}
+  /* The section nav. Two columns where there is room — ten items in one column is a scroll of
+     its own before the reader has started — and the same quiet grey ground the dialog's jump
+     list used, so a reader who knew the old one recognises this. */
+  .page-toc{margin:0 0 22px;padding:12px 14px;background:var(--grey-bg);border-radius:8px;
+    border:1px solid var(--grey-line);}
+  .page-toc .k{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--ink-mute);margin-bottom:8px;}
+  .page-toc ol{margin:0;padding:0;list-style:none;columns:2;column-gap:26px;}
+  @media (max-width:700px){ .page-toc ol{columns:1;} }
+  .page-toc li{break-inside:avoid;margin:0 0 5px;}
+  .page-toc a{font-size:12.5px;color:var(--ink-dim);text-decoration:none;
+    border-bottom:1px solid transparent;}
+  .page-toc a:hover{color:var(--blue-text);border-bottom-color:var(--blue-text);}
+  .page-toc a:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;border-radius:2px;}
+  /* An anchored heading must not land under the sticky masthead. */
+  .page-article h2{scroll-margin-top:86px;}
   @media (max-width:620px){ .page-h1{font-size:22px;} }
 </style>
 </head>
@@ -106,7 +122,46 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
     <p class="page-crumb"><a href="/">&larr; Live dashboard</a></p>
     <h1 class="page-h1">About GB Electricity</h1>
     <p class="page-lede">The provenance of the data, every endpoint the page calls, the licences that come with them, and where the project stands.</p>
-<h2>Inspired by</h2>
+    <nav class="page-toc" aria-label="Sections on this page">
+      <div class="k">On this page — 5 sections</div>
+      <ol>
+        <li><a href="#sec-what-you-can-see">What you can see</a></li>
+        <li><a href="#sec-inspired-by">Inspired by</a></li>
+        <li><a href="#sec-endpoints-called">Endpoints called</a></li>
+        <li><a href="#sec-data-sources-and-attribution">Data sources and attribution</a></li>
+        <li><a href="#sec-source-and-status">Source and status</a></li>
+      </ol>
+    </nav>
+
+      <p class="seo-lede">Every few minutes, Great Britain’s electricity system rearranges itself
+        — wind rises, gas throttles back, a cable to Norway reverses direction. This dashboard
+        shows that happening, from the public data, as it happens.</p>
+
+      <h2 id="sec-what-you-can-see">What you can see</h2>
+      <ul class="seo-points">
+        <li><b>Generation by fuel type</b> — gas, nuclear, wind, biomass, hydro, pumped storage
+          and the rest, ranked and shown as shares, updated every five minutes.</li>
+        <li><b>Two demand figures, not one</b> — what the transmission system can see, and what
+          the country actually used once rooftop solar is added back in.</li>
+        <li><b>Interconnectors link by link</b> — France, Norway, Denmark, the Netherlands,
+          Belgium and Ireland, each with its direction and its share of capacity.</li>
+        <li><b>Carbon intensity and system frequency</b> — how clean the mix is this half hour,
+          and the real-time balance of the whole system.</li>
+        <li><b>Every window downloadable</b> — any panel expands to fill the screen, and any data
+          window exports as a timestamped CSV.</li>
+      </ul>
+
+      <p>There is no account, no tracking and no server: it is a single HTML page that calls
+        public APIs from your browser and draws what comes back.</p>
+
+      <p><b>Sources:</b> <a href="https://bmrs.elexon.co.uk/" target="_blank" rel="noopener noreferrer">Elexon
+        Insights (BMRS)</a>, the <a href="https://carbonintensity.org.uk/" target="_blank" rel="noopener noreferrer">NESO
+        Carbon Intensity API</a> and <a href="https://www.solar.sheffield.ac.uk/pvlive/" target="_blank" rel="noopener noreferrer">Sheffield
+        Solar PV_Live</a>. The provenance, the endpoints called and the licences behind the data
+        are set out below; how each figure is derived, what these feeds cannot see and the places
+        this data is most often misread are on the
+        <a href="/methodology">Methodology page</a>.</p>
+<h2 id="sec-inspired-by">Inspired by</h2>
       <p>
         GB Electricity takes inspiration from existing public GB grid dashboards, particularly
         <a href="https://gridwatch.co.uk/" target="_blank" rel="noopener noreferrer">GridWatch</a>
@@ -121,7 +176,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
       </p>
 
       
-<h2>Endpoints called</h2>
+<h2 id="sec-endpoints-called">Endpoints called</h2>
       <div class="srcs">
         <span>GET /generation/outturn/summary</span>
         <span>GET /datasets/FUELINST</span>
@@ -141,7 +196,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
       </div>
 
       
-<h2>Data sources and attribution</h2>
+<h2 id="sec-data-sources-and-attribution">Data sources and attribution</h2>
       <p class="attrib">
         <b>Contains BMRS data © Elexon Limited copyright and database right 2026.</b>
         Used under Elexon's
@@ -175,7 +230,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
       </p>
 
       
-<h2>Source and status</h2>
+<h2 id="sec-source-and-status">Source and status</h2>
       <p>
         <a href="https://bmrs.elexon.co.uk/" target="_blank" rel="noopener noreferrer">Elexon Insights Solution (BMRS)</a>,
         base <b class="ds">https://data.elexon.co.uk/bmrs/api/v1</b>.
@@ -204,16 +259,16 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" title="Generated from GB Electricity v0.59">v0.59</span> &middot;
-      <a href="/methodology" class="footer-link">Methodology</a> &middot;
-      <a href="/about" class="footer-link">About</a>
+      <span class="version-label" title="Generated from GB Electricity v0.60">v0.60</span> &middot;
+      <a href="/about" class="footer-link">About</a> &middot;
+      <a href="/methodology" class="footer-link">Methodology</a>
     </div>
   </div>
 </footer>
 
 <script>
 
-/* ---- generated page runtime (pages59.mjs) — the minimum the static pages
+/* ---- generated page runtime (pages60.mjs) — the minimum the static pages
    need: theme, year, glossary. Everything content-bearing is extracted from
    the dashboard at generation time. ---- */
 const $ = (id)=>document.getElementById(id);
@@ -235,7 +290,7 @@ $("btn-theme").addEventListener("click", ()=>{
 const copyrightYear = $("copyright-year");
 if(copyrightYear) copyrightYear.textContent = String(new Date().getFullYear());
 
-/* Glossary — extracted verbatim from the dashboard by pages59.mjs. */
+/* Glossary — extracted verbatim from the dashboard by pages60.mjs. */
 const termDefs={
   INDO:"Initial National Demand Outturn — the transmission-system demand figure published by Elexon.",
   DISEBSP:"System Sell Price / System Buy Price — the imbalance price dataset used for the settlement price chart.",

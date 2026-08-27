@@ -1,4 +1,4 @@
-/* GENERATED from dash/GB_Electricity_v0.59.html (md5 5b750820e0c8a88d590f281bf1afd38e) by tools/pages59.mjs — do not edit. */
+/* GENERATED from dash/GB_Electricity_v0.60.html (md5 f72422d73c77f6ed86bb4b26106d5818) by tools/pages60.mjs — do not edit. */
   /* ============================================================================
      INTER — EMBEDDED, NOT LINKED  (v0.43)
 
@@ -3029,29 +3029,16 @@
        · NAVIGATION. Nine sections is enough to get lost in, so the headings are listed at the
          top as jump links. It is generated from the headings themselves rather than typed, so
          a section added later cannot go missing from the list. */
-  .modal.wide{width:min(940px,100%);}
-  .modal-body.scroll{max-height:min(82vh,900px);overflow-y:auto;-webkit-overflow-scrolling:touch;
-    scroll-behavior:smooth;}
-  @media (prefers-reduced-motion:reduce){ .modal-body.scroll{scroll-behavior:auto;} }
+  /* v0.60: `.modal.wide`, `.modal-body.scroll` and `.aboutnav` went with the About dialog —
+     it was their only consumer. When an element goes, its compensations go with it. The
+     `.about` rules below STAY: the generated pages consume them through site/styles.css, which
+     is extracted from this stylesheet verbatim. */
   .about h4{margin:30px 0 9px;font-size:12.5px;font-weight:700;letter-spacing:.06em;
     text-transform:uppercase;color:var(--blue-text);scroll-margin-top:10px;
     padding-top:14px;border-top:1px solid var(--grey-line);}
   .about h4:first-of-type{margin-top:4px;padding-top:0;border-top:none;}
   .about p{margin:0 0 14px;font-size:14.5px;line-height:1.7;color:var(--ink);max-width:74ch;}
   .about p b{color:var(--ink);font-weight:700;}
-  /* The jump list. Two columns where there is room, because nine items in one column is a
-     scroll of its own before the reader has started. */
-  .aboutnav{margin:0 0 6px;padding:12px 14px;background:var(--grey-bg);border-radius:8px;
-    border:1px solid var(--grey-line);}
-  .aboutnav .k{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
-    color:var(--ink-mute);margin-bottom:8px;}
-  .aboutnav ol{margin:0;padding:0;list-style:none;columns:2;column-gap:26px;}
-  @media (max-width:700px){ .aboutnav ol{columns:1;} }
-  .aboutnav li{break-inside:avoid;margin:0 0 5px;}
-  .aboutnav a{font-size:12.5px;color:var(--ink-dim);text-decoration:none;
-    border-bottom:1px solid transparent;}
-  .aboutnav a:hover{color:var(--blue-text);border-bottom-color:var(--blue-text);}
-  .aboutnav a:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;border-radius:2px;}
   /* Attribution paragraphs are set tighter than the prose around them: they are a notice, not an
      argument, and grouping them visually stops them reading as three unrelated sentences. */
   .about p.attrib{margin:0 0 7px;padding-left:11px;border-left:2px solid var(--blue-line);}
@@ -3062,7 +3049,6 @@
   .srcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:5px 22px;
     margin:4px 0 14px;font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);}
   @media (max-width:620px){ .srcs{grid-template-columns:1fr;} }
-  @media (max-width:620px){ .modal-body.scroll{max-height:none;} }
   /* ============================================================================
      ⚠ v0.52 — THE FOUR DATA STATES, AND WHY THIS IS A CORRECTNESS FEATURE
 
