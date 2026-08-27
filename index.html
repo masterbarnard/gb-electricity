@@ -20,8 +20,8 @@
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v60.png">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v60.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v61.png">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v61.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -29,7 +29,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v60.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v61.png">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -3018,6 +3018,31 @@
   .footer-link:hover{text-decoration:underline;}
   .footer-link:focus-visible{outline:2px solid var(--blue-text);outline-offset:3px;border-radius:3px;}
 
+  /* ============================================================================
+     THE HOMEPAGE INTRO  (v0.61)
+     Quiet by construction: it is the last thing in the content column, set at the muted size
+     the footer uses, above a hairline that separates it from the panels rather than boxing it.
+     It must read as a closing note, not as a panel — the disclosure it replaces was boxed and
+     that is exactly what made it look like a dashboard row with no data in it.
+     ⚠ THE HEADING IS NOT `.panel-head h2`. It is a prose heading and takes prose treatment —
+     sentence case, no letter-spacing, no uppercase — because a section of writing labelled like
+     a data panel claims to be one. Same reason the About disclosure's subtitle was never set in
+     mono: the shape follows the content, not the neighbours.
+     Selectors are unique in this sheet and declared once, so the rev 53 gate has nothing to
+     catch; the expanded-view rule names the element rather than relying on a parent's side
+     effect, which is the fault the seo-details rule was written to fix at v0.44. */
+  .homeintro{max-width:820px;margin:14px auto 0;padding:15px 18px 2px;
+    border-top:1px solid var(--grey-line);
+    font-size:12.5px;line-height:1.62;color:var(--ink-dim);}
+  .homeintro h2{margin:0 0 9px;font-size:13.5px;font-weight:700;line-height:1.3;
+    letter-spacing:0;text-transform:none;color:var(--ink);}
+  .homeintro p{margin:0 0 9px;max-width:74ch;}
+  .homeintro a{color:var(--blue-text);text-decoration:underline;text-underline-offset:2px;}
+  .homeintro a:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;border-radius:2px;}
+  @media (max-width:620px){ .homeintro{padding-left:0;padding-right:0;} }
+  /* Gone in the expanded view with everything else that is not the panel being read. */
+  body[data-expanded] .homeintro{display:none;}
+
   /* ⚠ v0.59: THESE RULES HAVE NO CONSUMER IN THIS DOCUMENT, AND THAT IS DELIBERATE — DO NOT
      TIDY THEM AWAY. The seo-details disclosure is gone: its purpose text lives at /methodology
      now, a real page generated from this file at release time by tools/pages59.mjs. That page
@@ -5222,11 +5247,49 @@
      the About dialog's fourteen sections split ten and four. The disclosure had been in three
      places in three releases (page-level → footer at v0.42 → end of #main at v0.44) because
      no position inside a dashboard suits a block of prose that shows no data; the fourth answer
-     is that it was never furniture, it was a page. A closed <details> is hidden text and
-     discounted by a crawler; the same words on an indexable URL with its own title, description
-     and canonical are not — that is the whole trade, and it costs this document nothing it
-     was using. The About dialog (#about-tpl above) is unchanged and remains the single source:
-     the pages are DERIVED from it, never edited directly. -->
+     is that it was never furniture, it was a page. The About dialog (#about-tpl above) remains
+     the single source: the pages are DERIVED from it, never edited directly.
+
+     ⚠ v0.61 — A CORRECTION TO THE ARGUMENT MADE HERE AT v0.59, worth recording because the
+     reasoning was quoted in two release notes. This comment claimed a closed <details> is
+     "hidden text and discounted by a crawler". That is not right, and the mistake was to state
+     an outdated rule of thumb as a fact: since mobile-first indexing Google indexes content in
+     collapsed and accordion sections and treats it substantially as it treats any other
+     content. The multi-page move was still correct, and for the reason the author's SEO review
+     gave — three URLs with their own titles, descriptions and subjects beat one URL, and that
+     is uncontested — but this page gave up its body copy for a smaller benefit than the note
+     claimed, and rev 55 moving the purpose text on to /about took the rest of it.
+     WHAT WAS ACTUALLY LOST: a homepage carrying ~340 words of prose became one carrying
+     roughly twenty, the remainder being interface labels and figures. Title, description,
+     canonical, JSON-LD and seven section headings were never affected; body copy was.
+     The block below is the repair, and it is deliberately NOT the old text back again. -->
+
+  <!-- ⚠ THIS COPY IS THE HOMEPAGE'S OWN AND MUST NOT BE MERGED WITH /about's.
+       Putting the same sentences on two of this site's URLs would split the signal between them
+       rather than double it, which is the failure this replaces one release after creating it.
+       `homeIntro` in the harness asserts the two share no sentence, so a later tidy-up that
+       "reuses" the About copy here fails the release rather than shipping quietly.
+       VISIBLE PROSE, NOT A DISCLOSURE. The <details> was closed by default and read as a
+       dashboard row that never showed data, which is why it moved three times. This is a short
+       closing note at the foot of the content column: no chevron, no state, nothing to open.
+       It is also SERVER-RENDERED — typed here rather than written by the renderer — so it does
+       not depend on a crawler executing the page's JavaScript, which is the one thing on this
+       document that a crawler might not do. -->
+  <section class="homeintro" aria-labelledby="homeintro-h">
+    <h2 id="homeintro-h">Live GB electricity data, updated every few minutes</h2>
+    <p>This page reads Great Britain's electricity system straight from the public feeds and
+      redraws it as it changes: which fuels are generating and how much, what the country is
+      actually drawing, which way each interconnector is flowing, how much carbon a unit of
+      electricity carries this half hour, and how far system frequency has drifted from 50&nbsp;Hz.</p>
+    <p>The numbers are the ones the UK electricity market settles on — Elexon's BM-metered
+      outturn, NESO's carbon intensity, and Sheffield Solar's estimate of the rooftop generation
+      the transmission system cannot see. Where two datasets disagree, the disagreement is shown
+      rather than averaged away.</p>
+    <p>How each figure is derived, and where it can mislead you, is set out on
+      <a href="https://gbelectricity.uk/methodology">Methodology</a>. The data sources, the
+      endpoints called and the licences behind them are on
+      <a href="https://gbelectricity.uk/about">About</a>.</p>
+  </section>
 
 </main><!-- /.wrap -->
 
@@ -5269,7 +5332,7 @@
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" id="version-label" title="Dashboard version">v0.60</span> &middot;
+      <span class="version-label" id="version-label" title="Dashboard version">v0.61</span> &middot;
       <!-- ⚠ v0.60: THE MODAL IS GONE AND THESE ARE BOTH REAL LINKS, About first.
            Until now the footer offered "About this Dashboard", a button opening a dialog that
            cloned all fourteen sections — while /about, published at rev 54, carried four of
@@ -5326,7 +5389,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.60";
+const APP_VERSION = "v0.61";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
