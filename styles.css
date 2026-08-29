@@ -1,4 +1,4 @@
-/* GENERATED from dash/GB_Electricity_v0.71.html (md5 a51700708a98cc3640560f27c43122cb) by tools/pages71.mjs — do not edit. */
+/* GENERATED from dash/GB_Electricity_v0.72.html (md5 51fdf934859fc22a99ac5ca13f8746ea) by tools/pages72.mjs — do not edit. */
   /* ============================================================================
      INTER — EMBEDDED, NOT LINKED  (v0.43)
 
@@ -483,7 +483,7 @@
   .mark{width:34px;height:34px;flex-shrink:0;}
   .wordmark{display:flex;flex-direction:column;line-height:1.02;min-width:0;}
   .wordmark .name{font-size:21px;font-weight:700;color:var(--ink);letter-spacing:-0.01em;}
-  .wordmark .sub{font-size:11px;color:var(--ink-dim);letter-spacing:.03em;margin-top:3px;}
+  .wordmark .sub{font-size:12px;color:var(--ink-dim);letter-spacing:.03em;margin-top:3px;}
   /* ================= BYLINE (v0.27) =================
      A third line in the wordmark, one step quieter than the strapline above it — which is the
      whole design. A credit that competes with the tool's own name reads as self-promotion; a
@@ -501,21 +501,21 @@
      It also drops half a point below the strapline and loses its bold, so the vertical order in
      the wordmark now matches the order of importance: the tool, what it is, who made it. */
   .header-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
-  .version-label{font-size:10.5px;color:var(--ink-dim);letter-spacing:.02em;
+  .version-label{font-size:12px;color:var(--ink-dim);letter-spacing:.02em;
     white-space:nowrap;}
-  .livewrap{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:var(--ink-dim);
+  .livewrap{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-dim);
     font-variant-numeric:tabular-nums;white-space:nowrap;}
   /* A <button> does NOT inherit font-family — it falls back to the UA's form-control face
      unless one is set. That is the other half of the "suspect fonts" report: any button here
      that neither sets --sans nor uses font:inherit was rendering in the browser's default. */
-  .tempchip{display:inline-flex;align-items:center;gap:5px;font-size:11px;
+  .tempchip{display:inline-flex;align-items:center;gap:5px;font-size:12px;
     font-family:var(--sans);font-variant-numeric:tabular-nums;
     color:var(--ink-dim);white-space:nowrap;background:none;border:none;padding:4px 2px;cursor:pointer;
     -webkit-tap-highlight-color:transparent;}
   .tempchip:hover{color:var(--ink);}
   .tempchip:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;border-radius:4px;}
   .tempchip .tval{font-weight:700;color:var(--ink);}
-  .tempchip .tdelta{font-size:10px;}
+  .tempchip .tdelta{font-size:11px;}
   .tempchip svg{width:11px;height:11px;flex-shrink:0;opacity:.7;}
   .tempchip[hidden]{display:none;}
   .livedot{width:8px;height:8px;border-radius:50%;background:var(--ok);flex-shrink:0;
@@ -573,7 +573,7 @@
   /* The labels are spans now, not buttons — there is one click target and it is the whole
      control, so a nested interactive element would be a second target inside the first. */
   .unitbtn{position:relative;z-index:1;flex:1 0 auto;min-width:30px;text-align:center;
-    background:none !important;font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.04em;
+    background:none !important;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.04em;
            color:var(--ink-dim);border:none;padding:5px 8px;pointer-events:none;
            font-variant-numeric:tabular-nums;}
   .unitswitch:hover{border-color:var(--blue-text);}
@@ -584,7 +584,7 @@
   .unitswitch:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;}
 
   @media (max-width:760px){
- .unitbtn{padding:5px 8px;font-size:10px;} }
+ .unitbtn{padding:5px 8px;font-size:11px;} }
 
   /* PANEL VIEW SWITCH (v0.20). Same mechanism as the unit switch — a slider under two labels
      that both stay legible — deliberately at a smaller scale, and sitting inside a panel head
@@ -602,13 +602,13 @@
     border-radius:5px;transition:transform .22s cubic-bezier(.4,0,.2,1);pointer-events:none;}
   @media (prefers-reduced-motion:reduce){ .viewswitch .slider{transition:none;} }
   .viewbtn{position:relative;z-index:1;flex:1 0 auto;min-width:40px;text-align:center;
-    background:none !important;font-family:var(--sans);font-size:10px;font-weight:700;
+    background:none !important;font-family:var(--sans);font-size:11px;font-weight:700;
     letter-spacing:.04em;color:var(--ink-dim);border:none;padding:4px 9px;pointer-events:none;}
   .viewswitch:hover .viewbtn:not(.is-on){color:var(--ink);}
   /* v0.31991: original segmented-control contract — inactive = grey text on white; active = white text on blue. */
   .viewbtn.is-on{color:var(--head-ink);}
   .viewswitch:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;}
-  @media (max-width:430px){ .unitbtn{padding:4px 7px;font-size:9.5px;letter-spacing:.02em;} }
+  @media (max-width:430px){ .unitbtn{padding:4px 7px;font-size:11px;letter-spacing:.02em;} }
   /* Last, so it wins over the width queries above. The switch stays visually small on a phone
      while the finger target clears 44px — padding grows and an equal negative margin takes the
      space back, so nothing moves. Written after the width rules deliberately: at v0.09 the
@@ -623,7 +623,7 @@
     .unitbtn{min-height:44px;padding:0 13px;display:inline-flex;align-items:center;justify-content:center;}
   }
 
-  .toolbtn{font-family:var(--sans);font-size:12px;font-weight:700;color:var(--blue-text);
+  .toolbtn{font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--blue-text);
     background:var(--surface);border:1px solid var(--blue-text);padding:6px 12px;border-radius:16px;
     cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;}
   .toolbtn:hover{background:var(--accent);color:var(--head-ink);}
@@ -695,20 +695,28 @@
      the highest observed values in the current 24-hour window, so the bars answer "how much now
      relative to today's peak?" without inventing installed-capacity figures.
   */
-  .insightbar{background:var(--surface);border:1px solid var(--blue-line);border-radius:10px;
-    padding:10px 12px 11px;margin-top:18px;}
+  /* ⚠ v0.72: THE OUTER BORDER IS GONE — one level of container, not two.
+     This was a bordered box holding three bordered cards, at the same weight and radius, and so
+     was the flow band. Nested boxes at one weight are the strongest period signal the page
+     carried; contemporary data UI holds structure in whitespace and type and spends a border
+     only where the box IS the meaning. Here it is not: the three cards are the meaning and the
+     panel is just their grouping, which a heading and space already state. */
+  .insightbar{background:none;border:0;border-radius:0;
+    padding:0;margin-top:26px;}
   .insight-head{display:flex;align-items:baseline;gap:10px;margin-bottom:8px;}
-  .insight-head h2{margin:0;font-size:10px;font-weight:700;letter-spacing:.08em;
-    text-transform:uppercase;color:var(--blue-text);}
+  /* Same treatment as `.panel-head h2` — the two are deliberately separate rules (see the note
+     on the panel rule) and `panelFrameMatchesTheGlanceBand` asserts they agree. */
+  .insight-head h2{margin:0;font-size:16px;font-weight:600;letter-spacing:-0.005em;
+    text-transform:none;color:var(--ink);}
     /* ⚠ v0.70: THREE, NOT FOUR. The panel shows the three largest movements, so the track count
      is the panel's contract rather than a layout preference. */
   .insight-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
   .insight-grid[hidden]{display:none;}
-  .insight-head .note{font-size:9.5px;font-weight:600;color:var(--ink-mute);}
+  .insight-head .note{font-size:11px;font-weight:600;color:var(--ink-mute);}
   /* ⚠ v0.70: THE QUIET STATE IS A STATED READING, not an empty panel. Below the ±50 MW floor the
      panel says the system is steady — a panel that always finds three movers cannot tell you
      that nothing is happening, which is half of what a reader came to find out. */
-  .insight-quiet{font-size:11.5px;line-height:1.45;color:var(--ink-dim);
+  .insight-quiet{font-size:13.5px;line-height:1.45;color:var(--ink-dim);
     padding:10px 11px;border:1px solid var(--grey-line);border-radius:7px;background:var(--page);}
   .insight-quiet b{color:var(--ink);}
   .insight-item.mover[hidden]{display:none;}
@@ -721,10 +729,21 @@
      A subtle dotted underline on the label is enough to signal "there is more here"
      without adding four visible info buttons to an already compact dashboard. */
   .insight-item{cursor:help;}
-  .insight-item .k{border-bottom:1px dotted var(--ink-mute);width:max-content;max-width:100%;}
+  /* ⚠ v0.72: THE UNDERLINE APPEARS ON HOVER AND FOCUS, IT NO LONGER SITS THERE.
+     A permanent dotted underline under every interrogable label was the most period-specific
+     detail on the page — it reads as a 2000s help-link — and there were enough of them that the
+     dotted texture became part of the page's default appearance rather than a signal.
+     The affordance is not removed: `cursor:help` still marks the card at rest, the underline
+     appears the moment a pointer or keyboard reaches it, and the control is still a real button
+     with aria-expanded. What goes is the resting state. `transparent` rather than `none` so the
+     text does not shift by a pixel when it appears. */
+  .insight-item .k{border-bottom:1px dotted transparent;width:max-content;max-width:100%;}
+  .insight-item:hover .k,
+  .insight-item:focus-visible .k,
+  .insight-item.tip-active .k{border-bottom-color:var(--ink-mute);}
   .insight-item:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;}
   .insight-item.tip-active{border-color:var(--blue-text);}
-  .insight-item .k{font-size:8.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  .insight-item .k{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
     color:var(--ink-mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .insight-item .v{font-size:17px;font-weight:700;line-height:1.05;margin-top:4px;
     color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;}
@@ -735,7 +754,7 @@
      which is also why those two sum to 100 whenever GB is importing. Detailed only: Simplified
      is the mode that keeps declining text, and it already shows the same MW figure. Hidden by
      mode, not un-rendered — switching density must never need a re-render. */
-  .insight-item .p{font-size:9.5px;font-weight:600;line-height:1.3;margin-top:3px;
+  .insight-item .p{font-size:11px;font-weight:600;line-height:1.3;margin-top:3px;
     color:var(--ink-mute);font-variant-numeric:tabular-nums;white-space:nowrap;
     overflow:hidden;text-overflow:ellipsis;}
   .insight-item .p:empty{display:none;}
@@ -814,7 +833,7 @@
     .insight-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
     .insight-item .v{font-size:15px;}
   }
-  .icval .util{display:block;font-size:8.5px;font-weight:700;line-height:1.15;
+  .icval .util{display:block;font-size:10px;font-weight:700;line-height:1.15;
     color:var(--ink-mute);margin-top:2px;}
 
   /* ================= ILLUSTRATIONS IN THE SMALL CARDS (v0.34, RE-SOURCED v0.48) =========
@@ -924,22 +943,23 @@
      the layout, exactly as the fuel legend keys do. */
   .figbtn{appearance:none;background:none;border:0;font:inherit;color:var(--ink);
     font-weight:700;font-variant-numeric:tabular-nums;cursor:help;
-    border-bottom:1px dotted var(--ink-mute);padding:5px 1px;margin:-5px -1px;
+    border-bottom:1px dotted transparent;padding:5px 1px;margin:-5px -1px;
     -webkit-tap-highlight-color:transparent;}
-  .figbtn:hover{color:var(--blue-text);border-bottom-color:var(--blue-text);}
+  .figbtn[aria-expanded="true"]{border-bottom-color:var(--blue-text);color:var(--blue-text);}
+  .figbtn:hover,.figbtn:focus-visible{color:var(--blue-text);border-bottom-color:var(--blue-text);}
   .figbtn:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;border-radius:3px;}
   @media (max-width:820px){ .figbtn{padding:7px 3px;margin:-7px -3px;} }
 
   .theme-pref{display:inline-flex;align-items:center;gap:4px;margin-left:10px;
     vertical-align:middle;}
-  .theme-pref-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  .theme-pref-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
     color:var(--ink-mute);margin-right:2px;}
   /* ⚠ WCAG 2.5.8 AT EVERY WIDTH, not only on a phone. The first draft grew the box at the phone
      breakpoint and shipped a 20.5px target on desktop — the same reasoning the fuel legend was
      corrected on at v0.57: the label size is a density decision, the target size is not, and a
      pointer being fine does not make a small target acceptable. 10.5px of text in 6px of padding
      plus a 1px border clears 24. */
-  .theme-opt{appearance:none;font:inherit;font-size:10.5px;font-weight:600;line-height:1;
+  .theme-opt{appearance:none;font:inherit;font-size:12px;font-weight:600;line-height:1;
     color:var(--ink-dim);background:none;border:1px solid var(--grey-line);border-radius:5px;
     padding:6px 9px;cursor:pointer;}
   .theme-opt:hover{color:var(--ink);border-color:var(--ink-mute);}
@@ -983,7 +1003,7 @@
      rule, control, on one baseline. */
   .bandrule{display:flex;align-items:center;gap:12px;margin:24px 0 10px;min-height:26px;}
   .bandrule:first-of-type{margin-top:16px;}
-  .bandrule .cap{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  .bandrule .cap{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
                  color:var(--ink-mute);white-space:nowrap;}
   .bandrule .line{flex:1;height:1px;background:var(--grey-line);min-width:12px;}
   /* The margin-top:0 here was left over from the band rules, which used to supply the space
@@ -1039,10 +1059,15 @@
     align-items:stretch;
     gap:0 6px;
     margin-top:16px;
-    padding:12px 16px 12px;
-    border:1px solid var(--grey-line);
-    border-radius:14px;
-    background:var(--surface);
+    /* ⚠ v0.72: THE OUTER BORDER AND SURFACE ARE GONE — see the note on `.insightbar`.
+       The three cards inside keep theirs, because there the box IS the argument: supply, balance
+       and demand are three separate accounts and the boxes are what say so. The container around
+       them said only "these three are related", which the arrows between them already say twice
+       over. Padding stays so the arrows have room; the band now sits on the page ground. */
+    padding:0 2px;
+    border:0;
+    border-radius:0;
+    background:none;
   }
   /* ============================================================================
      ⚠ v0.66: THE BAND IS ONE GRID ALL THE WAY DOWN, at the author's request that the three
@@ -1169,11 +1194,14 @@
      Not smaller than 4: the caption's descenders and the card's border need a hairline of air
      between them or the two touch at 33px type on a phone. */
   .fb-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px;margin:0 0 4px;min-height:15px;}
-  .fb-cap{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  /* The band's three section captions are titles, not in-card labels, so they take the title
+     treatment. Their colour stays — supply blue and demand teal are how the two sides are told
+     apart at a glance, and that is meaning rather than decoration. */
+  .fb-cap{font-size:16px;font-weight:600;letter-spacing:-0.005em;text-transform:none;
     color:var(--blue-text);white-space:nowrap;}
   .fb-demand .fb-cap{color:var(--teal-text);}   /* v0.49: was --c-wind, at 3.20:1 — see below */
   .fb-balance .fb-head{justify-content:center;text-align:center;}
-  .fb-sub{font-size:11px;color:var(--ink-mute);line-height:1.3;}
+  .fb-sub{font-size:12px;color:var(--ink-mute);line-height:1.3;}
   .fb-balance .fb-sub{width:100%;text-align:center;}
   /* The cards inside the band lose their own top margin — the band supplies the rhythm. */
   /* A flex COLUMN, so `margin-top:auto` on the note below has an axis to push against.
@@ -1268,7 +1296,14 @@
      The layout does not move at a fine pointer, where none of it is needed. */
   .tile.demandhero .meta .ge-lab .labelbtn,
   .tile.hero .meta .ge-lab .labelbtn{border-bottom:0;
-    text-decoration:underline dotted var(--ink-mute);text-underline-offset:3px;}
+    text-decoration:underline dotted transparent;text-underline-offset:3px;}
+  .tile.hero .meta .ge-lab .labelbtn:hover,
+  .tile.hero .meta .ge-lab .labelbtn:focus-visible,
+  .tile.hero .meta .ge-lab .labelbtn[aria-expanded="true"],
+  .tile.demandhero .meta .ge-lab .labelbtn:hover,
+  .tile.demandhero .meta .ge-lab .labelbtn:focus-visible,
+  .tile.demandhero .meta .ge-lab .labelbtn[aria-expanded="true"]{
+    text-decoration-color:var(--ink-mute);}
   .tile.demandhero .meta .ge-lab .labelbtn:hover,
   .tile.hero .meta .ge-lab .labelbtn:hover{color:var(--ink);
     text-decoration-color:var(--ink);}
@@ -1361,7 +1396,7 @@
      above them. Tabular, because two percentages that jiggle as they update are worse than no
      percentages. */
   .fb-proof-key{display:flex;justify-content:space-between;gap:10px;margin-top:3px;
-    font-size:9.5px;line-height:1.3;color:var(--ink-mute);
+    font-size:11px;line-height:1.3;color:var(--ink-mute);
     font-variant-numeric:tabular-nums;}
   .fb-proof-key i{font-style:normal;display:inline-flex;align-items:center;gap:4px;min-width:0;}
   /* A 7px chip of each segment's own material in front of its figure, so the label is bound to
@@ -1371,7 +1406,7 @@
   .fb-proof-key .k-emb::before{background:var(--solar-fill);
     background-image:var(--hatch-est-sm);box-shadow:inset 0 0 0 1px var(--solar-line);}
   /* The settlement stamp, pushed to the far end of the head row. */
-  .fb-stamp{margin-left:auto;font-size:10.5px;color:var(--ink-mute);white-space:nowrap;
+  .fb-stamp{margin-left:auto;font-size:12px;color:var(--ink-mute);white-space:nowrap;
     font-variant-numeric:tabular-nums;}
 
   /* ⚠ v0.46: THE ARROWS ARE DRAWN NOW, NOT TYPED. The first version was a dashed CSS border with
@@ -1517,11 +1552,11 @@
     justify-content:center;text-align:center;padding:15px 13px 14px;
     border:1px solid var(--blue-line);border-radius:10px;background:var(--surface);
     overflow:hidden;}
-  .balancebox .value{font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1.05;
+  .balancebox .value{font-size:27px;font-weight:700;letter-spacing:-.02em;line-height:1.05;
     font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap;}
-  .balancebox .value .unit{font-size:13px;font-weight:700;color:var(--ink-dim);margin-left:4px;
+  .balancebox .value .unit{font-size:13.5px;font-weight:700;color:var(--ink-dim);margin-left:4px;
     letter-spacing:0;}
-  .fb-balnote{margin-top:5px;font-size:12px;line-height:1.35;color:var(--ink-dim);}
+  .fb-balnote{margin-top:5px;font-size:13.5px;line-height:1.35;color:var(--ink-dim);}
   /* ⚠ v0.66: THE CANCELLATION LINE. It sits in the band's proof-bar rows, so it lands on the
      same line as the two bars either side of it — the three bottom elements of the band read as
      one row rather than as a sentence floating under a short card. Its chip is the estimated
@@ -1532,17 +1567,17 @@
      content — the card's working, not a caption under it. Left-aligned for the same reason: the
      balance's label and figure are centred because a single number centres well, and a sentence
      of forty words does not. */
-  .fb-reading{margin-top:9px;font-size:11px;line-height:1.45;color:var(--ink-dim);
+  .fb-reading{margin-top:9px;font-size:12px;line-height:1.45;color:var(--ink-dim);
     text-align:left;}
   .fb-reading b{color:var(--ink);}
   .fb-cancel{display:flex;align-items:flex-start;gap:6px;margin-top:7px;
-    font-size:10px;line-height:1.3;color:var(--ink-mute);text-align:left;}
+    font-size:11px;line-height:1.3;color:var(--ink-mute);text-align:left;}
   .fb-cancel .dstat{flex:0 0 auto;margin-top:3px;}
   .fb-balnote b{color:var(--ink);}
   /* The balance's own label, inside the box like every other figure's. `.tile .label` does not
      reach it — the balancebox is deliberately not a tile — so the type is restated here, at the
      same 10px/.06em/uppercase the tiles use, and asserted as agreement rather than as literals. */
-  .balancebox .label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  .balancebox .label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
     color:var(--ink-dim);margin-bottom:2px;}
   /* ⚠ v0.50 REMOVED `.fb-why` AND ITS ICON — seven rules — with the standalone trigger row.
      The rules go with the markup rather than being left behind: a styled class with nothing
@@ -1636,7 +1671,7 @@
        and the same thing at 380px, so the only thing that changes with width is type size.
        Two REAL reflow bugs were living in that machinery. They cannot recur, because the layout
        they were bugs in no longer exists. */
-    .flowband .tile.demandhero .value{font-size:33px;}
+    .flowband .tile.demandhero .value{font-size:32px;}
     .flowband .tile.demandhero .value .unit{font-size:14px;}
   }
   @media (max-width:820px){
@@ -1648,8 +1683,18 @@
        all coming along unchanged. The first version redrew both with a second set of pseudo-
        element rules, which is two things to keep in step for one arrow. */
     .fb-arrow{align-self:center;justify-self:center;width:34px;height:34px;margin:8px 0;}
+    /* ⚠ v0.72: THE DEMAND ARROW POINTED DOWN ON A PHONE — reported by the author on the live
+       page, and the comment directly above had the intent right while the sign was wrong.
+       Both arrows point INTO the balance. On desktop that is supply → ← demand. Stacked, supply
+       sits ABOVE the balance so its arrow points down, and demand sits BELOW it so its arrow
+       must point UP. The demand drawing points LEFT at rest; a CSS rotation is clockwise, so
+       rotate(-90deg) turns left into DOWN — away from the balance, and reading as though the
+       band flowed supply → balance → demand, which is the one thing this band exists not to say.
+       Both take rotate(90deg): right becomes down, left becomes up.
+       `flowArrowsPointIntoTheBalance` measures the rendered head against the shaft rather than
+       asserting the transform string, because the transform is the thing that was wrong. */
     .fb-arrow-supply{transform:rotate(90deg);}
-    .fb-arrow-demand{transform:rotate(-90deg);}
+    .fb-arrow-demand{transform:rotate(90deg);}
     .fb-balance .fb-head,.fb-balance .fb-sub{text-align:left;justify-content:flex-start;}
     .balancebox{align-items:flex-start;text-align:left;padding:13px 14px;}
     .flowband .tile{height:auto;}
@@ -1674,7 +1719,7 @@
      what the expanded view contains. */
   .icnetbox{display:none;position:relative;margin-top:14px;}
   .panel.is-expanded .icnetbox{display:block;}
-  .icnet-cap{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;font-size:11px;
+  .icnet-cap{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;font-size:12px;
     color:var(--ink-mute);}
   .icnet-cap b{color:var(--ink);font-weight:700;}
 
@@ -1801,8 +1846,19 @@
      structures and a shared rule would make either one's layout the other's problem;
      `panelFrameMatchesTheGlanceBand` in the harness asserts they AGREE, which is the property
      that matters and is the one a merged rule would stop being able to fail. */
-  .panel-head h2{margin:0;font-size:10px;font-weight:700;letter-spacing:.08em;
-    text-transform:uppercase;color:var(--blue-text);background:none;padding:0;
+  /* ⚠ v0.72: SENTENCE CASE AT 16px, AND THE UPPERCASE IS RATIONED TO ONE JOB.
+     Counted on a full-page render at 1440: SEVENTEEN uppercase letter-spaced labels above the
+     fold. When every label is small-caps with tracking it stops being a hierarchy and becomes a
+     texture — nothing is emphasised because everything is. And measured across every rendered
+     text node, 95.5% of the page's characters sat at 12.5px or below, with six sizes sharing
+     2.8% of the text between 12.5 and 21px: a hole where the panel titles should have been.
+     One change fixes both. A 16px medium-weight sentence-case title is the missing rung of the
+     scale AND takes the uppercase treatment off the element that used it most.
+     The uppercase now has one job: the small labels INSIDE cards (`.tile .label`, `.insight-item
+     .k`, `.fb-cap`), where it distinguishes a label from the figure beneath it at a size where
+     weight alone would not. `uppercaseIsRationed` asserts the count. */
+  .panel-head h2{margin:0;font-size:16px;font-weight:600;letter-spacing:-0.005em;
+    text-transform:none;color:var(--ink);background:none;padding:0;
     border-radius:0;line-height:1.25;}
   /* ⚠ `white-space:nowrap` IS GONE, and that is deliberate rather than incidental. It existed
      to stop the note wrapping in a row it shared with the title and the controls; on its own
@@ -1814,7 +1870,7 @@
      and the note has to start there too — the indent that made them agree before is exactly
      what would make them disagree now. A measurement that survives the thing it was measuring
      is how a layout drifts. */
-  .panel-head > .note{font-weight:400;font-size:10px;color:var(--ink-dim);
+  .panel-head > .note{font-weight:400;font-size:11px;color:var(--ink-dim);
     font-variant-numeric:tabular-nums;padding:2px 0 0;line-height:1.3;}
   .panel-head .note .ds{color:var(--ink);}
   /* .ds = a machine identifier (dataset name, BMRS code, endpoint). The ONE thing mono is for. */
@@ -2010,7 +2066,7 @@
      exception, and it earns it by being the one figure the page is for. */
   .tile{background:var(--surface);border:1px solid var(--blue-line);border-radius:9px;
     padding:13px 15px 14px;min-width:0;}
-  .tile .label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-dim);}
+  .tile .label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-dim);}
   /* ============================================================================
      THE ODOMETER  (v0.43)
 
@@ -2156,10 +2212,10 @@
   .odo-c.armed .odo-r::before{opacity:1;transform:none;}
   .odo-c.roll .odo-r::before{opacity:0;transition:opacity 220ms ease-out;}
 
-  .tile .value{font-size:33px;font-weight:700;letter-spacing:-.02em;line-height:1.05;margin-top:7px;
+  .tile .value{font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1.05;margin-top:7px;
     font-variant-numeric:tabular-nums;color:var(--ink);}
   .tile .value .unit{font-size:14px;font-weight:700;color:var(--ink-dim);margin-left:4px;letter-spacing:0;}
-  .tile .meta{font-size:11px;color:var(--ink-dim);margin-top:6px;line-height:1.4;}
+  .tile .meta{font-size:12px;color:var(--ink-dim);margin-top:6px;line-height:1.4;}
   .tile .meta b{color:var(--ink);font-weight:700;}
   /* ================= THE ESSENTIAL SUB-LINE (v0.29) =================
      Simplified strips every explanatory line under a tile, and that rule is right for eleven of
@@ -2203,7 +2259,7 @@
      verbatim in `icons/`, with the contract they were made under, so a later release can put
      any of them back without redrawing it. The glance-band marks (.insight-icon) stay. */
 
-  .tile .essential{display:none;font-size:11px;color:var(--ink-mute);margin-top:6px;
+  .tile .essential{display:none;font-size:12px;color:var(--ink-mute);margin-top:6px;
     line-height:1.35;}
   .tile .essential b{color:var(--ink-dim);font-weight:700;}
   /* The tile label IS the trigger now, rather than a separate glyph beside it. A dotted rule
@@ -2211,11 +2267,18 @@
      element, and it makes the whole label a hit target instead of a 10px circle. It stays a
      real <button>, so the keyboard route and the aria-expanded state are unchanged - the ⓘ was
      never the accessible part, it was just the visible part. */
+  /* ⚠ v0.72: THE UNDERLINE IS REVEALED, NOT RESTING — see the note on `.insight-item .k`.
+     `transparent` rather than removing the border, so the text cannot shift by a pixel when the
+     underline appears. The hover and focus states are unchanged; only the default is. */
   .labelbtn{font:inherit;font-size:inherit;font-weight:inherit;letter-spacing:inherit;
             text-transform:inherit;color:inherit;background:none;border:none;padding:0;
             margin:0;cursor:help;text-align:left;
-            border-bottom:1px dotted var(--ink-mute);}
+            border-bottom:1px dotted transparent;}
   .labelbtn:hover{color:var(--ink);border-bottom-color:var(--ink);}
+  .labelbtn:focus-visible{border-bottom-color:var(--ink);}
+  /* A card whose disclosure is open keeps the underline, so the thing being explained stays
+     marked while the reader is reading about it. */
+  .labelbtn[aria-expanded="true"]{border-bottom-color:var(--ink);}
   .labelbtn:focus-visible{outline:2px solid var(--blue-text);outline-offset:3px;border-radius:2px;}
   /* ⚠ v0.52: THE INLINE TARGETS, AND WHY THEY ARE NOT FORCED TO 24px BOXES.
      Measured across the ladder, `.labelbtn` renders 13px tall, `.legend-key` 16px and
@@ -2266,13 +2329,13 @@
     div.legend{row-gap:16px;}
   }
 
-  .infobtn{font:inherit;font-size:10px;line-height:1;color:var(--ink-dim);background:none;
+  .infobtn{font:inherit;font-size:11px;line-height:1;color:var(--ink-dim);background:none;
     border:1px solid var(--grey-line);border-radius:50%;width:15px;height:15px;padding:0;cursor:pointer;
     margin-left:5px;vertical-align:1px;-webkit-tap-highlight-color:transparent;}
   .infobtn:hover{color:var(--blue-text);border-color:var(--blue-text);}
   .infobtn:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;}
   #infopop{position:fixed;z-index:180;max-width:290px;background:var(--surface);
-    border:1px solid var(--grey-line);border-radius:7px;padding:10px 12px;font-size:11.5px;
+    border:1px solid var(--grey-line);border-radius:7px;padding:10px 12px;font-size:13.5px;
     line-height:1.5;color:var(--ink-dim);box-shadow:0 8px 24px rgba(0,0,0,.18);}
   #infopop[hidden]{display:none;}
   #infopop b{color:var(--ink);}
@@ -2286,12 +2349,12 @@
   .tip-live{margin-top:8px;padding-top:7px;border-top:1px solid var(--grey-line);
     display:flex;flex-direction:column;gap:3px;}
   .tip-live > span{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
-    font-size:11px;color:var(--ink-mute);}
+    font-size:12px;color:var(--ink-mute);}
   .tip-live > span > b{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;}
   /* A line with no value half — "the sun is down", "last published 62 minutes ago" — is prose,
      not a row, so it spans and wraps normally instead of being stretched into two columns. */
   .tip-live > span.wide{display:block;}
-  @media (pointer:coarse){ .infobtn{width:26px;height:26px;font-size:12px;} }
+  @media (pointer:coarse){ .infobtn{width:26px;height:26px;font-size:13.5px;} }
   /* CARBON INTENSITY BAND SCALE — a computed ramp, and the reasoning is the point.
 
      v0.05 adopts the green→yellow→orange family NESO uses on its own carbon intensity
@@ -2367,12 +2430,12 @@
      an identical scale and nothing else competes for attention. Same fuel colours as everywhere
      else on the page, because it is the same fuels. */
   .emwrap{margin-top:12px;padding-top:11px;border-top:1px solid var(--grey-line);}
-  .emhead{display:flex;align-items:baseline;gap:8px;font-size:9.5px;font-weight:700;
+  .emhead{display:flex;align-items:baseline;gap:8px;font-size:11px;font-weight:700;
           letter-spacing:.06em;text-transform:uppercase;color:var(--ink-dim);}
   .emhead .src{margin-left:auto;font-weight:400;letter-spacing:0;text-transform:none;
-               font-size:10px;color:var(--ink-mute);}
+               font-size:11px;color:var(--ink-mute);}
   .emrow{margin-top:7px;}
-  .emrow .k{font-size:9.5px;color:var(--ink-mute);margin-bottom:3px;}
+  .emrow .k{font-size:11px;color:var(--ink-mute);margin-bottom:3px;}
   .emstrip{display:flex;height:14px;border-radius:4px;overflow:hidden;gap:2px;
            background:var(--grey-bg);}
   .emstrip i{display:block;height:100%;cursor:default;transition:filter .12s ease,opacity .12s ease;}
@@ -2382,7 +2445,7 @@
      between two rows of similar colours. */
   .emwrap.dim .emstrip i{opacity:.4;}
   .emwrap.dim .emstrip i.on{opacity:1;filter:brightness(1.12) saturate(1.06);}
-  .emnote{font-size:10px;color:var(--ink-dim);margin-top:8px;line-height:1.45;}
+  .emnote{font-size:11px;color:var(--ink-dim);margin-top:8px;line-height:1.45;}
   .emwrap details.callout{margin-top:9px;}
   .emnote b{color:var(--ink);}
   .bandnow .sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;
@@ -2393,12 +2456,12 @@
      bands are not evenly wide - "very low" is 25 gCO2/kWh across and "very high" is the rest of
      the scale. Evenly spaced labels under unevenly sized bands is a caption pointing at the
      wrong thing. */
-  .bandlabels{position:relative;height:12px;margin-top:4px;font-size:9px;color:var(--ink-mute);
+  .bandlabels{position:relative;height:12px;margin-top:4px;font-size:10px;color:var(--ink-mute);
               letter-spacing:.02em;}
   .bandlabels span{position:absolute;transform:translateX(-50%);white-space:nowrap;}
   .bandlabels span.edge-l{transform:none;} .bandlabels span.edge-r{transform:translateX(-100%);}
-  .bandnow{font-weight:700;color:var(--ink);letter-spacing:.04em;text-transform:uppercase;font-size:10px;}
-  .prov{font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  .bandnow{font-weight:700;color:var(--ink);letter-spacing:.04em;text-transform:uppercase;font-size:11px;}
+  .prov{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
         color:var(--ink-mute);border:1px solid var(--grey-line);border-radius:3px;
         padding:1px 4px;margin-left:5px;vertical-align:2px;}
 
@@ -2416,11 +2479,11 @@
      shared. */
   .statrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px;
            padding-top:11px;border-top:1px solid var(--grey-line);}
-  .statcell .k{font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  .statcell .k{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
                color:var(--ink-mute);}
   .statcell .v{font-size:15px;font-weight:700;color:var(--ink);margin-top:3px;
                font-variant-numeric:tabular-nums;}
-  .statcell .s{font-size:10px;color:var(--ink-dim);margin-top:2px;}
+  .statcell .s{font-size:11px;color:var(--ink-dim);margin-top:2px;}
 
   .meter{height:6px;border-radius:3px;background:var(--grey-line);margin-top:9px;overflow:hidden;}
   /* The low-carbon meter fills in the CARBON RAMP'S CLEAN END rather than a fuel colour. That
@@ -2445,9 +2508,9 @@
   .spark .sband{fill:var(--grey-bg);}
   .spark .smid{stroke:var(--blue-line);stroke-width:1;}
   .spark .sdot{fill:var(--mark);stroke:var(--surface);stroke-width:1.5;}
-  .spark .shi,.spark .slo{fill:var(--ink-dim);font-size:8.5px;font-weight:700;}
+  .spark .shi,.spark .slo{fill:var(--ink-dim);font-size:10px;font-weight:700;}
   .sparkcap{display:flex;justify-content:space-between;gap:8px;margin-top:3px;
-    font-size:10px;color:var(--ink-dim);font-variant-numeric:tabular-nums;}
+    font-size:11px;color:var(--ink-dim);font-variant-numeric:tabular-nums;}
   .sparkcap b{color:var(--ink);font-weight:700;}
   .sparkcap .none{color:var(--ink-dim);font-style:normal;}
 
@@ -2465,14 +2528,14 @@
      remap would have collapsed both states onto one weight and quietly deleted the signal.
      The pair moves down a step instead: 600 at rest, 700 when pinned. The track ring is the
      other half of the mark and is untouched. */
-  .mixname{font-size:12.5px;font-weight:600;color:var(--ink);white-space:nowrap;}
-  .mixname .code{font-family:var(--mono);font-size:9.5px;color:var(--ink-mute);font-weight:400;
+  .mixname{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;}
+  .mixname .code{font-family:var(--mono);font-size:11px;color:var(--ink-mute);font-weight:400;
     display:block;letter-spacing:.02em;}
   .track{height:14px;background:var(--grey-bg);border-radius:4px;position:relative;overflow:hidden;}
   .track i{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;display:block;}
-  .mixmw{font-size:12.5px;font-weight:700;text-align:right;
+  .mixmw{font-size:13.5px;font-weight:700;text-align:right;
     font-variant-numeric:tabular-nums;color:var(--ink);}
-  .mixpc{font-size:11.5px;text-align:right;color:var(--ink-dim);
+  .mixpc{font-size:13.5px;text-align:right;color:var(--ink-dim);
     font-variant-numeric:tabular-nums;}
   /* ================= THE UNIT IS STATED ONCE (v0.31) =================
      Nine rows of bare figures with no unit anywhere on the panel. The unit belongs in a COLUMN
@@ -2488,12 +2551,12 @@
      content changed width — and the widths here are `max-content`, so they change with the
      data. */
   .mixhead{display:contents;}
-  .mixhead > span{font-family:var(--sans);font-size:9px;font-weight:700;letter-spacing:.07em;
+  .mixhead > span{font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.07em;
     text-transform:uppercase;color:var(--ink-mute);text-align:right;padding-bottom:2px;}
 
   /* ---- Embedded (estimated) block - deliberately set apart from the metered rows ---- */
   .embwrap{margin-top:13px;padding-top:11px;border-top:1px dashed var(--grey-line);}
-  .emblabel{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  .emblabel{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
     color:var(--ink-dim);margin-bottom:8px;}
   #embrows{display:grid;grid-template-columns:13px max-content minmax(60px,1fr) 74px 46px;
     column-gap:9px;row-gap:10px;align-items:center;}
@@ -2537,7 +2600,7 @@
   svg.chart{display:block;width:100%;max-width:100%;overflow:visible;}
   .gridline{stroke:var(--grey-line);stroke-width:1;stroke-dasharray:2 3;}
   .crosshair{stroke:var(--ink-dim);stroke-width:1;stroke-dasharray:3 3;pointer-events:none;}
-  .axlabel{font-size:10px;fill:var(--ink-dim);font-family:var(--sans);}
+  .axlabel{font-size:11px;fill:var(--ink-dim);font-family:var(--sans);}
   /* ⚠ v0.57: THE ROW GAP CARRIES THE HIT AREAS. Once the fuel keys got their 26px targets the
      audit still failed them as "partially obscured": a 5px row gap puts two 26px boxes 21px
      apart, so on a wrapped legend each row's targets overlapped the row above. A target you
@@ -2551,7 +2614,7 @@
      under Last 24 Hours was 16px: a third larger than the key it was supposed to match, for a
      reason invisible in either rule on its own. Reported by the author. Sizing both in one
      declaration is the fix that cannot drift; the phone override below does the same. */
-  .legend span,.legend .legend-key{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-dim);}
+  .legend span,.legend .legend-key{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;color:var(--ink-dim);}
   .legend i{width:10px;height:10px;border-radius:3px;display:inline-block;flex-shrink:0;}
   .legend i.est{border:1.5px solid var(--solar-line);background:var(--solar-fill);
     background-image:var(--hatch-est-sm);}
@@ -2580,40 +2643,44 @@
   /* Onshore/offshore split. Two segments of one metered total, so one strip on one scale -
      the same shape the interconnector net uses, for the same reason. */
   .splitwrap{margin-top:12px;padding-top:11px;border-top:1px solid var(--grey-line);}
-  .splithead{display:flex;align-items:baseline;gap:8px;font-size:9.5px;font-weight:700;
+  .splithead{display:flex;align-items:baseline;gap:8px;font-size:11px;font-weight:700;
              letter-spacing:.06em;text-transform:uppercase;color:var(--ink-dim);}
   .splithead .src{margin-left:auto;font-weight:400;letter-spacing:0;text-transform:none;
-                  font-size:10px;color:var(--ink-mute);}
+                  font-size:11px;color:var(--ink-mute);}
   .splitstrip{display:flex;height:16px;border-radius:4px;overflow:hidden;margin-top:8px;gap:2px;
               background:var(--grey-bg);}
   .splitstrip i{display:block;height:100%;background:var(--c-wind);}
   .splitstrip i.off{opacity:.55;}
-  .splitfoot{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-mute);
+  .splitfoot{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-mute);
              margin-top:5px;gap:10px;}
   .subchart{margin-top:14px;padding-top:12px;border-top:1px solid var(--grey-line);}
-  .subchart-title{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--ink-dim);margin-bottom:6px;display:flex;align-items:center;}
+  /* ⚠ v0.72: A SUB-PANEL TITLE IS A TITLE. This was uppercase like the in-card labels, which is
+     the one job the uppercase is now rationed to — but "Imbalance price" heading a chart inside
+     the Last 24 hours panel is a heading, not a label on a figure. Sentence case, one step below
+     the panel titles it sits under. */
+  .subchart-title{font-size:14px;font-weight:600;letter-spacing:-0.005em;text-transform:none;
+    color:var(--ink);margin-bottom:6px;display:flex;align-items:center;}
   .subchart-title .export-btn{text-transform:none;letter-spacing:0;}
   .subchart-title span{font-weight:400;letter-spacing:0;text-transform:none;
-    font-size:10px;color:var(--ink-mute);margin-left:6px;}
+    font-size:11px;color:var(--ink-mute);margin-left:6px;}
 
   /* min-width alone let a long value stretch the tooltip past the panel edge — the placement
      code clamps the left edge but cannot claw back a box wider than its container. A max-width
      caps it, and long values now wrap instead of pushing the box outwards. */
   .tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--grey-line);
-    border-radius:7px;padding:8px 10px;font-size:11.5px;box-shadow:0 6px 20px rgba(0,0,0,.16);
+    border-radius:7px;padding:8px 10px;font-size:13.5px;box-shadow:0 6px 20px rgba(0,0,0,.16);
     min-width:180px;max-width:min(255px,calc(100vw - 28px));z-index:20;opacity:0;transition:opacity .1s;}
   .tip.show{opacity:1;}
   .tip .t-head i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:6px;
                  vertical-align:0;}
-  .tip .t-head{font-weight:700;font-size:11.5px;margin-bottom:5px;color:var(--ink);
+  .tip .t-head{font-weight:700;font-size:13.5px;margin-bottom:5px;color:var(--ink);
     border-bottom:1px solid var(--grey-line);padding-bottom:4px;}
   .tip .t-row{display:flex;align-items:center;gap:7px;padding:1.5px 0;}
   .tip .t-row i{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
   .tip .t-row .n{color:var(--ink-dim);}
   .tip .t-row .v{margin-left:auto;font-weight:700;color:var(--ink);
     font-variant-numeric:tabular-nums;white-space:nowrap;}
-  .tip .t-row .v.ds{font-family:var(--mono);font-weight:400;font-size:10.5px;}
+  .tip .t-row .v.ds{font-family:var(--mono);font-weight:400;font-size:12px;}
   /* The same quantity in the other unit, subordinate to it rather than beside it as an equal —
      the Hz figure is the answer, the mHz figure is for the reader who thinks in mHz. */
   .tip .t-row .t-alt{font-weight:400;color:var(--ink-dim);}
@@ -2626,13 +2693,13 @@
   .chart.is-dim polygon[data-fuel]{opacity:.34;transition:opacity .1s ease;}
   .chart.is-dim polygon[data-fuel].on{opacity:1;}
   @media (prefers-reduced-motion:reduce){ .chart.is-dim polygon[data-fuel]{transition:none;} }
-  .tip .qual{font-style:normal;font-weight:400;font-size:9.5px;letter-spacing:.04em;
+  .tip .qual{font-style:normal;font-weight:400;font-size:11px;letter-spacing:.04em;
     text-transform:uppercase;color:var(--ink-mute);margin-left:3px;}
-  .tip .t-cav{font-size:10px;line-height:1.35;color:var(--warn);padding:3px 0 0;}
+  .tip .t-cav{font-size:11px;line-height:1.35;color:var(--warn);padding:3px 0 0;}
   /* The affordance hint is not a caveat, so it does not take the warn colour — a link with
      nothing wrong with its capacity figure should not carry a coloured line. Muted ink,
      same slot. */
-  .tip .t-hint{font-size:10px;line-height:1.35;color:var(--muted);padding:3px 0 0;}
+  .tip .t-hint{font-size:11px;line-height:1.35;color:var(--muted);padding:3px 0 0;}
 
   /* ================= Interconnectors (same shared-grid fix) ================= */
   /* ================= VIEW MODE (v0.23) ================= */
@@ -2654,7 +2721,7 @@
     background:var(--page); padding:9px 0 5px;}
   .viewbar{display:flex; align-items:center; justify-content:flex-start;}
   .viewbar .viewswitch{margin-left:0; align-self:auto; margin-top:0;}
-  .viewbar .viewbtn{font-size:10.5px; padding:5px 12px; min-width:62px;}
+  .viewbar .viewbtn{font-size:12px; padding:5px 12px; min-width:62px;}
   @media (pointer:coarse){ .viewbar .viewswitch{min-height:44px;}
     .viewbar .viewbtn{min-height:44px;display:inline-flex;align-items:center;justify-content:center;} }
 
@@ -2825,7 +2892,7 @@
      and cannot drift apart. A separate header grid above the rows is the classic way to get a
      table whose headings no longer line up with anything. */
   .ichead{display:contents;}
-  .ichead > *{font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  .ichead > *{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
     color:var(--ink-mute);align-self:end;}
   .ichead .h-flow{text-align:center;}
   /* ⚠ THE CAPACITY HEADING SPANS THE LAST TWO TRACKS. Its column is 48px — the width of "63%" —
@@ -2849,7 +2916,7 @@
      at every width the harness measures. A negative margin used to cancel padding cancels the
      layout too, at whichever edge the element happens to sit against. Vertical padding buys the
      height; the width is the label's own, which is comfortably past 24px for all three. */
-  button.icsort{font:inherit;font-size:9.5px;font-weight:700;letter-spacing:.05em;
+  button.icsort{font:inherit;font-size:11px;font-weight:700;letter-spacing:.05em;
     text-transform:uppercase;color:var(--ink-mute);background:none;border:none;cursor:pointer;
     padding:6px 0;margin:-6px 0;display:inline-flex;align-items:center;gap:4px;
     min-height:24px;max-width:100%;-webkit-tap-highlight-color:transparent;}
@@ -2864,7 +2931,7 @@
      active sort. Making FLOW bare and unclickable would leave a reader who sorted by name with
      no way back to the default order. So FLOW is sortable too, and shows an arrow rather than
      ⇅ precisely because it is the active one. */
-  .icsort .sarr{font-size:9px;opacity:.55;line-height:1;}
+  .icsort .sarr{font-size:10px;opacity:.55;line-height:1;}
   button.icsort[data-sort="descending"],
   button.icsort[data-sort="ascending"]{color:var(--ink);}
   button.icsort[data-sort="descending"] .sarr,
@@ -2914,7 +2981,7 @@
   }
   /* The footer caption. Centred and quiet, because it is the panel's small print — a statement
      that is true on every render and that a returning reader should be able to stop seeing. */
-  .icfoot{margin:9px 0 0;text-align:center;font-size:10.5px;line-height:1.5;
+  .icfoot{margin:9px 0 0;text-align:center;font-size:12px;line-height:1.5;
     color:var(--ink-mute);}
   .icfoot span{margin:0 7px;opacity:.7;}
   .icrow{display:contents;}
@@ -2988,7 +3055,7 @@
      So `.in` is now the right-hand term and takes the right alignment. */
   .icnet-term.in{text-align:right;align-items:flex-end;}
   .icnet-term .t-k,
-  .icnet-card .t-k{font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+  .icnet-card .t-k{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
   .icnet-term.in  .t-k{color:var(--flow-in);}
   .icnet-term.out .t-k{color:var(--flow-out-ink);}
   .icnet-card .t-k{color:var(--ink-dim);}
@@ -2999,10 +3066,10 @@
      row with a tint and a hairline, so the type size was doing a job that was already done, and
      paying for it in the legibility of the two gross figures a reader also came for. 22/27 is
      about 1.23:1: still unmistakably the answer, without shrinking its terms. */
-  .icnet-term .t-v{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;
+  .icnet-term .t-v{font-size:21px;font-weight:700;font-variant-numeric:tabular-nums;
                    letter-spacing:-.015em;white-space:nowrap;line-height:1.1;}
-  .icnet-term .t-v .unit{font-size:12px;font-weight:700;color:var(--ink-dim);}
-  .icnet-term .t-n{font-size:9.5px;color:var(--ink-mute);font-variant-numeric:tabular-nums;}
+  .icnet-term .t-v .unit{font-size:13.5px;font-weight:700;color:var(--ink-dim);}
+  .icnet-term .t-n{font-size:11px;color:var(--ink-mute);font-variant-numeric:tabular-nums;}
   .icnet-term.in  .t-v{color:var(--flow-in);}
   .icnet-term.out .t-v{color:var(--flow-out-ink);}
   /* The card is what lifts the answer out of the row. A tint and a hairline, not a fill: this is
@@ -3014,8 +3081,8 @@
   }
   .icnet-val{font-size:27px;font-weight:700;letter-spacing:-.02em;line-height:1.05;
              font-variant-numeric:tabular-nums;}
-  .icnet-val .unit{font-size:12.5px;font-weight:700;color:var(--ink-dim);letter-spacing:0;}
-  .icnet-dir{font-size:10px;font-weight:700;letter-spacing:.07em;}
+  .icnet-val .unit{font-size:13.5px;font-weight:700;color:var(--ink-dim);letter-spacing:0;}
+  .icnet-dir{font-size:11px;font-weight:700;letter-spacing:.07em;}
   .icnet-card.in-c  .icnet-val,.icnet-card.in-c  .icnet-dir{color:var(--flow-in);}
   .icnet-card.out-c .icnet-val,.icnet-card.out-c .icnet-dir{color:var(--flow-out-ink);}
   .icnet-card.idle-c .icnet-val,.icnet-card.idle-c .icnet-dir{color:var(--ink-dim);}
@@ -3041,7 +3108,7 @@
     .icnet-term.in{order:0;text-align:left;align-items:flex-start;}
     .icnet-term.out{order:1;text-align:left;align-items:flex-start;}
   }
-  .icname{font-size:12px;font-weight:700;color:var(--ink);white-space:nowrap;}
+  .icname{font-size:13.5px;font-weight:700;color:var(--ink);white-space:nowrap;}
   button.ic-open{font:inherit;color:var(--blue-text);background:none;border:none;padding:0;cursor:pointer;
     text-align:left;border-bottom:1px dotted var(--blue-text);-webkit-tap-highlight-color:transparent;}
   button.ic-open:hover{border-bottom-style:solid;}
@@ -3077,31 +3144,31 @@
   .modal-head::after{content:"";position:absolute;right:0;bottom:0;height:3px;width:var(--red-tail);
     background:var(--red);pointer-events:none;}
   .modal-head h3{margin:0;font-size:15px;font-weight:700;letter-spacing:-.01em;}
-  .modal-head .sub{font-size:11px;opacity:.85;margin-top:2px;}
+  .modal-head .sub{font-size:12px;opacity:.85;margin-top:2px;}
   .modal-close{margin-left:auto;background:none;border:1px solid currentColor;color:var(--head-ink);
     font-family:var(--sans);border-radius:5px;font-size:14px;line-height:1;padding:4px 8px;
     cursor:pointer;opacity:.8;}
   .modal-close:hover{opacity:1;}
   .modal-body{padding:14px 16px 16px;}
-  .modal .flownow{font-size:12px;padding:8px 11px;border-radius:6px;background:var(--grey-bg);
+  .modal .flownow{font-size:13.5px;padding:8px 11px;border-radius:6px;background:var(--grey-bg);
     margin-bottom:12px;}
   .modal .flownow b{font-variant-numeric:tabular-nums;}
-  .modal table.facts{border-collapse:collapse;width:100%;font-size:12px;margin-bottom:12px;}
+  .modal table.facts{border-collapse:collapse;width:100%;font-size:13.5px;margin-bottom:12px;}
   .modal table.facts th{text-align:left;font-weight:700;color:var(--blue-text);padding:5px 12px 5px 0;
     vertical-align:top;white-space:nowrap;width:1%;}
   .modal table.facts td{padding:5px 0;border-bottom:1px solid var(--grey-line);color:var(--ink);}
   .modal table.facts tr:last-child td{border-bottom:none;}
-  .modal p.note{font-size:12px;line-height:1.55;color:var(--ink-dim);margin:0 0 12px;}
-  .modal p.capnote{font-size:12px;line-height:1.55;color:var(--ink);margin:0 0 12px;
+  .modal p.note{font-size:13.5px;line-height:1.55;color:var(--ink-dim);margin:0 0 12px;}
+  .modal p.capnote{font-size:13.5px;line-height:1.55;color:var(--ink);margin:0 0 12px;
     padding:8px 11px;border-radius:6px;background:var(--bad-bg);border:1px solid var(--grey-line);}
   .modal p.capnote b{color:var(--bad);}
   .modal .lnks{display:flex;flex-direction:column;gap:6px;}
-  .modal .lnks a{font-size:12px;color:var(--blue-text);text-decoration:underline;text-underline-offset:2px;}
-  .modal .srcnote{font-size:10.5px;color:var(--ink-mute);margin-top:12px;line-height:1.5;}
+  .modal .lnks a{font-size:13.5px;color:var(--blue-text);text-decoration:underline;text-underline-offset:2px;}
+  .modal .srcnote{font-size:12px;color:var(--ink-mute);margin-top:12px;line-height:1.5;}
   @media (max-width:620px){ .modal-back{padding:0;} .modal{border-radius:0;min-height:100%;width:100%;} }
   /* The sub-line reads "Netherlands · INTNED". Only the second half is a machine identifier,
      so only the second half is mono — v0.17 set the whole line, country name included. */
-  .icname .code{font-size:10px;color:var(--ink-mute);font-weight:400;display:block;}
+  .icname .code{font-size:11px;color:var(--ink-mute);font-weight:400;display:block;}
   /* ⚠ v0.56: THE FLAG SITS BESIDE THE WHOLE NAME, NOT INSIDE THE SUB-LINE.
      It used to live in the sub-line's flex row, level with the country word — which put the one
      graphic element on the row on its SECOND line, below the name it identifies. The mock has
@@ -3113,7 +3180,7 @@
   .icname{display:flex;align-items:center;gap:9px;}
   .icname .icn-t{min-width:0;}
   .icname .code.icwho{display:block;}
-  .icname .code .ds{font-size:9.5px;}
+  .icname .code .ds{font-size:11px;}
   /* ⚠ THE BAR TRACK IS CAPPED AND CENTRED IN ITS COLUMN. Left as a bare `1fr` it swallowed
      every pixel the name column did not want, which on a wide panel pushed the MW figure most
      of a screen away from the bar it belongs to — the mock spends that slack as white space
@@ -3155,24 +3222,24 @@
      statement instead of ten), the direction is already said by the sign and the colour and by
      the side of the axis the bar is on, and the capacity share becomes its own column, which is
      the only way it can be scanned down or sorted on. What is left is the figure. */
-  .icval{font-size:12.5px;font-weight:700;text-align:right;
+  .icval{font-size:13.5px;font-weight:700;text-align:right;
     font-variant-numeric:tabular-nums;white-space:nowrap;}
   /* The capacity share is deliberately NOT in the flow colours. It is a property of the cable,
      not of the direction it happens to be running, and colouring it would make 82% on a small
      export read as a warning about the export. */
-  .iccap{font-size:11.5px;font-weight:600;text-align:right;color:var(--ink-dim);
+  .iccap{font-size:13.5px;font-weight:600;text-align:right;color:var(--ink-dim);
     font-variant-numeric:tabular-nums;white-space:nowrap;}
   .in-c{color:var(--flow-in);} .out-c{color:var(--flow-out-ink);} .idle-c{color:var(--ink-mute);}
 
   /* ================= Table view ================= */
   .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
-  table.data{border-collapse:collapse;width:100%;font-size:11.5px;}
-  table.data th{text-align:left;font-size:9.5px;color:var(--ink-dim);font-weight:700;text-transform:uppercase;
+  table.data{border-collapse:collapse;width:100%;font-size:13.5px;}
+  table.data th{text-align:left;font-size:11px;color:var(--ink-dim);font-weight:700;text-transform:uppercase;
     letter-spacing:.04em;padding:3px 8px 5px 0;border-bottom:1px solid var(--ink);white-space:nowrap;}
   table.data td{padding:4px 8px 4px 0;border-bottom:1px solid var(--grey-line);
     font-variant-numeric:tabular-nums;}
   table.data td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;}
-  table.data td.ds{font-family:var(--mono);font-size:10.5px;color:var(--ink-dim);}
+  table.data td.ds{font-family:var(--mono);font-size:12px;color:var(--ink-dim);}
   table.data tr:last-child td{border-bottom:none;}
   table.data td:first-child{font-weight:700;}
   table.data tfoot td{border-top:1px solid var(--ink);border-bottom:none;font-weight:700;padding-top:5px;}
@@ -3196,7 +3263,7 @@
      note's chrome belongs to the note. */
   .notewrap{margin-top:11px;}
   details.callout{padding:0;}
-  details.callout > summary{padding:8px 11px;border-radius:6px;font-size:11px;line-height:1.45;
+  details.callout > summary{padding:8px 11px;border-radius:6px;font-size:12px;line-height:1.45;
     background:var(--grey-bg);border:1px solid var(--grey-line);cursor:pointer;list-style:none;
     display:flex;gap:8px;align-items:flex-start;color:var(--ink-dim);}
   details.callout > summary::-webkit-details-marker{display:none;}
@@ -3204,17 +3271,17 @@
   details.callout > summary:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;}
   details.callout > summary b{color:var(--ink);}
   details.callout[open] > summary{border-radius:6px 6px 0 0;border-bottom-color:transparent;}
-  details.callout > summary .chev{margin-left:auto;flex-shrink:0;font-size:9px;opacity:.7;
+  details.callout > summary .chev{margin-left:auto;flex-shrink:0;font-size:10px;opacity:.7;
     transform:rotate(0deg);transition:transform .16s ease;padding-left:6px;}
   @media (prefers-reduced-motion:reduce){ details.callout > summary .chev{transition:none;} }
   details.callout[open] > summary .chev{transform:rotate(90deg);}
   details.callout .more{padding:9px 11px 10px;border:1px solid var(--grey-line);border-top:none;
-    border-radius:0 0 6px 6px;background:var(--grey-bg);font-size:11px;line-height:1.5;
+    border-radius:0 0 6px 6px;background:var(--grey-bg);font-size:12px;line-height:1.5;
     color:var(--ink-dim);}
   details.callout .more b{color:var(--ink);}
   @media (pointer:coarse){ details.callout > summary{padding:11px;} }
 
-  .callout{padding:8px 11px;border-radius:6px;font-size:11px;line-height:1.45;background:var(--grey-bg);
+  .callout{padding:8px 11px;border-radius:6px;font-size:12px;line-height:1.45;background:var(--grey-bg);
     color:var(--ink-dim);}
   /* v0.3196: history controls are a true two-choice switch, matching Wind/Solar.
      Fixed dimensions prevent the controls moving when 24h changes to 7d. */
@@ -3294,7 +3361,7 @@
      The extra top margin is the other half: 26px put the last panel's rounded corner almost
      against the footer's rule, which read as the page running out rather than ending. */
   footer.foot{position:relative;padding:16px 0 15px;border-top:none;
-    font-size:11px;color:var(--ink-dim);background:var(--foot-bg);flex-shrink:0;}
+    font-size:12px;color:var(--ink-dim);background:var(--foot-bg);flex-shrink:0;}
   footer.foot::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;
     background:linear-gradient(90deg,var(--accent) 0 calc(100% - var(--red-tail)),
     var(--red) calc(100% - var(--red-tail)) 100%);}
@@ -3338,7 +3405,7 @@
      page has six of them. */
   .homeintro{max-width:none;margin:16px 0 0;padding:16px 0 2px;
     border-top:1px solid var(--grey-line);
-    font-size:12.5px;line-height:1.62;color:var(--ink-dim);}
+    font-size:13.5px;line-height:1.62;color:var(--ink-dim);}
   .homeintro h2{max-width:var(--measure);margin:0 0 9px;font-size:13.5px;font-weight:700;line-height:1.3;
     letter-spacing:0;text-transform:none;color:var(--ink);}
   .homeintro p{margin:0 0 9px;max-width:var(--measure);}
@@ -3362,13 +3429,13 @@
     max-width:820px;
     margin:0 auto;
     padding:14px 18px 16px;
-    font-size:12.5px;
+    font-size:13.5px;
     line-height:1.58;
     color:var(--ink-dim);
   }
   .seo-copy h2,.seo-copy h3{color:var(--ink);line-height:1.25;margin:14px 0 5px;}
   .seo-copy h2{font-size:16px;}
-  .seo-copy h3{font-size:13px;}
+  .seo-copy h3{font-size:13.5px;}
   .seo-copy p{margin:0 0 8px;}
   .seo-copy ul{margin:4px 0 10px 18px;padding:0;}
   .seo-copy li{margin:2px 0;}
@@ -3383,7 +3450,7 @@
   .seo-copy .seo-points li:last-child{margin-bottom:0;}
   .seo-copy .seo-points b{color:var(--ink);}
   @media (max-width:620px){
-    .seo-copy .seo-lede{font-size:13px;}
+    .seo-copy .seo-lede{font-size:13.5px;}
     .seo-copy .seo-points{padding-left:11px;}
   }
   .seo-copy a{color:var(--blue-text);}
@@ -3422,7 +3489,7 @@
      it was their only consumer. When an element goes, its compensations go with it. The
      `.about` rules below STAY: the generated pages consume them through site/styles.css, which
      is extracted from this stylesheet verbatim. */
-  .about h4{margin:30px 0 9px;font-size:12.5px;font-weight:700;letter-spacing:.06em;
+  .about h4{margin:30px 0 9px;font-size:13.5px;font-weight:700;letter-spacing:.06em;
     text-transform:uppercase;color:var(--blue-text);scroll-margin-top:10px;
     padding-top:14px;border-top:1px solid var(--grey-line);}
   .about h4:first-of-type{margin-top:4px;padding-top:0;border-top:none;}
@@ -3436,7 +3503,7 @@
   /* The endpoint list is the one block that wants the extra width: it is a list of machine
      identifiers, not prose, so it gets a grid rather than a wrap and stays scannable. */
   .srcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:5px 22px;
-    margin:4px 0 14px;font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);}
+    margin:4px 0 14px;font-family:var(--mono);font-size:13.5px;color:var(--ink-dim);}
   @media (max-width:620px){ .srcs{grid-template-columns:1fr;} }
   /* ============================================================================
      ⚠ v0.52 — THE FOUR DATA STATES, AND WHY THIS IS A CORRECTNESS FEATURE
@@ -3519,13 +3586,13 @@
     /* The strapline goes on a phone and the byline stays. What the page IS can be inferred from
        the page; who made it cannot. */
     .wordmark .sub{display:none;}
-    .byline{font-size:10px;margin-top:2px;}
+    .byline{font-size:11px;margin-top:2px;}
     .header-actions{gap:8px;}
-    .livewrap{font-size:10px;gap:5px;}
-    .tempchip{font-size:10px;gap:4px;}
+    .livewrap{font-size:11px;gap:5px;}
+    .tempchip{font-size:11px;gap:4px;}
     .tempchip .tdelta{display:none;}
 
-    .toolbtn{font-size:11px;padding:7px 11px;}
+    .toolbtn{font-size:12px;padding:7px 11px;}
 
     .grid{gap:12px;margin-top:12px;}
     .panel-body{padding:11px 12px 13px;}
@@ -3533,11 +3600,11 @@
        so the phone no longer needs a rule to put it there — only to size it. It wraps freely
        here, which is what the narrow column needs. */
     .panel-head{padding:5px 11px 0;}
-    .panel-head > h2{font-size:10px;}
-    .panel-head > .note{font-size:9px;padding:2px 0 0;}
+    .panel-head > h2{font-size:11px;}
+    .panel-head > .note{font-size:10px;padding:2px 0 0;}
     .panelbtn{width:34px;height:32px;min-width:34px;font-size:18px;border-radius:7px;}
     .tile{padding:11px 13px 12px;}
-    .tile .value{font-size:28px;}
+    .tile .value{font-size:27px;}
   }
   @media (max-width:620px){
     /* ⚠ v0.45: THE CONDITION CARDS STAY 2×2 ON A PORTRAIT PHONE, at the author's direction.
@@ -3549,7 +3616,7 @@
     .g-tiles{grid-template-columns:repeat(2,minmax(0,1fr));}
     .g-tiles .tile{padding:11px 12px 12px;}
     .g-tiles .tile .value{font-size:26px;}
-    .g-tiles .tile .value .unit{font-size:12px;}
+    .g-tiles .tile .value .unit{font-size:13.5px;}
     .bandscale .bandlabels{font-size:8px;}
     /* ⚠ v0.45: THE 19px OVERFLOW IN THE 2-UP GRID WAS THE VALUE LINE, NOT THE BAND SCALE.
        The first fix hid the scale's five labels, which was wrong in the most instructive way:
@@ -3563,26 +3630,26 @@
     .tile.hero .value{font-size:34px;}
     /* The name column keeps max-content so every bar still starts on the same line — only
        the type scale comes down, which is the cheaper of the two ways to buy the width. */
-    #mixrows{grid-template-columns:11px max-content minmax(44px,1fr) 60px 40px;column-gap:7px;}
-    .mixname{font-size:11.5px;}
-    .mixname .code{font-size:8.5px;}
-    .mixmw{font-size:11px;}
-    .mixpc{font-size:10px;}
+    #mixrows{grid-template-columns:11px fit-content(150px) minmax(32px,1fr) max-content max-content;column-gap:7px;}
+    .mixname{font-size:13.5px;}
+    .mixname .code{font-size:10px;}
+    .mixmw{font-size:12px;}
+    .mixpc{font-size:11px;}
     /* v0.56: four tracks now — the extra one is the capacity share the mock split out of the
        value cell. The container query in the base block handles the layout; this step is the
        type scale only. */
-    .icname{font-size:11.5px;}
-    .icname .code{font-size:8.5px;}
-    .icval{font-size:11px;}
-    .iccap{font-size:10px;}
+    .icname{font-size:13.5px;}
+    .icname .code{font-size:10px;}
+    .icval{font-size:12px;}
+    .iccap{font-size:11px;}
     .compstrip{height:20px;}
     /* ⚠ v0.57: THE ROW GAP CANNOT DROP BELOW THE HIT AREA IT HAS TO CLEAR. This narrow step set
        4px, which puts two 26px fuel-key targets 8px into each other on a wrapped legend — the
        audit calls that partially obscured and it is right. The column gap tightens as it always
        did; the row gap is now a floor set by the control, not by the width. */
     .legend{gap:16px 12px;}
-    .legend span,.legend .legend-key{font-size:11px;}
-    .tip{min-width:150px;font-size:11px;}
+    .legend span,.legend .legend-key{font-size:12px;}
+    .tip{min-width:150px;font-size:12px;}
   }
   /* Touch devices: the switch and buttons keep their visual size but get a ≥44px hit area,
      since the Wiki's 21px-tall switch fails WCAG 2.5.8 target size on a finger. Padding is
@@ -3594,8 +3661,8 @@
   }
   @media (max-width:400px){
     .tile .value{font-size:25px;}
-    #mixrows{grid-template-columns:10px max-content minmax(30px,1fr) 54px 36px;column-gap:6px;}
-    .mixname{font-size:11px;}
+    #mixrows{grid-template-columns:10px fit-content(126px) minmax(22px,1fr) max-content max-content;column-gap:6px;}
+    .mixname{font-size:12px;}
   }
 
   /* ================= NARROW VIEWPORT HARDENING (v0.3197) =================
@@ -3662,12 +3729,12 @@
     .wordmark .sub,.byline{display:none;}
     .header-actions{width:100%;display:flex;align-items:center;justify-content:flex-start;
       flex-wrap:nowrap;gap:7px;min-width:0;}
-    .livewrap{font-size:10px;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;}
-    .tempchip{font-size:10px;flex:0 0 auto;}
+    .livewrap{font-size:11px;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;}
+    .tempchip{font-size:11px;flex:0 0 auto;}
     .tempchip .tdelta{display:none;}
     .unitswitch{flex:0 0 auto;}
-    .unitbtn{font-size:10px;padding:7px 9px;min-width:28px;}
-    .toolbtn{font-size:11px;padding:8px 10px;flex:0 0 auto;white-space:nowrap;}
+    .unitbtn{font-size:11px;padding:7px 9px;min-width:28px;}
+    .toolbtn{font-size:12px;padding:8px 10px;flex:0 0 auto;white-space:nowrap;}
 
     /* The view selector is a normal scrolling control, not a sticky navigation element. */
     .viewbar-strip{padding:7px 0 4px;}
@@ -3680,10 +3747,10 @@
     .g-tiles{gap:9px !important;margin-top:12px;}
     .g-tiles > .tile{width:100%;min-width:0;}
     .tile{padding:12px 14px 13px;}
-    .tile .label{font-size:10px;line-height:1.2;}
+    .tile .label{font-size:11px;line-height:1.2;}
     .tile .value{font-size:31px;line-height:1.05;white-space:nowrap;}
     .tile .value .unit{font-size:14px;margin-left:3px;}
-    .tile .essential{font-size:11px;line-height:1.35;margin-top:5px;}
+    .tile .essential{font-size:12px;line-height:1.35;margin-top:5px;}
 
     /* System at a Glance: retain the useful 2×2 dashboard shape on phones. */
     /* ⚠ v0.51: THE PANELS FOLLOW THE BAND DOWN TO 9px HERE, and they did not before. The band
@@ -3694,7 +3761,7 @@
     .insightbar,.panel{border-radius:9px;}
     .insightbar{margin-top:12px;padding:9px 10px 10px;}
     .insight-head{margin-bottom:7px;}
-    .insight-head h2{font-size:10px;line-height:1.2;}
+    .insight-head h2{font-size:11px;line-height:1.2;}
     .insight-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:7px;}
     .insight-item{padding:8px 9px;min-width:0;}
     .insight-item .k{font-size:8px;}
@@ -3705,32 +3772,52 @@
     .grid:has(> .panel){margin-top:10px;}
     .panel-body{padding:10px 10px 12px;}
     .panel-head{column-gap:6px;padding:5px 10px 0;}
-    .panel-head > h2{font-size:10px;}
-    .panel-head > .note{font-size:8.5px;padding-left:0;}
+    .panel-head > h2{font-size:11px;}
+    .panel-head > .note{font-size:10px;padding-left:0;}
     .chartbox{min-height:210px;}
-    #mixrows{grid-template-columns:11px minmax(82px,max-content) minmax(40px,1fr) 54px 38px;
+    #mixrows{grid-template-columns:11px fit-content(104px) minmax(18px,1fr) max-content max-content;
       column-gap:6px;row-gap:8px;}
-    .mixname{font-size:11px;}
+    .mixname{font-size:12px;}
     .mixname .code{font-size:8px;}
-    .mixmw{font-size:10.5px;}
-    .mixpc{font-size:9.5px;}
+    .mixmw{font-size:12px;}
+    .mixpc{font-size:11px;}
     #embrows{grid-template-columns:11px minmax(82px,max-content) minmax(40px,1fr) 54px 38px;
       column-gap:6px;}
     .legend{gap:16px 9px;}
-    .legend span{font-size:10px;}
+    .legend span{font-size:11px;}
   }
 
   @media (max-width:400px){
     .wrap{padding-left:10px;padding-right:10px;}
     .header-actions{gap:5px;}
-    .livewrap{font-size:9.5px;}
+    .livewrap{font-size:11px;}
     .unitbtn{padding:6px 7px;min-width:26px;}
-    .toolbtn{font-size:10px;padding:7px 8px;}
+    .toolbtn{font-size:11px;padding:7px 8px;}
     .tile .value{font-size:29px;}
     .insight-grid{gap:6px;}
     .insight-item .v{font-size:14px;}
-    #mixrows,#embrows{grid-template-columns:10px minmax(76px,max-content) minmax(25px,1fr) 50px 34px;
-      column-gap:5px;}
+    /* ⚠ v0.72: `fit-content()` ON THE NAME COLUMN, because `max-content` has no ceiling.
+       The larger type made the fuel names wider and the name track grew to fit them, pushing the
+       row 4px past its panel at 320-390px. A `minmax(x, max-content)` track can only ever grow;
+       the floor was the wrong end to be constraining. `fit-content()` caps it and lets the bar
+       track absorb what is left, which is the track that should give. */
+    /* ⚠ v0.72: THE TWO NUMERIC COLUMNS ARE `max-content`, NOT FIXED PIXELS — and two earlier
+       attempts at this went the wrong way. The overflow was 4px on `#mixrows` at 320-390 and I
+       twice narrowed the tracks, which made it worse. Measured properly: every element ended
+       exactly at the container's right edge, and the 4px was TEXT overflowing inside a 34px
+       SHARE cell that had to hold "30.9%" at 13.5px. The fixed width was the fault, and a fixed
+       width is a bet on a font size — a bet this release lost.
+       `max-content` on the two numeric columns lets them ask for exactly what they need and the
+       bar track, which has slack and should be the one that gives, absorbs it. */
+    #mixrows,#embrows{grid-template-columns:10px fit-content(88px) minmax(10px,1fr)
+      max-content max-content; column-gap:5px;}
+    /* ⚠ v0.72: THE THREE STAT LABELS OVERFLOW THEIR OWN CELLS AT 320px. `.statcell .k` is an
+       11px uppercase label with 0.05em of tracking in a third of a 320px panel — about 93px —
+       and "First forecast" does not fit. It did at 9.5px, which is what it was before the type
+       scale moved. The label drops a step and is allowed to wrap here; the VALUE below it keeps
+       its size, because that is the thing being read. */
+    .statcell .k{font-size:10px;letter-spacing:.02em;white-space:normal;line-height:1.2;}
+    .statrow{gap:7px;}
   }
 
 
@@ -3781,7 +3868,7 @@
     align-self:auto;
   }
   .viewbar .viewbtn{
-    font-size:10.5px;
+    font-size:12px;
     padding:5px 12px;
     min-width:62px;
   }
@@ -4343,12 +4430,12 @@
      the same `max-content` trap that overflowed the Wind panel's header at rev 47. */
   .ins-text{ flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap:3px; }
   /* Normal panel prose. The finding is the sentence, so it is set like one. */
-  .ins-line{ font-size:12px; line-height:1.45; color:var(--ink); }
+  .ins-line{ font-size:13.5px; line-height:1.45; color:var(--ink); }
   .ins-line b{ font-weight:700; color:var(--ink); }
   /* The qualifying facts. A list, so it is punctuated as one — and tabular, because most of the
      parts are figures and they should not shift as the numbers change. */
   .ins-meta{
-    font-size:10.5px; line-height:1.4; color:var(--ink-mute);
+    font-size:12px; line-height:1.4; color:var(--ink-mute);
     font-variant-numeric:tabular-nums; letter-spacing:.01em;
   }
   .ins-meta b{ color:var(--ink-dim); font-weight:700; }
@@ -4393,12 +4480,12 @@
   .ins-more{
     margin-top:8px; padding-top:8px;
     border-top:1px dotted var(--blue-line);
-    font-size:11.5px; line-height:1.55; color:var(--ink-dim);
+    font-size:13.5px; line-height:1.55; color:var(--ink-dim);
   }
   .ins-more b{ color:var(--ink); }
   @media (max-width:430px){
-    .ins-line{ font-size:11.5px; }
-    .ins-meta{ font-size:10px; }
+    .ins-line{ font-size:13.5px; }
+    .ins-meta{ font-size:11px; }
   }
 
 
