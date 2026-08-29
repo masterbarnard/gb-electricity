@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- GENERATED FILE — do not edit. Produced by tools/pages64.mjs from
-     dash/GB_Electricity_v0.64.html (md5 7f8582a49011f9c662d11c4ff3e7373a). Edit the dashboard, re-run the generator. -->
+<!-- GENERATED FILE — do not edit. Produced by tools/pages71.mjs from
+     dash/GB_Electricity_v0.71.html (md5 a51700708a98cc3640560f27c43122cb). Edit the dashboard, re-run the generator. -->
 <html lang="en-GB" data-page="methodology">
 <head>
 <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 <title>Methodology — How GB Electricity Derives Its Live Figures</title>
 <meta name="description" content="How GB Electricity derives each live figure: the UK generation mix, national and underlying demand, embedded solar, interconnector flows, carbon intensity and grid frequency — and what the public data cannot see.">
 <link rel="canonical" href="https://gbelectricity.uk/methodology">
-<meta name="generator" content="pages64.mjs — from GB Electricity v0.64">
+<meta name="generator" content="pages71.mjs — from GB Electricity v0.71">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -24,11 +24,11 @@
 <meta property="og:url" content="https://gbelectricity.uk/methodology">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v64.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v71.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Methodology — How GB Electricity Derives Its Live Figures">
 <meta name="twitter:description" content="How GB Electricity derives each live figure: the UK generation mix, national and underlying demand, embedded solar, interconnector flows, carbon intensity and grid frequency — and what the public data cannot see.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v64.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v71.png">
 <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" sizes="64x64" href="/favicon.png">
@@ -36,13 +36,13 @@
 <script>/* Applied before first paint so a dark-mode reader never gets a white flash.
   The storage key is extracted from the dashboard at generation time, so the two
   cannot disagree about where the preference lives. */
-(function(){try{var t=localStorage.getItem("nd-theme");
-if(t!=="dark"&&t!=="light")t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";
+(function(){try{var p=localStorage.getItem("nd-theme");
+var t=(p==="dark"||p==="light")?p:((window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light");
 document.documentElement.setAttribute("data-theme",t);}catch(e){
 document.documentElement.setAttribute("data-theme","light");}})();</script>
 <link rel="stylesheet" href="/styles.css">
 <style>
-  /* ---- generated page shell (pages64.mjs) ---- */
+  /* ---- generated page shell (pages71.mjs) ---- */
   .page-main{max-width:880px;margin:0 auto;padding:22px 18px 46px;}
   .page-crumb{margin:0 0 4px;font-size:12.5px;}
   .page-crumb a{color:var(--blue-text);text-decoration:none;}
@@ -105,13 +105,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         </div>
         </a>
       </div>
-      <div class="header-actions">
-        <button class="theme-switch" id="btn-theme" role="switch" aria-checked="false" aria-label="Dark mode">
-          <svg class="theme-icon sun" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7"/></svg>
-          <span class="switch-track"><span class="switch-knob"></span></span>
-          <svg class="theme-icon moon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        </button>
-      </div>
+      <div class="header-actions"></div>
     </div>
   </div>
   <hr class="rule">
@@ -308,8 +302,10 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
           Embedded solar, and the AGWS fallback.</li>
         <li><b>Forecast</b> — a dashed outline, matching the dashed strokes on the wind and carbon
           charts.</li>
-        <li><b>Calculated</b> — a bracket mark: derived from other figures here rather than read
-          from a feed. It carries no colour, because derived is not less trustworthy.</li>
+        <li><b>Calculated</b> — written as an equation: the terms listed above a rule and the
+          result under an equals sign. Derived from other figures here rather than read from a
+          feed. It carries no colour, because derived is not less trustworthy — and no chip
+          either, because a chip beside an equals sign only repeats it.</li>
         <li><b>Stale</b> — a clock and an age.</li>
         <li><b>Unavailable</b> — a struck-through chip and the word. The only mark that reads as a
           negation, because it is the one state that must never be mistaken for a value.</li>
@@ -362,16 +358,22 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" title="Generated from GB Electricity v0.64">v0.64</span> &middot;
+      <span class="version-label" title="Generated from GB Electricity v0.71">v0.71</span> &middot;
       <a href="/about" class="footer-link">About</a> &middot;
       <a href="/methodology" class="footer-link">Methodology</a>
+      <span class="theme-pref" id="theme-pref" role="radiogroup" aria-label="Colour theme">
+        <span class="theme-pref-label">Theme</span>
+        <button type="button" class="theme-opt" data-theme-pref="system" role="radio" aria-checked="true" tabindex="0">System</button>
+        <button type="button" class="theme-opt" data-theme-pref="light"  role="radio" aria-checked="false" tabindex="-1">Light</button>
+        <button type="button" class="theme-opt" data-theme-pref="dark"   role="radio" aria-checked="false" tabindex="-1">Dark</button>
+      </span>
     </div>
   </div>
 </footer>
 
 <script>
 
-/* ---- generated page runtime (pages64.mjs) — the minimum the static pages
+/* ---- generated page runtime (pages71.mjs) — the minimum the static pages
    need: theme, year, glossary. Everything content-bearing is extracted from
    the dashboard at generation time. ---- */
 const $ = (id)=>document.getElementById(id);
@@ -380,20 +382,46 @@ const store = {
   get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
   set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 };
-function setTheme(dark){
-  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
-  $("btn-theme").setAttribute("aria-checked", String(dark));
-  store.set("nd-theme", dark ? "dark" : "light");
+/* Three states, and the stored value is the PREFERENCE not the resolved theme — the same
+   contract the dashboard uses, and the same storage key, so a choice made on either document is
+   honoured by the other. System is a subscription rather than a one-off reading. */
+const THEME_PREFS = ["system","light","dark"];
+let themePref = "system";
+function resolvedTheme(pref){
+  if(pref === "dark" || pref === "light") return pref;
+  return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ? "dark" : "light";
 }
-$("btn-theme").setAttribute("aria-checked",
-  String(document.documentElement.getAttribute("data-theme")==="dark"));
-$("btn-theme").addEventListener("click", ()=>{
-  setTheme(document.documentElement.getAttribute("data-theme")!=="dark");
-});
+function applyTheme(pref, persist){
+  if(!THEME_PREFS.includes(pref)) pref = "system";
+  themePref = pref;
+  if(persist) store.set("nd-theme", pref);
+  document.documentElement.setAttribute("data-theme", resolvedTheme(pref));
+  document.querySelectorAll("[data-theme-pref]").forEach(b=>{
+    const on = b.dataset.themePref === pref;
+    b.setAttribute("aria-checked", String(on));
+    b.classList.toggle("is-on", on);
+    b.tabIndex = on ? 0 : -1;
+  });
+}
+(function(){
+  const group = $("theme-pref");
+  if(group) group.addEventListener("click", (e)=>{
+    const b = e.target.closest("[data-theme-pref]");
+    if(b) applyTheme(b.dataset.themePref, true);
+  });
+  if(window.matchMedia){
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const follow = ()=>{ if(themePref === "system") applyTheme("system", false); };
+    if(mq.addEventListener) mq.addEventListener("change", follow);
+    else if(mq.addListener) mq.addListener(follow);
+  }
+  applyTheme(store.get("nd-theme") || "system", false);
+})();
 const copyrightYear = $("copyright-year");
 if(copyrightYear) copyrightYear.textContent = String(new Date().getFullYear());
 
-/* Glossary — extracted verbatim from the dashboard by pages64.mjs. */
+/* Glossary — extracted verbatim from the dashboard by pages71.mjs. */
 const termDefs={
   INDO:"Initial National Demand Outturn — the transmission-system demand figure published by Elexon.",
   DISEBSP:"System Sell Price / System Buy Price — the imbalance price dataset used for the settlement price chart.",
