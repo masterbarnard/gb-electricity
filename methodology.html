@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- GENERATED FILE — do not edit. Produced by tools/pages72.mjs from
-     dash/GB_Electricity_v0.72.html (md5 51fdf934859fc22a99ac5ca13f8746ea). Edit the dashboard, re-run the generator. -->
+<!-- GENERATED FILE — do not edit. Produced by tools/pages75.mjs from
+     dash/GB_Electricity_v0.75.html (md5 757ef884c7fd59af99ce78618942f805). Edit the dashboard, re-run the generator. -->
 <html lang="en-GB" data-page="methodology">
 <head>
 <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 <title>Methodology — How GB Electricity Derives Its Live Figures</title>
 <meta name="description" content="How GB Electricity derives each live figure: the UK generation mix, national and underlying demand, embedded solar, interconnector flows, carbon intensity and grid frequency — and what the public data cannot see.">
 <link rel="canonical" href="https://gbelectricity.uk/methodology">
-<meta name="generator" content="pages72.mjs — from GB Electricity v0.72">
+<meta name="generator" content="pages75.mjs — from GB Electricity v0.75">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -24,11 +24,11 @@
 <meta property="og:url" content="https://gbelectricity.uk/methodology">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v72.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v75.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Methodology — How GB Electricity Derives Its Live Figures">
 <meta name="twitter:description" content="How GB Electricity derives each live figure: the UK generation mix, national and underlying demand, embedded solar, interconnector flows, carbon intensity and grid frequency — and what the public data cannot see.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v72.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v75.png">
 <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" sizes="64x64" href="/favicon.png">
@@ -42,7 +42,28 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){
 document.documentElement.setAttribute("data-theme","light");}})();</script>
 <link rel="stylesheet" href="/styles.css">
 <style>
-  /* ---- generated page shell (pages72.mjs) ---- */
+  /* ---- generated page shell (pages75.mjs) ---- */
+  /* ⚠ v0.73: BACK TO TOP. Fixed to the corner rather than pinned to the end of the article,
+     because a reader wants it at the moment they decide to leave, not after scrolling further to
+     find it. 44px minimum on both axes (WCAG 2.5.5's enhanced target, not merely 2.5.8's 24) —
+     it is a floating control with nothing adjacent, so there is no reason to be mean with it. */
+  .to-top{position:fixed;right:18px;bottom:18px;z-index:40;
+    display:inline-flex;align-items:center;gap:7px;
+    min-height:44px;padding:0 16px 0 13px;border-radius:22px;
+    background:var(--surface);color:var(--ink);text-decoration:none;
+    border:1px solid var(--grey-line);box-shadow:0 2px 10px rgba(17,24,39,.10);
+    font-size:13.5px;font-weight:600;}
+  .to-top[hidden]{display:none;}
+  .to-top svg{width:17px;height:17px;flex-shrink:0;color:var(--blue-text);}
+  .to-top:hover{border-color:var(--blue-text);color:var(--blue-text);}
+  .to-top:focus-visible{outline:2px solid var(--blue-text);outline-offset:3px;}
+  /* The smooth scroll is the reader's choice, not ours. */
+  @media (prefers-reduced-motion: no-preference){ html{scroll-behavior:smooth;} }
+  /* The nav sits under a sticky masthead, so an anchor jump must stop short of it or the first
+     line lands behind the header — the commonest fault with in-page navigation. */
+  #page-nav{scroll-margin-top:78px;}
+  .page-article h2{scroll-margin-top:78px;}
+  @media (max-width:560px){ .to-top{right:12px;bottom:12px;padding:0 14px 0 11px;} }
   .page-main{max-width:880px;margin:0 auto;padding:22px 18px 46px;}
   .page-crumb{margin:0 0 4px;font-size:12.5px;}
   .page-crumb a{color:var(--blue-text);text-decoration:none;}
@@ -116,7 +137,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
     <p class="page-crumb"><a href="/">&larr; Live dashboard</a></p>
     <h1 class="page-h1">Methodology</h1>
     <p class="page-lede">What each figure on the live dashboard means, how it is derived from the public feeds, and where the data can mislead you.</p>
-    <nav class="page-toc" aria-label="Sections on this page">
+    <nav class="page-toc" id="page-nav" tabindex="-1" aria-label="Sections on this page">
       <div class="k">On this page — 10 sections</div>
       <ol>
         <li><a href="#sec-what-this-is">What this is</a></li>
@@ -345,6 +366,25 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
   </article>
 </main>
 
+<!-- ⚠ v0.73: BACK TO TOP, and it is a LINK rather than a button, at the author's stated purpose.
+     He asked for it so a reader can "use the contents list to look somewhere else" — so the
+     destination is not the top of the window, it is the section nav. An an anchor to #page-nav
+     moves keyboard focus there as well as scrolling, which a scroll-to-zero button does not: a
+     button leaves focus stranded at the foot of the document, so the next Tab returns the reader
+     to where they just left. It also works with JavaScript off and offers the browser's own
+     "open in new tab" semantics, which a div-with-a-handler does not.
+     Hidden until the contents list has scrolled off: a control that is present from the top is
+     either useless or in the way, and the contents leaving the screen is the exact moment it
+     starts to be needed. "hidden" is toggled rather than opacity, so it leaves the
+     tab order entirely while it is not offered. -->
+<a class="to-top" id="to-top" href="#page-nav" hidden>
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 19V5M5 12l7-7 7 7"/>
+  </svg>
+  <span>Contents</span>
+</a>
+
 <div id="infopop" role="tooltip" aria-label="Explanation" hidden></div>
 
 <footer class="foot">
@@ -358,7 +398,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" title="Generated from GB Electricity v0.72">v0.72</span> &middot;
+      <span class="version-label" title="Generated from GB Electricity v0.75">v0.75</span> &middot;
       <a href="/about" class="footer-link">About</a> &middot;
       <a href="/methodology" class="footer-link">Methodology</a>
       <span class="theme-pref" id="theme-pref" role="radiogroup" aria-label="Colour theme">
@@ -373,7 +413,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
 
 <script>
 
-/* ---- generated page runtime (pages72.mjs) — the minimum the static pages
+/* ---- generated page runtime (pages75.mjs) — the minimum the static pages
    need: theme, year, glossary. Everything content-bearing is extracted from
    the dashboard at generation time. ---- */
 const $ = (id)=>document.getElementById(id);
@@ -421,7 +461,7 @@ function applyTheme(pref, persist){
 const copyrightYear = $("copyright-year");
 if(copyrightYear) copyrightYear.textContent = String(new Date().getFullYear());
 
-/* Glossary — extracted verbatim from the dashboard by pages72.mjs. */
+/* Glossary — extracted verbatim from the dashboard by pages75.mjs. */
 const termDefs={
   INDO:"Initial National Demand Outturn — the transmission-system demand figure published by Elexon.",
   DISEBSP:"System Sell Price / System Buy Price — the imbalance price dataset used for the settlement price chart.",
@@ -459,6 +499,30 @@ function attachTerms(){
 attachTerms();
 /* #infopop is position:fixed; on a scrolling document it must not ride along. */
 addEventListener("scroll", ()=>{ const p=$("infopop"); if(p) p.hidden=true; }, {passive:true});
+
+/* Back-to-top visibility. One and a half viewports is the point at which the section nav is
+   reliably off screen, so the control appears exactly when it starts being useful.
+   The smooth scroll is opt-in on the reader's own setting rather than on ours: scroll-behavior is
+   set in CSS behind prefers-reduced-motion no-preference, so a reader who has asked the system to
+   stop moving things gets an instant jump. Doing it here in JS would have meant reading the media
+   query twice and keeping the two in step.
+   NOTE: this block is inside a template literal in the generator — no backticks. */
+(function(){
+  const btn = $("to-top"), nav = $("page-nav");
+  if(!btn) return;
+  /* The useful moment is not a viewport multiple, it is the moment the contents list leaves the
+     screen — that is when a reader can no longer reach it and needs the control. It also works on
+     a page of any length, where "one and a half viewports" is a guess that is wrong on a short
+     page and late on a long one. */
+  const show = ()=>{
+    const gone = nav ? nav.getBoundingClientRect().bottom < 0
+                     : window.scrollY > window.innerHeight;
+    btn.hidden = !gone;
+  };
+  addEventListener("scroll", show, {passive:true});
+  addEventListener("resize", show, {passive:true});
+  show();
+})();
 
 </script>
 </body>

@@ -20,8 +20,8 @@
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v72.png">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v72.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v75.png">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v75.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -29,7 +29,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v72.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v75.png">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -112,6 +112,15 @@
 
   :root{
     /* ---- Interface tokens. Identity lives here and nowhere else. ---- */
+    /* v0.74: the odometer's digit window, hoisted from `.odo` because the flow band's figures
+       now set their line box to it so their digits centre where their boxes centre. */
+    --odo-h:.8em;
+    /* ⚠ v0.74b: THE TOP PADDING OF A CARD THAT CARRIES A LABEL OVER A FIGURE. It exists as a
+       token because the flow band puts three such cards side by side and their labels have to
+       start on one line — and they were set in two places at two values (`.tile` 13px,
+       `.balancebox` 15px) which is a 2px drift waiting to be noticed, on top of the 13px one
+       that actually shipped. Side-by-side cards cannot each own this number. */
+    --card-pad-t:13px;
     /* ---- Chrome. Achromatic on purpose. ----
        This is a data dashboard: the only things on the page that should carry hue are the
        series. A branded chrome colour competes with them for meaning — a reader has to learn
@@ -186,6 +195,10 @@
        contrast a reader needs to read the words at all. */
     --ink:#111827; --ink-dim:#4B5563; --ink-mute:#657189;
     --page:#F4F6FA; --grey-bg:#EDF0F7; --grey-line:#DDE4FF; --surface:#FFFFFF;
+    /* ⚠ v0.73: the gridline colour is its own token, not `--grey-line`. It is drawn OVER filled
+       bars in nine saturated fuel colours as well as over the empty track, so it needs to be
+       visible on both without stripping the bars — a translucent ink rather than a solid line. */
+    --mix-grid:rgba(17,24,39,.13);
     /* CARBON RAMP. Green through yellow to orange, the family NESO uses on its own carbon
        intensity dashboard — so a reader arriving from the official tool reads this the same
        way. Not NESO's exact values: theirs were measured and then improved on. See the note
@@ -400,6 +413,7 @@
        minimum that clears 4.5 on both the surface and the page ground. */
     --ink:#E9EBF4; --ink-dim:#A0A8BC; --ink-mute:#788298;
     --page:#0F111A; --grey-bg:#1C2030; --grey-line:#272E44; --surface:#171922;
+    --mix-grid:rgba(233,235,244,.16);
     /* v0.48: the floor under the balance arrows' fade. See .fb-arrow linearGradient below —
        0 in light, where a hairline running out into white still reads as a line; .3 here,
        where it does not. Dark-mode only, one number, so the two themes cannot drift. */
@@ -761,17 +775,29 @@
      only where the box IS the meaning. Here it is not: the three cards are the meaning and the
      panel is just their grouping, which a heading and space already state. */
   .insightbar{background:none;border:0;border-radius:0;
-    padding:0;margin-top:26px;}
+    padding:0;margin-top:34px;}
   .insight-head{display:flex;align-items:baseline;gap:10px;margin-bottom:8px;}
   /* Same treatment as `.panel-head h2` — the two are deliberately separate rules (see the note
      on the panel rule) and `panelFrameMatchesTheGlanceBand` asserts they agree. */
-  .insight-head h2{margin:0;font-size:16px;font-weight:600;letter-spacing:-0.005em;
+  /* ⚠ v0.73: 21px, A STEP ABOVE THE PANEL TITLES, at the author's request for more weight.
+     It is not an arbitrary bump: rev 67 defined a `section` rung at 21 and then barely used it,
+     so this band takes the rung that already existed rather than adding a sixteenth size to a
+     scale the same release cut to fifteen.
+     ⚠ AND IT IS HIERARCHICALLY HONEST. This is a BAND, a peer of the flow band above it, not one
+     of the six panels below — the panels are things you look inside, the band is a reading in its
+     own right. A title a step above theirs says which of the two it is. */
+  /* ⚠ The tracking stays at the panels' -0.005em rather than tightening with the size. Optical
+     sizing would justify a tighter setting at 21px, but the difference is sub-pixel here and it
+     would make this the only heading on the page whose treatment differs by more than its rung —
+     which is precisely what `everyTitleSharesTheBandsTreatment` exists to prevent. Size is the
+     hierarchy; everything else is the treatment, and the treatment is shared. */
+  .insight-head h2{margin:0;font-size:21px;font-weight:600;letter-spacing:-0.005em;
     text-transform:none;color:var(--ink);}
     /* ⚠ v0.70: THREE, NOT FOUR. The panel shows the three largest movements, so the track count
      is the panel's contract rather than a layout preference. */
   .insight-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
   .insight-grid[hidden]{display:none;}
-  .insight-head .note{font-size:11px;font-weight:600;color:var(--ink-mute);}
+  .insight-head .note{font-size:12px;font-weight:600;color:var(--ink-mute);}
   /* ⚠ v0.70: THE QUIET STATE IS A STATED READING, not an empty panel. Below the ±50 MW floor the
      panel says the system is steady — a panel that always finds three movers cannot tell you
      that nothing is happening, which is half of what a reader came to find out. */
@@ -780,7 +806,15 @@
   .insight-quiet b{color:var(--ink);}
   .insight-item.mover[hidden]{display:none;}
   .insight-item{--fill:0%;--bar:var(--blue-text);position:relative;overflow:hidden;min-width:0;
-    padding:9px 10px;border:1px solid var(--grey-line);border-radius:7px;background:var(--page);}
+    /* ⚠ v0.73: `--surface`, not `--page`, at the author's request. The cards sat on the page
+       ground because the panel around them used to be a white box; rev 67 removed that box, so
+       they were the only cards on the page not on a surface of their own. */
+    /* ⚠ v0.74: 9/10 → 13/13, AND THE HEIGHT COMES FROM THE TYPE AND THE PADDING rather than
+       from a `min-height` holding air. The author asked for taller boxes; a box made taller by
+       reserving empty space is a box that looks emptier, which is the opposite of the request.
+       Padding and three type sizes go up together and the card grows because it has more in it.
+       The three stay level because they are grid items in one row and stretch by default. */
+    padding:13px 13px;border:1px solid var(--grey-line);border-radius:7px;background:var(--surface);}
   .insight-item::before{content:"";position:absolute;inset:0 auto 0 0;width:var(--fill);
     background:var(--bar);opacity:.10;pointer-events:none;transition:width .25s ease;}
   .insight-item > *{position:relative;z-index:1;}
@@ -801,10 +835,53 @@
   .insight-item:focus-visible .k,
   .insight-item.tip-active .k{border-bottom-color:var(--ink-mute);}
   .insight-item:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;}
-  .insight-item.tip-active{border-color:var(--blue-text);}
-  .insight-item .k{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  /* ⚠ v0.74: THE BLUE IS GONE FROM BOTH STATES, at the author's report that "the fuels highlight
+     blue, while the demand border highlights — it doesn't quite feel right". He is describing two
+     separate faults that happen to share a colour, and it is worth separating them.
+     ONE: the card already carries its series colour on a 3px top border, and then lit BLUE when
+     selected — so gas-selected and wind-selected looked identical and the highlight stopped
+     saying WHICH series was lit. A highlight that discards the encoding underneath it is not a
+     highlight, it is a second, weaker encoding sitting on top of a good one.
+     TWO: the border he saw on Demand is a DIFFERENT state — the explainer being open — which
+     used the same blue. Two meanings, one colour, on one card, is unreadable by construction.
+     ⚠ AND THE ANSWER IS ONE STATE, NOT TWO DISTINGUISHABLE ONES, which is not where this
+     started. The first fix gave open-explainer a neutral ink ring so the two could be told
+     apart; then the gesture was looked at rather than the states. `mouseenter` opens the
+     explainer and `pointerenter` sets the highlight — the SAME movement of the pointer fires
+     both, always, so a reader can never see one without the other and a second appearance would
+     be a distinction with nothing behind it. Both take the series colour, and the ink ring is
+     removed rather than left as a rule nothing can reach. The states stay separate in the code,
+     where they genuinely differ: the chart legend can pin `is-on` with no explainer open.
+     So: the series highlight takes the series' own colour, through `--bar`, which every card
+     already sets — including Demand, whose `--bar` is `--ink-mute`, so it greys rather than
+     doing nothing and the asymmetry the author reported is gone. The
+     tint is the `::before` layer the cards already carry, run to full width at its existing
+     10% — no new colour arithmetic, and solar keeps its hatch because that layer is where solar's
+     hatch already lives. `transition:none` on the state so it appears rather than sweeping in: a
+     width animation on a bar-shaped element would read as a quantity filling.
+     The rules themselves are ~120 lines below, with the other `.mover` states. */
+  /* ⚠ v0.74: 10 → 11.5px, AND THIS PANEL WAS MISSED BY THE RESTYLE. Rev 67 took the body from
+     11.5px to 13.5px and cut the share of characters set at 12px or below from 95.5% to 36.1%;
+     these three cards kept a 10px key and an 11px sub-line, which left them the smallest type on
+     the page. 11.5px is the same rung the in-card labels sit on elsewhere, so the panel now
+     matches the treatment its siblings got rather than being the one exception to it. */
+  .insight-item .k{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
     color:var(--ink-mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .insight-item .v{font-size:17px;font-weight:700;line-height:1.05;margin-top:4px;
+  /* ⚠ 17 → 21px. The author asked at rev 68 for this panel to carry more visual importance and
+     it was given a bigger heading; the figures themselves stayed a step BELOW the tile values
+     they sit above, so the panel's title claimed a rank its content did not hold.
+     ⚠ 21 IS THE PANEL'S OWN HEADING STEP RATHER THAN A NEW ONE. The first draft used 22 and
+     `theScaleHasFewerThanFifteenSteps` failed on 18 steps — this project's rule is that a ceiling
+     which gets raised whenever something drifts past it is a ratchet in the wrong direction, so
+     the SIZE moved rather than the check. The difference from 22 is imperceptible and 21 says
+     something true: in this panel the figures ARE the content, so they sit at the same rung as
+     its title and are distinguished by weight and colour rather than by size. */
+  /* ⚠ AND IT STAYS A BLOCK. Making it a centring flex row is the obvious way to sit a drawn
+     arrow beside a figure, and it is the same trap the flow band's figures were just pulled out
+     of at v0.74: `align-items:center` turns the unit into its own flex item and lifts `MW` off
+     the digits' baseline. Inline layout is what puts a unit on a baseline, so the arrow is an
+     inline-block sized in `em` and aligned by hand instead. */
+  .insight-item .v{font-size:21px;font-weight:700;line-height:1.1;margin-top:5px;
     color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;}
   /* v0.35: THE SHARE LINE — each glance figure gets its percentage, and each names its own
      denominator, because the honest bases differ: wind and solar are shares OF GB GENERATION
@@ -813,7 +890,10 @@
      which is also why those two sum to 100 whenever GB is importing. Detailed only: Simplified
      is the mode that keeps declining text, and it already shows the same MW figure. Hidden by
      mode, not un-rendered — switching density must never need a re-render. */
-  .insight-item .p{font-size:11px;font-weight:600;line-height:1.3;margin-top:3px;
+  /* ⚠ v0.74: 11 → 12.5px, the same restyle correction the key above got. This line carries the
+     panel's actual sentence — "generating more · now 1,240 MW" — and it was set two rungs below
+     the page's body text. */
+  .insight-item .p{font-size:12.5px;font-weight:600;line-height:1.35;margin-top:4px;
     color:var(--ink-mute);font-variant-numeric:tabular-nums;white-space:nowrap;
     overflow:hidden;text-overflow:ellipsis;}
   .insight-item .p:empty{display:none;}
@@ -832,13 +912,34 @@
   /* The mark takes the series colour through `currentColor`; the text does not, because a
      coloured value would be a second encoding of something the border already says. */
   .insight-item.mover .insight-icon{color:var(--bar);}
-  .insight-item.mover .v .mv-arrow{color:var(--bar);}
-  .insight-item.mover .v .unit{font-size:.62em;font-weight:700;color:var(--ink-mute);}
+  /* ⚠ v0.74: THE DIRECTION MARK IS DRAWN, NOT TYPED. It was `↑` and `↓` as text, which put the
+     single most important glyph in this panel at the mercy of the font: Inter's arrows are set
+     to the same stroke weight as a lowercase stem, so at 17px beside a 700-weight figure the
+     arrow read as punctuation rather than as the direction the whole panel exists to state. A
+     shipped font also does not guarantee the glyph — a fallback face can substitute a different
+     arrow, or none.
+     Drawn at 2.4 stroke on a 24 box so it holds its weight against the figure, sized in `em` so
+     it tracks the value's type rather than needing a second number when that changes, and
+     aligned by hand rather than by flex so the unit keeps its baseline. `-0.06em` is the drop
+     that puts the shaft's midpoint on the digits' optical centre. */
+  .insight-item.mover .v .mv-arrow{color:var(--bar);display:inline-block;
+    width:.92em;height:.92em;vertical-align:-0.06em;margin-right:.06em;}
+  .insight-item.mover .v .mv-arrow svg{width:100%;height:100%;display:block;
+    fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
+  /* ⚠ AN EXPLICIT STEP, NOT `.62em`. An em fraction mints a NEW size every time the figure
+     moves — .62 of 22 is 13.64, of 21 is 13.02 — so the type scale grew a step nobody chose and
+     the census counted it. 13.5px is the page's body size and the bucket that already holds most
+     of its characters. */
+  .insight-item.mover .v .unit{font-size:13.5px;font-weight:700;color:var(--ink-mute);}
   /* ⚠ v0.70: NO FILL BAR ON A MOVER CARD. `--fill` stays at 0 for these, so the ::before rule
      paints nothing. Kept rather than deleted because the rule still serves nothing else that
      might want it, and because the reasoning belongs on the record: the only denominator a
      mover card could honestly use is the largest of the three changes shown, which makes the
      top card permanently full — the exact reading the author queried at rev 63. */
+  /* ⚠ v0.75: `--fill` NO LONGER DRIVES THESE AT ALL. The rule below sets the mover wash to a
+     full-width layer whose opacity is the state, so this declaration governs nothing on a mover
+     and is kept only for the reasoning above it, which is still the answer to "why is there no
+     proportional bar on a mover card". */
   .insight-item.mover{--fill:0%;}
   /* ⚠ THIS ONE RAN AT 135deg — the opposite diagonal from every other solar hatch on the page,
      for nine releases, because it was a tenth hand-written copy of the value. It takes the
@@ -872,6 +973,10 @@
      than its neighbours and is what "overpowers the other panels" looks like as a number.
      Rendered at .34 / .26 / .20 / .16 / .12 in both themes and looked at before the arithmetic
      was trusted; the same value reads correctly in dark, so there is one figure and not two. */
+  /* ⚠ v0.75: THE `opacity` HERE IS THE GLANCE BAND'S RESTING VALUE and a mover overrides it to
+     0 two rules below — movers show no wash until they are pointed at. Left in place rather than
+     scoped, because the background pair is what this rule exists for and the alpha belongs with
+     the arithmetic that chose it. */
   .insight-item.fuel-solar::before{
     background:var(--solar-fill);
     background-image:var(--hatch-est);
@@ -884,13 +989,56 @@
      panel's contents twice. Dead CSS is removed rather than left commented, per the folder rule
      — the reasoning lives here and in the changelog, which is where a reader looks.
      `.insight-item.mover.is-on` takes the highlight tint the `.driver-key` buttons used to. */
-  .insight-item.mover.is-on{border-color:var(--blue-text);background:var(--blue-2);}
+  /* ⚠ v0.74: THE SERIES' OWN COLOUR, AND THE SAME BEHAVIOUR FOR ALL TEN CARDS — see the long
+     note on `.insight-item:focus-visible` above for why the blue went. What still differs
+     between Demand and a fuel is what happens BELOW, in the two panels, and that difference is
+     honest: Demand is not a fuel and nothing down there draws it.
+     `tip-active` and `is-on` are listed alongside `:hover` rather than folded into it because
+     each is reachable without a pointer — `tip-active` from keyboard focus, `is-on` from a
+     selection pinned in the chart legend. */
+  .insight-item.mover:hover,
+  .insight-item.mover.tip-active,
+  .insight-item.mover.is-on{border-color:var(--bar);}
+  /* ⚠ v0.75: NO WIDTH, NO TRANSITION — THE TINT IS FLAT AND INSTANT, at the author's report
+     that he does not like the bar animations on these boxes.
+     What he was seeing, and why it read as a bar: the wash is the `::before` layer these cards
+     inherit from the glance band, anchored `inset:0 auto 0 0` and sized by WIDTH, with a
+     `transition:width .25s ease` on it. v0.74 ran it to `width:100%` on hover with the
+     transition off — so it snapped IN, and then on leave the state rule stopped applying, the
+     width fell back to `--fill` (0%) and the BASE transition animated it closed. A quarter of a
+     second of a coloured bar sliding leftwards out of the card, every time the pointer left it,
+     and a card caught mid-slide looks like a part-filled meter measuring something. On a panel
+     whose whole discipline is that nothing may look like a quantity unless it is one, that is
+     the wrong mark twice over.
+     ⚠ THE FIX IS TO STOP ANIMATING A WIDTH, NOT TO SPEED IT UP. The layer now covers the card
+     at all times and only its OPACITY changes, with no transition on either property — so there
+     is no direction for anything to slide in from and no intermediate state to catch. The tint
+     appears and disappears with the pointer.
+     Solar keeps its heavier alpha because it keeps its hatch: the hatch is the page's mark for
+     modelled data and .10 of it is barely visible, which is the whole argument recorded above
+     the `.fuel-solar` rule. Full-card and flat, though, exactly like the others. */
+  .insight-item.mover::before{width:100%;opacity:0;transition:none;}
+  .insight-item.mover:hover::before,
+  .insight-item.mover.tip-active::before,
+  .insight-item.mover.is-on::before{opacity:.10;}
+  .insight-item.mover.fuel-solar:hover::before,
+  .insight-item.mover.fuel-solar.tip-active::before,
+  .insight-item.mover.fuel-solar.is-on::before{opacity:.20;}
   @media (max-width:900px){
     .insight-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   }
   @media (max-width:560px){
     .insight-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
-    .insight-item .v{font-size:15px;}
+    /* ⚠ v0.74: THE `.v` FONT-SIZE THAT USED TO SIT HERE IS GONE, AND IT WAS ALREADY DEAD.
+       It set 15px, and the `max-width:760px` block ~3,100 lines below sets `.insight-item .v`
+       to 15px too, at the same specificity and later in the sheet — so every phone took the
+       760px block's value and this declaration never applied to anything. Identical values hid
+       it: the first draft of the v0.74 type increase raised THIS one to 19px, measured a phone,
+       and got 15px back, which is how the shadowing surfaced at all.
+       The phone's sizes are set once, in the block that owns them. `unreachableCss` catches
+       this class of fault when the two rules disagree; two rules that agree are invisible to it
+       and to a screenshot, which is the argument for having one rule rather than a matched
+       pair. */
   }
   .icval .util{display:block;font-size:10px;font-weight:700;line-height:1.15;
     color:var(--ink-mute);margin-top:2px;}
@@ -1083,6 +1231,12 @@
   .tile.hero .label{color:var(--blue-text);}
   .tile.hero .value{font-size:44px;}
   .tile.hero .value .unit{font-size:16px;}
+  /* ⚠ v0.74: THE SUBSCRIPT IN `gCO₂/kWh` WAS A SIZE NOBODY CHOSE. The browser's default for
+     `<sub>` is .83em, which against a 14px unit resolves to 11.7px — a step of its own in the
+     type census, contributed by one character, arrived at by a UA stylesheet rather than by a
+     decision. It is pinned to 11px, a step the page already uses, so the scale is the design's
+     and not partly the browser's. */
+  .unit sub{font-size:11px;}
   /* ============================================================================
      THE FLOW BAND  (v0.45)
 
@@ -1200,9 +1354,52 @@
     .flowband .fb-col > .tile.hero > .label,
     .flowband .fb-col > .tile.demandhero > .label,
     .flowband .fb-col > .balancebox > .label{grid-row:1;}
+    /* ⚠ v0.74: ALL THREE FIGURES CENTRE IN THE SAME ROW, BY ONE MECHANISM. Rev 68 got the
+       balance onto the headline row and centred it there; the two heroes were still positioned
+       by a DIFFERENT rule — a block box with `margin-top:7px`, whose digits land at
+       `row top + 7 + half a line height` while the balance's land at the row's centre. Two
+       formulas, one of which depends on the font size and the other on the row height, so they
+       agreed to about 1.5px at the current type scale and would drift apart the next time either
+       moved. That is the same class of fault as the 13px nudge rev 68 removed, one level up.
+       Now every figure is a stretched flex item centring its own content, so all three digit
+       blocks sit on the row's centre line whatever their point size — and the arrows, which
+       already centre on this row, are on it too. `margin-top:0` because the gap under the label
+       is the grid's row height to give, not the value's margin; the stacked layout below 821px
+       keeps the margin, because there is no shared row there to hold anything level.
+       ⚠ AND IT IS `align-self:center` ON THE BOX, NOT A FLEX CONTAINER INSIDE IT — which was
+       the first thing tried here and had to be undone after measuring. Making each `.value` a
+       centring flex container did align all three digit blocks to 0.02px, and it also lifted
+       every `MW` from the digits' baseline to the top of the box: `align-items:center` makes the
+       unit its own flex item, and `align-self:baseline` on it does not rejoin the digits'
+       baseline, it starts a baseline group of one at the top of the flex line. A unit riding the
+       baseline is inline typesetting and the box must stay inline inside. `align-self:center`
+       shrink-wraps the box to its own content and centres THAT in the row, so the inline layout
+       is untouched and the centring still comes from the shared row.
+       ⚠ Rev 68 recorded `align-self:center` as having "no effect — the item stretches to its
+       row, so there is no free space to distribute". That reading was wrong and is corrected
+       here: `align-self:center` REPLACES the stretch, so the free space it needs is the space
+       stretching used to consume. It did nothing at rev 68 because it was applied alongside the
+       `margin-top:7px` that was doing the positioning, not because the property cannot work. */
     .flowband .fb-col > .tile.hero > .value,
     .flowband .fb-col > .tile.demandhero > .value,
-    .flowband .fb-col > .balancebox > .value{grid-row:2;}
+    .flowband .fb-col > .balancebox > .value{grid-row:2;align-self:center;margin-top:0;
+      line-height:var(--odo-h);}
+    /* ⚠ AND THE UNIT MUST NOT GROW THE LINE BOX, which is the whole of the remaining error.
+       Centring the box centres the digits only if the box IS the digits' line box. Work it
+       through for Inter (ascent .969, descent .242) and the offset between a single line box's
+       centre and the digit cell's centre comes out at exactly zero for ANY line-height — the
+       two terms cancel. So the residual could only come from something else on the line, and it
+       does: `MW` is a smaller inline box sitting on the same baseline, and its descent reaches
+       below the digits', so the line box grows DOWNWARD and its centre drops away from the
+       digits. The bigger the figure, the bigger the gap — 2.7px under the 44px heroes, 1.2px
+       under the 27px balance, which is precisely the 1.5px disagreement that survived rev 68.
+       `line-height:0` takes the unit's inline box out of the line-box calculation without moving
+       the glyph, which still sits on the baseline and still renders in full. The unit is
+       decoration on a figure, not a second line of type; it should not be deciding where the
+       figure sits. */
+    .flowband .fb-col > .tile.hero > .value > .unit,
+    .flowband .fb-col > .tile.demandhero > .value > .unit,
+    .flowband .fb-col > .balancebox > .value > .unit{line-height:0;}
     /* The arithmetic block borrows four tracks and spends one per term. */
     .flowband .fb-col > .tile.hero > .meta,
     .flowband .fb-col > .tile.demandhero > .meta{grid-row:3 / 7;display:grid;
@@ -1235,13 +1432,67 @@
        in place it pushed the arrow 75px below the row the grid had just put it in, so the
        placement was correct and invisible. Two mechanisms for one position, and only one of
        them can be live at a time. */
-    .flowband > .fb-arrow{grid-row:3;align-self:center;height:auto;margin-top:0;}
-    /* The balance's figure joins the other two on the headline row. It is smaller and quieter —
-       that hierarchy is deliberate and unchanged — but it starts where they start, which is what
-       makes the three read as one row rather than as a card that has slipped. */
-    .flowband .fb-col > .balancebox{align-content:start;padding-top:13px;}
-    .flowband .fb-col > .balancebox > .label,
-    .flowband .fb-col > .balancebox > .value{align-self:start;}
+    /* The arrows centre on the row; the figures' optical centre sits 1px below it because the
+       odometer reserves descender space it never uses. One pixel, measured, so the five marks
+       agree rather than nearly agreeing. */
+    .flowband > .fb-arrow{grid-row:3;align-self:center;height:auto;margin-top:1px;}
+    /* ⚠ v0.73: THE THREE FIGURES AND THE TWO ARROWS SHARE ONE OPTICAL CENTRE, and this used to
+       be a hand-tuned nudge that the type scale invalidated.
+       What was here: `align-content:start; padding-top:13px`. The 13px was measured against
+       11.5px body text and a 44px headline; rev 67 moved both, and the balance figure ended up
+       18px above the two it is meant to sit beside — reported by the author.
+       ⚠ THE FIX IS NOT A BIGGER NUMBER. `align-content:start` opts the box OUT of the subgrid
+       rows it is placed on, which is what made a nudge necessary in the first place; without it
+       the box's own rows track the band's, and `align-self:center` puts the smaller figure on the
+       larger one's centre line by construction. Nothing here needs remeasuring when the type
+       changes again. `flowBandFiguresShareACentre` in the harness holds all five to 2px. */
+    /* ⚠ AND THE SUBGRID ROUTE DID NOT WORK, WHICH IS WORTH RECORDING RATHER THAN HIDING.
+       Two attempts: `align-self:center` on the value (no effect — the item stretches to its row,
+       so there is no free space to distribute), then centring INSIDE the item with flex (no
+       effect either — the balance box's subgrid rows do not resolve to the same heights as the
+       hero's, so the value was never in a taller row to centre within).
+       So the offset is measured and stated, as the 13px before it was — but two things have
+       changed. It is measured against the CURRENT type scale rather than a retired one, and
+       `flowBandFiguresShareACentre` now holds all five marks to 2px, so the next type change
+       fails a check instead of shipping a card that has visibly slipped. A magic number with a
+       test on it is a different thing from a magic number without one. */
+    /* ⚠ v0.74b: `padding-top:0` IS GONE, AND IT WAS THE AUTHOR'S REPORT THREE TIMES OVER.
+       Rev 68 removed this card's top padding as part of getting its FIGURE onto the shared
+       headline row. The figure moved; so did the LABEL, 13px up, and "Supply vs demand" has sat
+       above "Electricity on the grid" and "Underlying demand" ever since — at every width,
+       measured 13.0px each time. Reported at rev 69 as the figure being "quite high in the box
+       with a lot of space below it, aligned with 'Electricity on the grid' and 'Underlying
+       demand'", and I read the two quoted names as the figures under them rather than as the
+       titles he had actually quoted, fixed the figures, and left the label where rev 68 put it.
+       ⚠ THE PADDING IS NOT NEEDED FOR THE CENTRING AND NEVER WAS. A subgrid item's padding is
+       taken out of its FIRST and LAST tracks only; the label is on the first track and the figure
+       is on the second, so restoring the padding moves the label back and leaves the figure
+       exactly where v0.74 put it. Rev 68 removed a declaration that was not the problem, and the
+       thing that was — two positioning formulas for one row — went unfixed for another release.
+       All three cards now take `--card-pad-t`, so the labels start on one line by construction
+       rather than by three numbers agreeing. */
+    .flowband .fb-col > .balancebox{align-content:stretch;}
+    /* ⚠ `align-self:center` ALONE DOES NOTHING HERE, and the reason is worth stating because it
+       is the second wrong fix in this spot. The value is a grid item that STRETCHES to its row, so
+       it is already 50px tall with 28px of text sitting at the top of it — there is no free space
+       for `align-self` to distribute. Centring has to happen INSIDE the item, not to it. */
+    /* ⚠ AND THE THIRD ATTEMPT WAS UNREACHABLE CSS — the exact fault `unreachableCss` exists to
+       catch, committed while fixing something else. A new rule setting `align-self:stretch` was
+       added ABOVE the rule two lines below that sets `align-self:start` on the same selector at
+       the same specificity, so it lost on source order and did nothing. Twice I measured the
+       result and concluded the mechanism did not work, when the declaration was never applied.
+       The rule that OWNS the property is amended instead of being competed with — which is the
+       project's own rule for this, written down at rev 60 and paid for at rev 51.
+       The label still starts at the top of its row; the value stretches to its row and centres
+       its own text, which is what puts the smaller figure on the larger one's centre line. */
+    .flowband .fb-col > .balancebox > .label{align-self:start;}
+    /* ⚠ v0.74: THE CENTRING MOVED UP TO THE RULE THAT NOW OWNS IT for all three figures; what
+       is left here is the one thing that is genuinely this card's alone — its text is centred
+       horizontally and the two heroes' is not. Two rules setting `display:flex` on the same
+       element at the same specificity is the shape the cascade gate exists to catch, so the
+       shared declarations are stated once, above, and this rule adds only its difference.
+       `text-align`, not `justify-content`: the box is no longer a flex container. */
+    .flowband .fb-col > .balancebox > .value{text-align:center;}
   }
   }
   /* ⚠ v0.67: 7px → 4px, at the author's report that the caption floats away from its card.
@@ -1252,14 +1503,31 @@
      is a 3:1 ratio and the caption belongs to the card without question.
      Not smaller than 4: the caption's descenders and the card's border need a hairline of air
      between them or the two touch at 33px type on a phone. */
-  .fb-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px;margin:0 0 4px;min-height:15px;}
+  /* ⚠ v0.73: THE HEAD IS TWO LINES ON ALL THREE COLUMNS, AND THAT CLOSES A GAP RATHER THAN
+     OPENING ONE. The author reported "a substantial gap between 'Supply side…' and the box below
+     it", and the cause was that the three heads did not agree about their own height: balance
+     stacked its caption over its sub-line and centred them, while supply and demand ran caption,
+     sub and stamp along ONE line. The band's head row is sized by the tallest of the three, so
+     the two one-line heads were padded out to the two-line one — the gap was the difference,
+     showing under the shorter heads.
+     Making all three two lines removes it. A taller head that fills its row leaves less space
+     than a short head that does not. `grid-template-columns` on the head is what forces the
+     stamp onto the second line beside the sub, rather than trusting `flex-wrap` to break in the
+     place we happen to want. */
+  .fb-head{display:grid;grid-template-columns:1fr auto;align-items:baseline;
+    gap:1px 8px;margin:0 0 5px;}
+  .fb-cap{grid-column:1;grid-row:1;}
+  .fb-sub{grid-column:1;grid-row:2;}
+  .fb-stamp{grid-column:2;grid-row:2;align-self:baseline;}
   /* The band's three section captions are titles, not in-card labels, so they take the title
      treatment. Their colour stays — supply blue and demand teal are how the two sides are told
      apart at a glance, and that is meaning rather than decoration. */
   .fb-cap{font-size:16px;font-weight:600;letter-spacing:-0.005em;text-transform:none;
     color:var(--blue-text);white-space:nowrap;}
   .fb-demand .fb-cap{color:var(--teal-text);}   /* v0.49: was --c-wind, at 3.20:1 — see below */
-  .fb-balance .fb-head{justify-content:center;text-align:center;}
+  /* The balance column has no stamp of its own — neither side's settlement period covers it —
+     so it collapses to a single centred column and keeps the two-row rhythm. */
+  .fb-balance .fb-head{grid-template-columns:1fr;justify-items:center;text-align:center;}
   .fb-sub{font-size:12px;color:var(--ink-mute);line-height:1.3;}
   .fb-balance .fb-sub{width:100%;text-align:center;}
   /* The cards inside the band lose their own top margin — the band supplies the rhythm. */
@@ -1465,7 +1733,7 @@
   .fb-proof-key .k-emb::before{background:var(--solar-fill);
     background-image:var(--hatch-est-sm);box-shadow:inset 0 0 0 1px var(--solar-line);}
   /* The settlement stamp, pushed to the far end of the head row. */
-  .fb-stamp{margin-left:auto;font-size:12px;color:var(--ink-mute);white-space:nowrap;
+  .fb-stamp{font-size:12px;color:var(--ink-mute);white-space:nowrap;
     font-variant-numeric:tabular-nums;}
 
   /* ⚠ v0.46: THE ARROWS ARE DRAWN NOW, NOT TYPED. The first version was a dashed CSS border with
@@ -1608,7 +1876,7 @@
      measurements; this is a note on how closely they agree. Below both of them now, and above
      the embedded term, which is where it belongs in the reading order. */
   .balancebox{position:relative;display:flex;flex-direction:column;align-items:center;
-    justify-content:center;text-align:center;padding:15px 13px 14px;
+    justify-content:center;text-align:center;padding:var(--card-pad-t) 13px 14px;
     border:1px solid var(--blue-line);border-radius:10px;background:var(--surface);
     overflow:hidden;}
   .balancebox .value{font-size:27px;font-weight:700;letter-spacing:-.02em;line-height:1.05;
@@ -2124,7 +2392,7 @@
      one of them would be seven strong frames and no hierarchy at all. The hero tile is the
      exception, and it earns it by being the one figure the page is for. */
   .tile{background:var(--surface);border:1px solid var(--blue-line);border-radius:9px;
-    padding:13px 15px 14px;min-width:0;}
+    padding:var(--card-pad-t) 15px 14px;min-width:0;}
   .tile .label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-dim);}
   /* ============================================================================
      THE ODOMETER  (v0.43)
@@ -2156,7 +2424,33 @@
      the transition, and the JS skips building the outgoing digit at all, so there is no
      half-painted state for a stuck transition to strand.
      ============================================================================ */
-  .odo{font-variant-numeric:tabular-nums;--odo-h:.8em;--odo-t:.42em;}
+  /* ⚠ v0.74: `--odo-h` MOVED TO `:root` and is no longer declared here. It was a private token
+     of the odometer until the flow band needed the same number: a figure's line box has to be
+     exactly the digit window for the digits to centre where the box centres, so the band's three
+     `.value` rules set `line-height:var(--odo-h)`. Two copies of `.8em` in two places is the
+     thing this file has paid for repeatedly, so there is one declaration and both users read it.
+     It stays in `em`, which resolves against whichever element uses it — the digit cell at 44px
+     and the balance's at 27px both get their own .8em from the one token. */
+  /* ⚠ v0.74: THE ODOMETER'S SPAN IS TAKEN OUT OF HIT-TESTING AND ITS DIGIT CELLS ARE PUT BACK.
+     This is the v0.65 fix one level out, found the same way — by a harness click timing out on
+     `#und-info` — and the cause is worth stating because it will come back otherwise.
+     `.odo` is an inline element, so what hit-tests is its CONTENT AREA: font-size × (ascent +
+     descent), 1.211em for Inter, which at 44px is 53px. That is a fixed property of the typeface
+     and has nothing to do with the line box around it. For as long as `.value` carried a
+     line-height of 1.05 the two were close enough that the overhang cleared the label above;
+     v0.74 set the line box to the digit window (0.8em) so the figures would centre where their
+     boxes centre, and the content area — unchanged, because font metrics do not care about
+     line-height — began hanging 9.4px ABOVE the box, directly over the label button. Three of the
+     four flow-band labels became unclickable at some widths and none of them looked any
+     different.
+     ⚠ AND `pointer-events:none` ON `.odo` ALONE WOULD COST SOMETHING. A reader can select these
+     figures, and the author has reported on how the selection highlight paints, so it is
+     evidently used. The cells are put back in: `.odo-c` is 0.8em tall and sits exactly inside
+     the line box, so it can never overhang, and dragging across the digits still selects them.
+     What stops hit-testing is only the empty band of font metrics above the ink — which was
+     never a target and never had anything drawn in it. */
+  .odo{font-variant-numeric:tabular-nums;--odo-t:.42em;pointer-events:none;}
+  .odo-c{pointer-events:auto;}
   .odo-c{display:inline-block;position:relative;overflow:hidden;
     height:var(--odo-h);line-height:var(--odo-h);
     /* An inline-block with `overflow:hidden` takes its BOTTOM MARGIN EDGE as its baseline, not
@@ -2578,8 +2872,15 @@
      its own grid, so an auto-width name column resolved per row — "Interconnectors" and
      "Pumped storage" are wider than the rest, so those two bars started further right than
      the other six. A shared grid means one column definition and one set of widths. */
+  /* ⚠ v0.73: THICKER BARS, TIGHTER ROWS — and the rows still do not abut.
+     The author asked whether they should run together like GridWatch's chart. They should not,
+     and the reason is that these are not the same object. GridWatch draws a bar chart: one label,
+     one bar, nothing else. This is a TABLE — fuel, dataset code, bar, MW, share — read across as
+     well as down. Removing the gap turns nine readable rows into one block and makes the left
+     column harder to track to its own value, which is the only job that column has.
+     Thicker bars with a smaller gap buys most of the weight without losing the row. */
   #mixrows{display:grid;grid-template-columns:13px max-content minmax(60px,1fr) 74px 46px;
-    column-gap:9px;row-gap:10px;align-items:center;}
+    column-gap:9px;row-gap:5px;align-items:center;}
   .mixrow{display:contents;}
   .swatch{width:11px;height:11px;border-radius:3px;}
     /* ⚠ v0.43: 600, NOT 700 — AND THAT IS THE HIGHLIGHT, NOT A TASTE CHANGE. The pinned row
@@ -2590,7 +2891,24 @@
   .mixname{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;}
   .mixname .code{font-family:var(--mono);font-size:11px;color:var(--ink-mute);font-weight:400;
     display:block;letter-spacing:.02em;}
-  .track{height:14px;background:var(--grey-bg);border-radius:4px;position:relative;overflow:hidden;}
+  .track{height:19px;background:var(--grey-bg);border-radius:4px;position:relative;overflow:hidden;}
+  /* The gridlines, over the fill. `--tick` is one whole unit as a percentage of the track, set by
+     the renderer from the same `maxAbs` the bar widths use — so the lines and the lengths cannot
+     disagree about what the scale is. The first line at 0 is the track's own left edge and is
+     skipped by starting the repeat one tick in. */
+  .track::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:repeating-linear-gradient(to right,
+      transparent 0, transparent calc(var(--tick,25%) - 1px),
+      var(--mix-grid) calc(var(--tick,25%) - 1px), var(--mix-grid) var(--tick,25%));}
+  .mixscale{display:contents;}
+  .mixscale-track{position:relative;height:15px;margin-top:2px;}
+  .mixscale-track b{position:absolute;top:0;transform:translateX(-50%);white-space:nowrap;
+    font-size:11px;font-weight:600;color:var(--ink-mute);font-variant-numeric:tabular-nums;}
+  .mixscale-track b:first-child{transform:none;}
+  /* ⚠ v0.75: `.edge`, NOT `:last-child` — the renderer sets it from the tick's POSITION. See the
+     note beside it: the last whole tick is almost never at the track's end, so right-aligning it
+     for being last pulled the label a full width off the gridline it names. */
+  .mixscale-track b.edge{transform:translateX(-100%);}
   .track i{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;display:block;}
   .mixmw{font-size:13.5px;font-weight:700;text-align:right;
     font-variant-numeric:tabular-nums;color:var(--ink);}
@@ -2625,9 +2943,20 @@
   .track i.est{background:var(--solar-fill);background-image:var(--hatch-est);}
   .xcheck{margin-top:10px;}
 
-  .compstrip{display:flex;height:26px;border-radius:5px;overflow:hidden;margin-bottom:13px;gap:2px;
+  /* ⚠ v0.73: THE COMPOSITION BAR IS A DIFFERENT OBJECT FROM THE ROWS AND KEEPS ITS OWN
+     TREATMENT. The rows are nine independent lengths against a common scale; this is one whole
+     divided into parts. So it gets thicker than the rows rather than the same, and it carries the
+     fuel mark inside each segment — but only where the segment is wide enough to hold one. A 0.8%
+     sliver trying to carry an icon is worse than a sliver carrying nothing. */
+  .compstrip{display:flex;height:36px;border-radius:5px;overflow:hidden;margin-bottom:13px;gap:2px;
     background:var(--grey-line);}
-  .compstrip i{display:block;height:100%;cursor:default;transition:filter .12s ease;}
+  .compstrip i{display:block;height:100%;cursor:default;transition:filter .12s ease;
+    position:relative;}
+  .compstrip i > svg{position:absolute;inset:0;margin:auto;width:19px;height:19px;
+    color:var(--surface);opacity:.9;pointer-events:none;}
+  /* Below the threshold the mark is not rendered at all rather than hidden, so it costs nothing
+     in markup either. The class is set by the renderer, which knows each segment's width. */
+  .compstrip i.narrow > svg{display:none;}
   /* The strip was carrying a title attribute, which is a native tooltip: it waits about a
      second, cannot be styled, does not appear on touch at all, and reads out the raw string.
      Every other figure on this page has a real tooltip, so this one does now too - and the
@@ -2722,6 +3051,44 @@
   .subchart-title .export-btn{text-transform:none;letter-spacing:0;}
   .subchart-title span{font-weight:400;letter-spacing:0;text-transform:none;
     font-size:11px;color:var(--ink-mute);margin-left:6px;}
+
+  /* ⚠ v0.74: THE IMBALANCE PRICE'S HIGH, LOW AND AVERAGE (see the markup for why they exist).
+     Three equal columns because they are three readings of one series and none outranks the
+     others — a 2-1 or a leading cell would be a claim about importance that is not being made.
+     No box, no second border: the strip belongs to the chart directly above it and rev 67's
+     one-level-of-container rule means it gets its separation from a single hairline, not from a
+     surface of its own. Sentence case throughout: uppercase on this page is rationed to the
+     label that names a headline figure, and none of these is one. */
+  /* ⚠ ONE ELEMENT PER STAT, NOT NINE ELEMENTS ON A NINE-CELL GRID. The first draft put the
+     label, figure and basis straight into a three-column grid and gave each an explicit
+     `grid-row`. That places correctly today and is a trap: auto-placement of row-definite items
+     walks a cursor that resets per item, so the column an item lands in depends on the order the
+     rows appear in — add a fourth stat, or leave one basis line out, and the grid silently
+     transposes. A cell that owns its own three lines cannot do that. */
+  .pxstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;
+    margin-top:10px;padding-top:9px;border-top:1px solid var(--grey-line);}
+  .pxstats[hidden]{display:none;}
+  .pxstats .px-stat{min-width:0;}
+  .pxstats .px-k{font-size:12.5px;font-weight:600;color:var(--ink-mute);
+    line-height:1.3;}
+  .pxstats .px-v{font-size:17px;font-weight:700;color:var(--ink);line-height:1.2;
+    font-variant-numeric:tabular-nums;letter-spacing:-.01em;margin-top:1px;}
+  /* The basis line is the same rung as the share lines under the glance figures, and for the
+     same reason: it names what the number above it is a number OF. */
+  /* ⚠ 600, NOT 500. Three Inter faces are embedded — 400, 600, 700 — so a 500 here is not a
+     lighter weight, it is the browser SYNTHESISING one from 400, which is a different and worse
+     thing than the weight asked for. `noWeightIsSynthesised` caught it on the first run. 600
+     matches the share lines under the glance figures, which is what this line is. */
+  .pxstats .px-b{font-size:11.5px;font-weight:600;color:var(--ink-mute);
+    line-height:1.3;font-variant-numeric:tabular-nums;}
+  /* Negative prices are ordinary here — GB has had them on most windy overnight periods since
+     2019 — so they go through the shared `money` formatter and take a true minus, and they are
+     NOT coloured. A red trough would read as a fault; a negative price is a market state. */
+  @media (max-width:560px){
+    .pxstats{grid-template-columns:repeat(3,minmax(0,1fr));gap:2px 8px;}
+    .pxstats .px-v{font-size:15px;}
+    .pxstats .px-b{font-size:11px;}
+  }
 
   /* min-width alone let a long value stretch the tooltip past the panel edge — the placement
      code clamps the left edge but cannot claw back a box wider than its container. A max-width
@@ -3822,9 +4189,17 @@
     .insight-head{margin-bottom:7px;}
     .insight-head h2{font-size:11px;line-height:1.2;}
     .insight-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:7px;}
-    .insight-item{padding:8px 9px;min-width:0;}
-    .insight-item .k{font-size:8px;}
-    .insight-item .v{font-size:15px;line-height:1.05;}
+    /* ⚠ v0.74: THE PHONE'S SHARE OF THE SAME CORRECTION — and the worst of it was here. An 8px
+       key is below every floor this page has: rev 67 set out to remove type at 12px and under,
+       and this was 8. The step down from the desktop sizes is kept in proportion rather than
+       reset, because the reason for stepping down has not changed (two cards to a row on a
+       360px screen); what changes is the rung it steps down FROM. */
+    .insight-item{padding:10px 10px;min-width:0;}
+    .insight-item .k{font-size:10px;}
+    .insight-item .v{font-size:17px;line-height:1.05;}
+    .insight-item .p{font-size:11.5px;}
+    /* Pinned here too: 13.5px beside a 17px figure is nearly as large as the figure. */
+    .insight-item.mover .v .unit{font-size:11.5px;}
 
     /* Panels: reduce chrome and protect the actual data area. */
     .grid{gap:10px;margin-top:12px;}
@@ -3854,7 +4229,7 @@
     .toolbtn{font-size:11px;padding:7px 8px;}
     .tile .value{font-size:29px;}
     .insight-grid{gap:6px;}
-    .insight-item .v{font-size:14px;}
+    .insight-item .v{font-size:15px;}   /* v0.74: was 14, with the rest of the panel's scale */
     /* ⚠ v0.72: `fit-content()` ON THE NAME COLUMN, because `max-content` has no ceiling.
        The larger type made the fuel names wider and the name track grew to fit them, pushing the
        row 4px past its panel at 320-390px. A `minmax(x, max-content)` track can only ever grow;
@@ -5318,6 +5693,20 @@
                  aria-label="Line chart of the imbalance price over the last 24 hours"></svg>
             <div class="tip" id="pricetip"></div>
           </div>
+          <!-- ⚠ v0.74: THE THREE FIGURES A PRICE CHART IS ALWAYS READ FOR, asked for by the
+               author. A line shows the SHAPE of a series and is poor at its extremes: the eye
+               can see that the price spiked but cannot read how far, and cannot tell a −£15
+               trough from a −£40 one at this strip's height.
+               ⚠ EACH ONE NAMES ITS OWN BASIS, which is this page's standing rule for a derived
+               number. The high and the low say WHEN, because an extreme without its time is an
+               anecdote; the average says how many settlement periods it is the mean of, because
+               a mean over a partial window is a different quantity from a mean over a full one
+               and the reader is entitled to see which they have.
+               ⚠ AND IT FOLLOWS THE PANEL'S OWN RANGE SWITCH rather than carrying a second one.
+               The chart above already answers 24h/7d; a strip underneath it that could disagree
+               with the line it sits under would be a defect waiting to happen. -->
+          <div class="pxstats" id="pxstats" role="group"
+               aria-label="Imbalance price range over the charted window"></div>
         </div>
       </div>
     </div>
@@ -6047,7 +6436,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.72";
+const APP_VERSION = "v0.75";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -6535,6 +6924,17 @@ const iso = (d)=>d.toISOString().slice(0,19)+"Z";
 const isoMinute = (d)=>d.toISOString().slice(0,16)+"Z";
 const fmtTime = (t)=>new Date(t).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:TZ});
 const fmtDate = (t)=>new Date(t).toLocaleDateString("en-GB",{day:"2-digit",month:"short",timeZone:TZ});
+/* ⚠ v0.74: ONE MONEY FORMATTER, because there were five and four of them were wrong.
+   The imbalance price is the only money on this page and it goes negative on most windy nights,
+   so every place that prints it needs the sign handled. The sparkline caption did it correctly
+   with its own inline copy; the y-axis, the chart's end label, the hover tooltip's sell and buy
+   rows and the tile's low/high sentence all built the string as `"£" + num(v)` and produced
+   `£-93.78` — a hyphen-minus where this page uses a true minus everywhere else, and the sign on
+   the wrong side of the symbol, which is not how negative money is written.
+   Four wrong copies and one right one is what five copies of a rule looks like after sixty
+   releases, so there is now one function and no copies. Plain text, no markup: it has to work
+   inside an SVG `<text>` as well as in HTML. */
+const money = (v, dp=2)=>(v<0?"−£":"£")+num(Math.abs(v),dp);
 const londonDate = (d)=>new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit"}).format(d);
 const londonHour = (t)=>parseInt(new Intl.DateTimeFormat("en-GB",{timeZone:TZ,hour:"2-digit",hour12:false}).format(new Date(t)),10);
 
@@ -7591,8 +7991,15 @@ function renderBalance(grid, underlying, solMW){
        either ends in a finite clause or hangs its second part off an em dash, where an appositive
        is grammatical; this one asserted a sentence and then didn't write one. 89 characters, so
        still inside the ~108 budget that holds the band at 271px (see rev 62). */
+    /* ⚠ v0.73: "cadences" → "timings", at the author's question about which a reader understands.
+       He is right. "Cadence" is a term of art — it means the rhythm at which a feed publishes —
+       and a reader who does not already know it gets nothing from the sentence. "Timings" is
+       understood by everyone and carries the part of the meaning that actually explains the gap:
+       the two figures were taken at different moments. The rhythm is the cause of that, and the
+       reader who wants it has the dataset stamps on both sides of the band.
+       Same length, so the ~108-character budget is untouched. */
     reading = "<b>The two datasets agree as closely as they can.</b> They use different "
-      + "boundaries and cadences.";
+      + "boundaries and timings.";
   } else if(diff < 0){
     reading = "<b>Supply below demand, not a shortage.</b> Usually the demand outturn is newer, "
       + "or GB is exporting.";
@@ -8132,7 +8539,7 @@ function renderTiles(snap){
   S.px24 = px24;
   sparkline($("px-spark"), $("px-spark-cap"), px24.map(r=>r.systemSellPrice), {
     mid: 0,                       // negative prices are a real state, so zero is the reference
-    fmt: (v)=>(v<0?"−£":"£")+num(Math.abs(v),0), label:"Imbalance price, last 24 hours" });
+    fmt: (v)=>money(v,0), label:"Imbalance price, last 24 hours" });
   if(px24.length >= 2){
     const vs = px24.map(r=>r.systemSellPrice);
     const hiR = px24[vs.indexOf(Math.max(...vs))], loR = px24[vs.indexOf(Math.min(...vs))];
@@ -8154,8 +8561,8 @@ function renderTiles(snap){
     "price since 2015, so they match; <b>NIV</b> is net imbalance volume, positive when the " +
     "system was short. " +
     (S.pxExtremes
-      ? `Last <b>${S.pxExtremes.n}</b> settled periods: <b>£${num(S.pxExtremes.lo.systemSellPrice,2)}</b> ` +
-        `to <b>£${num(S.pxExtremes.hi.systemSellPrice,2)}</b>.`
+      ? `Last <b>${S.pxExtremes.n}</b> settled periods: <b>${money(S.pxExtremes.lo.systemSellPrice)}</b> ` +
+        `to <b>${money(S.pxExtremes.hi.systemSellPrice)}</b>.`
       : "");
 
   renderCarbonTile();
@@ -8470,7 +8877,7 @@ function renderSystemInsight(snap){
     if(icon) icon.innerHTML = MOVER_ICONS[x.key] || "";
     const kEl = $("mv-"+(i+1)+"-k"), vEl = $("mv-"+(i+1)+"-v"), pEl = $("mv-"+(i+1)+"-p");
     if(kEl) kEl.textContent = m.label;
-    if(vEl) vEl.innerHTML = `<span class="mv-arrow">${x.d>=0?"↑":"↓"}</span> `
+    if(vEl) vEl.innerHTML = MV_ARROW(x.d >= 0)
       + `${uv(Math.abs(x.d))}<span class="unit"> ${U()}</span>`;
     if(pEl) pEl.textContent = moverWording(x.key, x.d, x.now)
       + (isFinite(x.now) ? " · now " + moverLevel(x.key, x.now) + " " + U() : "");
@@ -8500,6 +8907,18 @@ function renderSystemInsight(snap){
    took at v0.48, and the same rule: redrawn to the project's spec, not traced.
    ⚠ These are a FIRST PASS at 38px. The dam's sluices and the storage basins are the two most
    likely to need another round. */
+/* ⚠ v0.74: THE DIRECTION ARROW, DRAWN. One shaft and one head, on a 24 box, mirrored vertically
+   for down rather than rotated — a rotation of a head drawn for "up" puts the chevron's optical
+   weight on the wrong side, which is exactly the fault the mobile flow-band arrow shipped at
+   rev 67 (`rotate(-90deg)` on a left-pointing arrow gives DOWN, not up). Two explicit paths, no
+   transform, nothing to get the wrong way round.
+   `aria-hidden` because the card's own `aria-label` already says the direction in words. */
+const MV_ARROW = (up)=>
+  `<span class="mv-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">`
+  + (up ? `<path d="M12,20 V5"/><path d="M5.2,11.4 L12,4.6 L18.8,11.4"/>`
+        : `<path d="M12,4 V19"/><path d="M5.2,12.6 L12,19.4 L18.8,12.6"/>`)
+  + `</svg></span>`;
+
 const MOVER_ICONS = (()=>{
   const wrap = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
     stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
@@ -8558,10 +8977,28 @@ const MOVER_ICONS = (()=>{
       <path d="M6.4 19h9.6"/>`),
     imports: wrap(`<path d="M2.8 8.6h12.4"/><path d="M12 5.4 15.2 8.6 12 11.8"/>
       <path d="M21.2 15.4H8.8"/><path d="M12 12.2 8.8 15.4 12 18.6"/>`),
+    /* ⚠ v0.75: THE BRACE REACHES THE LEGS, AND THE NUMBERS ARE SOLVED RATHER THAN NUDGED. The
+       author reported the X as not quite meeting the supports, against a reference photograph of
+       a lattice tower. It was drawn between x=8.9 and x=15.1 at both ends — a constant width —
+       while the legs SPLAY: solving the left leg (9.3,3.6)→(5.6,21) at y=11.4 gives x=7.64, so
+       the brace was stopping 1.26 units short at the top and 2.45 short at the foot, and the gap
+       grew as the tower widened, which is exactly what makes it look wrong rather than small.
+       Every endpoint below is a point ON a leg, computed from the leg's own line, so the brace
+       cannot come loose again if the legs are ever re-drawn:
+         left  leg at y=11.4 → 9.3 − 3.7·(7.8/17.4) = 7.64      at y=21 → 5.6  (the foot)
+         right leg at y=11.4 → 14.7 + 3.7·(7.8/17.4) = 16.36    at y=21 → 18.4 (the foot)
+       ⚠ AND IT SPANS THE WHOLE LOWER BODY, 11.4→21, where it used to stop at 17 and leave the
+       bottom four units empty. That is the reference's proportion and it is also the legible
+       choice: this mark is drawn at 38px on the mover card, where one large brace resolves and
+       the reference's eight stacked crosses would be a grey smudge. Copying the photograph's
+       detail at this size would make it read as less like a pylon, not more.
+       ⚠ THE BASE IS NEW AND IS A CONSISTENCY FIX, not a copy. Wind ends `M8.9 21h6.2` and solar
+       `M6.4 19h9.6`; this was the one mark in the set whose legs stopped in mid-air. */
     demand: wrap(`<path d="M5.6 21 9.3 3.6h5.4L18.4 21"/>
       <path d="M3.6 7.6h16.8"/><path d="M2.6 11.4h18.8"/>
-      <path d="M8.9 11.4 15.1 17"/><path d="M15.1 11.4 8.9 17"/>
-      <path d="M9.3 3.6h5.4"/>`)
+      <path d="M7.64 11.4 18.4 21"/><path d="M16.36 11.4 5.6 21"/>
+      <path d="M9.3 3.6h5.4"/>
+      <path d="M4.6 21h14.8"/>`)
   };
 })();
 
@@ -8655,7 +9092,19 @@ function renderMix(snap){
     const style = r.est
       ? `background:var(--solar-fill);background-image:var(--hatch-est);border:none;`
       : `background:var(${r.css});`;
-    return `<i data-fuel="${esc(r.key)}" style="width:${pc}%;${style}"></i>`;
+    /* ⚠ v0.73: THE SEGMENT CARRIES ITS FUEL MARK WHERE IT IS WIDE ENOUGH TO HOLD ONE, at the
+       author's suggestion. The threshold is a PERCENTAGE OF THE PANEL rather than a pixel width,
+       because the strip is fluid and a pixel test would need the rendered width the renderer does
+       not have. 6.5% of a ~660px strip is ~43px, which comfortably clears the 19px mark plus air
+       on a desktop and still holds on a phone; below it the mark is not emitted at all, so a
+       0.8% sliver carries nothing rather than carrying something clipped.
+       ⚠ The marks are the same `MOVER_ICONS` the movers panel uses — one mark per fuel across the
+       whole page, not a second set. Solar's segment is deliberately left bare: it wears the
+       estimated hatch, and a mark over a hatch at this size reads as neither. */
+    const wide = pc >= 6.5 && !r.est;
+    const mark = wide ? (MOVER_ICONS[r.key] || "") : "";
+    return `<i data-fuel="${esc(r.key)}" class="${wide?"":"narrow"}" `
+      + `style="width:${pc}%;${style}">${mark}</i>`;
   }).join("");
   /* The rows the strip was built from, keyed for the hover handler, so the tooltip reads the
      same numbers the table does rather than recomputing them from pixel widths. */
@@ -8690,6 +9139,68 @@ function renderMix(snap){
      on the two of them would push the first fuel row up into the gap beside them. */
   const HEAD = `<div class="mixhead" aria-hidden="true"><span></span><span></span><span></span>` +
     `<span>${U()}</span><span>Share</span></div>`;
+  /* ⚠ v0.73: A SCALE, IN WHOLE UNITS, WITH ITS GRIDLINES RUNNING THROUGH THE BARS.
+     Asked for by the author. Until now the bars were RELATIVE — each one's length said only how
+     it compared with the largest, and a reader wanting a magnitude had to go to the MW column and
+     do the arithmetic themselves. That is the same fault as a percentage without a denominator,
+     one column over.
+     ⚠ WHOLE-NUMBER INCREMENTS IN THE UNIT THE PAGE IS CURRENTLY IN, which is what makes it
+     readable: 1 GW steps in GW, and in MW the same tick set expressed as 1,000s, so the switch
+     never produces a scale reading 2.5, 5, 7.5. `niceStep` picks the largest whole step that
+     leaves at least four ticks, so a 25 GW peak steps by 5 and a 4 GW peak steps by 1 rather than
+     both being forced to a fixed count.
+     ⚠ AND THE LINES GO THROUGH THE BARS, NOT JUST UNDER THEM. A scale below an unruled chart
+     makes the eye travel across empty space and guess; a line crossing the bar is what lets a
+     reader read a length against it without a second glance. Drawn as a `::after` on the track so
+     it sits OVER the fill — under it, the lines would vanish exactly where they are needed. */
+  /* ⚠ v0.75: THE SCALE NAMES ITS UNIT, ONCE, ON THE LAST TICK. Asked for by the author, who
+     offered two placements: after every number, or once at the bottom right.
+     ONCE, and the reason is not brevity for its own sake — six repetitions of `MW` is six copies
+     of a fact that does not vary across the axis, and each one widens the label that carries it,
+     which on this scale is the thing in shortest supply (see the refit below). The last tick is
+     where a left-to-right axis finishes, so the unit lands exactly where the reading ends, and it
+     needs no element of its own. It also puts the unit where the switch can be seen working: in
+     GW the ticks read 0…8 and without it they are genuinely ambiguous, which is the case that
+     makes this worth doing at all.
+     NOT in the free cell to its right, which was the other candidate: that cell sits under the
+     `MW` column header, so a second `MW` at the bottom of it would read as a column footer rather
+     than as the axis's unit. */
+  const scaleMaxGW = maxAbs/1000;
+  /* ⚠ A STEP LARGER THAN THE RANGE PRODUCES A SCALE WITH ONLY ZERO ON IT. The interval cap is a
+     cap on INTERVALS, but the tick count is `floor(range/step)`, so a cap of one on an 8.9 GW
+     range chose a 10 GW step and rendered a single `0` — measured on a 360px phone. Only steps
+     that yield at least one interval are candidates, and if none of them meets the cap the
+     largest usable one wins: a slightly crowded scale is still a scale, and one tick is not. */
+  const stepFor = (cap)=>{
+    const usable = [1,2,5,10,20,50,100,200].filter(st => Math.floor(scaleMaxGW/st) >= 1);
+    if(!usable.length) return null;
+    for(const st of usable) if(scaleMaxGW/st <= cap) return st;
+    return usable[usable.length-1];
+  };
+  const mixEl = $("mixrows");
+  const buildScale = (step)=>{
+    const n = Math.floor(scaleMaxGW/step);
+    return `<div class="mixscale" aria-hidden="true"><span></span><span></span>`
+      + `<span class="mixscale-track">`
+      + Array.from({length:n+1},(_,i)=>{
+          const v = i*step;
+          const num = U()==="GW" ? v : uv(v*1000);
+          const pct = v*1000/maxAbs*100;
+          /* ⚠ `edge` IS SET FROM THE POSITION, NOT FROM BEING LAST, and that corrects a
+             mislabelling this scale has always had. The CSS right-aligned the LAST label so it
+             could not overflow the track — but the last whole tick is almost never AT the track's
+             end (8 GW on an 8.9 GW range sits at 90%), so the rule was pulling the label a full
+             width to the left of the gridline it names. A tick label that does not sit over its
+             own line is a wrong label. It only needs the shift when it would actually overflow,
+             which is when its tick is at the end. */
+          return `<b class="${pct > 92 ? "edge" : ""}" style="left:${pct.toFixed(3)}%">`
+               + `${num}${i===n ? " " + U() : ""}</b>`;
+        }).join("")
+      + `</span><span></span><span></span></div>`;
+  };
+  let scaleStep = stepFor(6);
+  const SCALE = scaleStep == null ? "" : buildScale(scaleStep);
+
   $("mixrows").innerHTML = HEAD + sorted.map((r,idx)=>{
     const w = Math.abs(r.mw)/maxAbs*100;
     const pc = r.mw>0 ? (r.mw/totalPos*100) : 0;
@@ -8704,7 +9215,35 @@ function renderMix(snap){
       <span class="mixmw">${neg?"−":""}${uv(Math.abs(r.mw))}</span>
       <span class="mixpc">${r.mw>0?pc.toFixed(1)+"%":"—"}</span>
     </div>`;
-  }).join("");
+  }).join("") + SCALE;
+
+  /* ⚠ AND THE TICK COUNT IS FITTED TO THE MEASURED TRACK, WHICH FIXED A FAULT THAT WAS ALREADY
+     THERE. The step was chosen from the VALUE RANGE alone — "the largest whole step leaving at
+     most six intervals" — and took no account of how much room the track actually has. Measured
+     across the breakpoints while placing the unit above: at 360px the track is 120.9px wide with
+     the last two ticks 26.7px apart, and the label "8,000" is 31.4px. **The scale's own numbers
+     have been overlapping on a phone**, before anything was added to them. Not reported; found by
+     measuring for something else.
+     So the cap on intervals is now the smaller of six and what fits: 72px per tick, which is the
+     widest number this scale produces plus air, and enough that the last label can carry its unit
+     without reaching the one before it. A 360px phone gets one interval and a legible axis
+     instead of six and a smudge.
+     ⚠ MEASURED, NOT ESTIMATED, AND IN THE SAME FRAME. The track's width depends on a
+     `max-content` name column, so it cannot be computed before the rows exist. The scale is
+     therefore written with the value-driven step, measured, and rewritten only if the fit differs
+     — both writes synchronous, so nothing is painted in between and there is no flicker. One
+     forced layout on one small element per render. `--tick` is set from whichever step wins, so
+     the gridlines inside the bars can never disagree with the numbers underneath them. */
+  const trk = mixEl && mixEl.querySelector(".mixscale-track");
+  if(trk){
+    const fitted = stepFor(Math.min(6, Math.max(1, Math.floor(trk.getBoundingClientRect().width / 72))));
+    if(fitted != null && fitted !== scaleStep){
+      scaleStep = fitted;
+      trk.parentElement.outerHTML = buildScale(scaleStep);
+    }
+  }
+  if(mixEl && scaleStep != null)
+    mixEl.style.setProperty("--tick", ((scaleStep*1000)/maxAbs*100).toFixed(4)+"%");
 
   /* The button names the number it will reveal, and names it again when open, because
      "Show fewer" alone leaves a reader who scrolled back up unsure what they are looking at. */
@@ -9391,14 +9930,62 @@ function renderStack(){
    One series, so no legend: the sub-title names it. NIV rides in the tooltip rather than on a
    second y-axis — two measures of different scale never share an axis.
    ============================================================ */
+/* ⚠ v0.74: THE HIGH, LOW AND AVERAGE, AS A PURE FUNCTION OF THE POINTS THE CHART DREW.
+   It takes the same `pts` array the polyline is built from, so the strip cannot describe a
+   window the line above it is not showing — the one failure mode a summary under a chart has.
+   ⚠ THE AVERAGE IS A PLAIN MEAN, AND THAT IS DEFENSIBLE HERE FOR A REASON THAT DOES NOT
+   GENERALISE. A mean of prices is usually the wrong statistic because periods differ in
+   duration or in volume; GB settlement periods are all exactly thirty minutes, so the plain
+   mean IS the time-weighted average and no weighting is being quietly skipped. It is NOT the
+   volume-weighted price, which is a different quantity and is not claimed — the basis line
+   says "settlement periods", not "MWh".
+   ⚠ TIES GO TO THE EARLIEST. Strict `>` and `<` mean a price that recurs at its extreme is
+   reported at its FIRST occurrence, which is the one a reader asking "when did it spike" wants.
+   Stated because the opposite convention is equally defensible and this is where it is chosen. */
+function priceStats(pts){
+  const rows = (pts||[]).filter(r=>r && isFinite(r.systemSellPrice));
+  if(!rows.length) return null;
+  let hi = rows[0], lo = rows[0], sum = 0;
+  for(const r of rows){
+    if(r.systemSellPrice > hi.systemSellPrice) hi = r;
+    if(r.systemSellPrice < lo.systemSellPrice) lo = r;
+    sum += r.systemSellPrice;
+  }
+  return { hi:{ v:hi.systemSellPrice, t:hi.startTime },
+           lo:{ v:lo.systemSellPrice, t:lo.startTime },
+           mean: sum / rows.length, n: rows.length };
+}
+function renderPriceStats(pts){
+  const el = $("pxstats");
+  if(!el) return;
+  const s = priceStats(pts);
+  if(!s){ el.hidden = true; el.innerHTML = ""; return; }
+  el.hidden = false;
+  const when = t => `${fmtDate(t)} ${fmtTime(t)}`;
+  const cell = (k, v, b) =>
+    `<div class="px-stat"><div class="px-k">${k}</div><div class="px-v">${v}</div>`
+    + `<div class="px-b">${b}</div></div>`;
+  el.innerHTML =
+      cell("Highest", money(s.hi.v), when(s.hi.t))
+    + cell("Lowest",  money(s.lo.v), when(s.lo.t))
+    /* ⚠ The average carries its COUNT rather than a time, because the honest basis for a mean
+       is how many readings it is a mean of. A part-loaded 7-day window is the case this is for:
+       144 periods under a "last 7 days" heading is a visible fact rather than a silent one. */
+    + cell("Average", money(s.mean),
+        `${num(s.n)} settlement period${s.n === 1 ? "" : "s"}`);
+}
 function renderPrice(){
   const svg=$("price"), tip=$("pricetip"), box=$("pricebox");
   const stack = stackSeries();
   const priceSource = S.historyWindow==="7d" ? S.px7d : S.prices;
-  if(!priceSource || !priceSource.length || !stack.length){ svg.innerHTML=""; return; }
+  /* ⚠ THE STRIP IS CLEARED ON EVERY PATH THAT CLEARS THE CHART. A summary left standing over an
+     empty chart is worse than no summary — it describes a window nothing is drawing. */
+  if(!priceSource || !priceSource.length || !stack.length){
+    svg.innerHTML=""; renderPriceStats(null); return; }
   const t0 = new Date(stack[0].t).getTime(), t1 = new Date(stack[stack.length-1].t).getTime();
   const pts = priceSource.filter(r=>{ const t=new Date(r.startTime).getTime(); return t>=t0 && t<=t1; });
-  if(pts.length < 2){ svg.innerHTML=""; return; }
+  if(pts.length < 2){ svg.innerHTML=""; renderPriceStats(null); return; }
+  renderPriceStats(pts);
 
   /* ⚠ v0.64: 120/140/150 → 126/148/160, AND THE CEILING IS WHY. Equalising the panel columns
      widened the right-hand one, which carries this strip; at 1920px it reached 5.01:1 and
@@ -9427,7 +10014,15 @@ function renderPrice(){
     const yy=y(v), zero = Math.abs(v)<1e-9;
     out += `<line class="gridline" x1="${ml}" y1="${yy.toFixed(1)}" x2="${W-mr}" y2="${yy.toFixed(1)}"${
       zero?' style="stroke:var(--ink-mute);stroke-dasharray:none;opacity:.5"':''}/>`;
-    out += `<text class="axlabel" x="${ml-7}" y="${(yy+3.5).toFixed(1)}" text-anchor="end">£${Math.round(v)}</text>`;
+    /* ⚠ v0.74: `£-100`, WITH A HYPHEN INSIDE THE CURRENCY, IS WHAT THIS PRINTED FOR SIXTY-ODD
+       RELEASES. Found while building the stats strip below, not by looking for it: the strip
+       formats the same quantity through `money` and the two sat two inches apart reading
+       `−£93.78` and `£-100`. Two faults in one string — a hyphen-minus where the page uses a
+       true minus everywhere else, and the sign on the wrong side of the symbol, which is not how
+       negative money is written in English. Negative imbalance prices are ordinary in GB, so
+       this axis label is reached on most windy nights rather than being an edge case. */
+    const axv = money(Math.round(v), 0);
+    out += `<text class="axlabel" x="${ml-7}" y="${(yy+3.5).toFixed(1)}" text-anchor="end">${axv}</text>`;
   }
   out += `<polyline fill="none" stroke="var(--mark)" stroke-width="2" stroke-linejoin="round"
            stroke-linecap="round" points="${pts.map(r=>`${xT(r.startTime).toFixed(1)},${y(r.systemSellPrice).toFixed(1)}`).join(" ")}"/>`;
@@ -9438,7 +10033,7 @@ function renderPrice(){
   const nearPx = pts.filter(r=>xT(r.startTime) >= lx-56 && xT(r.startTime) <= lx)
                     .map(r=>y(r.systemSellPrice));
   out += endLabel(lx-8, y(last.systemSellPrice), nearPx,
-                  "£"+num(last.systemSellPrice,2), {mt, ih});
+                  money(last.systemSellPrice), {mt, ih});
   out += `<line class="crosshair" x1="0" y1="${mt}" x2="0" y2="${mt+ih}" style="display:none"/>`;
   svg.innerHTML = out;
 
@@ -9452,8 +10047,8 @@ function renderPrice(){
     const same = Math.abs(pt.systemSellPrice - pt.systemBuyPrice) < 0.005;
     tip.innerHTML = `<div class="t-head">${fmtDate(pt.startTime)} ${fmtTime(pt.startTime)} · SP${pt.settlementPeriod}</div>` +
       `<div class="t-row"><span class="n">${same?"Price (SSP = SBP)":"Sell price"}</span>
-        <span class="v">£${num(pt.systemSellPrice,2)}</span></div>` +
-      (same?"":`<div class="t-row"><span class="n">Buy price</span><span class="v">£${num(pt.systemBuyPrice,2)}</span></div>`) +
+        <span class="v">${money(pt.systemSellPrice)}</span></div>` +
+      (same?"":`<div class="t-row"><span class="n">Buy price</span><span class="v">${money(pt.systemBuyPrice)}</span></div>`) +
       `<div class="t-row t-tot"><span class="n">NIV (${pt.netImbalanceVolume>=0?"short":"long"})</span>
         <span class="v">${num(pt.netImbalanceVolume,1)} MWh</span></div>`;
     tip.classList.add("show");
@@ -11682,6 +12277,31 @@ function attachInsightTooltip(card){
   function place(){
     const r = card.getBoundingClientRect();
     pop.hidden = false;
+    /* ⚠ v0.74: THE EXPLAINER TAKES THE CARD'S WIDTH, WITHIN A READABLE MEASURE. The author asked
+       whether it should match the box; the answer is "where matching is also readable", which is
+       most of the time and not all of it.
+       Matching outright fails twice. Below 560px the cards are two to a row and about 160px
+       wide, and a two-sentence definition over five label/value rows at 160px is a column of
+       fragments. At the 900px breakpoint the cards go the other way, past the measure at which
+       prose stops being scannable. So the card's width is the PREFERRED value inside a clamp,
+       not the value: on a desktop the popover lands exactly on the card's edges, which is the
+       effect asked for, and outside that range it stops at a width a reader can still use.
+       ⚠ 260 AND 510 ARE MEASURED, and the ceiling was set from the wrong end on the first
+       attempt. It was 340 — chosen from the popover's existing `max-width:290px` as "a bit
+       wider" — and then the cards were measured: 456px at 1440, 418px at the 900px breakpoint.
+       A 340px cap would have meant the popover never once matched the card on a desktop, which
+       is the case the author was asking about. The real constraint is the reading measure: the
+       explainer opens with two sentences of prose, and prose stops being scannable past about
+       75 characters, which for Inter at 13.5px is ~510px. Every desktop card is inside that, so
+       the popover matches the box everywhere it is asked to; a 1920px viewport is where the cap
+       first bites. 260 is the narrowest the label/value rows hold without their values wrapping
+       under their labels.
+       ⚠ AND THE WIDTH IS CLEARED BY THE OTHER POPOVER'S `place`. `#infopop` is one shared
+       element used by both `attachInfoPop` and this; an inline width set here would otherwise
+       persist into the next ⓘ that opened. */
+    pop.style.maxWidth = "calc(100vw - 20px)";
+    pop.style.width =
+      Math.round(Math.max(260, Math.min(r.width, 510, window.innerWidth - 20))) + "px";
     const w = pop.offsetWidth, h = pop.offsetHeight;
     let left = Math.min(r.left, window.innerWidth - w - 10);
     let top = r.bottom + 8;
@@ -11737,6 +12357,44 @@ function attachInsightTooltip(card){
 
 ["mv-1","mv-2","mv-3"].forEach(id=>attachInsightTooltip($(id)));
 
+/* ⚠ v0.73: HOVERING A MOVER HIGHLIGHTS ITS FUEL IN THE TWO PANELS BELOW — asked for by the
+   author, and it restores on HOVER the feature rev 65a reduced to a reflection.
+   Why hover rather than click, which is what the retired driver line used: the card's click
+   already means something — it pins the explainer tooltip. Two toggles on one gesture disagree
+   the first time an outside click closes the tooltip and leaves a fuel lit behind it, which is
+   exactly why rev 65a took the setting gesture off the card. Hover has no such owner, so the two
+   affordances sit on the same element without fighting: point at a mover to see it in the charts,
+   click it to read what it is.
+   ⚠ IT IS A PREVIEW, NOT A SELECTION. A pinned selection made from the legend must survive being
+   hovered over up here, so the previous key is remembered and restored on leave rather than
+   cleared to null — otherwise brushing past a card would silently drop the reader's own choice.
+   ⚠ AND DEMAND IS NOT A FUEL. It is one of the ten movers and no chart draws it, so hovering it
+   highlights nothing rather than dimming both panels to show an empty set.
+   Bound once per card, on the elements that persist across renders. Touch is untouched: a tap
+   opens the explainer, which is the reading a touch device should get. */
+(function(){
+  let pinned = null, previewing = false;
+  const isFuel = k => !!(MOVER_META[k] && MOVER_META[k].fuel);
+  ["mv-1","mv-2","mv-3"].forEach(id=>{
+    const card = $(id);
+    if(!card) return;
+    card.addEventListener("pointerenter",(e)=>{
+      if(e.pointerType === "touch") return;
+      const key = card.dataset.insight;
+      if(!isFuel(key)) return;
+      if(!previewing){ pinned = S.selectedFuel || null; previewing = true; }
+      S.selectedFuel = key;
+      setFuelHighlight(key);
+    });
+    card.addEventListener("pointerleave",(e)=>{
+      if(e.pointerType === "touch" || !previewing) return;
+      previewing = false;
+      S.selectedFuel = pinned;
+      setFuelHighlight(pinned);
+    });
+  });
+})();
+
 /* Small disclosure popover. Hover alone would be unreachable on touch and by keyboard, so it
    opens on click/Enter too, is announced via aria-expanded, and closes on Escape, outside
    click or scroll. */
@@ -11750,6 +12408,13 @@ function attachInfoPop(btn, getHTML){
   function place(){
     const r = btn.getBoundingClientRect();
     pop.hidden = false;
+    /* ⚠ v0.74: CLEARED, because `attachInsightTooltip` sets an inline width on this same shared
+       element to match the mover card it opened from. Without this, opening a mover explainer
+       and then any ⓘ on the page would size the ⓘ to a card it has nothing to do with — and it
+       would only be visible when the two widths happened to differ, which is the worst kind of
+       bug to leave for later. These popovers are sized by their CSS `max-width`. */
+    pop.style.width = "";
+    pop.style.maxWidth = "";
     const w = pop.offsetWidth, h = pop.offsetHeight;
     let left = Math.min(r.left, window.innerWidth - w - 10);
     let top  = r.bottom + 8;
@@ -12335,6 +13000,12 @@ window.__dash = Object.freeze({ ciBand, ciRead, CI_BANDS, CI_SCALE_MAX, ciScaleP
      and would still only reach the ones a fixture could be made to produce; calling the function
      reaches all of them. They belong on this surface for exactly the reason `lcGreen` does. */
   moverWording, moverLevel, MOVER_META: Object.assign({}, MOVER_META),
+  /* ⚠ v0.74: `priceStats` is here for the same reason `lcGreen` is — the claim being made is
+     about the ARITHMETIC, not about the three numbers today's fixture happens to produce. A
+     high, a low and a mean are exactly the kind of thing that looks right on any single sample
+     and is wrong at the edges: an empty window, a single period, a tie at the extreme, an
+     all-negative day. Those are five cases and one page load reaches one of them. */
+  priceStats,
   emRows: ()=>Object.assign({}, S.emRows),
   /* v0.20: lcGreen is a pure function of one number, and the claim made for it — that the bar
      gets darker and more saturated as the share rises — is a claim about the whole domain, not
