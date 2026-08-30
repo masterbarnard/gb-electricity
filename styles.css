@@ -1,4 +1,4 @@
-/* GENERATED from dash/GB_Electricity_v0.75.html (md5 757ef884c7fd59af99ce78618942f805) by tools/pages75.mjs — do not edit. */
+/* GENERATED from dash/GB_Electricity_v0.76.html (md5 2468d7538da895a2fc58b9ca17afcd31) by tools/pages76.mjs — do not edit. */
   /* ============================================================================
      INTER — EMBEDDED, NOT LINKED  (v0.43)
 
@@ -166,8 +166,20 @@
        −42% would have looked like the obvious "more of a good thing" and quietly broken it.
        Measured with CIEDE2000, and cross-checked against an independent palette validator.
 
-       Was: --ci1:#4f7a18 --ci2:#93bf34 --ci3:#f7d117 --ci4:#eb9622 --ci5:#dd6414 */
-    --ci1:#567733; --ci2:#99bc5a; --ci3:#efd260; --ci4:#de9c51; --ci5:#cd703f;
+       Was: --ci1:#4f7a18 --ci2:#93bf34 --ci3:#f7d117 --ci4:#eb9622 --ci5:#dd6414
+
+       ⚠ v0.76: RESTORED TO EXACTLY THAT, at the author's request — "they're lower down on the
+       page, so I'm happy for them to be restored to their original brightness". The toning was
+       never about these two tiles being wrong in themselves; rev 61 desaturated them because a
+       bright ramp high on the page competed with the flow band above it. Rev 65a then moved this
+       whole tile row BELOW the two charts, which removed the competition and left the correction
+       in place — a fix outliving the thing it fixed.
+       ⚠ AND RESTORING IMPROVES THE MEASUREMENT THE TONING WAS WEIGHED AGAINST. The note above
+       records nearest-fuel ΔE as 10.7 before the change and 8.1 after: desaturating walked the
+       ramp TOWARDS Other's orange. Going back puts 2.6 ΔE of separation from the fuel palette
+       back, well clear of the project's 8.0 target. The exact prior values were written down at
+       rev 61, so this is a restoration rather than a re-cut — no re-derivation, no drift. */
+    --ci1:#4f7a18; --ci2:#93bf34; --ci3:#f7d117; --ci4:#eb9622; --ci5:#dd6414;
     /* v0.20: WASHES of the five band colours, for the intensity chart's background zones.
        Not the band colours themselves and not an opacity applied to them: the two surfaces are
        different, so one alpha would give two different results and only one of them would have
@@ -3067,6 +3079,17 @@
      nothing wrong with its capacity figure should not carry a coloured line. Muted ink,
      same slot. */
   .tip .t-hint{font-size:11px;line-height:1.35;color:var(--muted);padding:3px 0 0;}
+  /* ⚠ v0.76: THE DESCRIPTION, AND THE ONE TOOLTIP THAT IS WIDER BECAUSE IT CARRIES ONE.
+     `.tip` caps at 255px, which is right for a stack of label/value rows and wrong for two
+     sentences — at 12px that is about 38 characters a line, so a description would run to seven
+     lines and the author's "compact, not a mini article" would be lost to the box rather than to
+     the writing. 320px puts it at roughly 48 characters, six words a line, which reads. Only
+     `#comptip` is widened: it is the only tooltip on the page with prose in it.
+     The rule below it separates the description from the figures — one hairline, because the two
+     are different kinds of thing and the eye should be able to skip straight to the numbers. */
+  #comptip{max-width:min(320px,calc(100vw - 28px));}
+  .tip .t-lede{font-size:12px;line-height:1.4;color:var(--ink-dim);padding:2px 0 6px;
+    margin-bottom:5px;border-bottom:1px solid var(--grey-line);}
 
   /* ================= Interconnectors (same shared-grid fix) ================= */
   /* ================= VIEW MODE (v0.23) ================= */

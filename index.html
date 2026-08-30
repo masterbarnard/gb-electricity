@@ -20,8 +20,8 @@
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v75.png">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v75.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v76.png">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v76.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -29,7 +29,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v75.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v76.png">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -225,8 +225,20 @@
        −42% would have looked like the obvious "more of a good thing" and quietly broken it.
        Measured with CIEDE2000, and cross-checked against an independent palette validator.
 
-       Was: --ci1:#4f7a18 --ci2:#93bf34 --ci3:#f7d117 --ci4:#eb9622 --ci5:#dd6414 */
-    --ci1:#567733; --ci2:#99bc5a; --ci3:#efd260; --ci4:#de9c51; --ci5:#cd703f;
+       Was: --ci1:#4f7a18 --ci2:#93bf34 --ci3:#f7d117 --ci4:#eb9622 --ci5:#dd6414
+
+       ⚠ v0.76: RESTORED TO EXACTLY THAT, at the author's request — "they're lower down on the
+       page, so I'm happy for them to be restored to their original brightness". The toning was
+       never about these two tiles being wrong in themselves; rev 61 desaturated them because a
+       bright ramp high on the page competed with the flow band above it. Rev 65a then moved this
+       whole tile row BELOW the two charts, which removed the competition and left the correction
+       in place — a fix outliving the thing it fixed.
+       ⚠ AND RESTORING IMPROVES THE MEASUREMENT THE TONING WAS WEIGHED AGAINST. The note above
+       records nearest-fuel ΔE as 10.7 before the change and 8.1 after: desaturating walked the
+       ramp TOWARDS Other's orange. Going back puts 2.6 ΔE of separation from the fuel palette
+       back, well clear of the project's 8.0 target. The exact prior values were written down at
+       rev 61, so this is a restoration rather than a re-cut — no re-derivation, no drift. */
+    --ci1:#4f7a18; --ci2:#93bf34; --ci3:#f7d117; --ci4:#eb9622; --ci5:#dd6414;
     /* v0.20: WASHES of the five band colours, for the intensity chart's background zones.
        Not the band colours themselves and not an opacity applied to them: the two surfaces are
        different, so one alpha would give two different results and only one of them would have
@@ -3126,6 +3138,17 @@
      nothing wrong with its capacity figure should not carry a coloured line. Muted ink,
      same slot. */
   .tip .t-hint{font-size:11px;line-height:1.35;color:var(--muted);padding:3px 0 0;}
+  /* ⚠ v0.76: THE DESCRIPTION, AND THE ONE TOOLTIP THAT IS WIDER BECAUSE IT CARRIES ONE.
+     `.tip` caps at 255px, which is right for a stack of label/value rows and wrong for two
+     sentences — at 12px that is about 38 characters a line, so a description would run to seven
+     lines and the author's "compact, not a mini article" would be lost to the box rather than to
+     the writing. 320px puts it at roughly 48 characters, six words a line, which reads. Only
+     `#comptip` is widened: it is the only tooltip on the page with prose in it.
+     The rule below it separates the description from the figures — one hairline, because the two
+     are different kinds of thing and the eye should be able to skip straight to the numbers. */
+  #comptip{max-width:min(320px,calc(100vw - 28px));}
+  .tip .t-lede{font-size:12px;line-height:1.4;color:var(--ink-dim);padding:2px 0 6px;
+    margin-bottom:5px;border-bottom:1px solid var(--grey-line);}
 
   /* ================= Interconnectors (same shared-grid fix) ================= */
   /* ================= VIEW MODE (v0.23) ================= */
@@ -5229,7 +5252,7 @@
 
        ⚠ THE BALANCE COMPARES GRID AGAINST *UNDERLYING* DEMAND, NOT NATIONAL. This is the whole
        correctness of the section and it is invisible at night, which is how it would have got
-       through. "Electricity on the grid" INCLUDES estimated embedded solar; National demand
+       through. "Electricity available to GB" INCLUDES estimated embedded solar; National demand
        (INDO) is measured at the transmission boundary and cannot see embedded solar at all.
        Comparing those two subtracts a figure that includes rooftop solar from one that does
        not, so on a sunny afternoon the residual is dominated by the embedded estimate and the
@@ -5273,7 +5296,7 @@
              page a reader could not interrogate — and it is a SUM, so it is the one most worth
              asking about. -->
         <div class="label"><button class="labelbtn" id="gen-info"
-          aria-expanded="false">Electricity on the grid</button></div>
+          aria-expanded="false">Electricity available to GB</button></div>
         <div class="value" id="t-gen"><span class="skeleton">—</span><span class="unit">MW</span></div>
         <!-- ⚠ v0.67: THIS BLOCK IS STATIC MARKUP NOW, AND THE REASON IS THE SAME ONE THE DEMAND
              CARD RECORDED AT v0.65. It was rebuilt from JS on every poll — `$("t-gen-meta").innerHTML = …`
@@ -5310,7 +5333,7 @@
           </div>
           <div class="ge-row ge-total">
             <span class="ge-op" aria-hidden="true">=</span>
-            <span class="ge-lab">Electricity on the grid</span>
+            <span class="ge-lab">Electricity available to GB</span>
             <span class="ge-val" id="t-gen-echo"><b>—</b> MW</span>
           </div>
         </div>
@@ -6436,7 +6459,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.75";
+const APP_VERSION = "v0.76";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -6587,8 +6610,16 @@ const fqmHz = (dHz)=> `${Math.abs(dHz*1000).toFixed(0)} mHz`;
    take the same −22% the ramp took, so the interpolation stays smooth rather than kinking at
    the last stop. Lightness stays strictly monotone, 0.670 → 0.528, which is the property the
    meter actually depends on.
-   Was: ["#959595","#838f7a","#72885e","#618141","#4f7a18"] */
-const LC_RAMP = ["#959595","#858e7e","#758666","#667f4e","#567733"];
+   Was: ["#959595","#838f7a","#72885e","#618141","#4f7a18"]
+
+   ⚠ v0.76: RESTORED, AND IT HAD TO MOVE WITH THE CARBON RAMP OR THE IDENTITY WOULD BREAK. The
+   documented property is that this ramp's top stop IS `--ci1`: a reader meeting deep green in
+   the Low-carbon meter and in the very-low carbon band is meeting one colour. Restoring `--ci1`
+   to #4f7a18 without restoring this would have left the meter a green that no longer matches
+   anything — the same silent break rev 66 avoided in the other direction. The grey end never
+   moved (it has no chroma to lose). Lightness returns to strictly monotone 0.670 → 0.512, which
+   is the property the meter depends on. */
+const LC_RAMP = ["#959595","#838f7a","#72885e","#618141","#4f7a18"];
 function lcGreen(pc){
   const f = Math.max(0, Math.min(1, (Number(pc)||0)/100));
   const seg = Math.min(LC_RAMP.length-2, Math.floor(f*(LC_RAMP.length-1)));
@@ -6655,6 +6686,89 @@ const SERIES = [
    or oil ever returned they would name themselves without anyone editing this file. The table
    view lists every raw Elexon code regardless, zeros included. */
 const SERIES_BY_KEY = Object.fromEntries(SERIES.map(s=>[s.key,s]));
+
+/* ============================================================================
+   ⚠ v0.76: ONE DESCRIPTION PER SERIES, USED IN BOTH PANELS.
+   The author asked for a 1–2 sentence description in each fuel tooltip, "for an interested
+   non-specialist", without turning the tooltip into a mini article. The movers panel already
+   had one set of these (`MOVER_DEFS`), so writing a second set for the mix panel would have put
+   two descriptions of the same fuel in one document — and the first time either was edited they
+   would disagree. This is the neutral description; the movers panel appends its own
+   movement-framed sentence to it, which is the only part that is genuinely about movement.
+   Each says something the number cannot: what is counted, what is NOT counted, or which way a
+   sign runs. None of them restates the figure above it. ============================================================================ */
+const SERIES_DEFS = {
+  nuclear: "Metered output from GB's nuclear reactors. They run close to flat by design and are not used to follow demand, so this figure moves only when a unit comes off or back on.",
+  biomass: "Metered generation from plant burning organic fuel — in GB, overwhelmingly Drax. It is counted as low-carbon here, following the convention of the source data.",
+  hydro:   "Metered output from conventional hydro schemes, where water passes through a turbine once. A small, steady part of the mix that follows rainfall and river flow rather than price.",
+  wind:    "GB wind generation as metered through the transmission system. Wind connected to local distribution networks is not visible in this figure and is not included in it.",
+  storage: "The net position of GB's pumped hydro. Positive means the units are generating; negative means they are pumping water uphill and drawing from the grid to do it.",
+  gas:     "Metered output from combined-cycle and open-cycle gas turbines. This is the fuel that usually moves to follow demand, so it takes up the slack when wind and solar fall away.",
+  other:   "Elexon's residual category — everything that does not fit one of the named fuels, plus coal and oil. It cannot be broken down further; the source defines it circularly.",
+  solar:   "Estimated output from GB's solar panels, almost all of them connected below the transmission system. It is modelled from a sample of sites rather than metered, which is why it is drawn differently everywhere on this page.",
+  imports: "The net flow across GB's subsea and cross-border links. Positive means GB is importing from its neighbours; negative means it is exporting to them."
+};
+
+/* ============================================================================
+   ⚠ v0.76: INSTALLED CAPACITY — WHERE THESE NUMBERS COME FROM, AND WHY NOT FROM IGCA.
+
+   The author asked for installed capacity and output-as-a-percentage-of-it, naming **IGCA** as
+   the primary source with IGCPU for validation. Both were checked against the live API before
+   any of this was written, twice, a day apart.
+
+   ⚠ IGCA IS EMPTY. `publishDateTimeFrom=2025-01-01` to today returns `[]`. The last publication
+   is 27 November 2024, for year 2025. A wider query returns plausible-looking rows and hides
+   that completely — a dataset that has stopped publishing still returns data.
+   ⚠ AND ITS FIGURES ARE NOT PHYSICAL. Pumped storage 5,891 → 11,080 MW year on year against a
+   real GB fleet near 2,900; solar losing 5 GW; gas gaining 8. A tooltip built on it would have
+   reported Dinorwig running flat out at about 3% of capacity.
+   ⚠ IGCPU CANNOT VALIDATE IT. It is a change log of individual BM units — 87 records across two
+   and a half years — not a register, so it confirms one unit's capacity where it appears and
+   cannot be summed into a fuel total. Kept for that purpose, which is what it is good for.
+
+   THE SOURCE USED INSTEAD is `/reference/bmunits/all`, summing `generationCapacity` over the
+   BM units carrying each `fuelType`. The decisive property is not that it is fresher — it is
+   that **its `fuelType` values are the same codes `SERIES` already uses** (CCGT, OCGT, WIND,
+   NUCLEAR, BIOMASS, PS, NPSHYD, OTHER, COAL). There is no fuel-type mapping to verify, because
+   the denominator is grouped by the same mapping as the numerator. That is the boundary match
+   IGCA structurally could not offer, and it is the whole reason this ratio can be stated at all.
+
+   ⚠ BAKED, NOT FETCHED, AND THAT IS A DELIBERATE TRADE. The endpoint is 2.07 MB and sends
+   `no-store`, against a 960 KB page, for eight numbers that move on a timescale of months.
+   Cross-origin works — tested from the live site — so a live version is possible later and is in
+   the backlog; it is not worth 2 MB on every load today. This follows the page's own precedent:
+   `IC_META`'s nameplate figures are quoted constants for exactly the same reason.
+
+   ⚠ THE REGISTER INCLUDES PLANT THAT NO LONGER RUNS, and the tooltips say so by name rather than
+   quietly correcting it. Nuclear's 7,430 MW includes Hunterston B units 7 and 8 (510 MW each),
+   closed in January 2022 — the operational fleet is 6,410 MW. Other's 8,573 MW includes 3,270 MW
+   of coal: Drax 5 and 6, and all four West Burton units, which stopped in September 2024. Naming
+   the units is better than silently excluding them: an excluded unit is a judgement this page
+   would then have to maintain, and a reader who checks the register would find a number that
+   does not match. **This is why the label is "installed capacity" and never "available
+   capacity"** — the author's own instruction, and the distinction these units are made of.
+
+   ⚠ SOLAR IS ABSENT ON PURPOSE. There is no SOLAR `fuelType` in the register at all, because
+   GB solar is not BM-registered; the page's solar figure is the PV_Live embedded estimate. A
+   capacity line there would be a denominator drawn from a different population than the
+   numerator above it, which is the exact fault that disqualified IGCA. The tooltip says so
+   instead of printing a number.
+
+   TAKEN 30 August 2026. Re-run the sum and update the date when it is next checked — see the
+   dated-work section of _DASH_STATE.md, alongside the carbon bands.
+   ============================================================================ */
+const FUEL_CAPACITY = {
+  gas:     { mw:33578, units:80  },
+  wind:    { mw:31547, units:232 },
+  other:   { mw:8573,  units:91,
+             note:"Includes <b>3,270 MW</b> of coal — Drax 5 and 6 and the four West Burton units — none of it generating since September 2024." },
+  nuclear: { mw:7430,  units:12,
+             note:"Includes <b>1,020 MW</b> at Hunterston B, closed in January 2022. The operating fleet is 6,410 MW." },
+  biomass: { mw:3675,  units:13  },
+  storage: { mw:3058,  units:16  },
+  hydro:   { mw:1106,  units:22  }
+};
+const FUEL_CAPACITY_TAKEN = "30 Aug 2026";
 
 const FUEL_LABELS = {
   CCGT:"Combined-cycle gas turbine", OCGT:"Open-cycle gas turbine", COAL:"Coal", OIL:"Oil",
@@ -7822,7 +7936,7 @@ function renderStatus(snap){
    RENDER — the supply/demand balance  (v0.45)
 
    ⚠ THE PAIRING IS THE WHOLE CORRECTNESS OF THIS FUNCTION, and it is invisible at night.
-   Electricity on the grid INCLUDES estimated embedded solar. National demand (INDO) is measured
+   Electricity available to GB INCLUDES estimated embedded solar. National demand (INDO) is measured
    at the transmission boundary and cannot see embedded solar at all. Subtracting one from the
    other leaves the embedded estimate standing in the answer, so on a sunny afternoon the band
    would read "supply 25% above demand" — a statement about a modelling boundary dressed up as a
@@ -8132,7 +8246,7 @@ function renderEquation(dem, sol){
   geVal(nat,  uv(natMW));
   geVal(emb,  uv(embMW));
   /* ⚠ THE TOTAL ROW IS WRITTEN FROM `undMW`, THE SAME VARIABLE THE HEADLINE IS. It restates the
-     headline under the rule, exactly as the supply card restates "Electricity on the grid", and
+     headline under the rule, exactly as the supply card restates "Electricity available to GB", and
      a restatement computed a second way is a second chance to disagree with itself. */
   geVal(echo, uv(undMW));
 
@@ -8288,7 +8402,7 @@ function renderTiles(snap){
          Metered generation        ← BM-metered fuel categories
        + Embedded generation       ← the PV_Live estimate. IDENTICAL ROW ON THE DEMAND CARD.
        + Net imports
-       = Electricity on the grid
+       = Electricity available to GB
 
      The sum is unchanged to the megawatt — metered + embedded is exactly what `domestic` was —
      so this is presentation, as instructed. What changes is that the same figure now appears as
@@ -8336,13 +8450,34 @@ function renderTiles(snap){
   /* v0.50: the live sum stays — it is the one thing a reader cannot get from the card — and the
      prose around it goes. The paragraph on interconnector sign convention and the one on what
      this is NOT were both answering questions nobody had asked yet. */
+  /* ⚠ v0.76: RENAMED AND REWRITTEN, AT THE AUTHOR'S REQUEST — AND THE OLD TEXT WAS WRONG.
+     The label was "Electricity on the grid", which invites the reading "on the transmission
+     system" and so quietly excludes the embedded term the card visibly adds in. "Available to
+     GB" says what the figure measures without making a claim about which wires it is on.
+     ⚠ THE EXPLAINER SAID THE OPPOSITE OF THE CARD. It read "excludes generation connected
+     below the transmission-system boundary, such as most embedded solar" — directly under an
+     equation whose second row is "+ Embedded generation". Two statements about one figure, in
+     one card, contradicting each other; the arithmetic was right and the sentence was wrong.
+     Written at v0.50 and not caught since, because nothing on this page reads prose against the
+     rows beside it.
+     It now names all three components in the order the card adds them, with the live figures, so
+     the sentence and the equation cannot come apart again: whoever changes one has the other in
+     front of them. The arithmetic, the layout and the balance are untouched — the author asked
+     for the terminology, and this is the terminology. */
   S.genExplainer =
-    "<b>Electricity supplied to the GB transmission system by generators and interconnectors.</b> "
-    + "It includes imports and excludes generation connected below the transmission-system "
-    + "boundary, such as most embedded solar. "
-    + "<b>" + uv(domestic) + " " + U() + " generated in GB "
-    + (k.imports>=0 ? "+ " + uv(Math.abs(k.imports)) + " " + U() + " imported"
-                    : "− " + uv(Math.abs(k.imports)) + " " + U() + " exported")
+    /* ⚠ 57 WORDS ON THE FIRST DRAFT, AND THE SET HAS A CEILING. `explainerLength` holds the
+       eleven tooltips to 635 words between them; this one went 41 → 57 and put the set at 636.
+       The ceiling is not the thing to move — the rule written into that check is that a
+       ceiling raised because COPY CREPT is a ratchet, and one raised because the SET GREW is
+       arithmetic. The set did not grow here. Trimmed to 46 with all three components still
+       named, which was the author's requirement; what went was scaffolding ("Three quantities
+       added together:", "from stations connected to"), not content. */
+    "<b>Everything available to meet GB demand right now.</b> <b>Metered generation</b> on the "
+    + "transmission system, plus <b>estimated embedded generation</b> below it — almost all "
+    + "solar, modelled rather than metered — plus the <b>net flow across the interconnectors</b>. "
+    + "<b>" + uv(meteredMW) + " metered + " + uv(solMW) + " embedded "
+    + (k.imports>=0 ? "+ " + uv(Math.abs(k.imports)) + " imported"
+                    : "− " + uv(Math.abs(k.imports)) + " exported")
     + " = " + uv(total) + " " + U() + ".</b>";
 
   /* ⚠ v0.49: THE THREE DEMAND FIGURES ARE ONE EQUATION AND ARE WRITTEN AS ONE UNIT.
@@ -9111,15 +9246,18 @@ function renderMix(snap){
   /* v0.314: the composition strip now has a small textual summary in the panel header
      area via the existing note, so no extra visual block is needed here. The detailed insight
      band above carries the current generation/wind/solar/import context. */
+  /* v0.76: `key` rides on the row object now. The tooltip looks up a description and a capacity
+     by series key, and the object it is handed was the only thing in the chain that had dropped
+     it — the key was the map's key and nothing else. */
   S.compRows = Object.fromEntries(rowsData.filter(r=>r.mw>0).map(r=>[r.key, {
-    label:r.label, mw:r.mw, pc:r.mw/totalPos*100, est:!!r.est, css:r.css, code:r.code||"" }]));
+    key:r.key, label:r.label, mw:r.mw, pc:r.mw/totalPos*100, est:!!r.est, css:r.css, code:r.code||"" }]));
   /* v0.20: EVERY row, not only the ones with a segment in the strip. The strip can only show
      positive output, so a fuel at zero — or pumped storage while it is pumping, which is
      negative — has no segment and would have had no tooltip. Those are exactly the rows a
      reader is most likely to ask about. `pc` is null rather than 0 for them, because "none of
      the mix" and "not part of this ratio" are different statements. */
   S.mixRows = Object.fromEntries(rowsData.map(r=>[r.key, {
-    label:r.label, mw:r.mw, pc:(r.mw>0 ? r.mw/totalPos*100 : null), est:!!r.est,
+    key:r.key, label:r.label, mw:r.mw, pc:(r.mw>0 ? r.mw/totalPos*100 : null), est:!!r.est,
     css:r.css, code:r.code||"", rank:0 }]));
   rowsData.slice().sort((a,b)=>Math.abs(b.mw)-Math.abs(a.mw))
     .forEach((r,i)=>{ S.mixRows[r.key].rank = i+1; });
@@ -10650,18 +10788,48 @@ function renderFreq(){
   function paint(key){
     setFuelHighlight(key || S.selectedFuel);
   }
+  /* ⚠ v0.76: THE CAPACITY PAIR, AND THE THREE ROWS THAT DO NOT GET IT.
+     Interconnectors take their LINK capacity from `IC_META` — the nameplate figures already on
+     this page since rev 23 — rather than the register's 12,820 MW, and the ratio is labelled as
+     flow against link capacity. They are not a fuel and their "capacity" is a different quantity
+     from a generator's; using one word for both would be the same category error the whole
+     capacity question turns on.
+     Solar gets a sentence instead of a number, for the reason recorded at `FUEL_CAPACITY`.
+     ⚠ THE RATIO USES THE MAGNITUDE. Pumped storage is signed on this page, and a negative
+     percentage of capacity is not a reading anyone can use — while pumping, the meaningful
+     statement is how hard it is pumping against what it could. The direction is already stated
+     by the row above and by the hint at the foot of the tooltip, so it is not lost. */
+  const IC_NAMEPLATE = Object.values(IC_META).reduce((a,m)=>a+(m.capMW||0),0);
+  function capRows(r){
+    if(r.key === "solar")
+      return `<div class="t-row t-hint">GB solar is not BM-registered, so there is no installed-capacity figure on the same basis as the output above.</div>`;
+    const isIC = r.key === "imports";
+    const cap  = isIC ? IC_NAMEPLATE : (FUEL_CAPACITY[r.key] || {}).mw;
+    if(!cap) return "";
+    const pc = Math.abs(r.mw) / cap * 100;
+    const note = isIC ? "" : ((FUEL_CAPACITY[r.key] || {}).note || "");
+    return `<div class="t-row"><span class="n">${isIC ? "Link capacity" : "Installed capacity"}</span>`
+      + `<span class="v">${uv(cap)} ${U()}</span></div>`
+      + `<div class="t-row"><span class="n">${isIC ? "Flow as % of link capacity" : "Output as % of capacity"}</span>`
+      + `<span class="v">${pc.toFixed(1)}%</span></div>`
+      + (note ? `<div class="t-row t-hint">${note}</div>` : "");
+  }
   function body(r){
     const swatch = r.est
       ? `<i class="est" style="background:var(--solar-fill);border:1.5px solid var(--solar-line)"></i>`
       : `<i style="background:var(${r.css})"></i>`;
     const neg = r.mw < 0;
-    return `<div class="t-head">${swatch}${esc(r.label)}</div>` +
+    /* The description leads, because it answers "what is this?" — which is the question a reader
+       who does not already know the fuel arrives with, and the rows below cannot answer it. */
+    const def = SERIES_DEFS[r.key] ? `<div class="t-lede">${SERIES_DEFS[r.key]}</div>` : "";
+    return `<div class="t-head">${swatch}${esc(r.label)}</div>` + def +
       (r.code?`<div class="t-row"><span class="n">Source</span><span class="v ds">${esc(r.code)}</span></div>`:"") +
       `<div class="t-row"><span class="n">Output</span><span class="v">${neg?"−":""}${uv(Math.abs(r.mw))} ${U()}</span></div>` +
       (r.pc!=null
         ? `<div class="t-row"><span class="n">Share of the mix</span><span class="v">${r.pc.toFixed(1)}%</span></div>`
         : `<div class="t-row"><span class="n">Share of the mix</span><span class="v">—</span></div>`) +
       (r.rank ? `<div class="t-row"><span class="n">Rank by size</span><span class="v">${r.rank} of ${S.mixRowCount}</span></div>` : "") +
+      capRows(r) +
       /* Two states the strip cannot show at all, and both are worth a sentence rather than a
          dash: a fuel at zero, and pumped storage while it is consuming rather than generating. */
       (neg ? `<div class="t-row t-hint">Negative — consuming, not generating. Pumped storage does this while it refills.</div>`
@@ -10686,7 +10854,52 @@ function renderFreq(){
       ? ((seg.querySelector && seg.querySelector(".track")) || seg)
       : strip;
     const ar = anchor.getBoundingClientRect();
-    placeTip(tip, wrap, ev.clientX - wr.left, (ar.bottom - wr.top) + 6);
+    /* ⚠ v0.76: IT FLIPS ABOVE THE ROW NOW INSTEAD OF BEING CLAMPED UP INTO IT.
+       These tooltips grew from about 120px to 240–290px when they gained a description and
+       two capacity rows, and `placeTip` resolves an overflow by CLAMPING to the container —
+       which for a tall tooltip on a low row slid it upwards until it covered the row it was
+       describing. Hovering Nuclear put the tooltip's top 48px ABOVE that row's bottom: the
+       reader's pointer was on a row they could no longer see.
+       Below when it fits, above when it does not, which is what every tooltip does and what
+       clamping is a poor substitute for. Clamping stays as the last resort for the case where
+       it fits in neither direction — a very short panel — because a tooltip inside the box is
+       still better than one off the end of it.
+       Only this tooltip is changed. `placeTip` is shared by five charts whose anchor is a
+       pointer position inside a plot rather than a row in a list, and flipping is meaningless
+       there. */
+    /* ⚠ THE FRAME IS THE VIEWPORT, NOT THE PANEL — and that was the actual fault.
+       `placeTip` fits a tooltip inside the box it is given, and the box given here is
+       `#mixhover`: the strip plus the rows, about 340px tall. Once these tooltips grew to
+       240–290px there was no row in that box with 290px beneath it, so every one of them was
+       clamped — slid up until it covered the row the reader was pointing at. Flipping above
+       did not help either, for the same reason in the other direction: the box is barely
+       taller than the tooltip.
+       But nothing requires the tooltip to fit inside `#mixhover`. It is a tooltip; it may
+       overhang the panel, and there is a whole viewport of room below a row two-thirds down a
+       list. Fitted against the VIEWPORT and then converted back into the container's
+       coordinates, it sits 6px under its own row in every case the panel could not hold.
+       ⚠ IT STAYS `position:absolute`. Going `fixed` would frame it against the viewport
+       directly and reintroduce the fault v0.20 fixed here: a fixed tooltip does not travel
+       with the panel, so a page scroll strands it and a scroll handler has to be added to
+       chase it. Absolute positioning with viewport-derived arithmetic gets the placement
+       without the stranding. */
+    const gap = 6, h = tip.offsetHeight, tw = tip.offsetWidth;
+    const vh = window.innerHeight, vw = window.innerWidth, edge = 6;
+    const vBelow = ar.bottom + gap, vAbove = ar.top - h - gap;
+    /* Below if it fits, above if THAT fits, otherwise below anyway. The last branch is not a
+       clamp: moving the tooltip to a viewport edge to make it fit whole would put it far from
+       the row it describes, which is the fault being fixed. Adjacent and overhanging beats
+       fully visible and detached — the reader is looking at the row, so the top of the tooltip
+       is the part they need and the part they get.
+       The `above` branch tests BOTH edges: clearing the top of the viewport is not enough if
+       the result still runs off the bottom, which is the case for an anchor below the fold. */
+    const vTop = (vBelow + h <= vh - edge) ? vBelow
+               : ((vAbove >= edge && vAbove + h <= vh - edge) ? vAbove : vBelow);
+    let vLeft = ev.clientX + 14;
+    if(vLeft + tw > vw - edge) vLeft = ev.clientX - tw - 14;
+    vLeft = Math.max(edge, Math.min(vw - tw - edge, vLeft));
+    tip.style.top  = (vTop  - wr.top)  + "px";
+    tip.style.left = (vLeft - wr.left) + "px";
   }
   function hide(){ tip.classList.remove("show"); paint(null); }
   strip.addEventListener("pointermove", (e)=>show(e,"strip"));
@@ -12220,18 +12433,38 @@ const gMove = (d) => (d == null || !isFinite(d) || Math.abs(d) < 1)
    sentence to drift out of agreement with the card that opened it — and the wording of a signed
    series is exactly the kind of thing that drifts. The card and the tooltip call the SAME
    `moverWording`, so they cannot disagree about whether storage is pumping. */
-const MOVER_DEFS = {
-  nuclear: "<b>Nuclear</b> is the metered output of GB's nuclear stations. It runs close to flat by design, so a movement of any size here is usually a unit coming off or back on rather than a response to price.",
-  biomass: "<b>Biomass</b> is metered generation from plant burning organic fuel — in GB, overwhelmingly Drax. It is counted as low-carbon by this dashboard, following the convention of the source data.",
-  hydro:   "<b>Hydro</b> is metered output from non-pumped hydro schemes. It is a small, steady part of the GB mix and follows rainfall and river flow rather than price.",
-  wind:    "<b>Wind</b> is the current GB wind-generation outturn reported through the live Elexon generation data. It is metered transmission-connected wind; embedded wind is not separately visible.",
-  storage: "<b>Pumped storage</b> is the net position of GB's pumped hydro. A positive figure means the units are generating; a negative figure means they are pumping and drawing from the grid.",
-  imports: "<b>Net imports</b> is the current net electricity flow across GB's interconnectors. Positive means GB is importing more than it exports; negative means GB is a net exporter.",
-  gas:     "<b>Gas</b> is metered output from combined-cycle and open-cycle gas turbines. It is the fuel that usually moves to follow demand, so it is the most frequent occupant of this panel.",
-  other:   "<b>Other</b> is Elexon's residual category — everything that cannot be placed in one of the named fuels, plus coal and oil. It cannot be broken down further; the source defines it circularly.",
-  solar:   "<b>Solar</b> is the current embedded solar-generation estimate used by this dashboard. It is modelled rather than metered through the transmission system, which is why it is kept visually distinct from the metered fuels.",
-  demand:  "<b>Demand</b> is national demand (INDO) — the electricity taken from the transmission system. It is not a fuel, and it is included here because it is one of the largest and most meaningful movements on the system."
+/* ⚠ v0.76: THE MOVERS PANEL BUILDS ON `SERIES_DEFS` RATHER THAN CARRYING ITS OWN DESCRIPTIONS.
+   It used to hold a full description per series. The author then asked for descriptions in the
+   fuel-mix tooltips too, and writing a second set would have put two descriptions of the same
+   fuel in one document — which disagree the first time either is edited. This holds only the
+   part that is genuinely about MOVEMENT, which is this panel's subject and not the mix panel's;
+   the shared sentence carries what the fuel IS. Two of the ten have nothing movement-specific to
+   add and correctly appear here with nothing.
+   Demand is defined here and not in `SERIES_DEFS` because it is not a series in the fuel mix —
+   no row in that panel draws it, so a description there would describe nothing. */
+const MOVER_EXTRA = {
+  nuclear: "",
+  biomass: "",
+  hydro:   "",
+  wind:    "",
+  storage: "",
+  imports: "",
+  gas:     "It is the most frequent occupant of this panel for that reason.",
+  other:   "",
+  solar:   ""
 };
+const MOVER_DEFS = Object.fromEntries(
+  Object.keys(SERIES_DEFS).map(k => [k,
+    /* ⚠ `<b>Label.</b> Sentence`, not `<b>Label</b> — sentence`. The shared descriptions are
+       written to stand alone in the mix tooltip, so they begin with a capital; joining them after
+       a dash gave "Solar — Estimated output…", a capital mid-sentence. Some of them legitimately
+       begin with a proper noun ("GB wind…", "Elexon's residual…"), so lower-casing the first
+       letter here would be wrong as often as it was right. A full stop after the label makes the
+       description its own sentence and the case correct in both places, with no surgery. */
+    "<b>" + (MOVER_META[k] ? MOVER_META[k].label : k) + ".</b> " + SERIES_DEFS[k]
+    + (MOVER_EXTRA[k] ? " " + MOVER_EXTRA[k] : "")]));
+MOVER_DEFS.demand = "<b>Demand.</b> National demand (INDO), the electricity taken from the transmission system. It is not a fuel, and it is here because it is one of the largest and most meaningful movements on the system.";
+
 
 /* The signed series print their level with its sign; everything else prints a plain figure.
    Shared with the card so the two cannot describe the same number differently. */
@@ -13000,6 +13233,19 @@ window.__dash = Object.freeze({ ciBand, ciRead, CI_BANDS, CI_SCALE_MAX, ciScaleP
      and would still only reach the ones a fixture could be made to produce; calling the function
      reaches all of them. They belong on this surface for exactly the reason `lcGreen` does. */
   moverWording, moverLevel, MOVER_META: Object.assign({}, MOVER_META),
+  /* ⚠ v0.76: THE TOOLTIP TABLES, AS COPIES. Four flat tables — the shared descriptions, the
+     capacity register, the date it was taken, and the movers' derived text — exposed for the same
+     reason `CI_BANDS` is: the claims made about them are claims about a TABLE, and reading them
+     through the page would mean opening nine tooltips to check nine rows. Copies rather than
+     references, so nothing here can write to what the page displays.
+     `SERIES_KEYS` rides along because `fuelTooltips` asserts that every capacity key IS a series
+     key — the guarantee that the denominator is grouped by the same mapping as the numerator, and
+     the whole reason that ratio is sayable. Asserting it needs both lists. */
+  SERIES_DEFS: Object.assign({}, SERIES_DEFS),
+  FUEL_CAPACITY: JSON.parse(JSON.stringify(FUEL_CAPACITY)),
+  FUEL_CAPACITY_TAKEN,
+  MOVER_DEFS: Object.assign({}, MOVER_DEFS),
+  SERIES_KEYS: SERIES.map(x=>x.key),
   /* ⚠ v0.74: `priceStats` is here for the same reason `lcGreen` is — the claim being made is
      about the ARITHMETIC, not about the three numbers today's fixture happens to produce. A
      high, a low and a mean are exactly the kind of thing that looks right on any single sample
