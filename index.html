@@ -20,8 +20,8 @@
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v78.png">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v78.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v79.png">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v79.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -29,7 +29,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v78.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v79.png">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -6459,7 +6459,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.78";
+const APP_VERSION = "v0.79";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -9088,6 +9088,13 @@ const MOVER_ICONS = (()=>{
   const wrap = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
     stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
     aria-hidden="true" focusable="false">${d}</svg>`;
+  /* ⚠ v0.79: a SECOND wrapper, and biomass is the only mark that uses it. Eight of the
+     nine marks are 1.7-weight line work; the grain ear is a filled silhouette. This is a
+     deliberate exception, not an oversight — see the biomass comment below for why the
+     stroke idiom could not carry that shape. If a future mark reaches for wrapSolid,
+     that is the moment to ask whether the SET is changing rather than one icon. */
+  const wrapSolid = (d) => `<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"
+    stroke="none" aria-hidden="true" focusable="false">${d}</svg>`;
   return {
     nuclear: wrap(`<circle cx="12" cy="12" r="2.3" fill="currentColor" stroke="none"/>
       <ellipse cx="12" cy="12" rx="9.4" ry="3.9"/>
@@ -9097,31 +9104,42 @@ const MOVER_ICONS = (()=>{
         c0-2-.9-3.6-2.1-5.2-.5 1.1-1.1 1.8-1.9 2.1.5-3.6-.8-7-2.3-9.7Z"/>
       <path d="M12 21.3a3.2 3.2 0 0 1-3.2-3.2c0-1.7 1.3-2.8 2.2-4.2.8 1.1 1.4 1.6 2 2.3.8 1 1.2
         1.5 1.2 1.9a3.2 3.2 0 0 1-2.2 3.2Z"/>`),
-    /* ⚠ v0.78: A PLANT, NOT A POWER STATION. The mark was a chimney with a leaf beside
-       it — seven paths, two subjects, and at 16px a grey smudge whose readable half was the
-       building. It was drawing the STATION rather than the FUEL, which is the odd one out in
-       a set where every other mark draws the thing itself.
-       The author supplied a sheet of six directions and chose the plant/stalk. Redrawn rather
-       than traced: his sheet is filled shapes at large size and this set is 1.7-weight line
-       work on a 24 box, so copying it would have produced the one solid mark among nine.
-       ⚠ TWO LEAF PAIRS AND A TIP, NOT FOUR PAIRS. The sheet shows four, which is right
-       for a filled icon at 64px and fills in at 16 as strokes. Five shapes is what resolves;
-       the silhouette still reads as a stalk because the eye takes the vertical spine and the
-       alternating mass, not the leaf count.
-       Each leaf is two equal arcs between the stem and the tip — a lens, so both edges carry
-       the same curvature and the pair mirrors exactly. Radius 5.3 against a ~6.7 chord makes
-       them thin enough to keep their counters open at 16px; plumper leaves blocked in, which
-       is what the first draft did. Rendered at 64/38/24/19/16 on both grounds before the
-       numbers were kept.
-       The ground line is the set's convention, not decoration: wind ends `M8.9 21h6.2` and
-       solar `M6.4 19h9.6`. A stalk without one floats. */
-    biomass: wrap(`<path d="M12 21V5.80"/>
-      <path d="M8.60 21h6.80"/>
-      <path d="M12.00 17.40 A5.30 5.30 0 0 1 6.90 13.00 A5.30 5.30 0 0 1 12.00 17.40Z"/>
-      <path d="M12.00 17.40 A5.30 5.30 0 0 0 17.10 13.00 A5.30 5.30 0 0 0 12.00 17.40Z"/>
-      <path d="M12.00 12.60 A5.30 5.30 0 0 1 7.30 8.50 A5.30 5.30 0 0 1 12.00 12.60Z"/>
-      <path d="M12.00 12.60 A5.30 5.30 0 0 0 16.70 8.50 A5.30 5.30 0 0 0 12.00 12.60Z"/>
-      <path d="M12.00 9.80 A3.70 3.70 0 0 0 12.00 5.20 A3.70 3.70 0 0 0 12.00 9.80Z"/>`),
+    /* ⚠ v0.79: A GRAIN EAR, FILLED. The v0.78 mark was a plant/stalk — a spine, two leaf
+       pairs and a tip, drawn in the set's stroke idiom. It shipped, and then failed on two
+       counts the author named: at small sizes it read as CANNABIS, and its symmetrical
+       branching structure put it in the same shape family as the atom and the wind turbine,
+       which are the two marks it most needs to be told apart from.
+       ⚠ THE DIAGNOSIS WAS THE MIRROR AXIS, NOT THE LEAF COUNT. Both faults trace to the
+       same property: a vertical spine with mass radiating symmetrically off it. That IS the
+       wind mark's construction, and it is close enough to the atom's radial symmetry to
+       blur at 16px. Thinning it or removing leaves does not help, because the axis survives.
+       Ten refinements were drawn and rendered at 32/24/16/14 on both grounds before any
+       verdict was written — the specimen sheet carries the full record. Four candidates were
+       killed not by illegibility but by a confident WRONG read that the 32px column hid: a
+       fir tree, a mountain range, a crown, and a set of floating punctuation marks. That is
+       the lesson worth keeping — for an icon, judging at the display size is not a final
+       check, it is the only check.
+       ⚠ WHY THIS IS THE ONE FILLED MARK IN THE SET. The stroke idiom cannot carry a grain
+       ear. Outlined, the kernels become eight open lenses around a spine and the counters
+       close up below 24px — rendered, it clots. Filled, the ear is a single dense mass, and
+       that mass IS the silhouette that separates it from the two marks it was colliding
+       with. The exception buys the distinction; it is not decoration. See wrapSolid above.
+       Three kernel pairs, not four: four fills in at 16px. Kernels are pulled tight to the
+       spine (x 6.6 to 17.4 against a 24 box) so the mark stays a NARROW vertical mass —
+       widening them re-introduces the radiating read that started this.
+       ⚠ NO GROUND LINE, DELIBERATELY, and this breaks the set's convention. Wind ends
+       `M8.9 21h6.2` and solar `M6.4 19h9.6`. The stalk mark had one and the author
+       identified it as making the cannabis association worse. The ear does not float
+       without it because the stem runs to y21.4 — the mark is bottom-anchored by its own
+       geometry rather than by a rule under it. */
+    biomass: wrapSolid(`<path d="M10.75 21.4h2.5V14.8h-2.5Z"/>
+      <path d="M12 1.6C14.5 4.3 14.5 6.8 12 6.8C9.5 6.8 9.5 4.3 12 1.6Z"/>
+      <path d="M12 7.6Q10.37 4.21 6.6 4.2Q8.23 7.59 12 7.6Z"/>
+      <path d="M12 7.6Q15.77 7.59 17.4 4.2Q13.63 4.21 12 7.6Z"/>
+      <path d="M12 11.4Q10.37 8.01 6.6 8Q8.23 11.39 12 11.4Z"/>
+      <path d="M12 11.4Q15.77 11.39 17.4 8Q13.63 8.01 12 11.4Z"/>
+      <path d="M12 15.2Q10.37 11.81 6.6 11.8Q8.23 15.19 12 15.2Z"/>
+      <path d="M12 15.2Q15.77 15.19 17.4 11.8Q13.63 11.81 12 15.2Z"/>`),
     hydro: wrap(`<path d="M3.1 4.4h2.3l1.3 12.2H2.1z"/>
       <path d="M18.6 4.4h2.3l1 12.2h-4.6z"/>
       <path d="M5.4 6.6h13.2"/><path d="M5.5 9h13"/>
