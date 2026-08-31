@@ -20,8 +20,8 @@
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v84.png">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v84.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v85.png">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v85.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -29,7 +29,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v84.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v85.png">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -2595,6 +2595,42 @@
   .statcell .v{font-size:15px;font-weight:700;color:var(--ink);margin-top:3px;
                font-variant-numeric:tabular-nums;}
   .statcell .s{font-size:11px;color:var(--ink-dim);margin-top:2px;}
+
+  /* ⚠ v0.85: INDICATED IMBALANCE. Two cells, and the visual separation between them IS the
+     argument — a forecast position and a settled outturn are different claims and must not read
+     as one series. They take the panel's existing stat-cell type scale rather than a new one, so
+     the block reads as part of the frequency panel and not as a second panel wearing its chrome.
+     The rule above it is the same rule `.statrow` uses, for the same reason: this is another
+     supporting band beneath a chart, not a new section. */
+  .imbwrap{margin-top:12px;padding-top:11px;border-top:1px solid var(--grey-line);}
+  .imbgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+  /* ⚠ THE DIVIDER IS LOAD-BEARING, not decoration. It is the only thing on the page saying these
+     two figures come from different datasets and mean different things; a reader who takes them
+     as one series has been misled by the layout. */
+  .imbcell + .imbcell{padding-left:14px;border-left:1px solid var(--grey-line);}
+  .imbcell .k{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+              color:var(--ink-mute);}
+  .imbcell .v{font-size:15px;font-weight:700;color:var(--ink);margin-top:3px;
+              font-variant-numeric:tabular-nums;}
+  .imbcell .s{font-size:11px;color:var(--ink-dim);margin-top:2px;}
+  /* ⚠ LONG AND SHORT ARE NOT COLOUR-CODED, AND THE FIRST DRAFT OF THIS RULE WAS. It gave long a
+     green and short the ink tone, which encodes a value judgement the data does not carry:
+     neither state is a fault, neither is better, and a system that is long is not in trouble. The
+     page already reserves its warn ramp for something being actually wrong, and this would have
+     been the first place a colour meant "this reading is the good one".
+     The WORD is the interpretation. It takes the figure's weight so it scans, and nothing else. */
+  .imbstate{font-weight:700;color:var(--ink);}
+  .imbspark{margin-top:7px;}
+  .imbnote{margin:10px 0 0;font-size:12px;line-height:1.5;color:var(--ink-dim);}
+  .imbnote b{color:var(--ink);}
+  @media (max-width:560px){
+    /* One column on a phone, and the divider becomes a rule ABOVE the second cell — the same
+       separation turned through ninety degrees, because side-by-side is what stops working, not
+       the distinction it was drawing. */
+    .imbgrid{grid-template-columns:minmax(0,1fr);gap:11px;}
+    .imbcell + .imbcell{padding-left:0;border-left:0;padding-top:11px;
+      border-top:1px solid var(--grey-line);}
+  }
 
   .meter{height:6px;border-radius:3px;background:var(--grey-line);margin-top:9px;overflow:hidden;}
   /* The low-carbon meter fills in the CARBON RAMP'S CLEAN END rather than a fuel colour. That
@@ -5707,7 +5743,7 @@
       <div class="label"><button class="labelbtn" id="ndf-info"
         aria-expanded="false">Demand forecast</button></div>
       <div class="value" id="t-ndf"><span class="skeleton">—</span><span class="unit">MW</span></div>
-      <div class="sparkwrap"><svg class="spark" id="ndf-spark" preserveAspectRatio="none"
+      <div class="sparkwrap"><svg class="spark" id="ndf-spark"
         role="img" aria-labelledby="ndf-spark-t"><title id="ndf-spark-t"></title></svg>
         <div class="sparkcap" id="ndf-spark-cap"></div></div>
       <div class="meta" id="t-ndf-meta">Elexon <span class="term ds" data-term="NDF">NDF</span>, national demand</div>
@@ -5721,7 +5757,7 @@
            descriptions of one fuel, at the level of a whole reading. The title carries the
            distinction so a reader never has to open the explainer to find it. -->
       <div class="value" id="t-imb"><span class="skeleton">—</span><span class="unit">MW</span></div>
-      <div class="sparkwrap"><svg class="spark" id="imb-spark" preserveAspectRatio="none"
+      <div class="sparkwrap"><svg class="spark" id="imb-spark"
         role="img" aria-labelledby="imb-spark-t"><title id="imb-spark-t"></title></svg>
         <div class="sparkcap" id="imb-spark-cap"></div></div>
       <div class="meta" id="t-imb-meta">Elexon <span class="term ds" data-term="IMBALNGC">IMBALNGC</span>, national boundary</div>
@@ -5730,7 +5766,7 @@
       <div class="label"><button class="labelbtn" id="mgn-info"
         aria-expanded="false">Demand margin</button></div>
       <div class="value" id="t-mgn"><span class="skeleton">—</span><span class="unit">MW</span></div>
-      <div class="sparkwrap"><svg class="spark" id="mgn-spark" preserveAspectRatio="none"
+      <div class="sparkwrap"><svg class="spark" id="mgn-spark"
         role="img" aria-labelledby="mgn-spark-t"><title id="mgn-spark-t"></title></svg>
         <div class="sparkcap" id="mgn-spark-cap"></div></div>
       <div class="meta" id="t-mgn-meta">Elexon <span class="term ds" data-term="OCNMFD2">OCNMFD2</span>, surplus at peak</div>
@@ -5742,7 +5778,7 @@
       <!-- The same trace the imbalance-price tile carries, for the same reason: the row's
            other members show movement and a bare number here would read as the odd one out.
            The series is already fetched for the figure, so this is a drawing, not a request. -->
-      <div class="sparkwrap"><svg class="spark" id="mid-spark" preserveAspectRatio="none"
+      <div class="sparkwrap"><svg class="spark" id="mid-spark"
         role="img" aria-labelledby="mid-spark-t"><title id="mid-spark-t"></title></svg>
         <div class="sparkcap" id="mid-spark-cap"></div></div>
       <div class="meta" id="t-mid-meta">Elexon <span class="term ds" data-term="MID">MID</span>, volume-weighted across exchanges</div>
@@ -5760,7 +5796,7 @@
            than one replacing the other — the meter is a position on a fixed 0-100% scale, the
            trace is a shape over 24 hours on its own range. The series was already computed for
            the ⓘ popover's low/high/mean sentence, so this adds a drawing, not a request. -->
-      <div class="sparkwrap"><svg class="spark" id="lc-spark" preserveAspectRatio="none"
+      <div class="sparkwrap"><svg class="spark" id="lc-spark"
         role="img" aria-labelledby="lc-spark-t"><title id="lc-spark-t"></title></svg>
         <div class="sparkcap" id="lc-spark-cap"></div></div>
       <div class="meta" id="t-lc-meta">Nuclear + wind + hydro + biomass, of GB generation</div>
@@ -5782,7 +5818,7 @@
       <div class="label"><button class="labelbtn" id="fq-info"
         aria-expanded="false">System frequency</button></div>
       <div class="value" id="t-fq"><span class="skeleton">—</span><span class="unit">Hz</span></div>
-      <div class="sparkwrap"><svg class="spark" id="fq-spark" preserveAspectRatio="none"
+      <div class="sparkwrap"><svg class="spark" id="fq-spark"
         role="img" aria-labelledby="fq-spark-t"><title id="fq-spark-t"></title></svg>
         <div class="sparkcap" id="fq-spark-cap"></div></div>
       <div class="meta" id="t-fq-meta">Elexon <span class="term ds" data-term="FREQ">FREQ</span>, measured every 15 seconds</div>
@@ -5795,7 +5831,7 @@
            other two carry a bar and a band scale. Both now carry a small trace of data the
            page already holds — no new request — so the row reads as one design and the tile
            says which way the number has been moving rather than only where it is now. -->
-      <div class="sparkwrap"><svg class="spark" id="px-spark" preserveAspectRatio="none"
+      <div class="sparkwrap"><svg class="spark" id="px-spark"
         role="img" aria-labelledby="px-spark-t"><title id="px-spark-t"></title></svg>
         <div class="sparkcap" id="px-spark-cap"></div></div>
       <div class="meta" id="t-px-meta">System sell / buy price, latest settled period</div>
@@ -5881,6 +5917,43 @@
                  figure alongside the Hz one above, and without an id it silently kept the
                  hard-coded text — the update was written and had nowhere to land. -->
             <div class="s" id="fq-dev-s">from 50.000 Hz</div></div>
+        </div>
+        <!-- ================= INDICATED IMBALANCE (v0.85) =================
+             ⚠ THE MW FIGURES ARE NOT ON THE Hz AXIS, AND THAT IS THE WHOLE DESIGN. The author's
+             brief, and it is right: the frequency chart above stays the primary visual and the
+             imbalance is CONTEXT beneath it. Plotting megawatts against a hertz axis would assert
+             that one determines the other on the same scale, which is false in a way a reader
+             cannot see — the two are not cause and effect, they are two readings of the same
+             underlying supply/demand position, one forecast by NESO and one measured by
+             instruments, on completely different timescales.
+             ⚠ TWO BLOCKS, NOT ONE SERIES — the author's explicit instruction and the thing most
+             worth protecting here. The left block is IMBALNGC: a FORECAST position in MW for a
+             period that has not happened. The right is settled NIV: an OUTTURN volume in MWh for
+             periods that have. Different datasets, different units, different status. Merged into
+             one trend they would read as a single history of "the imbalance", which is the fault
+             rev 71 found in two descriptions of one fuel, at the level of a whole panel. They sit
+             in separate blocks, each naming its own dataset, and nothing draws a line between
+             them. -->
+        <div class="imbwrap" id="freq-imb">
+          <div class="imbgrid">
+            <div class="imbcell" id="imb-expected">
+              <div class="k">Indicated imbalance <span class="term ds" data-term="IMBALNGC">IMBALNGC</span></div>
+              <div class="v" id="fimb-val">—</div>
+              <div class="s" id="fimb-sub">expected system position</div>
+              <div class="sparkwrap imbspark"><svg class="spark" id="fimb-spark"
+                role="img" aria-labelledby="fimb-spark-t"><title id="fimb-spark-t"></title></svg>
+                <div class="sparkcap" id="fimb-spark-cap"></div></div>
+            </div>
+            <div class="imbcell" id="imb-settled">
+              <div class="k">Settled net imbalance <span class="term ds" data-term="NIV">NIV</span></div>
+              <div class="v" id="fniv-val">—</div>
+              <div class="s" id="fniv-sub">what the position turned out to be</div>
+              <div class="sparkwrap imbspark"><svg class="spark" id="fniv-spark"
+                role="img" aria-labelledby="fniv-spark-t"><title id="fniv-spark-t"></title></svg>
+                <div class="sparkcap" id="fniv-spark-cap"></div></div>
+            </div>
+          </div>
+          <p class="imbnote" id="fimb-note"></p>
         </div>
         <div class="notewrap" id="freq-summary"></div>
       </div>
@@ -6343,7 +6416,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.84";
+const APP_VERSION = "v0.85";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -9948,7 +10021,32 @@ function sparkline(svgEl, capEl, series, opts={}){
     return;
   }
   svgEl.style.display="";
-  const W=150, H=26, pad=3.2;                 // viewBox units; the SVG stretches to the tile
+  /* ⚠ v0.85: TRUE PIXEL SIZE, LIKE EVERY OTHER CHART ON THIS PAGE. Until now the sparkline drew
+     into a fixed 150x26 viewBox and set `preserveAspectRatio="none"`, so the drawing was
+     STRETCHED to whatever width the tile happened to be. Reported by the author as two separate
+     complaints — "the dots look squished" and "the sparklines aren't as sharp as the panel
+     charts" — and they are one fault. Measured at 1440px:
+
+       SVG box  300.8 x 26      viewBox  150 x 26
+       scaleX   2.005           scaleY   1.000
+       a circle of r=2.1 rendered 8.42 x 4.20 px — a 2:1 ellipse
+
+     The softness has the same cause: a declared 1.4px stroke renders 2.8px across and 1.4px down,
+     so the line has no single weight and cannot land on the pixel grid. The panel charts never
+     had either problem because `chartGeom` has always measured the container and drawn at 1:1 —
+     its own comment says why ("otherwise every label, stroke and gap shrinks with the screen").
+     The sparkline was the one chart on the page that never got that treatment.
+
+     ⚠ A ZERO-WIDTH CONTAINER IS SKIPPED, not drawn into. A hidden tile reports a zero box, and
+     stamping a 0-wide viewBox would survive until the next redraw — the same trap `chartGeom`
+     documents, and the reason it returns null rather than guessing a width.
+     ⚠ THIS MAKES THE SPARKLINE RESIZE-DEPENDENT, which the stretched version was not: a fixed
+     viewBox rescales itself for free. The four tile renderers that own sparklines are in
+     `redrawCharts` for exactly that reason. Do not remove them from it. */
+  const box = svgEl.getBoundingClientRect();
+  const W = Math.round(box.width), H = Math.round(box.height) || 26;
+  if(!W) return;
+  const pad = 3.2;
   svgEl.setAttribute("viewBox",`0 0 ${W} ${H}`);
   let lo=Math.min(...vals), hi=Math.max(...vals);
   /* The drawn range always contains the reference line and the band, so a flat series does not
@@ -11017,6 +11115,119 @@ function renderEmissions(){
 /* ============================================================
    SYSTEM FREQUENCY
    ============================================================ */
+/* ============================================================
+   v0.85 — INDICATED IMBALANCE, BENEATH THE FREQUENCY CHART
+
+   ⚠ WHAT THIS SECTION MUST NOT SAY. The two figures here and the frequency above are all
+   readings of one thing — whether GB generation currently exceeds demand or falls short of it —
+   but they are NOT cause and effect, and the prose is written to keep that straight:
+
+     · IMBALNGC is NESO's FORECAST of the position, in MW, for a period that has not happened.
+     · NIV is the SETTLED outturn volume, in MWh, for periods that have.
+     · frequency is the physical response, measured every 15 seconds by instruments.
+
+   A sentence saying "frequency is low because the system is short" would be right often enough
+   to be quoted and wrong on the days it mattered — the imbalance is one input among many, and
+   the response is continuously acted on by the balancing mechanism, which is the whole point of
+   the balancing mechanism. So the prose states what each figure IS and leaves the reader to make
+   the comparison the layout has already put in front of them.
+
+   ⚠ AND THE TWO DATASETS ARE NEVER MERGED. Separate cells, separate labels, separate traces,
+   separate units. The author asked for this explicitly and it is the correct call: a settled MWh
+   volume and a forecast MW position spliced into one series would be a single history of "the
+   imbalance" that no dataset supports.
+   ============================================================ */
+function renderIndicatedImbalance(){
+  const val=$("fimb-val"), sub=$("fimb-sub"), note=$("fimb-note");
+  const nval=$("fniv-val"), nsub=$("fniv-sub");
+  if(!val || !nval) return;
+
+  /* ---- left: the forecast position, from the same publish the tile reads ---- */
+  const rows = S.imbalngc;
+  let expected = null;
+  if(rows === null){
+    val.textContent = "—";
+    if(sub) sub.textContent = "Elexon IMBALNGC — feed unavailable";
+    sparkline($("fimb-spark"), $("fimb-spark-cap"), [], {label:"Indicated imbalance"});
+  } else if(!rows || !rows.length){
+    val.textContent = "—";
+  } else {
+    const hit = nationalRowsNearestNow(rows);
+    if(!hit){ val.textContent = "—"; if(sub) sub.textContent = "No national row near now."; }
+    else {
+      const v = Number(hit.row.imbalance);
+      expected = v;
+      /* ⚠ THE SIGN CONVENTION IS THE SAME ONE THE PRICE TILE ALREADY USES, and it is stated
+         rather than assumed: positive is SHORT (the system needs more), negative is LONG (it has
+         a surplus). Two places on this page name these words and they must agree. */
+      const state = v > 0 ? "SHORT" : v < 0 ? "LONG" : "BALANCED";
+      val.innerHTML = (v > 0 ? "+" : v < 0 ? "−" : "") + uv(Math.abs(v))
+        + ' <span class="unit">MW</span> · <span class="imbstate">' + state + "</span>";
+      if(sub) sub.textContent = "expected position for "
+        + fmtTime(hit.row.startTime) + " · SP" + (hit.row.settlementPeriod ?? "–")
+        + " · published " + fmtTime(hit.publishTime);
+      /* Forward, dashed, marker on the nearest period — the same treatment as the tile, because
+         it is the same claim about the same data. */
+      sparkline($("fimb-spark"), $("fimb-spark-cap"),
+        nationalForwardSeries(rows, "imbalance"),
+        { fmt:(x)=>(x>0?"+":x<0?"−":"")+uv(Math.abs(x)), mid:0, forward:true,
+          label:"Indicated imbalance, remaining horizon" });
+    }
+  }
+
+  /* ---- right: the settled outturn, from the prices feed already in hand ---- */
+  const px = S.px24 || [];
+  const nivRows = px.filter(r => r && Number.isFinite(Number(r.netImbalanceVolume)));
+  let settled = null;
+  if(!nivRows.length){
+    nval.textContent = "—";
+    if(nsub) nsub.textContent = "No settled period has reported a volume yet.";
+    sparkline($("fniv-spark"), $("fniv-spark-cap"), [], {label:"Settled net imbalance"});
+  } else {
+    const last = nivRows[nivRows.length-1];
+    const n = Number(last.netImbalanceVolume);
+    settled = n;
+    const state = n > 0 ? "SHORT" : n < 0 ? "LONG" : "BALANCED";
+    nval.innerHTML = (n > 0 ? "+" : n < 0 ? "−" : "") + num(Math.abs(n),1)
+      + ' <span class="unit">MWh</span> · <span class="imbstate">' + state + "</span>";
+    if(nsub) nsub.textContent = "settled for " + fmtDate(last.startTime)
+      + " SP" + (last.settlementPeriod ?? "–") + " · last " + nivRows.length + " periods below";
+    /* ⚠ SOLID, NOT DASHED, and the marker is on the LAST point. This is history and must look
+       like the page's other history traces — the dashed treatment means "has not happened yet"
+       and using it here would undo the distinction the whole section is built on.
+       `mid:0` because the zero crossing is where the system turned from long to short, which is
+       the one feature of this series a reader is actually looking for. */
+    sparkline($("fniv-spark"), $("fniv-spark-cap"),
+      nivRows.map(r=>Number(r.netImbalanceVolume)),
+      { fmt:(x)=>(x>0?"+":x<0?"−":"")+num(Math.abs(x),0), mid:0,
+        label:"Settled net imbalance volume, last 24 hours" });
+  }
+
+  /* ---- the sentence that keeps the three readings apart ----
+     ⚠ EVERY CLAUSE BELOW IS LOAD-BEARING, and the first draft was half again as long because it
+     said the same thing about the balancing mechanism twice. What must survive any future edit:
+     (1) what each of the three readings IS, (2) that neither long nor short is a fault, (3) that
+     they are different timescales from different sources, and (4) that the imbalance does not set
+     the frequency. Shorten the words, never the list. */
+  if(note){
+    note.innerHTML =
+      "<b>Indicated imbalance is the position NESO expects; net imbalance volume is the position "
+      + "that settled; frequency above is the physical response.</b> <b>Short</b> means the "
+      + "system needs more generation than it has, <b>long</b> means it has a surplus — neither "
+      + "is a fault, and resolving them is what the balancing mechanism is for. "
+      + "⚠ <b>The imbalance does not set the frequency.</b> These are three measurements on three "
+      + "timescales from three sources — a forecast in MW, a settled volume in MWh, and a reading "
+      + "taken every 15 seconds — shown together because they describe the same system, not "
+      + "because one follows from the other."
+      + ((expected != null && settled != null)
+          ? " Right now the forecast and the last settled period "
+            + ((expected > 0) === (settled > 0)
+                ? "point the same way."
+                : "point opposite ways, which is ordinary: they describe different half hours.")
+          : "");
+  }
+}
+
 function renderFreq(){
   const svg=$("freq"), tip=$("freqtip"), box=$("freqbox"), sum=$("freq-summary");
   const pts = (S.freq||[]).filter(r=>r && r.frequency!=null && isFinite(r.frequency) && r.measurementTime)
@@ -12434,6 +12645,11 @@ function render(){
   safeRender("wind", renderWind);
   safeRender("carbon", renderCarbon);
   safeRender("frequency", renderFreq);
+  /* ⚠ v0.85: AFTER `price`, NOT BEFORE. This reads `S.px24`, which `renderPrice` builds — run
+     earlier it would find no settled volumes on the first paint and render its right-hand cell
+     empty until the next refresh. Its own safeRender, like every other renderer, so a feed that
+     throws takes this band down and not the frequency panel above it. */
+  safeRender("indicated imbalance", renderIndicatedImbalance);
   safeRender("emissions", renderEmissions);
   /* ⚠ v0.81: the tile fallbacks write into the seven headline tiles, which exist on the
      dashboard alone — so this passes through the same scope gate as every other renderer
@@ -13583,7 +13799,31 @@ function setExpanded(key){
   requestAnimationFrame(redrawChartsSettled);
 }
 
-function redrawCharts(){ renderStack(); renderPrice(); renderWind(); renderCarbon(); renderFreq(); renderEmissions(); renderICNet(); }
+/* ⚠ v0.85: THE TILE SPARKLINES ARE IN HERE NOW, AND THEY HAVE TO BE.
+   Until v0.85 a sparkline drew into a fixed 150-unit viewBox and was stretched to the tile, which
+   rescales itself on a resize for free — so no tile renderer needed to be in this list, and none
+   was. Drawing at true pixel size buys sharpness and circular dots and costs exactly that: a
+   sparkline is now only correct for the width it was drawn at, and a window resize leaves every
+   one of them stale until something redraws it.
+   ⚠ THE FIRST ATTEMPT ADDED FOUR RENDERERS AND WAS WRONG, and only a measurement said so. The
+   assumption was that `renderPrice`, `renderCarbon` and `renderFreq` — already in this list —
+   carried the price, low-carbon and frequency traces with them. They do not: all three of those
+   sparklines are drawn by `renderTiles`, which is not a chart renderer and was never in here.
+   Resizing 1440 -> 820 and reading the viewBoxes back showed the four new tiles following the
+   window and those three left stale at the old width. **A dependency you reason about is not a
+   dependency you have checked**, and the check took one resize.
+   ⚠ `renderTiles` NEEDS A SNAPSHOT, and is skipped when there is not one yet — a resize before
+   the first successful load has nothing to redraw, which is the same condition `render` guards.
+   ⚠ NOT `render()`. That would re-run every renderer on every resize, including the ones that
+   rebuild whole panels; this list is deliberately the charts alone.
+   ⚠ A harness clause resizes the window and compares each viewBox against its new box width,
+   because this is precisely the dependency that works on the day it is written and breaks
+   silently three releases later. */
+function redrawCharts(){ renderStack(); renderPrice(); renderWind(); renderCarbon(); renderFreq(); renderEmissions(); renderICNet();
+  renderMarketPrice(); renderForecastImbalance(); renderDemandForecast(); renderDemandMargin();
+  const snap = latestSnapshot(); if(snap) renderTiles(snap);
+  /* v0.85: it owns two sparklines, so it belongs here for the same reason the others do. */
+  renderIndicatedImbalance(); }
 /* ⚠ v0.41: THE EXPANDED PANEL NEEDS TWO PASSES, and the reason is ordering, not flakiness.
    A panel's primary chart sizes itself against its siblings — and on two panels those siblings
    are rendered LATER in this very function: the imbalance-price subchart below the 24-hour

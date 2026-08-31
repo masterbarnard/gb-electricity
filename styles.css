@@ -1,4 +1,4 @@
-/* GENERATED from dash/GB_Electricity_v0.84.html (md5 7b8c742be756a3a2cf5949d8792e0dbf) by tools/pages84.mjs — do not edit. */
+/* GENERATED from dash/GB_Electricity_v0.85.html (md5 6d1793470b51045acb8cf19603cff376) by tools/pages85.mjs — do not edit. */
   /* v0.80 (rev 74, Phase 0): the three Inter faces moved to css/fonts.css, their bytes to
      assets/inter-{400,600,700}.woff2 — linked from <head>. The OFL licence notice travels
      with them, as the licence requires. */
@@ -2498,6 +2498,42 @@
   .statcell .v{font-size:15px;font-weight:700;color:var(--ink);margin-top:3px;
                font-variant-numeric:tabular-nums;}
   .statcell .s{font-size:11px;color:var(--ink-dim);margin-top:2px;}
+
+  /* ⚠ v0.85: INDICATED IMBALANCE. Two cells, and the visual separation between them IS the
+     argument — a forecast position and a settled outturn are different claims and must not read
+     as one series. They take the panel's existing stat-cell type scale rather than a new one, so
+     the block reads as part of the frequency panel and not as a second panel wearing its chrome.
+     The rule above it is the same rule `.statrow` uses, for the same reason: this is another
+     supporting band beneath a chart, not a new section. */
+  .imbwrap{margin-top:12px;padding-top:11px;border-top:1px solid var(--grey-line);}
+  .imbgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+  /* ⚠ THE DIVIDER IS LOAD-BEARING, not decoration. It is the only thing on the page saying these
+     two figures come from different datasets and mean different things; a reader who takes them
+     as one series has been misled by the layout. */
+  .imbcell + .imbcell{padding-left:14px;border-left:1px solid var(--grey-line);}
+  .imbcell .k{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+              color:var(--ink-mute);}
+  .imbcell .v{font-size:15px;font-weight:700;color:var(--ink);margin-top:3px;
+              font-variant-numeric:tabular-nums;}
+  .imbcell .s{font-size:11px;color:var(--ink-dim);margin-top:2px;}
+  /* ⚠ LONG AND SHORT ARE NOT COLOUR-CODED, AND THE FIRST DRAFT OF THIS RULE WAS. It gave long a
+     green and short the ink tone, which encodes a value judgement the data does not carry:
+     neither state is a fault, neither is better, and a system that is long is not in trouble. The
+     page already reserves its warn ramp for something being actually wrong, and this would have
+     been the first place a colour meant "this reading is the good one".
+     The WORD is the interpretation. It takes the figure's weight so it scans, and nothing else. */
+  .imbstate{font-weight:700;color:var(--ink);}
+  .imbspark{margin-top:7px;}
+  .imbnote{margin:10px 0 0;font-size:12px;line-height:1.5;color:var(--ink-dim);}
+  .imbnote b{color:var(--ink);}
+  @media (max-width:560px){
+    /* One column on a phone, and the divider becomes a rule ABOVE the second cell — the same
+       separation turned through ninety degrees, because side-by-side is what stops working, not
+       the distinction it was drawing. */
+    .imbgrid{grid-template-columns:minmax(0,1fr);gap:11px;}
+    .imbcell + .imbcell{padding-left:0;border-left:0;padding-top:11px;
+      border-top:1px solid var(--grey-line);}
+  }
 
   .meter{height:6px;border-radius:3px;background:var(--grey-line);margin-top:9px;overflow:hidden;}
   /* The low-carbon meter fills in the CARBON RAMP'S CLEAN END rather than a fuel colour. That
