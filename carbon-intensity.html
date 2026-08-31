@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <!-- GENERATED FILE — do not edit. Produced by tools/pages81.mjs from
      dash/GB_Electricity_v0.81.html (md5 eb42734e61c6953eea8c62def68adc25). Edit the dashboard, re-run the generator. -->
-<html lang="en-GB" data-page="methodology" class="">
+<html lang="en-GB" data-page="carbon-intensity" class="">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Methodology — How GB Electricity Derives Its Live Figures</title>
-<meta name="description" content="How GB Electricity derives each live figure: the UK generation mix, national and underlying demand, embedded solar, interconnector flows, carbon intensity and grid frequency — and what the public data cannot see.">
-<link rel="canonical" href="https://gbelectricity.uk/methodology">
+<title>Carbon Intensity — GB Electricity</title>
+<meta name="description" content="The carbon intensity of GB electricity: grams of CO₂ per kilowatt-hour this half hour, the NESO band it falls in, and how the figure is built from the fuel mix.">
+<link rel="canonical" href="https://gbelectricity.uk/carbon-intensity">
+<!-- ⚠ An Under development page is deliberately kept out of the index. Thin pages indexed
+     across a small site cost the pages that do have content; `follow` keeps the links out of
+     it crawlable. Removing `stub: true` in the generator removes this line and puts the page
+     in the sitemap, in one edit. -->
+<meta name="robots" content="noindex,follow">
 <meta name="generator" content="pages81.mjs — from GB Electricity v0.81">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "name": "Methodology — How GB Electricity Derives Its Live Figures",
-  "url": "https://gbelectricity.uk/methodology",
-  "description": "How GB Electricity derives each live figure: the UK generation mix, national and underlying demand, embedded solar, interconnector flows, carbon intensity and grid frequency — and what the public data cannot see.",
+  "name": "Carbon Intensity — GB Electricity",
+  "url": "https://gbelectricity.uk/carbon-intensity",
+  "description": "The carbon intensity of GB electricity: grams of CO₂ per kilowatt-hour this half hour, the NESO band it falls in, and how the figure is built from the fuel mix.",
   "isPartOf": { "@type": "WebSite", "name": "GB Electricity", "url": "https://gbelectricity.uk/" }
 }
 </script>
-<meta property="og:title" content="Methodology — How GB Electricity Derives Its Live Figures">
-<meta property="og:description" content="How GB Electricity derives each live figure: the UK generation mix, national and underlying demand, embedded solar, interconnector flows, carbon intensity and grid frequency — and what the public data cannot see.">
-<meta property="og:url" content="https://gbelectricity.uk/methodology">
+<meta property="og:title" content="Carbon Intensity — GB Electricity">
+<meta property="og:description" content="The carbon intensity of GB electricity: grams of CO₂ per kilowatt-hour this half hour, the NESO band it falls in, and how the figure is built from the fuel mix.">
+<meta property="og:url" content="https://gbelectricity.uk/carbon-intensity">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="GB Electricity">
 <meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v81.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Methodology — How GB Electricity Derives Its Live Figures">
-<meta name="twitter:description" content="How GB Electricity derives each live figure: the UK generation mix, national and underlying demand, embedded solar, interconnector flows, carbon intensity and grid frequency — and what the public data cannot see.">
+<meta name="twitter:title" content="Carbon Intensity — GB Electricity">
+<meta name="twitter:description" content="The carbon intensity of GB electricity: grams of CO₂ per kilowatt-hour this half hour, the NESO band it falls in, and how the figure is built from the fuel mix.">
 <meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v81.png">
 <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -203,7 +208,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
       <a href="/generation" data-nav="generation">Generation</a>
       <a href="/demand" data-nav="demand">Demand</a>
       <a href="/interconnectors" data-nav="interconnectors">Interconnectors</a>
-      <a href="/carbon-intensity" data-nav="carbon-intensity">Carbon intensity</a>
+      <a href="/carbon-intensity" data-nav="carbon-intensity" aria-current="page">Carbon intensity</a>
       <a href="/system" data-nav="system">System</a>
     </nav>
   </div>
@@ -213,233 +218,20 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
 <main class="wrap page-main" id="main">
   <article class="about page-article">
     <p class="page-crumb"><a href="/">&larr; Live dashboard</a></p>
-    <h1 class="page-h1">Methodology</h1>
-    <p class="page-lede">What each figure on the live dashboard means, how it is derived from the public feeds, and where the data can mislead you.</p>
-    <nav class="page-toc" id="page-nav" tabindex="-1" aria-label="Sections on this page">
-      <div class="k">On this page — 10 sections</div>
-      <ol>
-        <li><a href="#sec-what-this-is">What this is</a></li>
-        <li><a href="#sec-other-is-a-residual-and-cannot-be-broken-dow">&ldquo;Other&rdquo; is a residual, and cannot be broken down</a></li>
-        <li><a href="#sec-embedded-solar-and-why-it-is-drawn-different">Embedded solar, and why it is drawn differently</a></li>
-        <li><a href="#sec-carbon-intensity-and-a-ruler-that-moves">Carbon intensity, and a ruler that moves</a></li>
-        <li><a href="#sec-system-frequency-and-two-limits-that-are-not">System frequency, and two limits that are not the same</a></li>
-        <li><a href="#sec-forecast-convergence-and-the-split">Forecast convergence, and the split</a></li>
-        <li><a href="#sec-why-supply-and-demand-never-quite-match">Why supply and demand never quite match</a></li>
-        <li><a href="#sec-reading-a-figure-that-is-not-there">Reading a figure that is not there</a></li>
-        <li><a href="#sec-how-a-figure-says-where-it-came-from">How a figure says where it came from</a></li>
-        <li><a href="#sec-what-this-deliberately-does-not-show">What this deliberately does not show</a></li>
-      </ol>
-    </nav>
-<h2 id="sec-what-this-is">What this is</h2>
-      <p>
-        A live read of the GB transmission system from Elexon's Insights (BMRS) API — no key, your
-        browser calls Elexon, NESO and Sheffield Solar directly. Every fuel row except solar is
-        <b>BM-metered</b>. Embedded (distribution-connected) generation is invisible to those feeds
-        and surfaces instead as suppressed National Demand: INDO on a sunny afternoon looks
-        implausibly low, and that is <b>the most common misreading of this data</b>. Embedded solar
-        is filled in from PV_Live and counted; embedded wind is not. Biomass counts as low-carbon
-        by UK convention despite being combustion. Pumped storage and interconnectors go negative
-        when pumping or exporting, and are excluded from the low-carbon denominator.
-      </p>
-      <p>
-        <b>Coal is not named as a fuel.</b> Ratcliffe-on-Soar, GB's last coal station, closed on
-        30 September 2024 and <b class="ds">COAL</b> has read 0 every settlement period since. The
-        code stays mapped so a residual could never be dropped silently, and the table still shows
-        the raw zero — but naming it in a label would imply an option the grid no longer has.
-      </p>
+    <h1 class="page-h1">Carbon intensity</h1>
+    <p class="page-lede">How clean the mix is this half hour, and how that number is arrived at.</p>
 
-      
-<h2 id="sec-other-is-a-residual-and-cannot-be-broken-dow">&ldquo;Other&rdquo; is a residual, and cannot be broken down</h2>
-      <p>
-        <b>Other</b> is not a fuel. Elexon's own definition, in the <i>BMRA and SAA Interface
-        Specification</i>, is circular by design: &ldquo;<i>all generation that cannot be placed
-        within any of the other categories.</i>&rdquo; At <b>0.2&ndash;3 GW</b>, peaking in the
-        evening, it can exceed hydro, pumped storage, OCGT, oil and coal put together — not a
-        rounding error.
-      </p>
-      <p>
-        <b>It cannot be decomposed from published data, and this page checked.</b> The feeds that
-        carry these volumes carry no fuel type per BM unit, and the register that does carry one is
-        self-declared at registration, by a different body over a different population — joining
-        them would be inventing a mapping nobody publishes. The usual guesses are worth naming as
-        guesses: waste-to-energy is largely distribution-connected and outside this feed entirely,
-        and Other has never gone negative on a day when pumped storage did, which is not what
-        net-charging batteries would look like.
-      </p>
-
-      
-<h2 id="sec-embedded-solar-and-why-it-is-drawn-different">Embedded solar, and why it is drawn differently</h2>
-      <p>
-        GB solar is almost entirely distribution-connected, so it is absent from every Elexon
-        metered feed. Two sources publish it and they disagree, so <b>which one you are looking at
-        depends on how you opened this page</b> — the solar row names its own source. Read that
-        before quoting a solar figure.
-      </p>
-      <p>
-        <b>Preferred: Sheffield Solar's PV_Live</b>, the recognised measure of total GB PV outturn.
-        <b>In practice, usually Elexon <span class="ds">AGWS</span></b>: PV_Live sends no CORS
-        headers, so a page opened off disk cannot read it and falls back. AGWS is the ENTSO-E B1440
-        flow, published about <b>2h30m late</b>, and has read <b>16&ndash;29% below PV_Live</b> at
-        every half hour compared — treat it as a <b>floor</b>, not a reading.
-      </p>
-      <p>
-        Embedded solar is <b>counted in every total</b>, because it is real generation powering the
-        country, but always drawn as a <b>hatched band</b>, because it is modelled rather than
-        metered. Provenance is carried by the fill, not by leaving real megawatts out of the
-        arithmetic; where both sources are readable, the gap between them is shown rather than
-        reconciled.
-      </p>
-      <p>
-        <b>Underlying demand</b> adds embedded solar back to INDO; <b>embedded wind is not
-        added</b>. NESO publishes an Embedded Wind and Solar dataset, but what it publishes is a
-        <i>forecast</i> rather than a measurement, and folding that into a demand figure would undo
-        the measured-versus-modelled distinction the rest of this page rests on. Those gigawatts
-        stay hidden inside demand: a <b>choice about what this tool is</b>, not an absence of data.
-      </p>
-      <p>
-        Daylight shading and the sunrise/sunset marks are <b>computed</b>, not fetched — NOAA's
-        solar-position algorithm for a PV-weighted GB point (52.4&deg;N, 1.5&deg;W). Sunset across
-        GB spans about 45 minutes end to end, so read them as representative rather than exact.
-      </p>
-
-      
-<h2 id="sec-carbon-intensity-and-a-ruler-that-moves">Carbon intensity, and a ruler that moves</h2>
-      <p>
-        <b>The band names are re-cut every 1 January.</b> As the grid decarbonises NESO lowers the
-        thresholds, so the same reading slides down the scale: 95&nbsp;gCO<sub>2</sub>/kWh was
-        <i>low</i> under 2025's cuts and is <i>moderate</i> under 2026's. The figure did not move —
-        the ruler did. Each reading is banded on <b>the row for the year it belongs to</b>, and the
-        panel says which year it used. The band is computed from the figure rather than read from
-        the API's label, because settlement reruns revise the figure without always recomputing the
-        label; where the two disagree, the panel says so rather than quietly choosing.
-      </p>
-      <p>
-        <b>Half the time the headline number is a forecast.</b> The settled actual for a half hour
-        in progress does not exist yet, so any live carbon figure is a prediction until settlement
-        catches up — hence the <b>actual</b> or <b>forecast</b> chip on the face of the number.
-      </p>
-
-      
-<h2 id="sec-system-frequency-and-two-limits-that-are-not">System frequency, and two limits that are not the same</h2>
-      <p>
-        Frequency is Elexon's <span class="term ds" data-term="FREQ">FREQ</span> dataset at its
-        native <b>15-second</b> resolution — by a wide margin the fastest-moving figure here.
-      </p>
-      <p>
-        The panel draws two pairs of lines, deliberately differently. <b>49.5 and 50.5&nbsp;Hz are
-        statutory</b>: the Electricity Safety, Quality and Continuity Regulations 2002 permit a
-        variation not exceeding 1% either side of the declared frequency, and Grid Code CC.6.1.2
-        restates it. <b>49.8 and 50.2&nbsp;Hz are operational</b> — NESO's own standard, not a
-        legal limit. Drifting outside the operational band is ordinary and happens most hours;
-        leaving the statutory range is not.
-      </p>
-
-      
-<h2 id="sec-forecast-convergence-and-the-split">Forecast convergence, and the split</h2>
-      <p>
-        The wind panel draws <b>three</b> series, all BM-metered wind on one MW axis: outturn, the
-        <b>latest</b> forecast for each settlement period, and the <b>first</b> forecast ever
-        published for it, typically two days ahead. The interesting question is not only how wrong
-        a forecast was but <b>when it stopped being wrong</b>, and the gap between the two dotted
-        lines is that answer. Both vintages are scored on the same periods, so the improvement is
-        like-for-like. Some days the latest forecast is <i>worse</i> than the first, and the panel
-        says so.
-      </p>
-      <p>
-        The <b>onshore / offshore split</b> comes from the same <span class="ds">AGWS</span> call
-        as the fallback solar figure, and carries its own timestamp rather than the chart's,
-        because AGWS lags.
-      </p>
-
-      
-<h2 id="sec-why-supply-and-demand-never-quite-match">Why supply and demand never quite match</h2>
-      <p>
-        The band at the top of the dashboard opens on the gap between supply and demand, because
-        the gap is the interesting part. The two sides are measured at different boundaries, by
-        different datasets, on different cadences, so they disagree by a few hundred megawatts
-        almost all of the time — a fact about measurement, not about the grid running short.
-      </p>
-      <p>
-        <b>Which two figures are compared is the whole correctness of it.</b> The balance compares
-        electricity on the grid with <b>underlying demand</b>, not with National Demand, because
-        both include the same estimate of embedded solar — so it cancels, leaving metered
-        generation plus net imports less national demand, which is a real quantity. Comparing
-        against National Demand would leave the embedded estimate standing in the answer: several
-        gigawatts on a sunny afternoon and <i>nothing at midnight</i>, which is why the wrong
-        pairing looks perfectly correct in an evening screenshot.
-      </p>
-
-      
-<h2 id="sec-reading-a-figure-that-is-not-there">Reading a figure that is not there</h2>
-      <p>
-        Every headline figure is in one of four states, each drawn distinctly:
-      </p>
-      <ul>
-        <li><b>A number</b> — a real reading, at full weight.</li>
-        <li><b>A dash</b> — the figure has not arrived, or the feed did not answer on the last
-          refresh. Hovering says which, and names the feed that failed.</li>
-        <li><b>A number with a clock</b> — a real reading, older than the refresh period it belongs
-          to. The mark carries its age.</li>
-        <li><b>Zero</b> — a genuine zero: a fact about the system, not a gap in the data.</li>
-      </ul>
-      <p>
-        The distinction being protected is the last one: <b>a missing value must never look like a
-        real zero.</b> A dash cannot be read as &ldquo;none&rdquo;, and a zero is never dressed as
-        an absence.
-      </p>
-
-      
-<h2 id="sec-how-a-figure-says-where-it-came-from">How a figure says where it came from</h2>
-      <p>
-        Separately from whether a figure has arrived: what kind of figure it is. Six states, marked
-        the same way everywhere.
-      </p>
-      <ul>
-        <li><b>Measured</b> — BM-metered outturn, and <b>unmarked</b>. Most of this dashboard is
-          measured; the absence of a mark is the statement.</li>
-        <li><b>Estimated</b> — hatched chip and hatched fill: modelled rather than metered.
-          Embedded solar, and the AGWS fallback.</li>
-        <li><b>Forecast</b> — a dashed outline, matching the dashed strokes on the wind and carbon
-          charts.</li>
-        <li><b>Calculated</b> — written as an equation: the terms listed above a rule and the
-          result under an equals sign. Derived from other figures here rather than read from a
-          feed. It carries no colour, because derived is not less trustworthy — and no chip
-          either, because a chip beside an equals sign only repeats it.</li>
-        <li><b>Stale</b> — a clock and an age.</li>
-        <li><b>Unavailable</b> — a struck-through chip and the word. The only mark that reads as a
-          negation, because it is the one state that must never be mistaken for a value.</li>
-      </ul>
-      <p>
-        <b>Where a mark can say it, the prose does not have to.</b>
-      </p>
-
-      
-<h2 id="sec-what-this-deliberately-does-not-show">What this deliberately does not show</h2>
-      <p>
-        <b>Battery storage.</b> Elexon reports storage discharging but not charging, and showing
-        discharge alone would count the same energy twice — once generated, again on the way out.
-        It is left out rather than shown as a half-truth, and is not folded into
-        &ldquo;Other&rdquo;.
-      </p>
-      <p>
-        <b>History.</b> 24 hours of most things, an hour of frequency, nothing further back — a
-        consequence of being one file with no server, not a judgement that history does not matter.
-      </p>
-      <p>
-        <b>Embedded wind</b>, as above, including all three wind series and the onshore/offshore
-        split, which are transmission-metered only.
-      </p>
-      <p>
-        <b>Wind curtailment.</b> No published GB figure exists, and deriving one means reconciling
-        physical notifications, bid-offer acceptances and export limits per unit. That is a
-        research problem rather than a panel, and a number this page could not defend is worse than
-        no number.
-      </p>
-
-      
+      <div class="stub">
+        <div class="stub-k">Under development</div>
+        <p class="stub-lede">This page is not built yet. It will carry the intensity series with its band scale, the forecast against outturn, and the emission factors each fuel contributes — including why imported energy is counted the way it is.</p>
+        <p>The figures it will carry are already live on the
+          <a href="/">dashboard</a>, and how each one is derived is set out on the
+          <a href="/methodology">Methodology page</a>.</p>
+        <p class="stub-feeds"><b>Data it will be built on:</b> The NESO Carbon Intensity API, with Elexon <b class="ds">FUELINST</b> behind the fuel-by-fuel breakdown.</p>
+      </div>
     <nav class="page-next" aria-label="Related pages">
       <a href="/">&larr; Live dashboard</a>
-      <a href="/about">About GB Electricity &rarr;</a>
+      <a href="/interconnectors">Interconnectors &rarr;</a>
     </nav>
   </article>
 </main>

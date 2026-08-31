@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<!-- GENERATED FILE — do not edit. Produced by tools/pages80.mjs from
-     dash/GB_Electricity_v0.80.html (md5 3fd7b6c9a6310e6ec668b1978f2de9d1). Edit the dashboard, re-run the generator. -->
-<html lang="en-GB" data-page="about">
+<!-- GENERATED FILE — do not edit. Produced by tools/pages81.mjs from
+     dash/GB_Electricity_v0.81.html (md5 eb42734e61c6953eea8c62def68adc25). Edit the dashboard, re-run the generator. -->
+<html lang="en-GB" data-page="about" class="">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>About GB Electricity — Data Sources, Licences & Status</title>
 <meta name="description" content="Where GB Electricity’s live UK grid data comes from: Elexon Insights (BMRS), the NESO Carbon Intensity API and Sheffield Solar PV_Live — the endpoints called, the attribution and licences, and the source and status of the project.">
 <link rel="canonical" href="https://gbelectricity.uk/about">
-<meta name="generator" content="pages80.mjs — from GB Electricity v0.80">
+<meta name="generator" content="pages81.mjs — from GB Electricity v0.81">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -24,11 +24,11 @@
 <meta property="og:url" content="https://gbelectricity.uk/about">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v80.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v81.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="About GB Electricity — Data Sources, Licences & Status">
 <meta name="twitter:description" content="Where GB Electricity’s live UK grid data comes from: Elexon Insights (BMRS), the NESO Carbon Intensity API and Sheffield Solar PV_Live — the endpoints called, the attribution and licences, and the source and status of the project.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v80.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v81.png">
 <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" sizes="64x64" href="/favicon.png">
@@ -46,7 +46,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
 <link rel="stylesheet" href="/css/tokens.css">
 <link rel="stylesheet" href="/styles.css">
 <style>
-  /* ---- generated page shell (pages80.mjs) ---- */
+  /* ---- generated page shell (pages81.mjs) ---- */
   /* ⚠ v0.73: BACK TO TOP. Fixed to the corner rather than pinned to the end of the article,
      because a reader wants it at the moment they decide to leave, not after scrolling further to
      find it. 44px minimum on both axes (WCAG 2.5.5's enhanced target, not merely 2.5.8's 24) —
@@ -110,6 +110,72 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
   /* An anchored heading must not land under the sticky masthead. */
   .page-article h2{scroll-margin-top:86px;}
   @media (max-width:620px){ .page-h1{font-size:22px;} }
+
+  /* ---- rev 75: Under development notice ---------------------------------- */
+  /* Quiet on purpose. A stub that shouts is a stub that reads as an error; this states what the
+     page will be and hands the reader somewhere that works today. */
+  .stub{border:1px solid var(--blue-line);background:var(--grey-bg);border-radius:10px;
+    padding:18px 20px;margin:6px 0 8px;max-width:74ch;}
+  .stub-k{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--blue-text);margin-bottom:9px;}
+  .stub-lede{margin:0 0 10px;font-size:15px;line-height:1.6;color:var(--ink);}
+  .stub p{margin:0 0 10px;font-size:14px;line-height:1.6;color:var(--ink-dim);}
+  .stub p:last-child{margin-bottom:0;}
+  .stub-feeds{font-size:13px;}
+  .stub a{color:var(--blue-text);}
+
+  /* ---- rev 75: the Interconnectors page ---------------------------------- */
+  /* The panel is the subject of this page, so it sits at the page's own width rather than the
+     74ch measure that governs prose — a ten-row table capped at a reading measure would waste
+     the width the bars need. The prose below it keeps the measure. */
+  .page-ic .page-main{max-width:1680px;}
+  .page-ic .panel{margin-top:4px;}
+  /* The panel's own head carries an expand button on the dashboard. On a page that is already
+     the expanded view there is nothing to expand into, so it goes — along with the panel's
+     duplicate H2, because the page has an H1 that says the same thing and two headings for one
+     subject is the fault rev 71 and rev 72 both paid for at the level of words. */
+  .page-ic .panel-head .ic-expand{display:none;}
+  .page-ic .panel > .panel-head > h2{position:absolute;width:1px;height:1px;overflow:hidden;
+    clip-path:inset(50%);white-space:nowrap;}
+  .page-ic .ic-prose{max-width:74ch;margin:30px auto 0;}
+  .page-ic .ic-prose.wide{max-width:none;}
+  .page-ic .ic-prose h2{margin:30px 0 8px;font-size:19px;line-height:1.25;color:var(--ink);}
+  .page-ic .ic-prose h2:first-child{margin-top:0;}
+  .page-ic .ic-prose p{margin:0 0 12px;font-size:14.5px;line-height:1.62;color:var(--ink-dim);
+    max-width:74ch;}
+  .page-ic .ic-prose p b, .page-ic .ic-prose li b{color:var(--ink);}
+  .page-ic .ic-prose ul{margin:8px 0 14px;padding-left:18px;max-width:74ch;}
+  .page-ic .ic-prose li{font-size:14.5px;line-height:1.6;margin:0 0 7px;color:var(--ink-dim);}
+  .page-ic .ic-prose a{color:var(--blue-text);}
+  /* A pull-out for the one thing readers most often get wrong. Left rule rather than a box:
+     the page already has a bordered panel and a bordered table, and a third border would make
+     the prose look like more furniture. */
+  .page-ic .ic-note{border-left:3px solid var(--blue-line);padding:2px 0 2px 14px;margin:14px 0 16px;
+    max-width:74ch;}
+  .page-ic .ic-note p{margin:0 0 8px;}
+  .page-ic .ic-note p:last-child{margin-bottom:0;}
+
+  /* The reference table. ⚠ IT SCROLLS INSIDE ITS OWN BOX, never the page: seven columns of link
+     detail cannot fit a 360px phone, and a table that widens the document is the one overflow
+     fault this project has fixed most often. */
+  .ic-ref-wrap{margin:10px 0 6px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    border:1px solid var(--blue-line);border-radius:9px;}
+  .ic-ref{border-collapse:collapse;width:100%;min-width:720px;font-size:13px;}
+  .ic-ref caption{text-align:left;padding:11px 13px 0;font-size:12.5px;color:var(--ink-mute);
+    caption-side:top;}
+  .ic-ref th, .ic-ref td{padding:9px 13px;text-align:left;vertical-align:top;
+    border-bottom:1px solid var(--grey-line);}
+  .ic-ref thead th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+    color:var(--ink-mute);background:var(--grey-bg);white-space:nowrap;}
+  .ic-ref tbody tr:last-child td{border-bottom:none;}
+  .ic-ref td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .ic-ref .lk{font-weight:700;color:var(--ink);white-space:nowrap;}
+  .ic-ref .cc{color:var(--ink-dim);}
+  .ic-ref a{color:var(--blue-text);}
+  @media (max-width:700px){
+    .page-ic .page-main{padding-left:12px;padding-right:12px;}
+    .page-ic .ic-prose h2{font-size:17.5px;}
+  }
 </style>
 </head>
 <body>
@@ -132,6 +198,14 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
       </div>
       <div class="header-actions"></div>
     </div>
+<nav class="mainnav" id="mainnav" aria-label="Sections">
+      <a href="/" data-nav="dashboard">Dashboard</a>
+      <a href="/generation" data-nav="generation">Generation</a>
+      <a href="/demand" data-nav="demand">Demand</a>
+      <a href="/interconnectors" data-nav="interconnectors">Interconnectors</a>
+      <a href="/carbon-intensity" data-nav="carbon-intensity">Carbon intensity</a>
+      <a href="/system" data-nav="system">System</a>
+    </nav>
   </div>
   <hr class="rule">
 </header>
@@ -297,7 +371,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" title="Generated from GB Electricity v0.80">v0.80</span> &middot;
+      <span class="version-label" title="Generated from GB Electricity v0.81">v0.81</span> &middot;
       <a href="/about" class="footer-link">About</a> &middot;
       <a href="/methodology" class="footer-link">Methodology</a>
       <span class="theme-pref" id="theme-pref" role="radiogroup" aria-label="Colour theme">
@@ -312,7 +386,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
 
 <script>
 
-/* ---- generated page runtime (pages80.mjs) — the minimum the static pages
+/* ---- generated page runtime (pages81.mjs) — the minimum the static pages
    need: theme, year, glossary. Everything content-bearing is extracted from
    the dashboard at generation time. ---- */
 const $ = (id)=>document.getElementById(id);
@@ -360,7 +434,7 @@ function applyTheme(pref, persist){
 const copyrightYear = $("copyright-year");
 if(copyrightYear) copyrightYear.textContent = String(new Date().getFullYear());
 
-/* Glossary — extracted verbatim from the dashboard by pages80.mjs. */
+/* Glossary — extracted verbatim from the dashboard by pages81.mjs. */
 const termDefs={
   INDO:"Initial National Demand Outturn — the transmission-system demand figure published by Elexon.",
   DISEBSP:"System Sell Price / System Buy Price — the imbalance price dataset used for the settlement price chart.",

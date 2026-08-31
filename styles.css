@@ -1,4 +1,4 @@
-/* GENERATED from dash/GB_Electricity_v0.80.html (md5 3fd7b6c9a6310e6ec668b1978f2de9d1) by tools/pages80.mjs — do not edit. */
+/* GENERATED from dash/GB_Electricity_v0.81.html (md5 eb42734e61c6953eea8c62def68adc25) by tools/pages81.mjs — do not edit. */
   /* v0.80 (rev 74, Phase 0): the three Inter faces moved to css/fonts.css, their bytes to
      assets/inter-{400,600,700}.woff2 — linked from <head>. The OFL licence notice travels
      with them, as the licence requires. */
@@ -260,6 +260,48 @@
      seven of them read as seven objects rather than one block. */
   /* v0.80 (rev 74, Phase 0): --red-tail and the red-device history moved to css/tokens.css;
      the .rule gradient below still consumes it. */
+  /* ================= SITE NAV (v0.81) =================
+     Six destinations across the top of every page. The treatment is the house one rather than
+     a new invention: quiet ink for the rest, `--blue-text` and a 2px `--blue` underline for the
+     page you are on, which is the same "position states the answer" logic the segmented
+     controls use. NO RED — the red is for structural end caps and the hero accent, and a nav is
+     neither.
+     ⚠ THE UNDERLINE IS ON A ::after, NOT A border-bottom, so the row's height does not change
+     between the current item and the rest — a border on one item only would shift five labels
+     by a pixel and read as a wobble.
+     ⚠ AND THE HIT AREA IS THE FULL ROW HEIGHT. An inline link's hit area is its font metrics,
+     which rev 69 already paid for once; these are inline-flex at a fixed height so the target
+     is the whole cell rather than the text's line box. */
+  .mainnav{display:flex;align-items:stretch;gap:2px;margin:0;padding:0;
+    /* The scroll container at every width — it simply has nothing to scroll on a wide screen.
+       Declaring it once means the phone tier changes padding and fade, not the mechanism. */
+    overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none;
+    /* A flick should land on a destination rather than between two. */
+    scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;}
+  .mainnav::-webkit-scrollbar{display:none;}
+  .mainnav a{position:relative;display:inline-flex;align-items:center;white-space:nowrap;
+    scroll-snap-align:start;
+    height:34px;padding:0 11px;border-radius:6px 6px 0 0;
+    font-family:var(--sans);font-size:13.5px;font-weight:600;letter-spacing:.005em;
+    color:var(--ink-dim);text-decoration:none;
+    transition:color .15s ease,background-color .15s ease;}
+  .mainnav a:hover{color:var(--blue-text);background:var(--grey-bg);}
+  .mainnav a:focus-visible{outline:2px solid var(--blue-text);outline-offset:-2px;}
+  .mainnav a[aria-current="page"]{color:var(--blue-text);font-weight:700;}
+  .mainnav a[aria-current="page"]::after{content:"";position:absolute;left:8px;right:8px;bottom:0;
+    height:2px;background:var(--blue);border-radius:1px 1px 0 0;}
+  /* ⚠ The strip fades at its right edge ONLY while there is more to reach. A permanent fade is a
+     decoration that lies on a wide screen; `animation-timeline:scroll()` would be the tidy way and
+     is not portable yet, so the fade is painted by the container and simply has nowhere to show
+     when the row fits. */
+  @media (max-width:700px){
+    .mainnav{gap:0;
+      -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);
+              mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);}
+    .mainnav a{font-size:13px;padding:0 10px;height:36px;}
+  }
+  @media (max-width:400px){ .mainnav a{padding:0 9px;} }
+
   .rule{border:none;height:2px;margin:0;background:linear-gradient(90deg,
         var(--accent) 0 calc(100% - var(--red-tail)), var(--red) calc(100% - var(--red-tail)) 100%);}
 
@@ -1570,6 +1612,8 @@
      what the expanded view contains. */
   .icnetbox{display:none;position:relative;margin-top:14px;}
   .panel.is-expanded .icnetbox{display:block;}
+  /* v0.81: on /interconnectors the chart is not a disclosure — it is part of the page. */
+  .page-ic .icnetbox{display:block;}
   .icnet-cap{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;font-size:12px;
     color:var(--ink-mute);}
   .icnet-cap b{color:var(--ink);font-weight:700;}
@@ -2921,24 +2965,37 @@
      itself the day one is added. `chartGeom` now measures only the siblings that share the
      chart's column, so the chart claims the height this layout actually leaves it.
      ================================================================================ */
+  /* ⚠ v0.81: THE SAME RULES SERVE THE INTERCONNECTORS PAGE. `/interconnectors` shows this panel
+     as its whole subject, which is the expanded layout by another name — so the page's selector
+     joins these rules rather than copying them. Nine rules copied into a page stylesheet would
+     be nine rules to keep in step, and the copy would be the one that went stale. */
   @media (min-width:1000px){
-    .panel.is-expanded > #ic-body{display:grid;
+    .panel.is-expanded > #ic-body,
+    .page-ic #ic-body{display:grid;
       grid-template-columns:minmax(0,1fr) minmax(0,1fr);
       column-gap:28px;align-items:start;align-content:start;}
-    .panel.is-expanded > #ic-body > #icnet{grid-column:1 / -1;grid-row:1;}
+    .panel.is-expanded > #ic-body > #icnet,
+    .page-ic #ic-body > #icnet{grid-column:1 / -1;grid-row:1;}
     /* ⚠ THE TABLE SPANS EVERY ROW THE RIGHT-HAND COLUMN USES. Placed in row 2 alone, the
        legend, footer, summary and table-view button sat in rows 3 to 6 — which are rows of the
        whole grid, so each one added its height BELOW the table even though column 1 is empty
        there. The panel came out 190px taller than its tallest column. Spanning the table across
        the same five rows makes the two columns two stacks whose heights are compared rather than
        added, which is what a two-column layout is for. */
-    .panel.is-expanded > #ic-body > #icrows{grid-column:1;grid-row:2 / span 5;}
-    .panel.is-expanded > #ic-body > #icnetbox{grid-column:2;grid-row:2;margin-top:15px;}
-    .panel.is-expanded > #ic-body > .legend{grid-column:2;grid-row:3;}
-    .panel.is-expanded > #ic-body > .icfoot{grid-column:2;grid-row:4;}
-    .panel.is-expanded > #ic-body > #ic-summary{grid-column:2;grid-row:5;}
-    .panel.is-expanded > #ic-body > .ictablewrap{grid-column:2;grid-row:6;}
-    .panel.is-expanded > #ic-body > #ictable{grid-column:1 / -1;grid-row:7;}
+    .panel.is-expanded > #ic-body > #icrows,
+    .page-ic #ic-body > #icrows{grid-column:1;grid-row:2 / span 5;}
+    .panel.is-expanded > #ic-body > #icnetbox,
+    .page-ic #ic-body > #icnetbox{grid-column:2;grid-row:2;margin-top:15px;}
+    .panel.is-expanded > #ic-body > .legend,
+    .page-ic #ic-body > .legend{grid-column:2;grid-row:3;}
+    .panel.is-expanded > #ic-body > .icfoot,
+    .page-ic #ic-body > .icfoot{grid-column:2;grid-row:4;}
+    .panel.is-expanded > #ic-body > #ic-summary,
+    .page-ic #ic-body > #ic-summary{grid-column:2;grid-row:5;}
+    .panel.is-expanded > #ic-body > .ictablewrap,
+    .page-ic #ic-body > .ictablewrap{grid-column:2;grid-row:6;}
+    .panel.is-expanded > #ic-body > #ictable,
+    .page-ic #ic-body > #ictable{grid-column:1 / -1;grid-row:7;}
   }
   /* The footer caption. Centred and quiet, because it is the panel's small print — a statement
      that is true on every render and that a returning reader should be able to stop seeing. */
