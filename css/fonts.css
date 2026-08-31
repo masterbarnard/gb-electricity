@@ -1,0 +1,55 @@
+/* ============================================================================
+   INTER — SELF-HOSTED IN assets/, DECLARED HERE  (v0.80, rev 74 Phase 0)
+
+   Inter v5.3.0, Latin subset, three static WOFF2 faces (400 / 600 / 700), served
+   from ../assets/ as files. From v0.43 to v0.79 these faces were inlined in the
+   dashboard as ~97 KB of base64 so the page was one self-contained file; that
+   property was deliberately retired at rev 74 (§5 of the architecture scope —
+   route (a), the author's decision, 31 August 2026), so the bytes now live once
+   in assets/ and are cached across every page of the coming split instead of
+   being re-parsed per document. There is still no Google Fonts link and no CDN:
+   self-hosted was the brief, and files of ours are as self-hosted as base64 was.
+
+   The url() paths are RELATIVE TO THIS FILE, so they resolve from anywhere this
+   sheet is linked — dash/ during development, the site root when deployed.
+
+   `font-display:swap` on every face: the fallback renders immediately and Inter
+   replaces it. The alternative, `block`, hides the numbers for up to three seconds
+   on a slow connection — on a page whose entire purpose is a figure a reader wants
+   right now, invisible text is worse than the wrong text.
+
+   ⚠ ONLY 400, 600 AND 700 EXIST. Ask for 800 and the browser SYNTHESISES a bold by
+   smearing the 700 outlines, which is the exact look that makes a good face read as
+   a cheap one. The harness walks the computed styles to keep every declaration on
+   one of the three.
+
+   ⚠ LICENCE — SIL Open Font License 1.1. Self-hosting is expressly permitted; the
+   licence requires that the copyright notice and licence travel WITH the font, which
+   is what this comment is. It is a condition, not a courtesy.
+
+     Copyright 2016 The Inter Project Authors (https://github.com/rsms/inter)
+     This Font Software is licensed under the SIL Open Font License, Version 1.1.
+     This licence is available with a FAQ at: https://scripts.sil.org/OFL
+
+   ============================================================================ */
+@font-face{
+  font-family:'Inter';
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+  src:url(../assets/inter-400.woff2) format('woff2');
+}
+@font-face{
+  font-family:'Inter';
+  font-style:normal;
+  font-weight:600;
+  font-display:swap;
+  src:url(../assets/inter-600.woff2) format('woff2');
+}
+@font-face{
+  font-family:'Inter';
+  font-style:normal;
+  font-weight:700;
+  font-display:swap;
+  src:url(../assets/inter-700.woff2) format('woff2');
+}
