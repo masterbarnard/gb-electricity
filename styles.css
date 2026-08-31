@@ -1,4 +1,4 @@
-/* GENERATED from dash/GB_Electricity_v0.82.html (md5 c224054c520e5a2275eaed91bb3a2bb9) by tools/pages82.mjs — do not edit. */
+/* GENERATED from dash/GB_Electricity_v0.83.html (md5 d67535259a07e2cf05eb4485a18f15f5) by tools/pages83.mjs — do not edit. */
   /* v0.80 (rev 74, Phase 0): the three Inter faces moved to css/fonts.css, their bytes to
      assets/inter-{400,600,700}.woff2 — linked from <head>. The OFL licence notice travels
      with them, as the licence requires. */
@@ -92,8 +92,13 @@
 
   /* ================= Masthead ================= */
   .masthead{background:var(--surface);position:sticky;top:0;z-index:60;}
+  /* ⚠ v0.83: THE GAP BETWEEN THE TWO MASTHEAD ROWS IS CUT, and the number that matters is the
+     RENDERED gap rather than this padding — the distance on screen is this value plus the nav
+     link's own line-box slack, so the padding alone cannot be read as the answer. Measured
+     after the change and reported in the release notes; the masthead loses the difference in
+     sticky height, which is paid back on every scroll. */
   .header-top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-    padding-top:15px;padding-bottom:11px;}
+    padding-top:15px;padding-bottom:2px;}
   .brand{display:flex;align-items:center;margin-right:auto;min-width:0;}
   /* The brand button inherits the row's whole look — no chrome of its own, because the mark
      and wordmark ARE the affordance. Focus ring for keyboards; the cursor for everyone else. */
@@ -261,6 +266,12 @@
   /* v0.80 (rev 74, Phase 0): --red-tail and the red-device history moved to css/tokens.css;
      the .rule gradient below still consumes it. */
   /* ---- v0.82: the nav row — nav on the left, live status on the right ---- */
+  /* ⚠ v0.83: THE HIERARCHY IS STATED, because the two rows are now close enough to compete.
+     The live status is the page's headline state and already takes `--ink` at 700; the
+     temperature chip is secondary and is dimmed to match the unit switch's weight. Nothing
+     changes SIZE — the page's own rule is that a quiet thing is quiet by size, weight and
+     position, and these two are already quiet by position. */
+  .header-actions .tempchip{color:var(--ink-dim);}
   .navrow{display:flex;align-items:center;gap:16px;}
   /* The nav is the flexible half and the one that scrolls; the status never shrinks, because a
      truncated timestamp is worse than a truncated nav — the nav's items are recoverable by
@@ -310,7 +321,13 @@
   .mainnav::-webkit-scrollbar{display:none;}
   .mainnav a{position:relative;display:inline-flex;align-items:center;white-space:nowrap;
     scroll-snap-align:start;
-    height:34px;padding:0 11px;border-radius:6px 6px 0 0;
+    /* ⚠ v0.83: 34px → 30px, and the height is HALF the spacing problem rather than a size
+       choice. The link centres its text in its own box, so a 34px box put 9px of slack above
+       the text — the reader sees that slack as part of the gap between the two masthead rows,
+       and no amount of padding trimming below the row above could remove it. 30px leaves ~7px,
+       which is what brings the measured text-to-text gap inside the 8–12px target. Desktop
+       only: the coarse-pointer tier keeps 36px, well clear of the 24px WCAG 2.5.8 floor. */
+    height:30px;padding:0 11px;border-radius:6px 6px 0 0;
     font-family:var(--sans);font-size:13.5px;font-weight:600;letter-spacing:.005em;
     color:var(--ink-dim);text-decoration:none;
     transition:color .15s ease,background-color .15s ease;}
@@ -3605,8 +3622,25 @@
     cursor:help;}
   /* STALE. A clock glyph at the figure's own baseline, in the warn tone the live chip already
      uses for the same meaning — so "older than expected" looks the same wherever it appears. */
+  /* ⚠ v0.83: THE FORECAST MARK. Four of the tiles now carry figures that describe a time
+     that has not happened yet, and a forecast presented like a meter reading is the defect
+     class this project names most often. It is deliberately the same component as the age
+     mark — same size, same position, same cursor — because both answer one question ("how
+     much should I trust this number?") and two different treatments for one question is how
+     a reader learns to ignore both. It takes `--ink-mute` rather than `--warn`: a forecast
+     is not a fault, and amber is reserved for something being wrong. */
+  /* ⚠ v0.83: A FIXED SIZE, NOT A RATIO OF THE FIGURE. Both marks were `.38em`, which made them
+     a different size on every figure they annotate — 12.2px on a tile, other values elsewhere —
+     and the type-scale check caught the extra rung that created. `.38em` also contradicted the
+     comment above it: two marks answering one question cannot be "the same size" if each one
+     scales off a different parent. 12px is an existing step and the size the page already uses
+     for every other piece of annotation, so this is one rung fewer, not one more. */
+  .figstate-fc{display:inline-flex;align-items:center;gap:3px;margin-left:6px;
+    font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--ink-mute);
+    vertical-align:middle;white-space:nowrap;cursor:help;}
+  @media (max-width:560px){ .figstate-fc .figstate-fc-t{display:none;} }
   .figstate-age{display:inline-flex;align-items:center;gap:3px;margin-left:6px;
-    font-size:.38em;font-weight:700;letter-spacing:.02em;color:var(--warn);
+    font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--warn);
     vertical-align:middle;white-space:nowrap;cursor:help;}
   .figstate-age svg{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;
     stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}

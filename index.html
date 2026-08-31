@@ -20,8 +20,8 @@
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v82.png">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v82.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v83.png">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v83.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -29,7 +29,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v82.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v83.png">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -189,8 +189,13 @@
 
   /* ================= Masthead ================= */
   .masthead{background:var(--surface);position:sticky;top:0;z-index:60;}
+  /* ⚠ v0.83: THE GAP BETWEEN THE TWO MASTHEAD ROWS IS CUT, and the number that matters is the
+     RENDERED gap rather than this padding — the distance on screen is this value plus the nav
+     link's own line-box slack, so the padding alone cannot be read as the answer. Measured
+     after the change and reported in the release notes; the masthead loses the difference in
+     sticky height, which is paid back on every scroll. */
   .header-top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-    padding-top:15px;padding-bottom:11px;}
+    padding-top:15px;padding-bottom:2px;}
   .brand{display:flex;align-items:center;margin-right:auto;min-width:0;}
   /* The brand button inherits the row's whole look — no chrome of its own, because the mark
      and wordmark ARE the affordance. Focus ring for keyboards; the cursor for everyone else. */
@@ -358,6 +363,12 @@
   /* v0.80 (rev 74, Phase 0): --red-tail and the red-device history moved to css/tokens.css;
      the .rule gradient below still consumes it. */
   /* ---- v0.82: the nav row — nav on the left, live status on the right ---- */
+  /* ⚠ v0.83: THE HIERARCHY IS STATED, because the two rows are now close enough to compete.
+     The live status is the page's headline state and already takes `--ink` at 700; the
+     temperature chip is secondary and is dimmed to match the unit switch's weight. Nothing
+     changes SIZE — the page's own rule is that a quiet thing is quiet by size, weight and
+     position, and these two are already quiet by position. */
+  .header-actions .tempchip{color:var(--ink-dim);}
   .navrow{display:flex;align-items:center;gap:16px;}
   /* The nav is the flexible half and the one that scrolls; the status never shrinks, because a
      truncated timestamp is worse than a truncated nav — the nav's items are recoverable by
@@ -407,7 +418,13 @@
   .mainnav::-webkit-scrollbar{display:none;}
   .mainnav a{position:relative;display:inline-flex;align-items:center;white-space:nowrap;
     scroll-snap-align:start;
-    height:34px;padding:0 11px;border-radius:6px 6px 0 0;
+    /* ⚠ v0.83: 34px → 30px, and the height is HALF the spacing problem rather than a size
+       choice. The link centres its text in its own box, so a 34px box put 9px of slack above
+       the text — the reader sees that slack as part of the gap between the two masthead rows,
+       and no amount of padding trimming below the row above could remove it. 30px leaves ~7px,
+       which is what brings the measured text-to-text gap inside the 8–12px target. Desktop
+       only: the coarse-pointer tier keeps 36px, well clear of the 24px WCAG 2.5.8 floor. */
+    height:30px;padding:0 11px;border-radius:6px 6px 0 0;
     font-family:var(--sans);font-size:13.5px;font-weight:600;letter-spacing:.005em;
     color:var(--ink-dim);text-decoration:none;
     transition:color .15s ease,background-color .15s ease;}
@@ -3702,8 +3719,25 @@
     cursor:help;}
   /* STALE. A clock glyph at the figure's own baseline, in the warn tone the live chip already
      uses for the same meaning — so "older than expected" looks the same wherever it appears. */
+  /* ⚠ v0.83: THE FORECAST MARK. Four of the tiles now carry figures that describe a time
+     that has not happened yet, and a forecast presented like a meter reading is the defect
+     class this project names most often. It is deliberately the same component as the age
+     mark — same size, same position, same cursor — because both answer one question ("how
+     much should I trust this number?") and two different treatments for one question is how
+     a reader learns to ignore both. It takes `--ink-mute` rather than `--warn`: a forecast
+     is not a fault, and amber is reserved for something being wrong. */
+  /* ⚠ v0.83: A FIXED SIZE, NOT A RATIO OF THE FIGURE. Both marks were `.38em`, which made them
+     a different size on every figure they annotate — 12.2px on a tile, other values elsewhere —
+     and the type-scale check caught the extra rung that created. `.38em` also contradicted the
+     comment above it: two marks answering one question cannot be "the same size" if each one
+     scales off a different parent. 12px is an existing step and the size the page already uses
+     for every other piece of annotation, so this is one rung fewer, not one more. */
+  .figstate-fc{display:inline-flex;align-items:center;gap:3px;margin-left:6px;
+    font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--ink-mute);
+    vertical-align:middle;white-space:nowrap;cursor:help;}
+  @media (max-width:560px){ .figstate-fc .figstate-fc-t{display:none;} }
   .figstate-age{display:inline-flex;align-items:center;gap:3px;margin-left:6px;
-    font-size:.38em;font-weight:700;letter-spacing:.02em;color:var(--warn);
+    font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--warn);
     vertical-align:middle;white-space:nowrap;cursor:help;}
   .figstate-age svg{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;
     stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
@@ -4859,14 +4893,15 @@
         </button>
       </div>
       <div class="header-actions">
-        <button class="tempchip" id="tempchip" aria-expanded="false"
-                aria-label="GB average temperature — details" hidden>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
-          </svg>
-          <span class="tval" id="temp-val">—</span><span class="tdelta" id="temp-delta"></span>
-        </button>
+        <!-- ⚠ v0.70: THE THEME SWITCH LEFT THE MASTHEAD, at the author's request. It sat beside
+             the MW/GW control, which is a control over the DATA, and gave equal prominence to a
+             control over the page's appearance — a preference most readers set once, if ever.
+             The page follows the operating system by default now, and the override lives in the
+             footer. Nothing about dark mode itself changed. -->
+        <!-- ⚠ v0.83: THE UNIT SWITCH COMES FIRST, at the author's direction — the row now reads
+             MW · GW · temperature. It puts a CONTROL before a READING, which is the reverse of
+             the nav row beneath it where the live status is a reading; recorded here so a later
+             tidy does not read the order as an accident and "correct" it. -->
         <!-- v0.21: ONE control, not two buttons.
              It was a radiogroup: two buttons, and clicking the one already selected did nothing.
              That is correct for a radiogroup and wrong for something shaped like a switch — half
@@ -4884,11 +4919,14 @@
           <span class="unitbtn is-on" data-unit="MW">MW</span>
           <span class="unitbtn" data-unit="GW">GW</span>
         </button>
-        <!-- ⚠ v0.70: THE THEME SWITCH LEFT THE MASTHEAD, at the author's request. It sat beside
-             the MW/GW control, which is a control over the DATA, and gave equal prominence to a
-             control over the page's appearance — a preference most readers set once, if ever.
-             The page follows the operating system by default now, and the override lives in the
-             footer. Nothing about dark mode itself changed. -->
+        <button class="tempchip" id="tempchip" aria-expanded="false"
+                aria-label="GB average temperature — details" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
+          </svg>
+          <span class="tval" id="temp-val">—</span><span class="tdelta" id="temp-delta"></span>
+        </button>
       </div>
     </div>
     <!-- ⚠ v0.81: THE SITE NAV. Six destinations, authored ONCE here and extracted by
@@ -5461,56 +5499,51 @@
        set and lifting one out would leave a three-tile row above and an orphan below, so the
        whole row went and the adjacency the brief asked for is the one delivered. Say if the
        intent was Carbon intensity alone — that is a different layout, not a smaller edit. -->
-  <section class="grid g-tiles g-tiles-b" aria-label="System condition">
+  <!-- ================= ROW 1 — DEMAND & MARKET =================
+       ⚠ v0.83 (revised on instruction): the author reordered both rows after seeing them on
+       the page. This row is now the DEMAND-AND-PRICE account — what demand is forecast to be,
+       how far the system expects to be out, how much headroom there is, and what the last
+       period traded at — and the row's name moved with its contents. A row keeping a name
+       that describes tiles that have left it is worse than no name at all: the aria-label is
+       read aloud, and "System and market" over four demand figures is a false heading.
+       ⚠ THEY STILL DO NOT ALL DESCRIBE THE SAME MOMENT. Three of these four are forecasts and
+       the market price is a settled outturn, so each tile states its own time and its own
+       quality rather than letting the row make a promise none of them made. -->
+  <section class="grid g-tiles g-tiles-b" aria-label="Demand and market">
     <div class="tile">
-      <div class="label"><button class="labelbtn" id="lc-info"
-        aria-expanded="false">Low-carbon share</button></div>
-      <div class="value" id="t-lc"><span class="skeleton">—</span><span class="unit">%</span></div>
-      <div class="meter"><span id="t-lc-bar" style="width:0%"></span></div>
-      <!-- v0.27: the meter says where the share IS; the sparkline says where it has BEEN. Two
-           different questions and two different marks, which is why the tile carries both rather
-           than one replacing the other — the meter is a position on a fixed 0-100% scale, the
-           trace is a shape over 24 hours on its own range. The series was already computed for
-           the ⓘ popover's low/high/mean sentence, so this adds a drawing, not a request. -->
-      <div class="sparkwrap"><svg class="spark" id="lc-spark" preserveAspectRatio="none"
-        role="img" aria-labelledby="lc-spark-t"><title id="lc-spark-t"></title></svg>
-        <div class="sparkcap" id="lc-spark-cap"></div></div>
-      <div class="meta" id="t-lc-meta">Nuclear + wind + hydro + biomass, of GB generation</div>
-    </div>
-    <div class="tile" id="tile-ci">
-      <div class="label"><button class="labelbtn" id="ci-info"
-        aria-expanded="false">Carbon intensity</button></div>
-      <div class="value" id="t-ci"><span class="skeleton">—</span><span class="unit">gCO<sub>2</sub>/kWh</span></div>
-      <div class="bandscale">
-        <div class="bandtrack" id="ci-track">
-          <span class="fill" id="ci-fill"></span>
-          <span class="bandneedle" id="ci-needle" style="left:0%"></span>
-        </div>
-        <div class="bandlabels" id="ci-labels"></div>
-      </div>
-      <div class="meta" id="t-ci-meta">NESO Carbon Intensity API</div>
+      <div class="label"><button class="labelbtn" id="ndf-info"
+        aria-expanded="false">Demand forecast</button></div>
+      <div class="value" id="t-ndf"><span class="skeleton">—</span><span class="unit">MW</span></div>
+      <div class="meta" id="t-ndf-meta">Elexon <span class="term ds" data-term="NDF">NDF</span>, national demand</div>
     </div>
     <div class="tile">
-      <div class="label"><button class="labelbtn" id="px-info"
-        aria-expanded="false">Imbalance price</button></div>
-      <div class="value" id="t-px"><span class="skeleton">—</span><span class="unit">£/MWh</span></div>
-      <!-- v0.20: the two tiles in this row that had no second element left a gap where the
-           other two carry a bar and a band scale. Both now carry a small trace of data the
-           page already holds — no new request — so the row reads as one design and the tile
-           says which way the number has been moving rather than only where it is now. -->
-      <div class="sparkwrap"><svg class="spark" id="px-spark" preserveAspectRatio="none"
-        role="img" aria-labelledby="px-spark-t"><title id="px-spark-t"></title></svg>
-        <div class="sparkcap" id="px-spark-cap"></div></div>
-      <div class="meta" id="t-px-meta">System sell / buy price, latest settled period</div>
+      <div class="label"><button class="labelbtn" id="imb-info"
+        aria-expanded="false">Forecast imbalance</button></div>
+      <!-- ⚠ NOT "Net imbalance". The row already contains an imbalance PRICE, which settles
+           what happened; this is NESO's forecast of what will. Two tiles saying "imbalance"
+           and meaning one settled and one forecast figure is the fault rev 71 found in two
+           descriptions of one fuel, at the level of a whole reading. The title carries the
+           distinction so a reader never has to open the explainer to find it. -->
+      <div class="value" id="t-imb"><span class="skeleton">—</span><span class="unit">MW</span></div>
+      <div class="meta" id="t-imb-meta">Elexon <span class="term ds" data-term="IMBALNGC">IMBALNGC</span>, national boundary</div>
     </div>
     <div class="tile">
-      <div class="label"><button class="labelbtn" id="fq-info"
-        aria-expanded="false">System frequency</button></div>
-      <div class="value" id="t-fq"><span class="skeleton">—</span><span class="unit">Hz</span></div>
-      <div class="sparkwrap"><svg class="spark" id="fq-spark" preserveAspectRatio="none"
-        role="img" aria-labelledby="fq-spark-t"><title id="fq-spark-t"></title></svg>
-        <div class="sparkcap" id="fq-spark-cap"></div></div>
-      <div class="meta" id="t-fq-meta">Elexon <span class="term ds" data-term="FREQ">FREQ</span>, measured every 15 seconds</div>
+      <div class="label"><button class="labelbtn" id="mgn-info"
+        aria-expanded="false">Demand margin</button></div>
+      <div class="value" id="t-mgn"><span class="skeleton">—</span><span class="unit">MW</span></div>
+      <div class="meta" id="t-mgn-meta">Elexon <span class="term ds" data-term="OCNMFD2">OCNMFD2</span>, surplus at peak</div>
+    </div>
+    <div class="tile">
+      <div class="label"><button class="labelbtn" id="mid-info"
+        aria-expanded="false">Market price</button></div>
+      <div class="value" id="t-mid"><span class="skeleton">—</span><span class="unit">£/MWh</span></div>
+      <!-- The same trace the imbalance-price tile carries, for the same reason: the row's
+           other members show movement and a bare number here would read as the odd one out.
+           The series is already fetched for the figure, so this is a drawing, not a request. -->
+      <div class="sparkwrap"><svg class="spark" id="mid-spark" preserveAspectRatio="none"
+        role="img" aria-labelledby="mid-spark-t"><title id="mid-spark-t"></title></svg>
+        <div class="sparkcap" id="mid-spark-cap"></div></div>
+      <div class="meta" id="t-mid-meta">Elexon <span class="term ds" data-term="MID">MID</span>, volume-weighted across exchanges</div>
     </div>
   </section>
 
@@ -5639,6 +5672,68 @@
   </section>
 
   <!-- ================= CARBON INTENSITY + FREQUENCY ================= -->
+  <!-- ================= ROW 2 — OUTLOOK & ENVIRONMENT =================
+       v0.83 (revised on instruction): the environment pair leads and the two live system
+       readings follow, so the row runs from what the electricity is made of to what the
+       system is doing about it. `g-tiles-b` is the same component as row 1 — this is a second
+       instance of an existing row, not a new card style.
+       ⚠ The name is the author's. Recorded here because two of the four tiles (frequency and
+       the imbalance price) are system readings rather than environmental ones, so the label
+       is broader than a literal reading of its contents; it was kept as given rather than
+       quietly rewritten. -->
+  <section class="grid g-tiles g-tiles-b" aria-label="Outlook and environment">
+    <div class="tile">
+      <div class="label"><button class="labelbtn" id="lc-info"
+        aria-expanded="false">Low-carbon share</button></div>
+      <div class="value" id="t-lc"><span class="skeleton">—</span><span class="unit">%</span></div>
+      <div class="meter"><span id="t-lc-bar" style="width:0%"></span></div>
+      <!-- v0.27: the meter says where the share IS; the sparkline says where it has BEEN. Two
+           different questions and two different marks, which is why the tile carries both rather
+           than one replacing the other — the meter is a position on a fixed 0-100% scale, the
+           trace is a shape over 24 hours on its own range. The series was already computed for
+           the ⓘ popover's low/high/mean sentence, so this adds a drawing, not a request. -->
+      <div class="sparkwrap"><svg class="spark" id="lc-spark" preserveAspectRatio="none"
+        role="img" aria-labelledby="lc-spark-t"><title id="lc-spark-t"></title></svg>
+        <div class="sparkcap" id="lc-spark-cap"></div></div>
+      <div class="meta" id="t-lc-meta">Nuclear + wind + hydro + biomass, of GB generation</div>
+    </div>
+    <div class="tile" id="tile-ci">
+      <div class="label"><button class="labelbtn" id="ci-info"
+        aria-expanded="false">Carbon intensity</button></div>
+      <div class="value" id="t-ci"><span class="skeleton">—</span><span class="unit">gCO<sub>2</sub>/kWh</span></div>
+      <div class="bandscale">
+        <div class="bandtrack" id="ci-track">
+          <span class="fill" id="ci-fill"></span>
+          <span class="bandneedle" id="ci-needle" style="left:0%"></span>
+        </div>
+        <div class="bandlabels" id="ci-labels"></div>
+      </div>
+      <div class="meta" id="t-ci-meta">NESO Carbon Intensity API</div>
+    </div>
+    <div class="tile">
+      <div class="label"><button class="labelbtn" id="fq-info"
+        aria-expanded="false">System frequency</button></div>
+      <div class="value" id="t-fq"><span class="skeleton">—</span><span class="unit">Hz</span></div>
+      <div class="sparkwrap"><svg class="spark" id="fq-spark" preserveAspectRatio="none"
+        role="img" aria-labelledby="fq-spark-t"><title id="fq-spark-t"></title></svg>
+        <div class="sparkcap" id="fq-spark-cap"></div></div>
+      <div class="meta" id="t-fq-meta">Elexon <span class="term ds" data-term="FREQ">FREQ</span>, measured every 15 seconds</div>
+    </div>
+    <div class="tile">
+      <div class="label"><button class="labelbtn" id="px-info"
+        aria-expanded="false">Imbalance price</button></div>
+      <div class="value" id="t-px"><span class="skeleton">—</span><span class="unit">£/MWh</span></div>
+      <!-- v0.20: the two tiles in this row that had no second element left a gap where the
+           other two carry a bar and a band scale. Both now carry a small trace of data the
+           page already holds — no new request — so the row reads as one design and the tile
+           says which way the number has been moving rather than only where it is now. -->
+      <div class="sparkwrap"><svg class="spark" id="px-spark" preserveAspectRatio="none"
+        role="img" aria-labelledby="px-spark-t"><title id="px-spark-t"></title></svg>
+        <div class="sparkcap" id="px-spark-cap"></div></div>
+      <div class="meta" id="t-px-meta">System sell / buy price, latest settled period</div>
+    </div>
+  </section>
+
   <section class="grid g-2a" id="sec-ci-freq">
 
     <div class="panel" id="panel-ci">
@@ -6177,7 +6272,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.82";
+const APP_VERSION = "v0.83";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -6955,6 +7050,13 @@ const figUnavailable = (el, tailHTML, why) =>
 
 /* The clock annotation. Appended to the TAIL rather than the text, so it is outside the
    odometer's character cells and cannot be mistaken for a digit to roll. */
+/* v0.83: "FORECAST" / "D+2" and so on, stated on the figure itself rather than only in the
+   small print beneath it. The label is the caller's, because "for 19:30" and "for 2 Sep" are
+   the same claim at two different resolutions and only the caller knows which it has. */
+function figForecastMark(label, note){
+  return '<span class="figstate-fc" title="' + esc(note || "This figure is a forecast, not an outturn.") + '">'
+    + '<span class="figstate-fc-t">' + esc(label) + '</span></span>';
+}
 function figAgeMark(minutes, note){
   const m = Math.round(minutes);
   const label = m >= 90 ? Math.round(m/60) + "h old" : m + "m old";
@@ -7419,6 +7521,40 @@ async function loadAll(){
        seasonal reference alongside it. A week's window so an early-morning load still finds a
        figure before the day's own value is published. */
     temp    : ()=>getJSON(`/temperature?from=${londonDate(new Date(now-7*86400000))}&to=${today}`),
+    /* ============================================================================
+       v0.83 — FOUR FORWARD-LOOKING FEEDS, and every one of them has a trap that a
+       "take the latest row" reading falls into. All four were probed against the live
+       API before a line of this was written; the numbers below are what came back.
+
+       ⚠ 1. THE LAST ROW IS NEVER THE ANSWER. IMBALNGC and NDF publish a whole FORWARD
+       HORIZON in one go — 67 settlement periods reaching about two days out. The final
+       row is the furthest forecast, not the current one. Measured: `nearestIsLastRow`
+       was false for both. The period nearest NOW has to be selected, not assumed.
+
+       ⚠ 2. IMBALNGC CARRIES EIGHTEEN BOUNDARIES. One publish is 1,206 rows: B1–B17 plus
+       `N`, the national figure. In the probe run they ranged from +6,529 MW (B11) to
+       −2,887 MW (B12) for the SAME half hour. Any row but `N` is a transmission-boundary
+       figure wearing a national label — a plausible number attached to the wrong subject,
+       which is this project's most-repeated defect class. `boundary === "N"` is not a
+       tidy-up; it is the difference between right and wrong.
+
+       ⚠ 3. THE WINDOW IS 45 MINUTES BECAUSE IT IS ENOUGH. Measured: 45 minutes catches
+       exactly one publish of each at 212 KB (IMBALNGC) and 11 KB (NDF); 90 minutes
+       catches three and costs 646 KB for an answer that is identical. This page is read
+       on phones, so the smaller window is the right one and the reason is recorded so a
+       future "make it more robust" widening knows what it is paying.
+       ============================================================================ */
+    /* MID — the market index price. ⚠ TWO PROVIDERS PER PERIOD (APXMIDP and N2EXMIDP),
+       and in the probe run N2EX was reporting price 0 on volume 0 while APX reported
+       £97.92 on 3,744 MWh. "The latest row" would have put £0 on the page. Weighted by
+       traded volume, which gives a silent provider zero weight rather than a zero price. */
+    mid     : ()=>getJSON(`/balancing/pricing/market-index?from=${encodeURIComponent(iso(new Date(now-6*3600*1000)))}&to=${encodeURIComponent(iso(now))}`),
+    imbalngc: ()=>getJSON(`/datasets/IMBALNGC?publishDateTimeFrom=${encodeURIComponent(iso(new Date(now-45*60*1000)))}&publishDateTimeTo=${encodeURIComponent(iso(now))}`),
+    ndf     : ()=>getJSON(`/datasets/NDF?publishDateTimeFrom=${encodeURIComponent(iso(new Date(now-45*60*1000)))}&publishDateTimeTo=${encodeURIComponent(iso(now))}`),
+    /* OCNMFD2 — surplus margin, DAILY and 2 to 14 days ahead. There is no "now" in this
+       dataset at all; the nearest figure it can offer is D+2, so the tile stamps the date
+       it applies to rather than implying it describes this half hour. */
+    ocnmfd2 : ()=>getJSON(`/datasets/OCNMFD2?publishDateTimeFrom=${encodeURIComponent(iso(new Date(now-6*3600*1000)))}&publishDateTimeTo=${encodeURIComponent(iso(now))}`),
     /* Elexon's own view of the Insights API. Status 2 is healthy, 1 degraded, 0 unhealthy.
        Asked on every refresh so the notice appears and clears on its own; deliberately the
        last job in the list, because it is the only one whose failure changes nothing. */
@@ -7731,6 +7867,233 @@ function tickLiveAge(){
   if(dot)  dot.className = "livedot" + (stale ? " stale" : "");
   if(live) live.classList.toggle("stale", stale);
   if(lead) lead.textContent = stale ? "Stale" : "Live";
+}
+
+/* ============================================================================
+   v0.83 — SELECTING THE RIGHT RECORD FROM A FORWARD-LOOKING FEED
+
+   Each helper answers one question — "which row of this publish describes now?" —
+   and each returns null rather than a guess when it cannot. A null renders as
+   "unavailable", which is a state this page already knows how to say; a wrong row
+   renders as a confident number, which it does not.
+   ============================================================================ */
+
+/* The latest publish in a dataset that publishes a whole horizon at once. */
+function latestPublish(rows){
+  const t = (rows||[]).map(r=>r && r.publishTime).filter(Boolean).sort();
+  return t.length ? t[t.length-1] : null;
+}
+/* ⚠ NATIONAL ONLY. See the note in loadAll: IMBALNGC carries B1–B17 alongside `N`, and
+   the boundary rows are a different subject with a similar shape. NDF is national in
+   practice; it is filtered the same way rather than trusted to stay that way. */
+function nationalRowsNearestNow(rows){
+  const pub = latestPublish(rows);
+  if(!pub) return null;
+  const inPub = (rows||[]).filter(r => r && r.publishTime === pub && (r.boundary === "N" || r.boundary == null));
+  if(!inPub.length) return null;
+  const now = Date.now();
+  /* Nearest by absolute distance, not "the last one" and not "the first one after now":
+     a publish that has just landed can begin one period BEHIND the clock, and the row a
+     reader means by "now" is the closest one either side. */
+  let best = null, bestD = Infinity;
+  for(const r of inPub){
+    const t = r.startTime ? new Date(r.startTime).getTime() : NaN;
+    if(!isFinite(t)) continue;
+    const d = Math.abs(t - now);
+    if(d < bestD){ bestD = d; best = r; }
+  }
+  return best ? { row: best, publishTime: pub, aheadMin: Math.round((new Date(best.startTime) - now)/60000) } : null;
+}
+
+/* MID — a VOLUME-WEIGHTED index across providers, for the most recent period that
+   actually traded. ⚠ The zero-volume provider is the whole reason this is weighted:
+   a straight mean of £97.92 and £0.00 is £48.96, a number no one paid. */
+function midNow(rows){
+  const byPeriod = new Map();
+  for(const r of (rows||[])){
+    if(!r || !r.startTime) continue;
+    if(!byPeriod.has(r.startTime)) byPeriod.set(r.startTime, []);
+    byPeriod.get(r.startTime).push(r);
+  }
+  const times = [...byPeriod.keys()].sort();
+  for(let i = times.length - 1; i >= 0; i--){
+    const set = byPeriod.get(times[i]);
+    const vol = set.reduce((a,r)=>a + (Number(r.volume)||0), 0);
+    if(vol <= 0) continue;                       // nothing traded: not a price, so keep looking back
+    const price = set.reduce((a,r)=>a + (Number(r.price)||0) * (Number(r.volume)||0), 0) / vol;
+    return { price, volume: vol, startTime: times[i],
+             settlementPeriod: set[0].settlementPeriod,
+             providers: set.filter(r=>(Number(r.volume)||0) > 0).map(r=>r.dataProvider).sort(),
+             /* Named so the explainer can say which exchanges are IN the figure and which
+                reported nothing — the reader of a blended number is owed its ingredients. */
+             silent: set.filter(r=>!((Number(r.volume)||0) > 0)).map(r=>r.dataProvider).sort() };
+  }
+  return null;
+}
+
+/* OCNMFD2 — daily surplus margin, earliest forecast date in the latest publish. */
+function marginNow(rows){
+  const pub = latestPublish(rows);
+  if(!pub) return null;
+  const inPub = (rows||[]).filter(r => r && r.publishTime === pub && r.forecastDate && r.margin != null);
+  if(!inPub.length) return null;
+  inPub.sort((a,b)=> a.forecastDate < b.forecastDate ? -1 : 1);
+  const r = inPub[0];
+  const days = Math.round((new Date(r.forecastDate + "T12:00:00Z") - Date.now())/86400000);
+  return { margin: Number(r.margin), forecastDate: r.forecastDate, publishTime: pub, daysAhead: days,
+           horizon: { from: inPub[0].forecastDate, to: inPub[inPub.length-1].forecastDate, n: inPub.length } };
+}
+
+/* ============================================================================
+   v0.83 — THE FOUR NEW TILES
+
+   Every one states three things a reader needs and that the old glance band did not:
+   WHAT the figure is of, WHEN it applies to, and WHETHER it has happened yet. Three of
+   the four describe a time in the future, so the third is not optional.
+   ============================================================================ */
+function renderMarketPrice(){
+  const el = $("t-mid"), meta = $("t-mid-meta");
+  const unit = '<span class="unit">£/MWh</span>';
+  const rows = S.mid;
+  if(rows === null){ figUnavailable(el, unit); if(meta) meta.textContent = "Elexon MID — feed unavailable"; S.midExplainer = null; return; }
+  if(!rows || !rows.length){ figLoading(el, unit); return; }
+  const m = midNow(rows);
+  if(!m){
+    /* ⚠ A REAL STATE, NOT AN ERROR. Every provider can report zero volume for a period —
+       it happened in the probe run — and "no trade" is a different thing from "no feed". */
+    figUnavailable(el, unit, "No volume traded in the periods returned, so there is no index price to state.");
+    if(meta) meta.textContent = "Elexon MID · no traded volume";
+    S.midExplainer = null; return;
+  }
+  setFigure(el, money(m.price, 2), unit);
+  /* One point per settlement period that traded, oldest first — the periods with no volume
+     are left OUT rather than drawn as zero, because a zero here would be a price nobody paid
+     and a trace that dips to the axis says something false about the market. */
+  const series = [...new Map((rows||[]).filter(r=>r && r.startTime).map(r=>[r.startTime,null])).keys()]
+    .sort().map(t=>{
+      const set=(rows||[]).filter(r=>r.startTime===t);
+      const v=set.reduce((a,r)=>a+(Number(r.volume)||0),0);
+      return v>0 ? set.reduce((a,r)=>a+(Number(r.price)||0)*(Number(r.volume)||0),0)/v : null;
+    }).filter(x=>x!=null);
+  S.mid24 = series;
+  sparkline($("mid-spark"), $("mid-spark-cap"), series, {
+    mid: 0, fmt:(v)=>money(v,0), label:"Market index price, recent settlement periods" });
+  if(meta){
+    meta.innerHTML = 'Elexon <span class="term ds" data-term="MID">MID</span> · '
+      + esc(m.providers.join(" + ")) + ' · SP' + esc(String(m.settlementPeriod ?? "–"));
+  }
+  const vol = Math.round(m.volume).toLocaleString("en-GB");
+  S.midExplainer =
+    "<b>The volume-weighted price of electricity traded on the day-ahead and within-day "
+    + "exchanges for this settlement period.</b> It is what the market paid, and it is a "
+    + "different question from the imbalance price beside it — that one is what parties pay "
+    + "for being <i>out</i> of balance.<br><br>"
+    + "<b>Two exchanges report a price, and this is both of them weighted by what each "
+    + "actually traded</b> — " + esc(m.providers.join(" and ")) + " on " + vol + " MWh"
+    + (m.silent.length ? ", with " + esc(m.silent.join(" and ")) + " reporting no volume for this period and therefore no weight" : "")
+    + ". ⚠ A straight average of the two would be a number nobody paid: a provider posting "
+    + "£0 on zero volume would halve the price.<br><br>"
+    + "Period beginning " + esc(fmtTime(m.startTime)) + ".";
+}
+
+/* ⚠ THE THREE FORECAST TILES SHARE ONE RENDERER, because they are one shape: a national
+   figure, from the latest publish, for the period nearest now, that has not happened yet.
+   Three copies of this would be three places for the boundary filter to be forgotten. */
+function renderForecastTile(cfg){
+  const el = $(cfg.id), meta = $(cfg.id + "-meta");
+  const unit = '<span class="unit">' + cfg.unit + '</span>';
+  const rows = S[cfg.feed];
+  if(rows === null){ figUnavailable(el, unit); if(meta) meta.textContent = cfg.source + " — feed unavailable"; S[cfg.explainer] = null; return; }
+  if(!rows || !rows.length){ figLoading(el, unit); return; }
+  const hit = nationalRowsNearestNow(rows);
+  if(!hit){ figUnavailable(el, unit, "The latest publish carried no national row for a period near now."); S[cfg.explainer] = null; return; }
+  const v = Number(hit.row[cfg.field]);
+  if(!isFinite(v)){ figUnavailable(el, unit); S[cfg.explainer] = null; return; }
+  const when = fmtTime(hit.row.startTime);
+  setFigure(el, cfg.fmt(v), unit + figForecastMark("for " + when,
+    "A forecast for the settlement period beginning " + when + ", published at "
+    + fmtTime(hit.publishTime) + ". It has not happened yet."));
+  if(meta){
+    meta.innerHTML = cfg.source + ' · published ' + esc(fmtTime(hit.publishTime))
+      + ' · SP' + esc(String(hit.row.settlementPeriod ?? "–"));
+  }
+  S[cfg.explainer] = cfg.explain(v, hit);
+}
+
+function renderDemandForecast(){
+  renderForecastTile({
+    id:"t-ndf", feed:"ndf", field:"demand", unit:"MW",
+    source:'Elexon <span class="term ds" data-term="NDF">NDF</span>',
+    explainer:"ndfExplainer",
+    fmt:(v)=>uv(v),
+    explain:(v,hit)=>
+      "<b>NESO's forecast of national demand for the settlement period beginning "
+      + esc(fmtTime(hit.row.startTime)) + ".</b> National demand is what the transmission "
+      + "system expects to meet — the same boundary as the National demand figure at the top "
+      + "of this page, so the two are directly comparable.<br><br>"
+      + "⚠ <b>It excludes embedded generation</b>, exactly as the outturn figure does. Demand "
+      + "met by rooftop solar never reaches the transmission system and so is never forecast "
+      + "here.<br><br>"
+      + "Published " + esc(fmtTime(hit.publishTime)) + ", "
+      + (hit.aheadMin >= 0 ? esc(String(hit.aheadMin)) + " minutes ahead of now" : "for the period now running")
+      + ". The publish carries a horizon reaching about two days out; this is the period nearest now."
+  });
+}
+
+function renderForecastImbalance(){
+  renderForecastTile({
+    id:"t-imb", feed:"imbalngc", field:"imbalance", unit:"MW",
+    source:'Elexon <span class="term ds" data-term="IMBALNGC">IMBALNGC</span>',
+    explainer:"imbExplainer",
+    /* Signed, and the sign is the content: this is a direction, not a size. */
+    fmt:(v)=>(v > 0 ? "+" : v < 0 ? "−" : "") + uv(Math.abs(v)),
+    explain:(v,hit)=>
+      "<b>NESO's indicated imbalance for the settlement period beginning "
+      + esc(fmtTime(hit.row.startTime)) + " — how far generation is expected to run above or "
+      + "below demand.</b><br><br>"
+      + "⚠ <b>This is a forecast, and it is not the same figure as the imbalance PRICE tile.</b> "
+      + "That one settles what happened; this one says what NESO expects to happen. Two tiles "
+      + "in this row use the word imbalance and they mean different things, which is why this "
+      + "one is stamped with the period it describes.<br><br>"
+      + "⚠ <b>National only.</b> The dataset publishes seventeen transmission-boundary series "
+      + "alongside the national one, and in a single half hour they have ranged from +6,529 MW "
+      + "to −2,887 MW. A boundary figure is a real number about a different subject; this tile "
+      + "reads the national row and nothing else.<br><br>"
+      + "Published " + esc(fmtTime(hit.publishTime)) + "."
+  });
+}
+
+function renderDemandMargin(){
+  const el = $("t-mgn"), meta = $("t-mgn-meta");
+  const unit = '<span class="unit">MW</span>';
+  const rows = S.ocnmfd2;
+  if(rows === null){ figUnavailable(el, unit); if(meta) meta.textContent = "Elexon OCNMFD2 — feed unavailable"; S.mgnExplainer = null; return; }
+  if(!rows || !rows.length){ figLoading(el, unit); return; }
+  const m = marginNow(rows);
+  if(!m){ figUnavailable(el, unit); S.mgnExplainer = null; return; }
+  /* ⚠ THE DATE, NOT A TIME. This dataset has no "now" — its nearest figure is two days out —
+     so the mark states a DATE and the tile never implies it describes this half hour. */
+  const dLabel = "D+" + m.daysAhead;
+  setFigure(el, uv(m.margin), unit + figForecastMark(dLabel,
+    "Surplus margin forecast for " + fmtDate(m.forecastDate + "T12:00:00Z") + ", "
+    + m.daysAhead + " days ahead. This dataset does not publish a figure for today."));
+  if(meta){
+    meta.innerHTML = 'Elexon <span class="term ds" data-term="OCNMFD2">OCNMFD2</span> · for '
+      + esc(fmtDate(m.forecastDate + "T12:00:00Z"));
+  }
+  S.mgnExplainer =
+    "<b>The forecast surplus of available generation over demand at peak, for "
+    + esc(fmtDate(m.forecastDate + "T12:00:00Z")) + ".</b> It is the headroom the system "
+    + "expects to have — the margin between what can be generated and what is expected to be "
+    + "needed.<br><br>"
+    + "⚠ <b>There is no figure for today, and that is the dataset rather than this page.</b> "
+    + "OCNMFD2 forecasts <b>2 to 14 days ahead</b> and publishes one value per day, so the "
+    + "nearest it can offer is " + esc(String(m.daysAhead)) + " days out. The tile is stamped "
+    + "<b>" + esc(dLabel) + "</b> for that reason; it is not a live reading and should not be "
+    + "read beside the frequency tile as though it were.<br><br>"
+    + "This publish covers " + esc(String(m.horizon.n)) + " days, "
+    + esc(fmtDate(m.horizon.from + "T12:00:00Z")) + " to "
+    + esc(fmtDate(m.horizon.to + "T12:00:00Z")) + ".";
 }
 
 function renderStatus(snap){
@@ -11874,6 +12237,12 @@ function render(){
     safeRender("insight", ()=>renderSystemInsight(snap));
     safeRender("mix", ()=>renderMix(snap));
   }
+  /* v0.83: the four new tiles. Each is its own safeRender so a feed that throws takes its
+     own tile down and not the row — the isolation every other renderer already has. */
+  safeRender("market price", renderMarketPrice);
+  safeRender("forecast imbalance", renderForecastImbalance);
+  safeRender("demand forecast", renderDemandForecast);
+  safeRender("demand margin", renderDemandMargin);
   safeRender("temperature", renderTemp);
   safeRender("generation-history", renderStack);
   safeRender("price", renderPrice);
@@ -12667,6 +13036,10 @@ function attachInfoPop(btn, getHTML){
   window.addEventListener("resize", ()=>{ if(open) hide(); });
 }
 attachInfoPop($("px-info"),   ()=>S.pxExplainer);
+attachInfoPop($("mid-info"),  ()=>S.midExplainer);
+attachInfoPop($("imb-info"),  ()=>S.imbExplainer);
+attachInfoPop($("ndf-info"),  ()=>S.ndfExplainer);
+attachInfoPop($("mgn-info"),  ()=>S.mgnExplainer);
 attachInfoPop($("fq-info"),   ()=>S.fqExplainer);
 attachInfoPop($("lc-info"),   ()=>S.lcExplainer);
 attachInfoPop($("ci-info"),   ()=>S.ciExplainer);
@@ -12860,6 +13233,10 @@ document.addEventListener("click",(e)=>{
    CONTEXTUAL DATASET TERMS
    Short, touch-friendly definitions for machine identifiers. */
 const termDefs={
+  MID:"Market Index Data — the volume-weighted price of electricity traded on the GB day-ahead and within-day exchanges for a settlement period. Two providers report; this page weights them by traded volume.",
+  IMBALNGC:"Indicated Imbalance — NESO’s forecast of how far generation will run above or below demand in a settlement period. A forecast, not a settled figure, and published for seventeen transmission boundaries as well as the national one.",
+  NDF:"National Demand Forecast — NESO’s forecast of transmission-system demand. Excludes embedded generation, on the same boundary as the National demand outturn.",
+  OCNMFD2:"Operational Continuous Network Margin Forecast, 2–14 days — the forecast surplus of available generation over demand at peak. Daily, and never for today: the nearest figure it publishes is two days out.",
   INDO:"Initial National Demand Outturn — the transmission-system demand figure published by Elexon.",
   DISEBSP:"System Sell Price / System Buy Price — the imbalance price dataset used for the settlement price chart.",
   INTOUTHH:"Half-hourly interconnector outturn — measured flow into or out of GB.",

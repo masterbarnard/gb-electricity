@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- GENERATED FILE — do not edit. Produced by tools/pages82.mjs from
-     dash/GB_Electricity_v0.82.html (md5 c224054c520e5a2275eaed91bb3a2bb9). Edit the dashboard, re-run the generator. -->
+<!-- GENERATED FILE — do not edit. Produced by tools/pages83.mjs from
+     dash/GB_Electricity_v0.83.html (md5 d67535259a07e2cf05eb4485a18f15f5). Edit the dashboard, re-run the generator. -->
 <html lang="en-GB" data-page="interconnectors" class="page-ic">
 <head>
 <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 <title>GB Interconnectors — Live Flows, Capacity & Every Link Explained</title>
 <meta name="description" content="Live flows on all ten GB electricity interconnectors — France, Norway, Denmark, the Netherlands, Belgium, Ireland and Northern Ireland — with each link’s capacity, route and owner, and an explanation of what decides which way the power runs.">
 <link rel="canonical" href="https://gbelectricity.uk/interconnectors">
-<meta name="generator" content="pages82.mjs — from GB Electricity v0.82">
+<meta name="generator" content="pages83.mjs — from GB Electricity v0.83">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -24,11 +24,11 @@
 <meta property="og:url" content="https://gbelectricity.uk/interconnectors">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v82.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v83.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Interconnectors — Live Flows, Capacity & Every Link Explained">
 <meta name="twitter:description" content="Live flows on all ten GB electricity interconnectors — France, Norway, Denmark, the Netherlands, Belgium, Ireland and Northern Ireland — with each link’s capacity, route and owner, and an explanation of what decides which way the power runs.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v82.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v83.png">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
 <link rel="icon" sizes="48x48 96x96" href="/favicon.ico">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -47,7 +47,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
 <link rel="stylesheet" href="/css/tokens.css">
 <link rel="stylesheet" href="/styles.css">
 <style>
-  /* ---- generated page shell (pages82.mjs) ---- */
+  /* ---- generated page shell (pages83.mjs) ---- */
   /* ⚠ v0.73: BACK TO TOP. Fixed to the corner rather than pinned to the end of the article,
      because a reader wants it at the moment they decide to leave, not after scrolling further to
      find it. 44px minimum on both axes (WCAG 2.5.5's enhanced target, not merely 2.5.8's 24) —
@@ -551,7 +551,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" title="Generated from GB Electricity v0.82">v0.82</span> &middot;
+      <span class="version-label" title="Generated from GB Electricity v0.83">v0.83</span> &middot;
       <a href="/about" class="footer-link">About</a> &middot;
       <a href="/methodology" class="footer-link">Methodology</a>
       <span class="theme-pref" id="theme-pref" role="radiogroup" aria-label="Colour theme">
@@ -587,7 +587,7 @@ window.__GBE_PAGE = "interconnectors";
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.82";
+const APP_VERSION = "v0.83";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -1365,6 +1365,13 @@ const figUnavailable = (el, tailHTML, why) =>
 
 /* The clock annotation. Appended to the TAIL rather than the text, so it is outside the
    odometer's character cells and cannot be mistaken for a digit to roll. */
+/* v0.83: "FORECAST" / "D+2" and so on, stated on the figure itself rather than only in the
+   small print beneath it. The label is the caller's, because "for 19:30" and "for 2 Sep" are
+   the same claim at two different resolutions and only the caller knows which it has. */
+function figForecastMark(label, note){
+  return '<span class="figstate-fc" title="' + esc(note || "This figure is a forecast, not an outturn.") + '">'
+    + '<span class="figstate-fc-t">' + esc(label) + '</span></span>';
+}
 function figAgeMark(minutes, note){
   const m = Math.round(minutes);
   const label = m >= 90 ? Math.round(m/60) + "h old" : m + "m old";
@@ -1829,6 +1836,40 @@ async function loadAll(){
        seasonal reference alongside it. A week's window so an early-morning load still finds a
        figure before the day's own value is published. */
     temp    : ()=>getJSON(`/temperature?from=${londonDate(new Date(now-7*86400000))}&to=${today}`),
+    /* ============================================================================
+       v0.83 — FOUR FORWARD-LOOKING FEEDS, and every one of them has a trap that a
+       "take the latest row" reading falls into. All four were probed against the live
+       API before a line of this was written; the numbers below are what came back.
+
+       ⚠ 1. THE LAST ROW IS NEVER THE ANSWER. IMBALNGC and NDF publish a whole FORWARD
+       HORIZON in one go — 67 settlement periods reaching about two days out. The final
+       row is the furthest forecast, not the current one. Measured: `nearestIsLastRow`
+       was false for both. The period nearest NOW has to be selected, not assumed.
+
+       ⚠ 2. IMBALNGC CARRIES EIGHTEEN BOUNDARIES. One publish is 1,206 rows: B1–B17 plus
+       `N`, the national figure. In the probe run they ranged from +6,529 MW (B11) to
+       −2,887 MW (B12) for the SAME half hour. Any row but `N` is a transmission-boundary
+       figure wearing a national label — a plausible number attached to the wrong subject,
+       which is this project's most-repeated defect class. `boundary === "N"` is not a
+       tidy-up; it is the difference between right and wrong.
+
+       ⚠ 3. THE WINDOW IS 45 MINUTES BECAUSE IT IS ENOUGH. Measured: 45 minutes catches
+       exactly one publish of each at 212 KB (IMBALNGC) and 11 KB (NDF); 90 minutes
+       catches three and costs 646 KB for an answer that is identical. This page is read
+       on phones, so the smaller window is the right one and the reason is recorded so a
+       future "make it more robust" widening knows what it is paying.
+       ============================================================================ */
+    /* MID — the market index price. ⚠ TWO PROVIDERS PER PERIOD (APXMIDP and N2EXMIDP),
+       and in the probe run N2EX was reporting price 0 on volume 0 while APX reported
+       £97.92 on 3,744 MWh. "The latest row" would have put £0 on the page. Weighted by
+       traded volume, which gives a silent provider zero weight rather than a zero price. */
+    mid     : ()=>getJSON(`/balancing/pricing/market-index?from=${encodeURIComponent(iso(new Date(now-6*3600*1000)))}&to=${encodeURIComponent(iso(now))}`),
+    imbalngc: ()=>getJSON(`/datasets/IMBALNGC?publishDateTimeFrom=${encodeURIComponent(iso(new Date(now-45*60*1000)))}&publishDateTimeTo=${encodeURIComponent(iso(now))}`),
+    ndf     : ()=>getJSON(`/datasets/NDF?publishDateTimeFrom=${encodeURIComponent(iso(new Date(now-45*60*1000)))}&publishDateTimeTo=${encodeURIComponent(iso(now))}`),
+    /* OCNMFD2 — surplus margin, DAILY and 2 to 14 days ahead. There is no "now" in this
+       dataset at all; the nearest figure it can offer is D+2, so the tile stamps the date
+       it applies to rather than implying it describes this half hour. */
+    ocnmfd2 : ()=>getJSON(`/datasets/OCNMFD2?publishDateTimeFrom=${encodeURIComponent(iso(new Date(now-6*3600*1000)))}&publishDateTimeTo=${encodeURIComponent(iso(now))}`),
     /* Elexon's own view of the Insights API. Status 2 is healthy, 1 degraded, 0 unhealthy.
        Asked on every refresh so the notice appears and clears on its own; deliberately the
        last job in the list, because it is the only one whose failure changes nothing. */
@@ -2141,6 +2182,233 @@ function tickLiveAge(){
   if(dot)  dot.className = "livedot" + (stale ? " stale" : "");
   if(live) live.classList.toggle("stale", stale);
   if(lead) lead.textContent = stale ? "Stale" : "Live";
+}
+
+/* ============================================================================
+   v0.83 — SELECTING THE RIGHT RECORD FROM A FORWARD-LOOKING FEED
+
+   Each helper answers one question — "which row of this publish describes now?" —
+   and each returns null rather than a guess when it cannot. A null renders as
+   "unavailable", which is a state this page already knows how to say; a wrong row
+   renders as a confident number, which it does not.
+   ============================================================================ */
+
+/* The latest publish in a dataset that publishes a whole horizon at once. */
+function latestPublish(rows){
+  const t = (rows||[]).map(r=>r && r.publishTime).filter(Boolean).sort();
+  return t.length ? t[t.length-1] : null;
+}
+/* ⚠ NATIONAL ONLY. See the note in loadAll: IMBALNGC carries B1–B17 alongside `N`, and
+   the boundary rows are a different subject with a similar shape. NDF is national in
+   practice; it is filtered the same way rather than trusted to stay that way. */
+function nationalRowsNearestNow(rows){
+  const pub = latestPublish(rows);
+  if(!pub) return null;
+  const inPub = (rows||[]).filter(r => r && r.publishTime === pub && (r.boundary === "N" || r.boundary == null));
+  if(!inPub.length) return null;
+  const now = Date.now();
+  /* Nearest by absolute distance, not "the last one" and not "the first one after now":
+     a publish that has just landed can begin one period BEHIND the clock, and the row a
+     reader means by "now" is the closest one either side. */
+  let best = null, bestD = Infinity;
+  for(const r of inPub){
+    const t = r.startTime ? new Date(r.startTime).getTime() : NaN;
+    if(!isFinite(t)) continue;
+    const d = Math.abs(t - now);
+    if(d < bestD){ bestD = d; best = r; }
+  }
+  return best ? { row: best, publishTime: pub, aheadMin: Math.round((new Date(best.startTime) - now)/60000) } : null;
+}
+
+/* MID — a VOLUME-WEIGHTED index across providers, for the most recent period that
+   actually traded. ⚠ The zero-volume provider is the whole reason this is weighted:
+   a straight mean of £97.92 and £0.00 is £48.96, a number no one paid. */
+function midNow(rows){
+  const byPeriod = new Map();
+  for(const r of (rows||[])){
+    if(!r || !r.startTime) continue;
+    if(!byPeriod.has(r.startTime)) byPeriod.set(r.startTime, []);
+    byPeriod.get(r.startTime).push(r);
+  }
+  const times = [...byPeriod.keys()].sort();
+  for(let i = times.length - 1; i >= 0; i--){
+    const set = byPeriod.get(times[i]);
+    const vol = set.reduce((a,r)=>a + (Number(r.volume)||0), 0);
+    if(vol <= 0) continue;                       // nothing traded: not a price, so keep looking back
+    const price = set.reduce((a,r)=>a + (Number(r.price)||0) * (Number(r.volume)||0), 0) / vol;
+    return { price, volume: vol, startTime: times[i],
+             settlementPeriod: set[0].settlementPeriod,
+             providers: set.filter(r=>(Number(r.volume)||0) > 0).map(r=>r.dataProvider).sort(),
+             /* Named so the explainer can say which exchanges are IN the figure and which
+                reported nothing — the reader of a blended number is owed its ingredients. */
+             silent: set.filter(r=>!((Number(r.volume)||0) > 0)).map(r=>r.dataProvider).sort() };
+  }
+  return null;
+}
+
+/* OCNMFD2 — daily surplus margin, earliest forecast date in the latest publish. */
+function marginNow(rows){
+  const pub = latestPublish(rows);
+  if(!pub) return null;
+  const inPub = (rows||[]).filter(r => r && r.publishTime === pub && r.forecastDate && r.margin != null);
+  if(!inPub.length) return null;
+  inPub.sort((a,b)=> a.forecastDate < b.forecastDate ? -1 : 1);
+  const r = inPub[0];
+  const days = Math.round((new Date(r.forecastDate + "T12:00:00Z") - Date.now())/86400000);
+  return { margin: Number(r.margin), forecastDate: r.forecastDate, publishTime: pub, daysAhead: days,
+           horizon: { from: inPub[0].forecastDate, to: inPub[inPub.length-1].forecastDate, n: inPub.length } };
+}
+
+/* ============================================================================
+   v0.83 — THE FOUR NEW TILES
+
+   Every one states three things a reader needs and that the old glance band did not:
+   WHAT the figure is of, WHEN it applies to, and WHETHER it has happened yet. Three of
+   the four describe a time in the future, so the third is not optional.
+   ============================================================================ */
+function renderMarketPrice(){
+  const el = $("t-mid"), meta = $("t-mid-meta");
+  const unit = '<span class="unit">£/MWh</span>';
+  const rows = S.mid;
+  if(rows === null){ figUnavailable(el, unit); if(meta) meta.textContent = "Elexon MID — feed unavailable"; S.midExplainer = null; return; }
+  if(!rows || !rows.length){ figLoading(el, unit); return; }
+  const m = midNow(rows);
+  if(!m){
+    /* ⚠ A REAL STATE, NOT AN ERROR. Every provider can report zero volume for a period —
+       it happened in the probe run — and "no trade" is a different thing from "no feed". */
+    figUnavailable(el, unit, "No volume traded in the periods returned, so there is no index price to state.");
+    if(meta) meta.textContent = "Elexon MID · no traded volume";
+    S.midExplainer = null; return;
+  }
+  setFigure(el, money(m.price, 2), unit);
+  /* One point per settlement period that traded, oldest first — the periods with no volume
+     are left OUT rather than drawn as zero, because a zero here would be a price nobody paid
+     and a trace that dips to the axis says something false about the market. */
+  const series = [...new Map((rows||[]).filter(r=>r && r.startTime).map(r=>[r.startTime,null])).keys()]
+    .sort().map(t=>{
+      const set=(rows||[]).filter(r=>r.startTime===t);
+      const v=set.reduce((a,r)=>a+(Number(r.volume)||0),0);
+      return v>0 ? set.reduce((a,r)=>a+(Number(r.price)||0)*(Number(r.volume)||0),0)/v : null;
+    }).filter(x=>x!=null);
+  S.mid24 = series;
+  sparkline($("mid-spark"), $("mid-spark-cap"), series, {
+    mid: 0, fmt:(v)=>money(v,0), label:"Market index price, recent settlement periods" });
+  if(meta){
+    meta.innerHTML = 'Elexon <span class="term ds" data-term="MID">MID</span> · '
+      + esc(m.providers.join(" + ")) + ' · SP' + esc(String(m.settlementPeriod ?? "–"));
+  }
+  const vol = Math.round(m.volume).toLocaleString("en-GB");
+  S.midExplainer =
+    "<b>The volume-weighted price of electricity traded on the day-ahead and within-day "
+    + "exchanges for this settlement period.</b> It is what the market paid, and it is a "
+    + "different question from the imbalance price beside it — that one is what parties pay "
+    + "for being <i>out</i> of balance.<br><br>"
+    + "<b>Two exchanges report a price, and this is both of them weighted by what each "
+    + "actually traded</b> — " + esc(m.providers.join(" and ")) + " on " + vol + " MWh"
+    + (m.silent.length ? ", with " + esc(m.silent.join(" and ")) + " reporting no volume for this period and therefore no weight" : "")
+    + ". ⚠ A straight average of the two would be a number nobody paid: a provider posting "
+    + "£0 on zero volume would halve the price.<br><br>"
+    + "Period beginning " + esc(fmtTime(m.startTime)) + ".";
+}
+
+/* ⚠ THE THREE FORECAST TILES SHARE ONE RENDERER, because they are one shape: a national
+   figure, from the latest publish, for the period nearest now, that has not happened yet.
+   Three copies of this would be three places for the boundary filter to be forgotten. */
+function renderForecastTile(cfg){
+  const el = $(cfg.id), meta = $(cfg.id + "-meta");
+  const unit = '<span class="unit">' + cfg.unit + '</span>';
+  const rows = S[cfg.feed];
+  if(rows === null){ figUnavailable(el, unit); if(meta) meta.textContent = cfg.source + " — feed unavailable"; S[cfg.explainer] = null; return; }
+  if(!rows || !rows.length){ figLoading(el, unit); return; }
+  const hit = nationalRowsNearestNow(rows);
+  if(!hit){ figUnavailable(el, unit, "The latest publish carried no national row for a period near now."); S[cfg.explainer] = null; return; }
+  const v = Number(hit.row[cfg.field]);
+  if(!isFinite(v)){ figUnavailable(el, unit); S[cfg.explainer] = null; return; }
+  const when = fmtTime(hit.row.startTime);
+  setFigure(el, cfg.fmt(v), unit + figForecastMark("for " + when,
+    "A forecast for the settlement period beginning " + when + ", published at "
+    + fmtTime(hit.publishTime) + ". It has not happened yet."));
+  if(meta){
+    meta.innerHTML = cfg.source + ' · published ' + esc(fmtTime(hit.publishTime))
+      + ' · SP' + esc(String(hit.row.settlementPeriod ?? "–"));
+  }
+  S[cfg.explainer] = cfg.explain(v, hit);
+}
+
+function renderDemandForecast(){
+  renderForecastTile({
+    id:"t-ndf", feed:"ndf", field:"demand", unit:"MW",
+    source:'Elexon <span class="term ds" data-term="NDF">NDF</span>',
+    explainer:"ndfExplainer",
+    fmt:(v)=>uv(v),
+    explain:(v,hit)=>
+      "<b>NESO's forecast of national demand for the settlement period beginning "
+      + esc(fmtTime(hit.row.startTime)) + ".</b> National demand is what the transmission "
+      + "system expects to meet — the same boundary as the National demand figure at the top "
+      + "of this page, so the two are directly comparable.<br><br>"
+      + "⚠ <b>It excludes embedded generation</b>, exactly as the outturn figure does. Demand "
+      + "met by rooftop solar never reaches the transmission system and so is never forecast "
+      + "here.<br><br>"
+      + "Published " + esc(fmtTime(hit.publishTime)) + ", "
+      + (hit.aheadMin >= 0 ? esc(String(hit.aheadMin)) + " minutes ahead of now" : "for the period now running")
+      + ". The publish carries a horizon reaching about two days out; this is the period nearest now."
+  });
+}
+
+function renderForecastImbalance(){
+  renderForecastTile({
+    id:"t-imb", feed:"imbalngc", field:"imbalance", unit:"MW",
+    source:'Elexon <span class="term ds" data-term="IMBALNGC">IMBALNGC</span>',
+    explainer:"imbExplainer",
+    /* Signed, and the sign is the content: this is a direction, not a size. */
+    fmt:(v)=>(v > 0 ? "+" : v < 0 ? "−" : "") + uv(Math.abs(v)),
+    explain:(v,hit)=>
+      "<b>NESO's indicated imbalance for the settlement period beginning "
+      + esc(fmtTime(hit.row.startTime)) + " — how far generation is expected to run above or "
+      + "below demand.</b><br><br>"
+      + "⚠ <b>This is a forecast, and it is not the same figure as the imbalance PRICE tile.</b> "
+      + "That one settles what happened; this one says what NESO expects to happen. Two tiles "
+      + "in this row use the word imbalance and they mean different things, which is why this "
+      + "one is stamped with the period it describes.<br><br>"
+      + "⚠ <b>National only.</b> The dataset publishes seventeen transmission-boundary series "
+      + "alongside the national one, and in a single half hour they have ranged from +6,529 MW "
+      + "to −2,887 MW. A boundary figure is a real number about a different subject; this tile "
+      + "reads the national row and nothing else.<br><br>"
+      + "Published " + esc(fmtTime(hit.publishTime)) + "."
+  });
+}
+
+function renderDemandMargin(){
+  const el = $("t-mgn"), meta = $("t-mgn-meta");
+  const unit = '<span class="unit">MW</span>';
+  const rows = S.ocnmfd2;
+  if(rows === null){ figUnavailable(el, unit); if(meta) meta.textContent = "Elexon OCNMFD2 — feed unavailable"; S.mgnExplainer = null; return; }
+  if(!rows || !rows.length){ figLoading(el, unit); return; }
+  const m = marginNow(rows);
+  if(!m){ figUnavailable(el, unit); S.mgnExplainer = null; return; }
+  /* ⚠ THE DATE, NOT A TIME. This dataset has no "now" — its nearest figure is two days out —
+     so the mark states a DATE and the tile never implies it describes this half hour. */
+  const dLabel = "D+" + m.daysAhead;
+  setFigure(el, uv(m.margin), unit + figForecastMark(dLabel,
+    "Surplus margin forecast for " + fmtDate(m.forecastDate + "T12:00:00Z") + ", "
+    + m.daysAhead + " days ahead. This dataset does not publish a figure for today."));
+  if(meta){
+    meta.innerHTML = 'Elexon <span class="term ds" data-term="OCNMFD2">OCNMFD2</span> · for '
+      + esc(fmtDate(m.forecastDate + "T12:00:00Z"));
+  }
+  S.mgnExplainer =
+    "<b>The forecast surplus of available generation over demand at peak, for "
+    + esc(fmtDate(m.forecastDate + "T12:00:00Z")) + ".</b> It is the headroom the system "
+    + "expects to have — the margin between what can be generated and what is expected to be "
+    + "needed.<br><br>"
+    + "⚠ <b>There is no figure for today, and that is the dataset rather than this page.</b> "
+    + "OCNMFD2 forecasts <b>2 to 14 days ahead</b> and publishes one value per day, so the "
+    + "nearest it can offer is " + esc(String(m.daysAhead)) + " days out. The tile is stamped "
+    + "<b>" + esc(dLabel) + "</b> for that reason; it is not a live reading and should not be "
+    + "read beside the frequency tile as though it were.<br><br>"
+    + "This publish covers " + esc(String(m.horizon.n)) + " days, "
+    + esc(fmtDate(m.horizon.from + "T12:00:00Z")) + " to "
+    + esc(fmtDate(m.horizon.to + "T12:00:00Z")) + ".";
 }
 
 function renderStatus(snap){
@@ -6284,6 +6552,12 @@ function render(){
     safeRender("insight", ()=>renderSystemInsight(snap));
     safeRender("mix", ()=>renderMix(snap));
   }
+  /* v0.83: the four new tiles. Each is its own safeRender so a feed that throws takes its
+     own tile down and not the row — the isolation every other renderer already has. */
+  safeRender("market price", renderMarketPrice);
+  safeRender("forecast imbalance", renderForecastImbalance);
+  safeRender("demand forecast", renderDemandForecast);
+  safeRender("demand margin", renderDemandMargin);
   safeRender("temperature", renderTemp);
   safeRender("generation-history", renderStack);
   safeRender("price", renderPrice);
@@ -7077,6 +7351,10 @@ function attachInfoPop(btn, getHTML){
   window.addEventListener("resize", ()=>{ if(open) hide(); });
 }
 attachInfoPop($("px-info"),   ()=>S.pxExplainer);
+attachInfoPop($("mid-info"),  ()=>S.midExplainer);
+attachInfoPop($("imb-info"),  ()=>S.imbExplainer);
+attachInfoPop($("ndf-info"),  ()=>S.ndfExplainer);
+attachInfoPop($("mgn-info"),  ()=>S.mgnExplainer);
 attachInfoPop($("fq-info"),   ()=>S.fqExplainer);
 attachInfoPop($("lc-info"),   ()=>S.lcExplainer);
 attachInfoPop($("ci-info"),   ()=>S.ciExplainer);
@@ -7270,6 +7548,10 @@ document.addEventListener("click",(e)=>{
    CONTEXTUAL DATASET TERMS
    Short, touch-friendly definitions for machine identifiers. */
 const termDefs={
+  MID:"Market Index Data — the volume-weighted price of electricity traded on the GB day-ahead and within-day exchanges for a settlement period. Two providers report; this page weights them by traded volume.",
+  IMBALNGC:"Indicated Imbalance — NESO’s forecast of how far generation will run above or below demand in a settlement period. A forecast, not a settled figure, and published for seventeen transmission boundaries as well as the national one.",
+  NDF:"National Demand Forecast — NESO’s forecast of transmission-system demand. Excludes embedded generation, on the same boundary as the National demand outturn.",
+  OCNMFD2:"Operational Continuous Network Margin Forecast, 2–14 days — the forecast surplus of available generation over demand at peak. Daily, and never for today: the nearest figure it publishes is two days out.",
   INDO:"Initial National Demand Outturn — the transmission-system demand figure published by Elexon.",
   DISEBSP:"System Sell Price / System Buy Price — the imbalance price dataset used for the settlement price chart.",
   INTOUTHH:"Half-hourly interconnector outturn — measured flow into or out of GB.",
