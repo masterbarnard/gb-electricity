@@ -1,4 +1,4 @@
-/* GENERATED from dash/GB_Electricity_v0.83.html (md5 d67535259a07e2cf05eb4485a18f15f5) by tools/pages83.mjs — do not edit. */
+/* GENERATED from dash/GB_Electricity_v0.84.html (md5 7b8c742be756a3a2cf5949d8792e0dbf) by tools/pages84.mjs — do not edit. */
   /* v0.80 (rev 74, Phase 0): the three Inter faces moved to css/fonts.css, their bytes to
      assets/inter-{400,600,700}.woff2 — linked from <head>. The OFL licence notice travels
      with them, as the licence requires. */
@@ -819,6 +819,19 @@
   /* v0.45: the `.tile.hero` span rule went with the hero, which now lives in the flow band
      rather than in a tile row. What is left is one row of four equal condition cards. */
   .g-tiles{grid-template-columns:repeat(4,minmax(0,1fr));}
+  /* ⚠ v0.84: TWO TILE ROWS IN A ROW READ AS ONE BLOCK, so the space between them is the row gap
+     rather than the section gap. `.grid.g-tiles + .grid{margin-top:22px}` is the separation
+     between a tile row and a PANEL row, which is a change of subject; two tile rows stacked are
+     not, and 22px against an 18px internal gap would draw a line where none is meant.
+     ⚠ NO `order` RULE IS NEEDED HERE, and an earlier draft of this release carried one. That
+     draft ordered the eight by COLUMN — each figure above its opposite number — which the
+     two-column collapse destroys, so it needed the halves interleaving back together at every
+     width below 1080. The author's ordering makes the ROW the unit of meaning instead, and
+     row-major flow keeps the members of a row adjacent all the way down: at two columns row 1
+     becomes (demand forecast, forecast imbalance) then (demand margin, market price), which is
+     the same chain in two-word steps. The layout that needs no help surviving the collapse is
+     the better layout, and that is worth more than the hack it saves. */
+  .grid.g-tiles + .grid.g-tiles{margin-top:18px;}
 /* BAND RULE. The seven tiles were one undifferentiated block, and the grouping that was
      already latent in them - three quantities in megawatts, then four readings in four
      different units - was doing no work because nothing said it was there. A hairline and a
@@ -2444,6 +2457,23 @@
               letter-spacing:.02em;}
   .bandlabels span{position:absolute;transform:translateX(-50%);white-space:nowrap;}
   .bandlabels span.edge-l{transform:none;} .bandlabels span.edge-r{transform:translateX(-100%);}
+  /* ⚠ v0.84: BELOW 560px THE LEGEND IS THINNED, NOT SHRUNK. Found while reviewing the rev 78
+     layout renders: "very low" and "low" collided and drew over each other — 2.3px of overlap at
+     480, 10.5px at 390, 17.2px at 320. The five labels are positioned at their band midpoints,
+     and the lowest band is the narrowest, so its label is the one with nowhere to go.
+     MEASURED at 1440, 1080, 900, 760, 560, 480, 390, 360 and 320: nothing overlaps at 560 or
+     above, and only this one pair overlaps below it.
+     ⚠ THE WRONG FIX IS A SMALLER FONT. It is already 8px here, which is below the size anything
+     else on the page is allowed to be, and the collision returns at the next narrower phone.
+     ⚠ THE OTHER WRONG FIX IS ABBREVIATION. "v. low" is a second vocabulary for one scale, and
+     the same words appear in full in the reading beneath.
+     So the second and fourth labels step out and the scale keeps its two ends and its midpoint —
+     enough to read a gradient by. Nothing is lost: the band the reader actually needs is named
+     in words immediately below the track ("MODERATE · half hour to 17:30"), which is the sentence
+     this legend exists to support rather than duplicate. */
+  @media (max-width:560px){
+    .bandlabels span:nth-child(2), .bandlabels span:nth-child(4){display:none;}
+  }
   .bandnow{font-weight:700;color:var(--ink);letter-spacing:.04em;text-transform:uppercase;font-size:11px;}
   .prov{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
         color:var(--ink-mute);border:1px solid var(--grey-line);border-radius:3px;
@@ -2489,6 +2519,22 @@
   .sparkwrap{margin-top:8px;}
   .spark{display:block;width:100%;height:26px;overflow:visible;}
   .spark .sline{fill:none;stroke:var(--mark);stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round;}
+  /* ⚠ v0.84: A FORECAST TRACE RUNS THE OTHER WAY, AND MUST NOT LOOK LIKE A RECORD.
+     Every sparkline on this page until now has been HISTORY — the last 24 hours, ending at now.
+     The three added here are the opposite: they start at now and run forward. Same mark, opposite
+     meaning, and a reader who has learned "the squiggle is what happened" would read a forecast
+     as a record. That is the exact failure the forecast mark beside the figure exists to prevent,
+     so the trace cannot quietly undo it.
+     Dashed, because a broken line is the near-universal convention for a projected value and the
+     page already uses it for the carbon forecast series in the panel below — this is that same
+     convention at tile size, not a new one. It keeps `--mark`, so it is legibly the same FAMILY
+     of object; only its certainty differs. */
+  .spark .sline-fc{fill:none;stroke:var(--mark);stroke-width:1.4;stroke-linejoin:round;
+    stroke-linecap:round;stroke-dasharray:3 2.6;opacity:.9;}
+  /* The dot marks the point the FIGURE above is showing. On a history trace that is the last
+     value, at the right; on a forecast it is the nearest period, at the left. Hollow rather than
+     filled — the same "not settled" treatment the carbon panel's forecast marker uses. */
+  .spark .sdot-fc{fill:var(--surface);stroke:var(--mark);stroke-width:1.5;}
   .spark .sband{fill:var(--grey-bg);}
   .spark .smid{stroke:var(--blue-line);stroke-width:1;}
   .spark .sdot{fill:var(--mark);stroke:var(--surface);stroke-width:1.5;}
@@ -3635,9 +3681,18 @@
      comment above it: two marks answering one question cannot be "the same size" if each one
      scales off a different parent. 12px is an existing step and the size the page already uses
      for every other piece of annotation, so this is one rung fewer, not one more. */
-  .figstate-fc{display:inline-flex;align-items:center;gap:3px;margin-left:6px;
+  /* ⚠ v0.84: THE MARK SITS ON THE UNIT'S BASELINE, NOT HALFWAY UP THE FIGURE. Reported by the
+     author: "for 21:30" and "D+2" floated above "MW" instead of running along the same line.
+     MEASURED before changing anything, because the marks agree with each OTHER perfectly — all
+     eight tiles put the mark at the same offset — so the fault was never inconsistency between
+     tiles. It was that `vertical-align:middle` centres the mark on the figure's x-height while
+     `.unit` sits on the text baseline, leaving the two 5.4px apart in the same line of type.
+     `middle` was defensible when the mark was `.38em` and scaled with the figure; with a fixed
+     12px it just puts two pieces of annotation, the same size, on two different lines.
+     Baseline is what a reader expects of anything that reads as a run of words. */
+  .figstate-fc{display:inline-flex;align-items:baseline;gap:3px;margin-left:6px;
     font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--ink-mute);
-    vertical-align:middle;white-space:nowrap;cursor:help;}
+    vertical-align:baseline;white-space:nowrap;cursor:help;}
   @media (max-width:560px){ .figstate-fc .figstate-fc-t{display:none;} }
   .figstate-age{display:inline-flex;align-items:center;gap:3px;margin-left:6px;
     font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--warn);

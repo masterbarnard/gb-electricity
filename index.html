@@ -20,8 +20,8 @@
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v83.png">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v83.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v84.png">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v84.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -29,7 +29,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v83.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v84.png">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -916,6 +916,19 @@
   /* v0.45: the `.tile.hero` span rule went with the hero, which now lives in the flow band
      rather than in a tile row. What is left is one row of four equal condition cards. */
   .g-tiles{grid-template-columns:repeat(4,minmax(0,1fr));}
+  /* ⚠ v0.84: TWO TILE ROWS IN A ROW READ AS ONE BLOCK, so the space between them is the row gap
+     rather than the section gap. `.grid.g-tiles + .grid{margin-top:22px}` is the separation
+     between a tile row and a PANEL row, which is a change of subject; two tile rows stacked are
+     not, and 22px against an 18px internal gap would draw a line where none is meant.
+     ⚠ NO `order` RULE IS NEEDED HERE, and an earlier draft of this release carried one. That
+     draft ordered the eight by COLUMN — each figure above its opposite number — which the
+     two-column collapse destroys, so it needed the halves interleaving back together at every
+     width below 1080. The author's ordering makes the ROW the unit of meaning instead, and
+     row-major flow keeps the members of a row adjacent all the way down: at two columns row 1
+     becomes (demand forecast, forecast imbalance) then (demand margin, market price), which is
+     the same chain in two-word steps. The layout that needs no help surviving the collapse is
+     the better layout, and that is worth more than the hack it saves. */
+  .grid.g-tiles + .grid.g-tiles{margin-top:18px;}
 /* BAND RULE. The seven tiles were one undifferentiated block, and the grouping that was
      already latent in them - three quantities in megawatts, then four readings in four
      different units - was doing no work because nothing said it was there. A hairline and a
@@ -2541,6 +2554,23 @@
               letter-spacing:.02em;}
   .bandlabels span{position:absolute;transform:translateX(-50%);white-space:nowrap;}
   .bandlabels span.edge-l{transform:none;} .bandlabels span.edge-r{transform:translateX(-100%);}
+  /* ⚠ v0.84: BELOW 560px THE LEGEND IS THINNED, NOT SHRUNK. Found while reviewing the rev 78
+     layout renders: "very low" and "low" collided and drew over each other — 2.3px of overlap at
+     480, 10.5px at 390, 17.2px at 320. The five labels are positioned at their band midpoints,
+     and the lowest band is the narrowest, so its label is the one with nowhere to go.
+     MEASURED at 1440, 1080, 900, 760, 560, 480, 390, 360 and 320: nothing overlaps at 560 or
+     above, and only this one pair overlaps below it.
+     ⚠ THE WRONG FIX IS A SMALLER FONT. It is already 8px here, which is below the size anything
+     else on the page is allowed to be, and the collision returns at the next narrower phone.
+     ⚠ THE OTHER WRONG FIX IS ABBREVIATION. "v. low" is a second vocabulary for one scale, and
+     the same words appear in full in the reading beneath.
+     So the second and fourth labels step out and the scale keeps its two ends and its midpoint —
+     enough to read a gradient by. Nothing is lost: the band the reader actually needs is named
+     in words immediately below the track ("MODERATE · half hour to 17:30"), which is the sentence
+     this legend exists to support rather than duplicate. */
+  @media (max-width:560px){
+    .bandlabels span:nth-child(2), .bandlabels span:nth-child(4){display:none;}
+  }
   .bandnow{font-weight:700;color:var(--ink);letter-spacing:.04em;text-transform:uppercase;font-size:11px;}
   .prov{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
         color:var(--ink-mute);border:1px solid var(--grey-line);border-radius:3px;
@@ -2586,6 +2616,22 @@
   .sparkwrap{margin-top:8px;}
   .spark{display:block;width:100%;height:26px;overflow:visible;}
   .spark .sline{fill:none;stroke:var(--mark);stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round;}
+  /* ⚠ v0.84: A FORECAST TRACE RUNS THE OTHER WAY, AND MUST NOT LOOK LIKE A RECORD.
+     Every sparkline on this page until now has been HISTORY — the last 24 hours, ending at now.
+     The three added here are the opposite: they start at now and run forward. Same mark, opposite
+     meaning, and a reader who has learned "the squiggle is what happened" would read a forecast
+     as a record. That is the exact failure the forecast mark beside the figure exists to prevent,
+     so the trace cannot quietly undo it.
+     Dashed, because a broken line is the near-universal convention for a projected value and the
+     page already uses it for the carbon forecast series in the panel below — this is that same
+     convention at tile size, not a new one. It keeps `--mark`, so it is legibly the same FAMILY
+     of object; only its certainty differs. */
+  .spark .sline-fc{fill:none;stroke:var(--mark);stroke-width:1.4;stroke-linejoin:round;
+    stroke-linecap:round;stroke-dasharray:3 2.6;opacity:.9;}
+  /* The dot marks the point the FIGURE above is showing. On a history trace that is the last
+     value, at the right; on a forecast it is the nearest period, at the left. Hollow rather than
+     filled — the same "not settled" treatment the carbon panel's forecast marker uses. */
+  .spark .sdot-fc{fill:var(--surface);stroke:var(--mark);stroke-width:1.5;}
   .spark .sband{fill:var(--grey-bg);}
   .spark .smid{stroke:var(--blue-line);stroke-width:1;}
   .spark .sdot{fill:var(--mark);stroke:var(--surface);stroke-width:1.5;}
@@ -3732,9 +3778,18 @@
      comment above it: two marks answering one question cannot be "the same size" if each one
      scales off a different parent. 12px is an existing step and the size the page already uses
      for every other piece of annotation, so this is one rung fewer, not one more. */
-  .figstate-fc{display:inline-flex;align-items:center;gap:3px;margin-left:6px;
+  /* ⚠ v0.84: THE MARK SITS ON THE UNIT'S BASELINE, NOT HALFWAY UP THE FIGURE. Reported by the
+     author: "for 21:30" and "D+2" floated above "MW" instead of running along the same line.
+     MEASURED before changing anything, because the marks agree with each OTHER perfectly — all
+     eight tiles put the mark at the same offset — so the fault was never inconsistency between
+     tiles. It was that `vertical-align:middle` centres the mark on the figure's x-height while
+     `.unit` sits on the text baseline, leaving the two 5.4px apart in the same line of type.
+     `middle` was defensible when the mark was `.38em` and scaled with the figure; with a fixed
+     12px it just puts two pieces of annotation, the same size, on two different lines.
+     Baseline is what a reader expects of anything that reads as a run of words. */
+  .figstate-fc{display:inline-flex;align-items:baseline;gap:3px;margin-left:6px;
     font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--ink-mute);
-    vertical-align:middle;white-space:nowrap;cursor:help;}
+    vertical-align:baseline;white-space:nowrap;cursor:help;}
   @media (max-width:560px){ .figstate-fc .figstate-fc-t{display:none;} }
   .figstate-age{display:inline-flex;align-items:center;gap:3px;margin-left:6px;
     font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--warn);
@@ -5492,61 +5547,6 @@
 
   </section>
 
-  <!-- ⚠ v0.70: THIS ROW MOVED, at the author's request — from directly under the flow band to
-       below the two charts. The order the page now reads in: what is on the system, what is
-       moving, what it is made of, how it got here, then what it costs and how clean it is.
-       ⚠ IT MOVED AS A ROW. The brief named Carbon intensity; the four tiles are one grid track
-       set and lifting one out would leave a three-tile row above and an orphan below, so the
-       whole row went and the adjacency the brief asked for is the one delivered. Say if the
-       intent was Carbon intensity alone — that is a different layout, not a smaller edit. -->
-  <!-- ================= ROW 1 — DEMAND & MARKET =================
-       ⚠ v0.83 (revised on instruction): the author reordered both rows after seeing them on
-       the page. This row is now the DEMAND-AND-PRICE account — what demand is forecast to be,
-       how far the system expects to be out, how much headroom there is, and what the last
-       period traded at — and the row's name moved with its contents. A row keeping a name
-       that describes tiles that have left it is worse than no name at all: the aria-label is
-       read aloud, and "System and market" over four demand figures is a false heading.
-       ⚠ THEY STILL DO NOT ALL DESCRIBE THE SAME MOMENT. Three of these four are forecasts and
-       the market price is a settled outturn, so each tile states its own time and its own
-       quality rather than letting the row make a promise none of them made. -->
-  <section class="grid g-tiles g-tiles-b" aria-label="Demand and market">
-    <div class="tile">
-      <div class="label"><button class="labelbtn" id="ndf-info"
-        aria-expanded="false">Demand forecast</button></div>
-      <div class="value" id="t-ndf"><span class="skeleton">—</span><span class="unit">MW</span></div>
-      <div class="meta" id="t-ndf-meta">Elexon <span class="term ds" data-term="NDF">NDF</span>, national demand</div>
-    </div>
-    <div class="tile">
-      <div class="label"><button class="labelbtn" id="imb-info"
-        aria-expanded="false">Forecast imbalance</button></div>
-      <!-- ⚠ NOT "Net imbalance". The row already contains an imbalance PRICE, which settles
-           what happened; this is NESO's forecast of what will. Two tiles saying "imbalance"
-           and meaning one settled and one forecast figure is the fault rev 71 found in two
-           descriptions of one fuel, at the level of a whole reading. The title carries the
-           distinction so a reader never has to open the explainer to find it. -->
-      <div class="value" id="t-imb"><span class="skeleton">—</span><span class="unit">MW</span></div>
-      <div class="meta" id="t-imb-meta">Elexon <span class="term ds" data-term="IMBALNGC">IMBALNGC</span>, national boundary</div>
-    </div>
-    <div class="tile">
-      <div class="label"><button class="labelbtn" id="mgn-info"
-        aria-expanded="false">Demand margin</button></div>
-      <div class="value" id="t-mgn"><span class="skeleton">—</span><span class="unit">MW</span></div>
-      <div class="meta" id="t-mgn-meta">Elexon <span class="term ds" data-term="OCNMFD2">OCNMFD2</span>, surplus at peak</div>
-    </div>
-    <div class="tile">
-      <div class="label"><button class="labelbtn" id="mid-info"
-        aria-expanded="false">Market price</button></div>
-      <div class="value" id="t-mid"><span class="skeleton">—</span><span class="unit">£/MWh</span></div>
-      <!-- The same trace the imbalance-price tile carries, for the same reason: the row's
-           other members show movement and a bare number here would read as the odd one out.
-           The series is already fetched for the figure, so this is a drawing, not a request. -->
-      <div class="sparkwrap"><svg class="spark" id="mid-spark" preserveAspectRatio="none"
-        role="img" aria-labelledby="mid-spark-t"><title id="mid-spark-t"></title></svg>
-        <div class="sparkcap" id="mid-spark-cap"></div></div>
-      <div class="meta" id="t-mid-meta">Elexon <span class="term ds" data-term="MID">MID</span>, volume-weighted across exchanges</div>
-    </div>
-  </section>
-
   <!-- ================= INTERCONNECTORS + WIND ================= -->
   <section class="grid g-2a" id="sec-ic-wind">
 
@@ -5671,17 +5671,85 @@
 
   </section>
 
-  <!-- ================= CARBON INTENSITY + FREQUENCY ================= -->
-  <!-- ================= ROW 2 — OUTLOOK & ENVIRONMENT =================
-       v0.83 (revised on instruction): the environment pair leads and the two live system
-       readings follow, so the row runs from what the electricity is made of to what the
-       system is doing about it. `g-tiles-b` is the same component as row 1 — this is a second
-       instance of an existing row, not a new card style.
-       ⚠ The name is the author's. Recorded here because two of the four tiles (frequency and
-       the imbalance price) are system readings rather than environmental ones, so the label
-       is broader than a literal reading of its contents; it was kept as given rather than
-       quietly rewritten. -->
-  <section class="grid g-tiles g-tiles-b" aria-label="Outlook and environment">
+  <!-- ================= THE COMPACT READINGS — TWO STACKED ROWS OF FOUR =================
+       ⚠ v0.84: THE TWO ROWS COME TOGETHER, AND EACH ROW IS A SENTENCE. Rev 77 shipped these as
+       two rows separated by the interconnector panels, which put them too far apart to be read
+       against each other. They are adjacent now, and the author set the order and the reasoning:
+       each row runs left to right as a chain, and the two chains are parallel — both start with
+       a quantity and end on the price signal that quantity produces.
+
+         row 1, DEMAND & OUTLOOK — what the system expects
+           Demand forecast     expected demand
+           Forecast imbalance  expected supply/demand position
+           Demand margin       expected system headroom
+           Market price        the market signal
+
+         row 2, SYSTEM CONDITIONS — what the system is doing
+           Low-carbon share    generation composition
+           Carbon intensity    environmental outcome
+           System frequency    physical system balance
+           Imbalance price     the balancing-market signal
+
+       ⚠ AN EARLIER DRAFT ORDERED THESE BY COLUMN instead, pairing each figure with its opposite
+       number in the other row. It was rejected in favour of this, and the reasoning is worth
+       keeping: a grid is read along its ROWS first, so a row that reads as a sentence is doing
+       work on every visit, while a column pair only pays off for a reader who thinks to look
+       down. One column survives the change anyway — Market price sits directly above Imbalance
+       price — which is the comparison most worth having.
+       ⚠ THE ROWS ARE TWO <section>s, NOT ONE. Each carries its own aria-label, so the names the
+       author gave them are announced rather than existing only in this comment; one section
+       could only have one name, and "Compact readings" names neither chain.
+       ⚠ THE BLOCK KEEPS ROW 2'S OLD POSITION — after the interconnector pair, before the carbon
+       pair — so Carbon intensity stays adjacent to the Carbon intensity panel, which is the
+       adjacency the rev 75 brief asked for. -->
+  <section class="grid g-tiles g-tiles-b" aria-label="Demand and outlook">
+    <div class="tile">
+      <div class="label"><button class="labelbtn" id="ndf-info"
+        aria-expanded="false">Demand forecast</button></div>
+      <div class="value" id="t-ndf"><span class="skeleton">—</span><span class="unit">MW</span></div>
+      <div class="sparkwrap"><svg class="spark" id="ndf-spark" preserveAspectRatio="none"
+        role="img" aria-labelledby="ndf-spark-t"><title id="ndf-spark-t"></title></svg>
+        <div class="sparkcap" id="ndf-spark-cap"></div></div>
+      <div class="meta" id="t-ndf-meta">Elexon <span class="term ds" data-term="NDF">NDF</span>, national demand</div>
+    </div>
+    <div class="tile">
+      <div class="label"><button class="labelbtn" id="imb-info"
+        aria-expanded="false">Forecast imbalance</button></div>
+      <!-- ⚠ NOT "Net imbalance". The row already contains an imbalance PRICE, which settles
+           what happened; this is NESO's forecast of what will. Two tiles saying "imbalance"
+           and meaning one settled and one forecast figure is the fault rev 71 found in two
+           descriptions of one fuel, at the level of a whole reading. The title carries the
+           distinction so a reader never has to open the explainer to find it. -->
+      <div class="value" id="t-imb"><span class="skeleton">—</span><span class="unit">MW</span></div>
+      <div class="sparkwrap"><svg class="spark" id="imb-spark" preserveAspectRatio="none"
+        role="img" aria-labelledby="imb-spark-t"><title id="imb-spark-t"></title></svg>
+        <div class="sparkcap" id="imb-spark-cap"></div></div>
+      <div class="meta" id="t-imb-meta">Elexon <span class="term ds" data-term="IMBALNGC">IMBALNGC</span>, national boundary</div>
+    </div>
+    <div class="tile">
+      <div class="label"><button class="labelbtn" id="mgn-info"
+        aria-expanded="false">Demand margin</button></div>
+      <div class="value" id="t-mgn"><span class="skeleton">—</span><span class="unit">MW</span></div>
+      <div class="sparkwrap"><svg class="spark" id="mgn-spark" preserveAspectRatio="none"
+        role="img" aria-labelledby="mgn-spark-t"><title id="mgn-spark-t"></title></svg>
+        <div class="sparkcap" id="mgn-spark-cap"></div></div>
+      <div class="meta" id="t-mgn-meta">Elexon <span class="term ds" data-term="OCNMFD2">OCNMFD2</span>, surplus at peak</div>
+    </div>
+    <div class="tile">
+      <div class="label"><button class="labelbtn" id="mid-info"
+        aria-expanded="false">Market price</button></div>
+      <div class="value" id="t-mid"><span class="skeleton">—</span><span class="unit">£/MWh</span></div>
+      <!-- The same trace the imbalance-price tile carries, for the same reason: the row's
+           other members show movement and a bare number here would read as the odd one out.
+           The series is already fetched for the figure, so this is a drawing, not a request. -->
+      <div class="sparkwrap"><svg class="spark" id="mid-spark" preserveAspectRatio="none"
+        role="img" aria-labelledby="mid-spark-t"><title id="mid-spark-t"></title></svg>
+        <div class="sparkcap" id="mid-spark-cap"></div></div>
+      <div class="meta" id="t-mid-meta">Elexon <span class="term ds" data-term="MID">MID</span>, volume-weighted across exchanges</div>
+    </div>
+  </section>
+
+  <section class="grid g-tiles g-tiles-b" aria-label="System conditions">
     <div class="tile">
       <div class="label"><button class="labelbtn" id="lc-info"
         aria-expanded="false">Low-carbon share</button></div>
@@ -5733,6 +5801,9 @@
       <div class="meta" id="t-px-meta">System sell / buy price, latest settled period</div>
     </div>
   </section>
+
+  <!-- ================= CARBON INTENSITY + FREQUENCY ================= -->
+
 
   <section class="grid g-2a" id="sec-ci-freq">
 
@@ -6272,7 +6343,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.83";
+const APP_VERSION = "v0.84";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -6890,9 +6961,39 @@ const iso = (d)=>d.toISOString().slice(0,19)+"Z";
 /* The Carbon Intensity API takes minute precision and rejects seconds. */
 const isoMinute = (d)=>d.toISOString().slice(0,16)+"Z";
 const fmtTime = (t)=>new Date(t).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:TZ});
-const fmtDate = (t)=>new Date(t).toLocaleDateString("en-GB",{day:"2-digit",month:"short",timeZone:TZ});
+/* ⚠ v0.84: `day:"numeric"`, NOT `"2-digit"`. It printed "02 Sept", and a leading zero on a day
+   is a machine convention — it exists so strings sort and columns line up. Nobody writes or says
+   "the second of September" as "02". Every one of the seventeen call sites reads better without
+   it, and the two-digit form was never load-bearing: nothing here sorts on a formatted string.
+   ⚠ "Sept" is left alone. en-GB's short month is Sept for September and three letters for every
+   other month, which is inconsistent in width but is correct British usage — and the alternative
+   is a hand-written month table, which is a sixth copy of a rule the platform already owns. */
+const fmtDate = (t)=>new Date(t).toLocaleDateString("en-GB",{day:"numeric",month:"short",timeZone:TZ});
+/* ⚠ v0.84: A DATE TWO DAYS OUT IS BEST GIVEN AS A WEEKDAY. People navigate the near future by
+   weekday, not by date number: "Wednesday" is placed instantly, "2 Sept" has to be worked out
+   against today. Past about a week the weekday stops being unique enough to help — "Wednesday"
+   could be either of two — so the date takes over. Today and tomorrow get their own words
+   because a reader who sees a weekday for today has to check the calendar to be sure.
+   This is the standard treatment for near-future dates in an interface, and it is what makes
+   the Demand margin tile legible without arithmetic. The horizon stays stated exactly by the
+   D+n mark beside the figure, so nothing is lost by being friendly here. */
+const fmtDayAhead = (iso, days)=>{
+  if(days === 0) return "today";
+  if(days === 1) return "tomorrow";
+  const d = new Date(iso + "T12:00:00Z");
+  if(days >= 2 && days <= 6)
+    return d.toLocaleDateString("en-GB",{weekday:"long",timeZone:TZ});
+  return fmtDate(iso + "T12:00:00Z");
+};
 /* ⚠ v0.74: ONE MONEY FORMATTER, because there were five and four of them were wrong.
-   The imbalance price is the only money on this page and it goes negative on most windy nights,
+   ⚠ v0.84: SIX, and the sixth was the tile FACE — see `renderPrices`. The sweep below fixed
+   every place the price was printed except the one a reader looks at first, which then sat
+   unsymbolled for ten releases. The lesson is not "there were five copies": it is that a sweep
+   driven by searching for a string finds the places that got the rule slightly wrong and misses
+   the place that never applied it at all. Money on this page is now `money()` everywhere,
+   including the market price added at rev 77 — so the sentence below about it being the only
+   money is history rather than fact, and is kept because the reasoning still holds.
+   The imbalance price goes negative on most windy nights,
    so every place that prints it needs the sign handled. The sparkline caption did it correctly
    with its own inline copy; the y-axis, the chart's end label, the hover tooltip's sell and buy
    rows and the tile's low/high sentence all built the string as `"£" + num(v)` and produced
@@ -7905,6 +8006,31 @@ function nationalRowsNearestNow(rows){
   return best ? { row: best, publishTime: pub, aheadMin: Math.round((new Date(best.startTime) - now)/60000) } : null;
 }
 
+/* ⚠ v0.84: THE FORWARD SERIES BEHIND THE THREE FORECAST TRACES.
+   Same publish and same boundary filter as `nationalRowsNearestNow` — anything else would draw a
+   shape from one publish and label it with a figure from another, or splice a transmission
+   boundary into a national line. It returns the rows from the nearest-to-now period ONWARD, so
+   the trace starts where the tile's figure is and runs into the horizon: the earlier rows of a
+   publish that begins behind the clock are dropped rather than drawn, because a "forecast" trace
+   with a settled tail at the left is two claims in one mark.
+   ⚠ SORTED BY TIME, not left in publish order. The sparkline plots against INDEX and says so in
+   its own comment; index plotting is only honest on a series that is in order and evenly spaced,
+   and these are half-hourly with no gaps within a publish. If that ever stops being true this
+   has to become a time scale — the same note the sparkline itself carries. */
+function nationalForwardSeries(rows, field){
+  const pub = latestPublish(rows);
+  if(!pub) return [];
+  const inPub = (rows||[]).filter(r => r && r.publishTime === pub
+    && (r.boundary === "N" || r.boundary == null)
+    && r.startTime && Number.isFinite(Number(r[field])));
+  if(!inPub.length) return [];
+  inPub.sort((a,b)=> new Date(a.startTime) - new Date(b.startTime));
+  const now = Date.now();
+  let start = 0, bestD = Infinity;
+  inPub.forEach((r,i)=>{ const d = Math.abs(new Date(r.startTime) - now); if(d < bestD){ bestD = d; start = i; } });
+  return inPub.slice(start).map(r => Number(r[field]));
+}
+
 /* MID — a VOLUME-WEIGHTED index across providers, for the most recent period that
    actually traded. ⚠ The zero-volume provider is the whole reason this is weighted:
    a straight mean of £97.92 and £0.00 is £48.96, a number no one paid. */
@@ -8017,12 +8143,27 @@ function renderForecastTile(cfg){
     meta.innerHTML = cfg.source + ' · published ' + esc(fmtTime(hit.publishTime))
       + ' · SP' + esc(String(hit.row.settlementPeriod ?? "–"));
   }
+  /* ⚠ v0.84: THE TRACE, AND IT IS A DRAWING RATHER THAN A REQUEST. The publish already in hand
+     carries the whole forward horizon — it is what `nationalRowsNearestNow` picked one row out
+     of — so the shape costs nothing but the drawing. `forward:true` dashes the line and moves
+     the dot to the nearest period, because this series runs AWAY from now rather than towards
+     it; see the sparkline's own comment for why that distinction is not cosmetic. */
+  if(cfg.spark){
+    sparkline($(cfg.spark), $(cfg.spark + "-cap"),
+      nationalForwardSeries(rows, cfg.field),
+      { fmt: cfg.fmt, label: cfg.sparkLabel || "", forward: true,
+        /* `mid` only where zero is a real threshold. On the imbalance it is the whole point —
+           the crossing is where the system is expected to turn from long to short — and on
+           demand it would be a line the series can never approach. */
+        ...(cfg.sparkMid != null ? { mid: cfg.sparkMid } : {}) });
+  }
   S[cfg.explainer] = cfg.explain(v, hit);
 }
 
 function renderDemandForecast(){
   renderForecastTile({
     id:"t-ndf", feed:"ndf", field:"demand", unit:"MW",
+    spark:"ndf-spark", sparkLabel:"Demand forecast, remaining horizon",
     source:'Elexon <span class="term ds" data-term="NDF">NDF</span>',
     explainer:"ndfExplainer",
     fmt:(v)=>uv(v),
@@ -8043,6 +8184,7 @@ function renderDemandForecast(){
 function renderForecastImbalance(){
   renderForecastTile({
     id:"t-imb", feed:"imbalngc", field:"imbalance", unit:"MW",
+    spark:"imb-spark", sparkLabel:"Forecast imbalance, remaining horizon", sparkMid:0,
     source:'Elexon <span class="term ds" data-term="IMBALNGC">IMBALNGC</span>',
     explainer:"imbExplainer",
     /* Signed, and the sign is the content: this is a direction, not a size. */
@@ -8074,16 +8216,36 @@ function renderDemandMargin(){
   /* ⚠ THE DATE, NOT A TIME. This dataset has no "now" — its nearest figure is two days out —
      so the mark states a DATE and the tile never implies it describes this half hour. */
   const dLabel = "D+" + m.daysAhead;
+  /* ⚠ THE WEEKDAY ON THE FACE, THE DATE IN THE PROSE. The meta line is glanced at and wants the
+     form a reader places without arithmetic; the explainer is read, may be quoted, and wants the
+     one that is unambiguous on its own — so it carries both. */
+  const dWhen = fmtDayAhead(m.forecastDate, m.daysAhead);
+  const dFull = fmtDate(m.forecastDate + "T12:00:00Z");
   setFigure(el, uv(m.margin), unit + figForecastMark(dLabel,
-    "Surplus margin forecast for " + fmtDate(m.forecastDate + "T12:00:00Z") + ", "
+    "Surplus margin forecast for " + dWhen + " (" + dFull + "), "
     + m.daysAhead + " days ahead. This dataset does not publish a figure for today."));
   if(meta){
     meta.innerHTML = 'Elexon <span class="term ds" data-term="OCNMFD2">OCNMFD2</span> · for '
-      + esc(fmtDate(m.forecastDate + "T12:00:00Z"));
+      + esc(dWhen);
+  }
+  /* ⚠ v0.84: THIS TRACE IS DAYS, NOT HALF HOURS — the only series on the page that is. Thirteen
+     points from D+2 to D+14, one per day, evenly spaced, which is what index plotting requires.
+     It reads like the other two forecast traces but shows something different in kind: not how
+     the next few hours look, but how the margin develops across a fortnight, which is the
+     question this dataset exists to answer.
+     ⚠ NO `mid`. Zero margin is a catastrophe rather than a threshold, and a reference line at a
+     value the series should never approach would be scenery, not information. */
+  {
+    const pubM = latestPublish(rows);
+    const days = (rows||[]).filter(r => r && r.publishTime === pubM && r.forecastDate && r.margin != null)
+      .sort((a,b)=> a.forecastDate < b.forecastDate ? -1 : 1)
+      .map(r => Number(r.margin));
+    sparkline($("mgn-spark"), $("mgn-spark-cap"), days,
+      { fmt:(v)=>uv(v), label:"Demand margin, published horizon", forward:true });
   }
   S.mgnExplainer =
     "<b>The forecast surplus of available generation over demand at peak, for "
-    + esc(fmtDate(m.forecastDate + "T12:00:00Z")) + ".</b> It is the headroom the system "
+    + esc(dWhen) + " (" + esc(dFull) + ").</b> It is the headroom the system "
     + "expects to have — the margin between what can be generated and what is expected to be "
     + "needed.<br><br>"
     + "⚠ <b>There is no figure for today, and that is the dataset rather than this page.</b> "
@@ -8840,8 +9002,16 @@ function renderTiles(snap){
   if(S.price){
     const p = S.price;
     const same = Math.abs(p.systemSellPrice - p.systemBuyPrice) < 0.005;
-    setFigure($("t-px"), num(p.systemSellPrice,2), '<span class="unit">£/MWh</span>');
-    $("t-px-meta").innerHTML = (same ? "Single price (SSP = SBP)" : "SBP <b>"+num(p.systemBuyPrice,2)+"</b>") +
+    /* ⚠ v0.84: THE FACE WAS THE ONE PLACE THE v0.74 SWEEP MISSED. That release found five copies
+       of the money rule and replaced them with one function — but it fixed the y-axis, the chart
+       label, the tooltip and the low/high sentence, and left the figure a reader actually looks
+       at first printing a bare `200.61`. It read as money-shaped without being money, and it sat
+       two inches from a Market price tile that does carry the symbol, which is what made it
+       visible. Reported by the author.
+       ⚠ `money` and not `"£" + num(...)`: this price is negative on most windy nights, and the
+       sign belongs OUTSIDE the symbol with a true minus — −£94, never £-94. */
+    setFigure($("t-px"), money(p.systemSellPrice,2), '<span class="unit">£/MWh</span>');
+    $("t-px-meta").innerHTML = (same ? "Single price (SSP = SBP)" : "SBP <b>"+money(p.systemBuyPrice,2)+"</b>") +
       " · NIV <b>"+num(p.netImbalanceVolume,1)+" MWh</b> ("+(p.netImbalanceVolume>=0?"short":"long")+")"+
       " · "+fmtDate(p.startTime)+" SP"+p.settlementPeriod;
   } else {
@@ -9761,7 +9931,14 @@ function sparkline(svgEl, capEl, series, opts={}){
   /* `fmt` returns the COMPLETE display string, units and sign included. An earlier version
      took a separate `unit` and concatenated it, which put the symbol on the wrong side of a
      currency ("-94 £") and made a minus sign ambiguous. One formatter, one string. */
-  const { mid=null, band=null, fmt=(v)=>num(v,0), label="" } = opts;
+  /* ⚠ v0.84: `forward` FLIPS TWO THINGS AND NOTHING ELSE. The series still runs left to right in
+     time — that never changes — but on a forecast the left edge is NOW and the right edge is the
+     far end of the horizon, so the point the tile's figure is showing is the FIRST one, not the
+     last. The dot moves to it, and the line goes dashed. See the CSS for why dashed.
+     ⚠ The caption still reads low/high over the drawn window, which is the same claim it makes
+     for history; the accessible title says "forecast" so the text alternative does not present a
+     projection as a record either. */
+  const { mid=null, band=null, fmt=(v)=>num(v,0), label="", forward=false } = opts;
   if(!svgEl) return;
   const vals = (series||[]).filter(v=>v!=null && isFinite(v));
   const cap = capEl || null;
@@ -9785,8 +9962,9 @@ function sparkline(svgEl, capEl, series, opts={}){
   if(band) out += `<rect class="sband" x="0" y="${y(band[1]).toFixed(1)}" width="${W}"
     height="${Math.max(0.5, y(band[0])-y(band[1])).toFixed(1)}"/>`;
   if(mid!=null) out += `<line class="smid" x1="0" y1="${y(mid).toFixed(1)}" x2="${W}" y2="${y(mid).toFixed(1)}"/>`;
-  out += `<polyline class="sline" points="${vals.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ")}"/>`;
-  out += `<circle class="sdot" cx="${(W-1.6).toFixed(1)}" cy="${y(vals[vals.length-1]).toFixed(1)}" r="2.1"/>`;
+  out += `<polyline class="${forward?"sline-fc":"sline"}" points="${vals.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ")}"/>`;
+  const markIdx = forward ? 0 : vals.length-1;
+  out += `<circle class="${forward?"sdot-fc":"sdot"}" cx="${(forward?1.6:W-1.6).toFixed(1)}" cy="${y(vals[markIdx]).toFixed(1)}" r="2.1"/>`;
   const t = svgEl.querySelector("title");
   svgEl.innerHTML = out;
   /* The <title> is the accessible name and is rebuilt because innerHTML just removed it. A
@@ -9794,8 +9972,11 @@ function sparkline(svgEl, capEl, series, opts={}){
      carries the same three numbers the caption does. */
   const ttl = document.createElementNS("http://www.w3.org/2000/svg","title");
   ttl.id = (t && t.id) || "";
-  ttl.textContent = `${label}: low ${fmt(Math.min(...vals))}, high ${fmt(Math.max(...vals))}, ` +
-    `latest ${fmt(vals[vals.length-1])}`;
+  ttl.textContent = forward
+    ? `${label}: forecast, low ${fmt(Math.min(...vals))}, high ${fmt(Math.max(...vals))}, ` +
+      `nearest period ${fmt(vals[0])}`
+    : `${label}: low ${fmt(Math.min(...vals))}, high ${fmt(Math.max(...vals))}, ` +
+      `latest ${fmt(vals[vals.length-1])}`;
   svgEl.insertBefore(ttl, svgEl.firstChild);
   if(cap) cap.innerHTML =
     `<span>low <b>${fmt(Math.min(...vals))}</b></span>` +

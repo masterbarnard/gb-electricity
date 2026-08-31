@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- GENERATED FILE — do not edit. Produced by tools/pages83.mjs from
-     dash/GB_Electricity_v0.83.html (md5 d67535259a07e2cf05eb4485a18f15f5). Edit the dashboard, re-run the generator. -->
+<!-- GENERATED FILE — do not edit. Produced by tools/pages84.mjs from
+     dash/GB_Electricity_v0.84.html (md5 7b8c742be756a3a2cf5949d8792e0dbf). Edit the dashboard, re-run the generator. -->
 <html lang="en-GB" data-page="interconnectors" class="page-ic">
 <head>
 <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 <title>GB Interconnectors — Live Flows, Capacity & Every Link Explained</title>
 <meta name="description" content="Live flows on all ten GB electricity interconnectors — France, Norway, Denmark, the Netherlands, Belgium, Ireland and Northern Ireland — with each link’s capacity, route and owner, and an explanation of what decides which way the power runs.">
 <link rel="canonical" href="https://gbelectricity.uk/interconnectors">
-<meta name="generator" content="pages83.mjs — from GB Electricity v0.83">
+<meta name="generator" content="pages84.mjs — from GB Electricity v0.84">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -24,11 +24,11 @@
 <meta property="og:url" content="https://gbelectricity.uk/interconnectors">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v83.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v84.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Interconnectors — Live Flows, Capacity & Every Link Explained">
 <meta name="twitter:description" content="Live flows on all ten GB electricity interconnectors — France, Norway, Denmark, the Netherlands, Belgium, Ireland and Northern Ireland — with each link’s capacity, route and owner, and an explanation of what decides which way the power runs.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v83.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v84.png">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
 <link rel="icon" sizes="48x48 96x96" href="/favicon.ico">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -47,7 +47,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
 <link rel="stylesheet" href="/css/tokens.css">
 <link rel="stylesheet" href="/styles.css">
 <style>
-  /* ---- generated page shell (pages83.mjs) ---- */
+  /* ---- generated page shell (pages84.mjs) ---- */
   /* ⚠ v0.73: BACK TO TOP. Fixed to the corner rather than pinned to the end of the article,
      because a reader wants it at the moment they decide to leave, not after scrolling further to
      find it. 44px minimum on both axes (WCAG 2.5.5's enhanced target, not merely 2.5.8's 24) —
@@ -551,7 +551,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" title="Generated from GB Electricity v0.83">v0.83</span> &middot;
+      <span class="version-label" title="Generated from GB Electricity v0.84">v0.84</span> &middot;
       <a href="/about" class="footer-link">About</a> &middot;
       <a href="/methodology" class="footer-link">Methodology</a>
       <span class="theme-pref" id="theme-pref" role="radiogroup" aria-label="Colour theme">
@@ -587,7 +587,7 @@ window.__GBE_PAGE = "interconnectors";
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.83";
+const APP_VERSION = "v0.84";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -1205,9 +1205,39 @@ const iso = (d)=>d.toISOString().slice(0,19)+"Z";
 /* The Carbon Intensity API takes minute precision and rejects seconds. */
 const isoMinute = (d)=>d.toISOString().slice(0,16)+"Z";
 const fmtTime = (t)=>new Date(t).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:TZ});
-const fmtDate = (t)=>new Date(t).toLocaleDateString("en-GB",{day:"2-digit",month:"short",timeZone:TZ});
+/* ⚠ v0.84: `day:"numeric"`, NOT `"2-digit"`. It printed "02 Sept", and a leading zero on a day
+   is a machine convention — it exists so strings sort and columns line up. Nobody writes or says
+   "the second of September" as "02". Every one of the seventeen call sites reads better without
+   it, and the two-digit form was never load-bearing: nothing here sorts on a formatted string.
+   ⚠ "Sept" is left alone. en-GB's short month is Sept for September and three letters for every
+   other month, which is inconsistent in width but is correct British usage — and the alternative
+   is a hand-written month table, which is a sixth copy of a rule the platform already owns. */
+const fmtDate = (t)=>new Date(t).toLocaleDateString("en-GB",{day:"numeric",month:"short",timeZone:TZ});
+/* ⚠ v0.84: A DATE TWO DAYS OUT IS BEST GIVEN AS A WEEKDAY. People navigate the near future by
+   weekday, not by date number: "Wednesday" is placed instantly, "2 Sept" has to be worked out
+   against today. Past about a week the weekday stops being unique enough to help — "Wednesday"
+   could be either of two — so the date takes over. Today and tomorrow get their own words
+   because a reader who sees a weekday for today has to check the calendar to be sure.
+   This is the standard treatment for near-future dates in an interface, and it is what makes
+   the Demand margin tile legible without arithmetic. The horizon stays stated exactly by the
+   D+n mark beside the figure, so nothing is lost by being friendly here. */
+const fmtDayAhead = (iso, days)=>{
+  if(days === 0) return "today";
+  if(days === 1) return "tomorrow";
+  const d = new Date(iso + "T12:00:00Z");
+  if(days >= 2 && days <= 6)
+    return d.toLocaleDateString("en-GB",{weekday:"long",timeZone:TZ});
+  return fmtDate(iso + "T12:00:00Z");
+};
 /* ⚠ v0.74: ONE MONEY FORMATTER, because there were five and four of them were wrong.
-   The imbalance price is the only money on this page and it goes negative on most windy nights,
+   ⚠ v0.84: SIX, and the sixth was the tile FACE — see `renderPrices`. The sweep below fixed
+   every place the price was printed except the one a reader looks at first, which then sat
+   unsymbolled for ten releases. The lesson is not "there were five copies": it is that a sweep
+   driven by searching for a string finds the places that got the rule slightly wrong and misses
+   the place that never applied it at all. Money on this page is now `money()` everywhere,
+   including the market price added at rev 77 — so the sentence below about it being the only
+   money is history rather than fact, and is kept because the reasoning still holds.
+   The imbalance price goes negative on most windy nights,
    so every place that prints it needs the sign handled. The sparkline caption did it correctly
    with its own inline copy; the y-axis, the chart's end label, the hover tooltip's sell and buy
    rows and the tile's low/high sentence all built the string as `"£" + num(v)` and produced
@@ -2220,6 +2250,31 @@ function nationalRowsNearestNow(rows){
   return best ? { row: best, publishTime: pub, aheadMin: Math.round((new Date(best.startTime) - now)/60000) } : null;
 }
 
+/* ⚠ v0.84: THE FORWARD SERIES BEHIND THE THREE FORECAST TRACES.
+   Same publish and same boundary filter as `nationalRowsNearestNow` — anything else would draw a
+   shape from one publish and label it with a figure from another, or splice a transmission
+   boundary into a national line. It returns the rows from the nearest-to-now period ONWARD, so
+   the trace starts where the tile's figure is and runs into the horizon: the earlier rows of a
+   publish that begins behind the clock are dropped rather than drawn, because a "forecast" trace
+   with a settled tail at the left is two claims in one mark.
+   ⚠ SORTED BY TIME, not left in publish order. The sparkline plots against INDEX and says so in
+   its own comment; index plotting is only honest on a series that is in order and evenly spaced,
+   and these are half-hourly with no gaps within a publish. If that ever stops being true this
+   has to become a time scale — the same note the sparkline itself carries. */
+function nationalForwardSeries(rows, field){
+  const pub = latestPublish(rows);
+  if(!pub) return [];
+  const inPub = (rows||[]).filter(r => r && r.publishTime === pub
+    && (r.boundary === "N" || r.boundary == null)
+    && r.startTime && Number.isFinite(Number(r[field])));
+  if(!inPub.length) return [];
+  inPub.sort((a,b)=> new Date(a.startTime) - new Date(b.startTime));
+  const now = Date.now();
+  let start = 0, bestD = Infinity;
+  inPub.forEach((r,i)=>{ const d = Math.abs(new Date(r.startTime) - now); if(d < bestD){ bestD = d; start = i; } });
+  return inPub.slice(start).map(r => Number(r[field]));
+}
+
 /* MID — a VOLUME-WEIGHTED index across providers, for the most recent period that
    actually traded. ⚠ The zero-volume provider is the whole reason this is weighted:
    a straight mean of £97.92 and £0.00 is £48.96, a number no one paid. */
@@ -2332,12 +2387,27 @@ function renderForecastTile(cfg){
     meta.innerHTML = cfg.source + ' · published ' + esc(fmtTime(hit.publishTime))
       + ' · SP' + esc(String(hit.row.settlementPeriod ?? "–"));
   }
+  /* ⚠ v0.84: THE TRACE, AND IT IS A DRAWING RATHER THAN A REQUEST. The publish already in hand
+     carries the whole forward horizon — it is what `nationalRowsNearestNow` picked one row out
+     of — so the shape costs nothing but the drawing. `forward:true` dashes the line and moves
+     the dot to the nearest period, because this series runs AWAY from now rather than towards
+     it; see the sparkline's own comment for why that distinction is not cosmetic. */
+  if(cfg.spark){
+    sparkline($(cfg.spark), $(cfg.spark + "-cap"),
+      nationalForwardSeries(rows, cfg.field),
+      { fmt: cfg.fmt, label: cfg.sparkLabel || "", forward: true,
+        /* `mid` only where zero is a real threshold. On the imbalance it is the whole point —
+           the crossing is where the system is expected to turn from long to short — and on
+           demand it would be a line the series can never approach. */
+        ...(cfg.sparkMid != null ? { mid: cfg.sparkMid } : {}) });
+  }
   S[cfg.explainer] = cfg.explain(v, hit);
 }
 
 function renderDemandForecast(){
   renderForecastTile({
     id:"t-ndf", feed:"ndf", field:"demand", unit:"MW",
+    spark:"ndf-spark", sparkLabel:"Demand forecast, remaining horizon",
     source:'Elexon <span class="term ds" data-term="NDF">NDF</span>',
     explainer:"ndfExplainer",
     fmt:(v)=>uv(v),
@@ -2358,6 +2428,7 @@ function renderDemandForecast(){
 function renderForecastImbalance(){
   renderForecastTile({
     id:"t-imb", feed:"imbalngc", field:"imbalance", unit:"MW",
+    spark:"imb-spark", sparkLabel:"Forecast imbalance, remaining horizon", sparkMid:0,
     source:'Elexon <span class="term ds" data-term="IMBALNGC">IMBALNGC</span>',
     explainer:"imbExplainer",
     /* Signed, and the sign is the content: this is a direction, not a size. */
@@ -2389,16 +2460,36 @@ function renderDemandMargin(){
   /* ⚠ THE DATE, NOT A TIME. This dataset has no "now" — its nearest figure is two days out —
      so the mark states a DATE and the tile never implies it describes this half hour. */
   const dLabel = "D+" + m.daysAhead;
+  /* ⚠ THE WEEKDAY ON THE FACE, THE DATE IN THE PROSE. The meta line is glanced at and wants the
+     form a reader places without arithmetic; the explainer is read, may be quoted, and wants the
+     one that is unambiguous on its own — so it carries both. */
+  const dWhen = fmtDayAhead(m.forecastDate, m.daysAhead);
+  const dFull = fmtDate(m.forecastDate + "T12:00:00Z");
   setFigure(el, uv(m.margin), unit + figForecastMark(dLabel,
-    "Surplus margin forecast for " + fmtDate(m.forecastDate + "T12:00:00Z") + ", "
+    "Surplus margin forecast for " + dWhen + " (" + dFull + "), "
     + m.daysAhead + " days ahead. This dataset does not publish a figure for today."));
   if(meta){
     meta.innerHTML = 'Elexon <span class="term ds" data-term="OCNMFD2">OCNMFD2</span> · for '
-      + esc(fmtDate(m.forecastDate + "T12:00:00Z"));
+      + esc(dWhen);
+  }
+  /* ⚠ v0.84: THIS TRACE IS DAYS, NOT HALF HOURS — the only series on the page that is. Thirteen
+     points from D+2 to D+14, one per day, evenly spaced, which is what index plotting requires.
+     It reads like the other two forecast traces but shows something different in kind: not how
+     the next few hours look, but how the margin develops across a fortnight, which is the
+     question this dataset exists to answer.
+     ⚠ NO `mid`. Zero margin is a catastrophe rather than a threshold, and a reference line at a
+     value the series should never approach would be scenery, not information. */
+  {
+    const pubM = latestPublish(rows);
+    const days = (rows||[]).filter(r => r && r.publishTime === pubM && r.forecastDate && r.margin != null)
+      .sort((a,b)=> a.forecastDate < b.forecastDate ? -1 : 1)
+      .map(r => Number(r.margin));
+    sparkline($("mgn-spark"), $("mgn-spark-cap"), days,
+      { fmt:(v)=>uv(v), label:"Demand margin, published horizon", forward:true });
   }
   S.mgnExplainer =
     "<b>The forecast surplus of available generation over demand at peak, for "
-    + esc(fmtDate(m.forecastDate + "T12:00:00Z")) + ".</b> It is the headroom the system "
+    + esc(dWhen) + " (" + esc(dFull) + ").</b> It is the headroom the system "
     + "expects to have — the margin between what can be generated and what is expected to be "
     + "needed.<br><br>"
     + "⚠ <b>There is no figure for today, and that is the dataset rather than this page.</b> "
@@ -3155,8 +3246,16 @@ function renderTiles(snap){
   if(S.price){
     const p = S.price;
     const same = Math.abs(p.systemSellPrice - p.systemBuyPrice) < 0.005;
-    setFigure($("t-px"), num(p.systemSellPrice,2), '<span class="unit">£/MWh</span>');
-    $("t-px-meta").innerHTML = (same ? "Single price (SSP = SBP)" : "SBP <b>"+num(p.systemBuyPrice,2)+"</b>") +
+    /* ⚠ v0.84: THE FACE WAS THE ONE PLACE THE v0.74 SWEEP MISSED. That release found five copies
+       of the money rule and replaced them with one function — but it fixed the y-axis, the chart
+       label, the tooltip and the low/high sentence, and left the figure a reader actually looks
+       at first printing a bare `200.61`. It read as money-shaped without being money, and it sat
+       two inches from a Market price tile that does carry the symbol, which is what made it
+       visible. Reported by the author.
+       ⚠ `money` and not `"£" + num(...)`: this price is negative on most windy nights, and the
+       sign belongs OUTSIDE the symbol with a true minus — −£94, never £-94. */
+    setFigure($("t-px"), money(p.systemSellPrice,2), '<span class="unit">£/MWh</span>');
+    $("t-px-meta").innerHTML = (same ? "Single price (SSP = SBP)" : "SBP <b>"+money(p.systemBuyPrice,2)+"</b>") +
       " · NIV <b>"+num(p.netImbalanceVolume,1)+" MWh</b> ("+(p.netImbalanceVolume>=0?"short":"long")+")"+
       " · "+fmtDate(p.startTime)+" SP"+p.settlementPeriod;
   } else {
@@ -4076,7 +4175,14 @@ function sparkline(svgEl, capEl, series, opts={}){
   /* `fmt` returns the COMPLETE display string, units and sign included. An earlier version
      took a separate `unit` and concatenated it, which put the symbol on the wrong side of a
      currency ("-94 £") and made a minus sign ambiguous. One formatter, one string. */
-  const { mid=null, band=null, fmt=(v)=>num(v,0), label="" } = opts;
+  /* ⚠ v0.84: `forward` FLIPS TWO THINGS AND NOTHING ELSE. The series still runs left to right in
+     time — that never changes — but on a forecast the left edge is NOW and the right edge is the
+     far end of the horizon, so the point the tile's figure is showing is the FIRST one, not the
+     last. The dot moves to it, and the line goes dashed. See the CSS for why dashed.
+     ⚠ The caption still reads low/high over the drawn window, which is the same claim it makes
+     for history; the accessible title says "forecast" so the text alternative does not present a
+     projection as a record either. */
+  const { mid=null, band=null, fmt=(v)=>num(v,0), label="", forward=false } = opts;
   if(!svgEl) return;
   const vals = (series||[]).filter(v=>v!=null && isFinite(v));
   const cap = capEl || null;
@@ -4100,8 +4206,9 @@ function sparkline(svgEl, capEl, series, opts={}){
   if(band) out += `<rect class="sband" x="0" y="${y(band[1]).toFixed(1)}" width="${W}"
     height="${Math.max(0.5, y(band[0])-y(band[1])).toFixed(1)}"/>`;
   if(mid!=null) out += `<line class="smid" x1="0" y1="${y(mid).toFixed(1)}" x2="${W}" y2="${y(mid).toFixed(1)}"/>`;
-  out += `<polyline class="sline" points="${vals.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ")}"/>`;
-  out += `<circle class="sdot" cx="${(W-1.6).toFixed(1)}" cy="${y(vals[vals.length-1]).toFixed(1)}" r="2.1"/>`;
+  out += `<polyline class="${forward?"sline-fc":"sline"}" points="${vals.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ")}"/>`;
+  const markIdx = forward ? 0 : vals.length-1;
+  out += `<circle class="${forward?"sdot-fc":"sdot"}" cx="${(forward?1.6:W-1.6).toFixed(1)}" cy="${y(vals[markIdx]).toFixed(1)}" r="2.1"/>`;
   const t = svgEl.querySelector("title");
   svgEl.innerHTML = out;
   /* The <title> is the accessible name and is rebuilt because innerHTML just removed it. A
@@ -4109,8 +4216,11 @@ function sparkline(svgEl, capEl, series, opts={}){
      carries the same three numbers the caption does. */
   const ttl = document.createElementNS("http://www.w3.org/2000/svg","title");
   ttl.id = (t && t.id) || "";
-  ttl.textContent = `${label}: low ${fmt(Math.min(...vals))}, high ${fmt(Math.max(...vals))}, ` +
-    `latest ${fmt(vals[vals.length-1])}`;
+  ttl.textContent = forward
+    ? `${label}: forecast, low ${fmt(Math.min(...vals))}, high ${fmt(Math.max(...vals))}, ` +
+      `nearest period ${fmt(vals[0])}`
+    : `${label}: low ${fmt(Math.min(...vals))}, high ${fmt(Math.max(...vals))}, ` +
+      `latest ${fmt(vals[vals.length-1])}`;
   svgEl.insertBefore(ttl, svgEl.firstChild);
   if(cap) cap.innerHTML =
     `<span>low <b>${fmt(Math.min(...vals))}</b></span>` +
