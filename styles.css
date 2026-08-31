@@ -1,4 +1,4 @@
-/* GENERATED from dash/GB_Electricity_v0.81.html (md5 eb42734e61c6953eea8c62def68adc25) by tools/pages81.mjs — do not edit. */
+/* GENERATED from dash/GB_Electricity_v0.82.html (md5 c224054c520e5a2275eaed91bb3a2bb9) by tools/pages82.mjs — do not edit. */
   /* v0.80 (rev 74, Phase 0): the three Inter faces moved to css/fonts.css, their bytes to
      assets/inter-{400,600,700}.woff2 — linked from <head>. The OFL licence notice travels
      with them, as the licence requires. */
@@ -260,6 +260,35 @@
      seven of them read as seven objects rather than one block. */
   /* v0.80 (rev 74, Phase 0): --red-tail and the red-device history moved to css/tokens.css;
      the .rule gradient below still consumes it. */
+  /* ---- v0.82: the nav row — nav on the left, live status on the right ---- */
+  .navrow{display:flex;align-items:center;gap:16px;}
+  /* The nav is the flexible half and the one that scrolls; the status never shrinks, because a
+     truncated timestamp is worse than a truncated nav — the nav's items are recoverable by
+     scrolling and half a clock time is not. */
+  .navrow > .mainnav{flex:1 1 auto;min-width:0;}
+  .navrow > .livewrap{flex:0 0 auto;}
+  /* ⚠ v0.82: EMPHASIS BY WEIGHT AND INK, NOT BY SIZE OR COLOUR. The chip is a status, and the
+     page's own rule is that a quiet thing is quiet by size, weight and position — so the loud
+     version of it is the same size in a stronger ink with the reading itself at 700. No new
+     hue: `--ink` is the ink the figures already use. */
+  .navrow .livewrap{font-size:12.5px;color:var(--ink-dim);}
+  .navrow .livewrap #live-lead{font-weight:700;color:var(--ink);}
+  .navrow .livewrap #live-age{font-weight:700;color:var(--ink);}
+  @media (max-width:700px){
+    /* The status keeps its place at the end of the row; the nav gives up the width because it
+       can scroll and the status cannot. Below 430px the absolute time is dropped rather than
+       the age — see `#live-clock` — because "3 min ago" is the question a reader is asking. */
+    .navrow{gap:10px;}
+    .navrow .livewrap{font-size:11.5px;}
+  }
+  /* ⚠ THE CHIP SHEDS DETAIL BEFORE THE NAV SHEDS WIDTH, and the order it sheds in is the order
+     of how general the information is. The absolute time goes first (the age answers the same
+     question and answers it better), then the settlement period (specialist detail). What never
+     goes is the dot and the age — liveness and staleness are the reason the chip exists. Both
+     survive in the chip's own `title`, which states the time and the period in full. */
+  @media (max-width:620px){ #live-clock{display:none;} }
+  @media (max-width:560px){ #live-sp{display:none;} }
+
   /* ================= SITE NAV (v0.81) =================
      Six destinations across the top of every page. The treatment is the house one rather than
      a new invention: quiet ink for the rest, `--blue-text` and a 2px `--blue` underline for the
@@ -288,8 +317,25 @@
   .mainnav a:hover{color:var(--blue-text);background:var(--grey-bg);}
   .mainnav a:focus-visible{outline:2px solid var(--blue-text);outline-offset:-2px;}
   .mainnav a[aria-current="page"]{color:var(--blue-text);font-weight:700;}
+  /* ⚠ v0.82: THE CURRENT TAB'S UNDERLINE TAKES THE RED DEVICE, at the next step of the series
+     the device is already expressed in — and the divisor is the whole decision.
+     The rule is a proportion, not a pixel count: the page rule carries `--red-tail`, and the
+     hero's inset bar carries `--red-tail/2` because the tile is about half the page's width.
+     Carried literally, a nav tab is about a thirteenth of the page rule, which would put the
+     terminal at 2.6px — a dot, not a terminal, and invisible at 2px high.
+     ⚠ SO THE SERIES STOPS AT /4 RATHER THAN CONTINUING, and that is stated because it is an
+     exception: below about 8px the device stops reading as the end of a line and becomes a
+     speck, so /4 is the floor at which it still means what it means everywhere else. The
+     alternative — a visible cap sized by eye — would give this one instance several times the
+     red density of every other, which is exactly the creep the 10% share cap exists to catch.
+     `--accent` rather than `--blue`, because that is the token the other four instances use and
+     the device is defined on a blue STRUCTURAL line; the two resolve to the same value today,
+     which is precisely why naming the right one now matters. */
   .mainnav a[aria-current="page"]::after{content:"";position:absolute;left:8px;right:8px;bottom:0;
-    height:2px;background:var(--blue);border-radius:1px 1px 0 0;}
+    height:2px;border-radius:1px 1px 0 0;
+    background:linear-gradient(90deg,
+      var(--accent) 0 calc(100% - var(--red-tail)/4),
+      var(--red) calc(100% - var(--red-tail)/4) 100%);}
   /* ⚠ The strip fades at its right edge ONLY while there is more to reach. A permanent fade is a
      decoration that lies on a wide screen; `animation-timeline:scroll()` would be the tidy way and
      is not portable yet, so the fade is painted by the container and simply has nowhere to show

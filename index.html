@@ -20,8 +20,8 @@
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v81.png">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v81.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v82.png">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v82.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -29,7 +29,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v81.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v82.png">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -47,9 +47,38 @@
      bytes and both must agree. -->
 <!-- v0.3199: stable 64×64 PNG favicon first in the document for Google Search and other crawlers.
      The SVG remains the JS-controlled browser favicon so the existing settlement-period pulse is preserved. -->
-<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+<!-- ⚠ v0.82: THE ICON SET, AND WHY THERE ARE NOW THREE OF THEM.
+     Reported: Google Search shows the generic globe rather than the mark. Diagnosed rather than
+     guessed, and two popular explanations were checked and ELIMINATED first — Google's current
+     documented requirement is "square, at least 8x8, larger than 48x48 recommended", NOT the
+     often-repeated "multiple of 48", so 64x64 was already valid; and the live Cloudflare-managed
+     robots.txt allows Googlebot-Image (it restricts nine AI crawlers and nothing else).
+
+     What is left is the format list and the JS. ⚠ GOOGLE'S SUPPORTED FAVICON FORMATS ARE BMP,
+     GIF, ICO, PNG, JPEG, PPM AND TIFF — SVG IS NOT AMONG THEM. This head declared an SVG icon
+     second, and `favPulse()` then rewrites that link's href to a generated `data:` URI on the
+     first tick, which a crawler cannot fetch at all. So of the two icons a crawler could find,
+     one was an unsupported format that becomes uncrawlable the moment the page runs.
+
+     Three changes, none of which touch the pulse:
+       · `/favicon.ico` — 48 and 96px in one file, the conventional path Google checks by
+         convention even without a link element, and a format it supports.
+       · `/favicon.png` is 96x96 now, up from 64. Both cleared the minimum; 96 is what the
+         documentation actually recommends for the surfaces it is rendered on.
+       · ⚠ THE PNG STAYS FIRST. The ICO was briefly put first on the theory that the crawler
+         should meet a supported format first — and the harness rejected it, correctly. v33 had
+         already made exactly that decision and pinned it: "a static /favicon.png sits FIRST in
+         the head for crawlers (Google will not render an SVG data URI in results)". The
+         ordering was never the fault; the PNG was already first, static and crawlable. The ICO
+         is an ADDITION for the conventional path, not a replacement, and it goes second.
+     Both raster files are rendered from `favicon.svg` — the same vector, so the mark is
+     identical rather than an upscale of the old 64px raster.
+     ⚠ The SVG link keeps its id and its pulse: it is what a browser tab actually uses, and the
+     animation is a real feature. Nothing here changes it. -->
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
+<link rel="icon" sizes="48x48 96x96" href="/favicon.ico">
 <link rel="icon" id="favicon" type="image/svg+xml" href="/favicon.svg">
-<link rel="apple-touch-icon" sizes="64x64" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="96x96" href="/favicon.png">
 <meta name="color-scheme" content="light dark">
 <!-- Pre-boot placeholders. Both are overwritten from APP_NAME/APP_VERSION as soon as the
      script runs; they exist so the tab and masthead are not blank for that instant. They are
@@ -328,6 +357,35 @@
      seven of them read as seven objects rather than one block. */
   /* v0.80 (rev 74, Phase 0): --red-tail and the red-device history moved to css/tokens.css;
      the .rule gradient below still consumes it. */
+  /* ---- v0.82: the nav row — nav on the left, live status on the right ---- */
+  .navrow{display:flex;align-items:center;gap:16px;}
+  /* The nav is the flexible half and the one that scrolls; the status never shrinks, because a
+     truncated timestamp is worse than a truncated nav — the nav's items are recoverable by
+     scrolling and half a clock time is not. */
+  .navrow > .mainnav{flex:1 1 auto;min-width:0;}
+  .navrow > .livewrap{flex:0 0 auto;}
+  /* ⚠ v0.82: EMPHASIS BY WEIGHT AND INK, NOT BY SIZE OR COLOUR. The chip is a status, and the
+     page's own rule is that a quiet thing is quiet by size, weight and position — so the loud
+     version of it is the same size in a stronger ink with the reading itself at 700. No new
+     hue: `--ink` is the ink the figures already use. */
+  .navrow .livewrap{font-size:12.5px;color:var(--ink-dim);}
+  .navrow .livewrap #live-lead{font-weight:700;color:var(--ink);}
+  .navrow .livewrap #live-age{font-weight:700;color:var(--ink);}
+  @media (max-width:700px){
+    /* The status keeps its place at the end of the row; the nav gives up the width because it
+       can scroll and the status cannot. Below 430px the absolute time is dropped rather than
+       the age — see `#live-clock` — because "3 min ago" is the question a reader is asking. */
+    .navrow{gap:10px;}
+    .navrow .livewrap{font-size:11.5px;}
+  }
+  /* ⚠ THE CHIP SHEDS DETAIL BEFORE THE NAV SHEDS WIDTH, and the order it sheds in is the order
+     of how general the information is. The absolute time goes first (the age answers the same
+     question and answers it better), then the settlement period (specialist detail). What never
+     goes is the dot and the age — liveness and staleness are the reason the chip exists. Both
+     survive in the chip's own `title`, which states the time and the period in full. */
+  @media (max-width:620px){ #live-clock{display:none;} }
+  @media (max-width:560px){ #live-sp{display:none;} }
+
   /* ================= SITE NAV (v0.81) =================
      Six destinations across the top of every page. The treatment is the house one rather than
      a new invention: quiet ink for the rest, `--blue-text` and a 2px `--blue` underline for the
@@ -356,8 +414,25 @@
   .mainnav a:hover{color:var(--blue-text);background:var(--grey-bg);}
   .mainnav a:focus-visible{outline:2px solid var(--blue-text);outline-offset:-2px;}
   .mainnav a[aria-current="page"]{color:var(--blue-text);font-weight:700;}
+  /* ⚠ v0.82: THE CURRENT TAB'S UNDERLINE TAKES THE RED DEVICE, at the next step of the series
+     the device is already expressed in — and the divisor is the whole decision.
+     The rule is a proportion, not a pixel count: the page rule carries `--red-tail`, and the
+     hero's inset bar carries `--red-tail/2` because the tile is about half the page's width.
+     Carried literally, a nav tab is about a thirteenth of the page rule, which would put the
+     terminal at 2.6px — a dot, not a terminal, and invisible at 2px high.
+     ⚠ SO THE SERIES STOPS AT /4 RATHER THAN CONTINUING, and that is stated because it is an
+     exception: below about 8px the device stops reading as the end of a line and becomes a
+     speck, so /4 is the floor at which it still means what it means everywhere else. The
+     alternative — a visible cap sized by eye — would give this one instance several times the
+     red density of every other, which is exactly the creep the 10% share cap exists to catch.
+     `--accent` rather than `--blue`, because that is the token the other four instances use and
+     the device is defined on a blue STRUCTURAL line; the two resolve to the same value today,
+     which is precisely why naming the right one now matters. */
   .mainnav a[aria-current="page"]::after{content:"";position:absolute;left:8px;right:8px;bottom:0;
-    height:2px;background:var(--blue);border-radius:1px 1px 0 0;}
+    height:2px;border-radius:1px 1px 0 0;
+    background:linear-gradient(90deg,
+      var(--accent) 0 calc(100% - var(--red-tail)/4),
+      var(--red) calc(100% - var(--red-tail)/4) 100%);}
   /* ⚠ The strip fades at its right edge ONLY while there is more to reach. A permanent fade is a
      decoration that lies on a wide screen; `animation-timeline:scroll()` would be the tidy way and
      is not portable yet, so the fade is painted by the container and simply has nowhere to show
@@ -4784,7 +4859,6 @@
         </button>
       </div>
       <div class="header-actions">
-        <span class="livewrap" id="live-status" title="Waiting for the latest live data"><span class="livedot" id="livedot"></span><span id="livetext" aria-live="polite">connecting…</span></span>
         <button class="tempchip" id="tempchip" aria-expanded="false"
                 aria-label="GB average temperature — details" hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -4826,6 +4900,14 @@
          screen reader announces and what the underline says visually. The generator rewrites
          that attribute per route and does not touch anything else.
          Below 700px it becomes a horizontally scrolling strip — see the CSS. -->
+    <!-- ⚠ v0.82: THE NAV ROW CARRIES THE LIVE STATUS. It sat in `.header-actions` beside the
+         temperature chip and the MW/GW switch — which are CONTROLS, and grouping a status
+         readout with them said the wrong thing about what it is. The nav row already existed
+         and had roughly 900px of unused width on a desktop, so the chip gets its own visual
+         line, directly above the red-tipped rule, at ZERO added masthead height. That last
+         part is the whole reason this beats a third row: the masthead is sticky, so every
+         pixel of it is paid on every scroll, and the hero figure is what pays. -->
+    <div class="navrow">
     <nav class="mainnav" id="mainnav" aria-label="Sections">
       <a href="/" data-nav="dashboard" aria-current="page">Dashboard</a>
       <a href="/generation" data-nav="generation">Generation</a>
@@ -4834,6 +4916,8 @@
       <a href="/carbon-intensity" data-nav="carbon-intensity">Carbon intensity</a>
       <a href="/system" data-nav="system">System</a>
     </nav>
+      <span class="livewrap" id="live-status" title="Waiting for the latest live data"><span class="livedot" id="livedot"></span><span id="livetext" aria-live="polite">connecting…</span></span>
+    </div>
   </div>
   <hr class="rule">
   <div id="loadbar" role="progressbar" aria-label="Loading live data"
@@ -6093,7 +6177,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.81";
+const APP_VERSION = "v0.82";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -7609,13 +7693,61 @@ function renderHealth(){
   bar.style.display="";
 }
 
+/* ============================================================
+   v0.82 — HOW OLD IS THIS, rather than HOW LONG UNTIL THE NEXT ONE.
+
+   ⚠ A COUNTDOWN WAS ASKED FOR AND IS NOT WHAT THIS IS, for three measured reasons.
+   The refresh is `setInterval(REFRESH_MS)` started when the page loaded and skipped while the
+   tab is hidden — so a countdown counts down to the moment the page will ASK, which is not the
+   moment new data exists. FUELINST publishes on its own five-minute cadence, unaligned to ours;
+   a timer reaching 0:00 and changing nothing on screen (same settlement period, or nothing new
+   published) reads as a broken page rather than a quiet system. And most of this page is not on
+   a five-minute cycle at all: interconnectors and carbon intensity are half-hourly settlement
+   values and PV_Live runs about ten minutes behind, so one countdown in the masthead would be a
+   promise the page cannot keep for most of what is under it.
+
+   An AGE is true without any of that. It needs no alignment, it is right on the first paint and
+   on the thousandth, and when a fetch fails it keeps counting up — which is exactly the signal a
+   reader wants, and is the honest version of what a stalled countdown would hide.
+   ============================================================ */
+function liveAge(ms){
+  const m = Math.floor(ms/60000);
+  if(m < 1)  return "just now";
+  if(m === 1) return "1 min ago";
+  if(m < 60) return m + " min ago";
+  const h = Math.round(m/60);
+  return h === 1 ? "about an hour ago" : "about " + h + " hours ago";
+}
+/* Repaints the age and nothing else. ⚠ It also re-evaluates STALENESS, which the old chip could
+   not: staleness was decided once per render, so a page whose feed died sat there saying "Live"
+   until the next successful fetch changed it — the one state where the label most needed to be
+   right was the state it could not reach. */
+function tickLiveAge(){
+  if(!S.liveStampMs) return;
+  const el = $("live-age"); if(!el) return;
+  const ageMs = Date.now() - S.liveStampMs, stale = ageMs > 20*60000;
+  el.textContent = liveAge(ageMs);
+  const dot = $("livedot"), live = $("live-status"), lead = $("live-lead");
+  if(dot)  dot.className = "livedot" + (stale ? " stale" : "");
+  if(live) live.classList.toggle("stale", stale);
+  if(lead) lead.textContent = stale ? "Stale" : "Live";
+}
+
 function renderStatus(snap){
   const dot=$("livedot"),txt=$("livetext"),live=$("live-status");
   if(!snap){dot.className="livedot err";live.classList.remove("stale");live.classList.add("err");txt.textContent="No live data";live.title="The latest Elexon live generation snapshot could not be loaded.";}
   else{
     const ageMin=(Date.now()-new Date(snap.publishTime).getTime())/60000,stale=ageMin>20;
     dot.className="livedot"+(stale?" stale":"");live.classList.toggle("stale",stale);live.classList.remove("err");
-    txt.textContent=(stale?"Stale · ":"Live · ")+"updated "+fmtTime(snap.publishTime)+" · SP"+(snap.settlementPeriod??"–");
+    /* ⚠ v0.82: THE CHIP IS SPANS NOW, SO THE AGE CAN TICK WITHOUT A FETCH. `#live-age` is the
+       only part that changes between refreshes; rebuilding the whole string on a timer would
+       rewrite an aria-live region every thirty seconds and make a screen reader announce a
+       timestamp that has not changed. */
+    S.liveStampMs = new Date(snap.publishTime).getTime();
+    txt.innerHTML = '<span id="live-lead">'+(stale?"Stale":"Live")+'</span> · '
+      + '<span id="live-clock">updated '+esc(fmtTime(snap.publishTime))+' · </span>'
+      + '<span id="live-age">'+esc(liveAge(Date.now()-S.liveStampMs))+'</span>'
+      + '<span id="live-sp"> · SP'+esc(String(snap.settlementPeriod??"–"))+'</span>';
     live.title=stale?"The latest live snapshot is more than 20 minutes old. The page refreshes automatically every five minutes.":"Latest Elexon live generation snapshot: "+fmtTime(snap.publishTime)+" · settlement period "+(snap.settlementPeriod??"–");
   }
   const eb=$("errbar");
@@ -8590,6 +8722,35 @@ function renderSystemInsight(snap){
      cannot infer why dispatch changed. */
   const current = hist.length ? hist[hist.length-1] : null;
   const prior = hist.length >= 3 ? hist[hist.length-3] : null;
+  /* ⚠ v0.82: THE HEADER NAMES THE TWO MOMENTS BEING COMPARED, and it is not decoration.
+     "Largest movements in the last hour" is a claim about a window, and until now the window
+     was unstated and — more to the point — not reliably an hour. It is `hist[n-1]` against
+     `hist[n-3]`: two steps back on a half-hourly series, which IS an hour only when neither
+     period is missing. Real FUELHH is stitched from three fetches and periods do go missing
+     (rev 69 paid for assuming otherwise on the wind chart), so on a gapped series those two
+     steps can be ninety minutes and the header would still have said "the last hour".
+     Naming both endpoints makes the claim checkable, which is the denominator rule this project
+     already applies to every percentage, applied to a window instead. */
+  {
+    const note = $("insight-note");
+    if(note){
+      if(current && prior && current.t && prior.t){
+        const mins = Math.round((new Date(current.t) - new Date(prior.t))/60000);
+        /* The span is stated only when it is NOT the hour the label implies — saying "60 min"
+           beside two times an hour apart is noise, and saying nothing when it is 90 would be the
+           original fault. */
+        const odd = Math.abs(mins - 60) > 5 ? ' <b class="ds">'+mins+' min</b>' : '';
+        note.innerHTML = 'Largest movements · ' + esc(fmtTime(prior.t)) + ' → '
+          + esc(fmtTime(current.t)) + odd;
+        note.title = 'Each figure is the change between the settlement periods ending '
+          + fmtTime(prior.t) + ' and ' + fmtTime(current.t)
+          + (odd ? ' — ' + mins + ' minutes apart, because a settlement period is missing from the feed.' : '.');
+      } else {
+        note.textContent = 'Largest movements in the last hour';
+        note.removeAttribute('title');
+      }
+    }
+  }
   const changes = [];
 
   if(current && prior){
@@ -13037,6 +13198,11 @@ window.addEventListener("resize", ()=>{
 });
 
 setInterval(()=>{ if(!document.hidden) loadAll(); }, REFRESH_MS);
+/* v0.82: the age ticks every 30s so a minute never passes unclaimed. Cheap by construction — it
+   rewrites one text node and touches no feed — and it is deliberately NOT tied to the refresh:
+   the whole point of an age is that it stays true while the refresh is not happening. */
+setInterval(tickLiveAge, 30000);
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) tickLiveAge(); });
 document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) loadAll(); });
 
 /* No stored value means system — the default for a new reader. A legacy "dark" or "light" is an
@@ -13058,6 +13224,13 @@ applyTheme(store.get("nd-theme") || "system", false);
    reported `hasRows:false` into an output nobody failed a release over. The check on the one
    arithmetic error this project has actually shipped could not run. */
 window.__dash = Object.freeze({ ciBand, ciRead, CI_BANDS, CI_SCALE_MAX, ciScaleParts,
+  /* ⚠ v0.82: `liveAge` belongs here for the same reason `moverWording` does — the claim is about
+     a MATRIX of wordings (just now / 1 min / N min / about an hour / about N hours) and about
+     the boundaries between them, and driving those through page loads would mean waiting real
+     minutes for each one. It is a pure function of a duration: no state, no setter, nothing that
+     can change what the page displays, which is this surface's whole contract. `tickLiveAge` is
+     deliberately NOT here — it writes to the DOM. */
+  liveAge,
   /* ⚠ v0.70: `moverWording` and `moverLevel` are pure functions of (key, delta, level), and the
      claim made for them is a claim about a MATRIX rather than about whichever three series the
      fixture happened to move. Pumped storage alone has seven cases — generating more, generating

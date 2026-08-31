@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- GENERATED FILE — do not edit. Produced by tools/pages81.mjs from
-     dash/GB_Electricity_v0.81.html (md5 eb42734e61c6953eea8c62def68adc25). Edit the dashboard, re-run the generator. -->
+<!-- GENERATED FILE — do not edit. Produced by tools/pages82.mjs from
+     dash/GB_Electricity_v0.82.html (md5 c224054c520e5a2275eaed91bb3a2bb9). Edit the dashboard, re-run the generator. -->
 <html lang="en-GB" data-page="interconnectors" class="page-ic">
 <head>
 <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 <title>GB Interconnectors — Live Flows, Capacity & Every Link Explained</title>
 <meta name="description" content="Live flows on all ten GB electricity interconnectors — France, Norway, Denmark, the Netherlands, Belgium, Ireland and Northern Ireland — with each link’s capacity, route and owner, and an explanation of what decides which way the power runs.">
 <link rel="canonical" href="https://gbelectricity.uk/interconnectors">
-<meta name="generator" content="pages81.mjs — from GB Electricity v0.81">
+<meta name="generator" content="pages82.mjs — from GB Electricity v0.82">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -24,14 +24,15 @@
 <meta property="og:url" content="https://gbelectricity.uk/interconnectors">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v81.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v82.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Interconnectors — Live Flows, Capacity & Every Link Explained">
 <meta name="twitter:description" content="Live flows on all ten GB electricity interconnectors — France, Norway, Denmark, the Netherlands, Belgium, Ireland and Northern Ireland — with each link’s capacity, route and owner, and an explanation of what decides which way the power runs.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v81.png">
-<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v82.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
+<link rel="icon" sizes="48x48 96x96" href="/favicon.ico">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="apple-touch-icon" sizes="64x64" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="96x96" href="/favicon.png">
 <meta name="color-scheme" content="light dark">
 <script>/* Applied before first paint so a dark-mode reader never gets a white flash.
   The storage key is extracted from the dashboard at generation time, so the two
@@ -46,7 +47,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
 <link rel="stylesheet" href="/css/tokens.css">
 <link rel="stylesheet" href="/styles.css">
 <style>
-  /* ---- generated page shell (pages81.mjs) ---- */
+  /* ---- generated page shell (pages82.mjs) ---- */
   /* ⚠ v0.73: BACK TO TOP. Fixed to the corner rather than pinned to the end of the article,
      because a reader wants it at the moment they decide to leave, not after scrolling further to
      find it. 44px minimum on both axes (WCAG 2.5.5's enhanced target, not merely 2.5.8's 24) —
@@ -197,7 +198,6 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         </a>
       </div>
       <div class="header-actions">
-        <span class="livewrap" id="live-status" title="Waiting for the latest live data"><span class="livedot" id="livedot"></span><span id="livetext" aria-live="polite">connecting…</span></span>
         <button type="button" class="unitswitch" id="unitswitch" data-unit="MW" data-flip="0"
                 role="switch" aria-checked="false" aria-label="Show values in gigawatts">
           <span class="slider" aria-hidden="true"></span>
@@ -205,6 +205,9 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
           <span class="unitbtn" data-unit="GW">GW</span>
         </button></div>
     </div>
+    <!-- rev 76: the nav row carries the live status on an app page, exactly as the dashboard
+         does. A static page has no live status to show, so the row holds the nav alone. -->
+    <div class="navrow">
 <nav class="mainnav" id="mainnav" aria-label="Sections">
       <a href="/" data-nav="dashboard">Dashboard</a>
       <a href="/generation" data-nav="generation">Generation</a>
@@ -213,6 +216,8 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
       <a href="/carbon-intensity" data-nav="carbon-intensity">Carbon intensity</a>
       <a href="/system" data-nav="system">System</a>
     </nav>
+      <span class="livewrap" id="live-status" title="Waiting for the latest live data"><span class="livedot" id="livedot"></span><span id="livetext" aria-live="polite">connecting…</span></span>
+    </div>
   </div>
   <hr class="rule">
   <div id="loadbar" role="progressbar" aria-label="Loading live data"
@@ -546,7 +551,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" title="Generated from GB Electricity v0.81">v0.81</span> &middot;
+      <span class="version-label" title="Generated from GB Electricity v0.82">v0.82</span> &middot;
       <a href="/about" class="footer-link">About</a> &middot;
       <a href="/methodology" class="footer-link">Methodology</a>
       <span class="theme-pref" id="theme-pref" role="radiogroup" aria-label="Colour theme">
@@ -582,7 +587,7 @@ window.__GBE_PAGE = "interconnectors";
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.81";
+const APP_VERSION = "v0.82";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -2098,13 +2103,61 @@ function renderHealth(){
   bar.style.display="";
 }
 
+/* ============================================================
+   v0.82 — HOW OLD IS THIS, rather than HOW LONG UNTIL THE NEXT ONE.
+
+   ⚠ A COUNTDOWN WAS ASKED FOR AND IS NOT WHAT THIS IS, for three measured reasons.
+   The refresh is `setInterval(REFRESH_MS)` started when the page loaded and skipped while the
+   tab is hidden — so a countdown counts down to the moment the page will ASK, which is not the
+   moment new data exists. FUELINST publishes on its own five-minute cadence, unaligned to ours;
+   a timer reaching 0:00 and changing nothing on screen (same settlement period, or nothing new
+   published) reads as a broken page rather than a quiet system. And most of this page is not on
+   a five-minute cycle at all: interconnectors and carbon intensity are half-hourly settlement
+   values and PV_Live runs about ten minutes behind, so one countdown in the masthead would be a
+   promise the page cannot keep for most of what is under it.
+
+   An AGE is true without any of that. It needs no alignment, it is right on the first paint and
+   on the thousandth, and when a fetch fails it keeps counting up — which is exactly the signal a
+   reader wants, and is the honest version of what a stalled countdown would hide.
+   ============================================================ */
+function liveAge(ms){
+  const m = Math.floor(ms/60000);
+  if(m < 1)  return "just now";
+  if(m === 1) return "1 min ago";
+  if(m < 60) return m + " min ago";
+  const h = Math.round(m/60);
+  return h === 1 ? "about an hour ago" : "about " + h + " hours ago";
+}
+/* Repaints the age and nothing else. ⚠ It also re-evaluates STALENESS, which the old chip could
+   not: staleness was decided once per render, so a page whose feed died sat there saying "Live"
+   until the next successful fetch changed it — the one state where the label most needed to be
+   right was the state it could not reach. */
+function tickLiveAge(){
+  if(!S.liveStampMs) return;
+  const el = $("live-age"); if(!el) return;
+  const ageMs = Date.now() - S.liveStampMs, stale = ageMs > 20*60000;
+  el.textContent = liveAge(ageMs);
+  const dot = $("livedot"), live = $("live-status"), lead = $("live-lead");
+  if(dot)  dot.className = "livedot" + (stale ? " stale" : "");
+  if(live) live.classList.toggle("stale", stale);
+  if(lead) lead.textContent = stale ? "Stale" : "Live";
+}
+
 function renderStatus(snap){
   const dot=$("livedot"),txt=$("livetext"),live=$("live-status");
   if(!snap){dot.className="livedot err";live.classList.remove("stale");live.classList.add("err");txt.textContent="No live data";live.title="The latest Elexon live generation snapshot could not be loaded.";}
   else{
     const ageMin=(Date.now()-new Date(snap.publishTime).getTime())/60000,stale=ageMin>20;
     dot.className="livedot"+(stale?" stale":"");live.classList.toggle("stale",stale);live.classList.remove("err");
-    txt.textContent=(stale?"Stale · ":"Live · ")+"updated "+fmtTime(snap.publishTime)+" · SP"+(snap.settlementPeriod??"–");
+    /* ⚠ v0.82: THE CHIP IS SPANS NOW, SO THE AGE CAN TICK WITHOUT A FETCH. `#live-age` is the
+       only part that changes between refreshes; rebuilding the whole string on a timer would
+       rewrite an aria-live region every thirty seconds and make a screen reader announce a
+       timestamp that has not changed. */
+    S.liveStampMs = new Date(snap.publishTime).getTime();
+    txt.innerHTML = '<span id="live-lead">'+(stale?"Stale":"Live")+'</span> · '
+      + '<span id="live-clock">updated '+esc(fmtTime(snap.publishTime))+' · </span>'
+      + '<span id="live-age">'+esc(liveAge(Date.now()-S.liveStampMs))+'</span>'
+      + '<span id="live-sp"> · SP'+esc(String(snap.settlementPeriod??"–"))+'</span>';
     live.title=stale?"The latest live snapshot is more than 20 minutes old. The page refreshes automatically every five minutes.":"Latest Elexon live generation snapshot: "+fmtTime(snap.publishTime)+" · settlement period "+(snap.settlementPeriod??"–");
   }
   const eb=$("errbar");
@@ -3079,6 +3132,35 @@ function renderSystemInsight(snap){
      cannot infer why dispatch changed. */
   const current = hist.length ? hist[hist.length-1] : null;
   const prior = hist.length >= 3 ? hist[hist.length-3] : null;
+  /* ⚠ v0.82: THE HEADER NAMES THE TWO MOMENTS BEING COMPARED, and it is not decoration.
+     "Largest movements in the last hour" is a claim about a window, and until now the window
+     was unstated and — more to the point — not reliably an hour. It is `hist[n-1]` against
+     `hist[n-3]`: two steps back on a half-hourly series, which IS an hour only when neither
+     period is missing. Real FUELHH is stitched from three fetches and periods do go missing
+     (rev 69 paid for assuming otherwise on the wind chart), so on a gapped series those two
+     steps can be ninety minutes and the header would still have said "the last hour".
+     Naming both endpoints makes the claim checkable, which is the denominator rule this project
+     already applies to every percentage, applied to a window instead. */
+  {
+    const note = $("insight-note");
+    if(note){
+      if(current && prior && current.t && prior.t){
+        const mins = Math.round((new Date(current.t) - new Date(prior.t))/60000);
+        /* The span is stated only when it is NOT the hour the label implies — saying "60 min"
+           beside two times an hour apart is noise, and saying nothing when it is 90 would be the
+           original fault. */
+        const odd = Math.abs(mins - 60) > 5 ? ' <b class="ds">'+mins+' min</b>' : '';
+        note.innerHTML = 'Largest movements · ' + esc(fmtTime(prior.t)) + ' → '
+          + esc(fmtTime(current.t)) + odd;
+        note.title = 'Each figure is the change between the settlement periods ending '
+          + fmtTime(prior.t) + ' and ' + fmtTime(current.t)
+          + (odd ? ' — ' + mins + ' minutes apart, because a settlement period is missing from the feed.' : '.');
+      } else {
+        note.textContent = 'Largest movements in the last hour';
+        note.removeAttribute('title');
+      }
+    }
+  }
   const changes = [];
 
   if(current && prior){
@@ -7526,6 +7608,11 @@ window.addEventListener("resize", ()=>{
 });
 
 setInterval(()=>{ if(!document.hidden) loadAll(); }, REFRESH_MS);
+/* v0.82: the age ticks every 30s so a minute never passes unclaimed. Cheap by construction — it
+   rewrites one text node and touches no feed — and it is deliberately NOT tied to the refresh:
+   the whole point of an age is that it stays true while the refresh is not happening. */
+setInterval(tickLiveAge, 30000);
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) tickLiveAge(); });
 document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) loadAll(); });
 
 /* No stored value means system — the default for a new reader. A legacy "dark" or "light" is an
@@ -7547,6 +7634,13 @@ applyTheme(store.get("nd-theme") || "system", false);
    reported `hasRows:false` into an output nobody failed a release over. The check on the one
    arithmetic error this project has actually shipped could not run. */
 window.__dash = Object.freeze({ ciBand, ciRead, CI_BANDS, CI_SCALE_MAX, ciScaleParts,
+  /* ⚠ v0.82: `liveAge` belongs here for the same reason `moverWording` does — the claim is about
+     a MATRIX of wordings (just now / 1 min / N min / about an hour / about N hours) and about
+     the boundaries between them, and driving those through page loads would mean waiting real
+     minutes for each one. It is a pure function of a duration: no state, no setter, nothing that
+     can change what the page displays, which is this surface's whole contract. `tickLiveAge` is
+     deliberately NOT here — it writes to the DOM. */
+  liveAge,
   /* ⚠ v0.70: `moverWording` and `moverLevel` are pure functions of (key, delta, level), and the
      claim made for them is a claim about a MATRIX rather than about whichever three series the
      fixture happened to move. Pumped storage alone has seven cases — generating more, generating
