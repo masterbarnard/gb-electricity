@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- GENERATED FILE — do not edit. Produced by tools/pages85.mjs from
-     dash/GB_Electricity_v0.85.html (md5 6d1793470b51045acb8cf19603cff376). Edit the dashboard, re-run the generator. -->
+<!-- GENERATED FILE — do not edit. Produced by tools/pages88.mjs from
+     dash/GB_Electricity_v0.88.html (md5 cdbffc5b1d6f83061544fce5a06da4dd). Edit the dashboard, re-run the generator. -->
 <html lang="en-GB" data-page="interconnectors" class="page-ic">
 <head>
 <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 <title>GB Interconnectors — Live Flows, Capacity & Every Link Explained</title>
 <meta name="description" content="Live flows on all ten GB electricity interconnectors — France, Norway, Denmark, the Netherlands, Belgium, Ireland and Northern Ireland — with each link’s capacity, route and owner, and an explanation of what decides which way the power runs.">
 <link rel="canonical" href="https://gbelectricity.uk/interconnectors">
-<meta name="generator" content="pages85.mjs — from GB Electricity v0.85">
+<meta name="generator" content="pages88.mjs — from GB Electricity v0.88">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -24,11 +24,11 @@
 <meta property="og:url" content="https://gbelectricity.uk/interconnectors">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v85.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v88.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Interconnectors — Live Flows, Capacity & Every Link Explained">
 <meta name="twitter:description" content="Live flows on all ten GB electricity interconnectors — France, Norway, Denmark, the Netherlands, Belgium, Ireland and Northern Ireland — with each link’s capacity, route and owner, and an explanation of what decides which way the power runs.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v85.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v88.png">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
 <link rel="icon" sizes="48x48 96x96" href="/favicon.ico">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -47,7 +47,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
 <link rel="stylesheet" href="/css/tokens.css">
 <link rel="stylesheet" href="/styles.css">
 <style>
-  /* ---- generated page shell (pages85.mjs) ---- */
+  /* ---- generated page shell (pages88.mjs) ---- */
   /* ⚠ v0.73: BACK TO TOP. Fixed to the corner rather than pinned to the end of the article,
      because a reader wants it at the moment they decide to leave, not after scrolling further to
      find it. 44px minimum on both axes (WCAG 2.5.5's enhanced target, not merely 2.5.8's 24) —
@@ -230,7 +230,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
   <p class="page-lede">Ten subsea and tunnel cables connect Great Britain to six countries. This is what each one is doing right now, and what decides which way it runs.</p>
   <div id="healthbar" style="display:none;margin-top:16px;" class="callout flag" role="status"></div>
   <div id="errbar" style="display:none;margin-top:16px;" class="callout flag" role="status"></div>
-  <div class="panel" id="panel-ic">
+<div class="panel" id="panel-ic">
       <div class="panel-head">
         <h2>Interconnector flows</h2>
         <span class="note" id="ic-note"><span class="term ds" data-term="INTOUTHH">INTOUTHH</span> · half-hourly</span>
@@ -551,7 +551,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" title="Generated from GB Electricity v0.85">v0.85</span> &middot;
+      <span class="version-label" title="Generated from GB Electricity v0.88">v0.88</span> &middot;
       <a href="/about" class="footer-link">About</a> &middot;
       <a href="/methodology" class="footer-link">Methodology</a>
       <span class="theme-pref" id="theme-pref" role="radiogroup" aria-label="Colour theme">
@@ -568,7 +568,14 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
 /* ⚠ THIS IS THE DASHBOARD'S OWN APPLICATION, RUN WITH A NARROWER SCOPE — not a copy of part of
    it. `__GBE_PAGE` is read by PAGE_SCOPES in the script below, which decides which feeds are
    fetched and which renderers run. Set before the script rather than after, because the script
-   ends by calling loadAll(). */
+   ends by calling loadAll().
+   ⚠ v0.86: THIS WAS HARD-CODED TO "interconnectors" AND WAS INVISIBLE UNTIL A SECOND APP PAGE
+   EXISTED. It was correct while there was exactly one, and the moment the Generation page was
+   added it booted that page with the Interconnectors scope — so every generation renderer was
+   filtered out and the page rendered its panel shells and nothing in them. NO ERROR WAS THROWN
+   and nothing appeared in the console: a scope that excludes a renderer is the mechanism working
+   as designed, so the page looked like a data problem rather than a wiring one.
+   The slug is the scope key by construction now, which is why PAGE_SCOPES is keyed by slug. */
 window.__GBE_PAGE = "interconnectors";
 </script>
 <script>
@@ -587,7 +594,7 @@ window.__GBE_PAGE = "interconnectors";
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.85";
+const APP_VERSION = "v0.88";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -1401,6 +1408,40 @@ const figUnavailable = (el, tailHTML, why) =>
 function figForecastMark(label, note){
   return '<span class="figstate-fc" title="' + esc(note || "This figure is a forecast, not an outturn.") + '">'
     + '<span class="figstate-fc-t">' + esc(label) + '</span></span>';
+}
+/* ⚠ v0.87: A STALE SOLAR READING DURING DAYLIGHT, AND THE THREE FIGURES IT SILENTLY WRONGED.
+   Reported by the author from the live site: embedded generation showing 0 MW at 07:50 on
+   1 September, when GB rooftop solar should be low gigawatts an hour and a half after sunrise.
+   Reproduced with a fixture (PV_Live publishing up to 05:30 and nothing since, clock at 07:50):
+
+     Electricity available   22,772 MW   — no staleness mark at all
+     Embedded generation          0 MW   — no mark
+     Underlying demand       23,170 MW   — identical to national demand
+     the mix panel's note    "This reading is 110 minutes old (05:30)"
+
+   ⚠ THE PAGE ALREADY KNEW. `latestSolar()` computes the age and sets `stale`, and the solar
+   cross-check note beneath the mix panel says it in plain words — one scroll below the three
+   headline figures that were wrong. **The knowledge existed and did not reach the numbers.**
+
+   ⚠ AND IT IS THE SAME LAG v0.44 ALREADY FIXED, FROM THE OTHER END. That release caught AGWS
+   running 2h45m behind and showing 1,253 MW of solar at 21:40 — because solar at night is
+   visibly absurd. At dawn the identical lag produces a ZERO, which looks entirely ordinary, so
+   nobody reports it. A fault is found at the end of the day where it is loud and missed at the
+   start of the day where it is quiet.
+
+   ⚠ THE TOTAL INHERITED THE FRESHNESS OF ITS FRESHEST INPUT. `t-gen`'s age came only from
+   FUELINST's publish time, so a fresh snapshot plus a two-hour-old solar figure produced a
+   headline with no mark on it. **A sum is as old as its oldest addend**, and it now takes the
+   max of the two. That is the rule worth keeping out of all of this. */
+function solarStaleMin(sol){
+  return (sol && !sol.night && sol.stale && isFinite(sol.ageMin)) ? sol.ageMin : null;
+}
+/* The arithmetic rows are `.ge-val`s rather than `.value`s, so they take a compact mark rather
+   than the full figure-state component — same words, same tone, sized for a 12px row. */
+function geAgeMark(minutes, note){
+  const m = Math.round(minutes);
+  return ' <span class="ge-age" title="' + esc(note) + '">'
+    + esc(m >= 90 ? Math.round(m/60) + "h old" : m + "m old") + '</span>';
 }
 function figAgeMark(minutes, note){
   const m = Math.round(minutes);
@@ -2834,9 +2875,20 @@ function renderEquation(dem, sol){
   const embMW = Math.max(0, sol.mw);
   const undMW = natMW + embMW;
 
-  setFigure(und, uv(undMW), uUnit());
+  /* ⚠ v0.87: THE STALENESS TRAVELS WITH THE FIGURE IT AFFECTS. `embMW` is the only stale input
+     here, so the embedded row is marked and the total it feeds is marked with it — underlying
+     demand is national plus embedded, so a two-hour-old embedded figure makes the total two
+     hours old too, however fresh the demand outturn is. */
+  const solStale = solarStaleMin(sol);
+  const solNote = solStale == null ? "" :
+    "The embedded solar estimate behind this figure was last published "
+    + Math.round(solStale) + " minutes ago, at " + fmtTime(sol.t) + ". The sun is up, so the "
+    + "current figure is almost certainly higher than the one shown.";
+  if(solStale != null) figStale(und, uv(undMW), uUnit(), solStale, solNote);
+  else setFigure(und, uv(undMW), uUnit());
   geVal(nat,  uv(natMW));
   geVal(emb,  uv(embMW));
+  if(solStale != null && emb) emb.innerHTML += geAgeMark(solStale, solNote);
   /* ⚠ THE TOTAL ROW IS WRITTEN FROM `undMW`, THE SAME VARIABLE THE HEADLINE IS. It restates the
      headline under the rule, exactly as the supply card restates "Electricity available to GB", and
      a restatement computed a second way is a second chance to disagree with itself. */
@@ -2956,10 +3008,25 @@ function renderTiles(snap){
   }
   const snapAge = snap && snap.publishTime
     ? (Date.now() - new Date(snap.publishTime).getTime())/60000 : null;
-  if(snapAge != null && isFinite(snapAge) && snapAge > 20)
-    figStale($("t-gen"), uv(total), uUnit(), snapAge,
-      "Elexon last published this generation snapshot " + Math.round(snapAge) +
-      " minutes ago — the figure is real but older than the five-minute refresh.");
+  /* ⚠ v0.87: A SUM IS AS OLD AS ITS OLDEST ADDEND. This took `snapAge` alone — FUELINST's publish
+     time — so a fresh metered snapshot plus a two-hour-old embedded solar estimate produced a
+     headline figure with no staleness mark on it at all. Electricity available is metered PLUS
+     embedded PLUS imports; if any one of them is stale the total is stale, and taking the
+     freshest input's age was the wrong direction to round.
+     ⚠ The note names WHICH input is old, because "this figure is 110 minutes old" over a figure
+     whose metered component refreshed a minute ago is true and useless. */
+  const solAgeForTotal = solarStaleMin(latestSolar());
+  const worstAge = Math.max(snapAge != null && isFinite(snapAge) ? snapAge : 0,
+                            solAgeForTotal != null ? solAgeForTotal : 0);
+  const ageIsSolar = solAgeForTotal != null && solAgeForTotal >= (isFinite(snapAge) ? snapAge : 0);
+  if(worstAge > 20)
+    figStale($("t-gen"), uv(total), uUnit(), worstAge,
+      ageIsSolar
+        ? "The embedded solar estimate inside this total was last published "
+          + Math.round(worstAge) + " minutes ago. The metered generation beside it is current; "
+          + "the sun is up, so the real total is almost certainly higher than the figure shown."
+        : "Elexon last published this generation snapshot " + Math.round(worstAge) +
+          " minutes ago — the figure is real but older than the five-minute refresh.");
   else setFigure($("t-gen"), uv(total), uUnit());
   /* v0.29: written as the SUM it is. The middot version listed two quantities beside a third
      and left the reader to work out that the third was the first two added — which is exactly
@@ -3162,8 +3229,16 @@ function renderTiles(snap){
         const sol = latestSolar(); const solMW = sol ? Math.max(0, sol.mw) : 0;
         const dom = Math.max(0, SERIES.filter(x=>x.key!=="imports")
                         .reduce((a,x)=>a+(snap.byKey[x.key]||0),0));
+        /* ⚠ v0.87, the THIRD site of the stale-addend fault. `dom` is metered and fresh;
+           `dom + solMW` is a composite, and stating it as a bare figure asserts a freshness the
+           second term does not have. The metered figure keeps its full confidence; only the sum
+           is qualified, and the qualification names WHICH term is late. */
+        const stale = solarStaleMin(sol);
         return "<b>" + uv(dom) + " " + U() + "</b> now; with embedded generation that makes "
-             + "<b>GB generation</b> of " + uv(dom + solMW) + " " + U() + "."; })();
+             + "<b>GB generation</b> of " + uv(dom + solMW) + " " + U() + "."
+             + (stale == null ? ""
+                : " The embedded estimate in that sum is " + Math.round(stale) + " minutes old ("
+                  + esc(fmtTime(sol.t)) + "), so GB generation is almost certainly higher."); })();
   S.impExplainer =
     "<b>Net flow across GB's ten interconnectors</b>, metered at the same boundary as the "
     + "generation above it. Positive means GB imports more than it exports; negative means it is "
@@ -3645,9 +3720,62 @@ function renderSystemInsight(snap){
       + `${uv(Math.abs(x.d))}<span class="unit"> ${U()}</span>`;
     if(pEl) pEl.textContent = moverWording(x.key, x.d, x.now)
       + (isFinite(x.now) ? " · now " + moverLevel(x.key, x.now) + " " + U() : "");
+    renderMoverSpark(i+1, x.key);
   }
 
   setFuelHighlight(S.selectedFuel);
+}
+
+
+/* ⚠ v0.87: THE MOVER TRACE, SIX HOURS WITH THE REPORTED HOUR PICKED OUT.
+   The card states a delta between two half hours. That answers "how much" and leaves "is that
+   normal" unanswered, which is the next thing a reader asks — a 2,240 MW rise is the ordinary
+   morning ramp on a weekday and something else entirely at 3am.
+   ⚠ NO NEW REQUEST. Every series here is already in `stackSeries()`, which the stacked chart
+   draws, plus the demand rows the flow band uses. Solar comes from the same map the mix reads.
+   ⚠ DRAWN AT TRUE PIXEL SIZE, like every chart on this page since v0.85 — a fixed viewBox
+   stretched to the card would put the markers back on the ellipse geometry that release fixed.
+   Skipped when the card has no width yet, the same guard `chartGeom` documents. */
+function moverSeries(key){
+  const hist = stackSeries() || [];
+  if(key === "demand"){
+    const rows = (S.demand||[])
+      .filter(r => r && r.startTime && Number.isFinite(Number(r.initialDemandOutturn)))
+      .sort((a,b)=> new Date(a.startTime) - new Date(b.startTime));
+    return rows.map(r => Number(r.initialDemandOutturn));
+  }
+  if(key === "solar"){
+    const m = solarMap();
+    return [...m.keys()].sort().map(k => Math.max(0, m.get(k)));
+  }
+  return hist.map(p => p.byKey[key]).filter(v => v != null && isFinite(v));
+}
+function renderMoverSpark(slot, key){
+  const svg = $("mv-" + slot + "-spark");
+  if(!svg) return;
+  const all = moverSeries(key);
+  /* Twelve half hours plus the current one. Fewer than eight and the shape is not worth the
+     ink — the card falls back to the figure alone rather than drawing a stub. */
+  const vals = all.slice(-13);
+  const box = svg.getBoundingClientRect();
+  const W = Math.round(box.width), H = Math.round(box.height) || 22;
+  if(vals.length < 8 || !W){ svg.innerHTML = ""; svg.style.visibility = "hidden"; return; }
+  svg.style.visibility = "";
+  svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+  const pad = 2.5;
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  if(hi - lo < 1e-9){ hi = lo + 1; lo = lo - 1; }
+  const x = i => (i/(vals.length-1)) * W;
+  const y = v => pad + (H - 2*pad) * (1 - (v-lo)/((hi-lo)||1));
+  const pt = (i) => x(i).toFixed(1) + "," + y(vals[i]).toFixed(1);
+  const whole = vals.map((_,i)=>pt(i)).join(" ");
+  /* The reported hour is the last two steps — the comparison the card's delta is made from. */
+  const win = [vals.length-3, vals.length-2, vals.length-1].filter(i=>i>=0).map(pt).join(" ");
+  svg.innerHTML =
+    '<polyline class="mvline" points="' + whole + '"/>'
+    + '<polyline class="mvwin" points="' + win + '"/>'
+    + '<circle class="mvdot" cx="' + x(vals.length-1).toFixed(1) + '" cy="'
+      + y(vals[vals.length-1]).toFixed(1) + '" r="2"/>';
 }
 
 /* ⚠ v0.70: TEN MARKS, INLINE SVG, DRAWN TO ONE SPEC — replacing four base64 PNGs.
@@ -5186,6 +5314,472 @@ function renderCarbon(){
    It is the cheapest genuinely new thing on the page and it converts a fuel mix into an
    argument: gas at ~30% of generation is usually ~70% of the carbon, and seeing the two shapes
    fail to line up says that faster than any sentence. */
+/* ============================================================================
+   v0.86 — THE FUEL DETAIL TABLE (Generation page)
+
+   ⚠ NO NEW ENDPOINT, AND THAT IS THE DESIGN. Everything here is already in memory: the current
+   mix from FUELINST, the half-hourly history the stacked chart draws, and the published emission
+   factors the strips use. The page earns its detail by combining what the dashboard already
+   fetches rather than by asking for more.
+
+   WHAT IT ADDS THAT THE DASHBOARD CANNOT. The dashboard's mix answers "what is running now".
+   This answers the three questions a reader asks immediately afterwards and has nowhere to look:
+   how unusual is that (the 24-hour range), how dirty is it (the factor), and how much of the
+   carbon is it responsible for (share of emissions against share of generation).
+
+   ⚠ THE LAST TWO COLUMNS ARE THE POINT. Gas is routinely ~30% of generation and ~70% of the
+   carbon, and a table that put those two numbers side by side says that faster than the
+   paragraph explaining it. This is the emissions strip's argument in a form you can read a
+   single fuel out of.
+
+   ⚠ EVERY ROW STATES ITS OWN PROVENANCE. Embedded solar is an ESTIMATE and says so; the
+   interconnector row's factor is a BLEND of three published import factors and says that too.
+   A table is the format most likely to be quoted, so it is the format where an unlabelled
+   estimate does the most damage.
+   ============================================================================ */
+function renderFuelDetail(){
+  const el = $("fueldetail");
+  if(!el) return;
+  const rows = S.mixRows;
+  if(!rows || !Object.keys(rows).length){ el.innerHTML = ""; return; }
+
+  /* The 24-hour extremes per series, from the same array the stacked chart draws. `null` when
+     there is not enough history to make the claim, rather than a range of one point. */
+  const hist = stackSeries() || [];
+  const range = {};
+  if(hist.length >= 5){
+    for(const s of SERIES){
+      const vals = hist.map(p => p.byKey[s.key]).filter(v => v != null && isFinite(v));
+      if(vals.length >= 5) range[s.key] = { lo: Math.min(...vals), hi: Math.max(...vals) };
+    }
+  }
+
+  const F = S.ciFact || CI_FACTORS_FALLBACK;
+  const liveFactors = !!S.ciFact;
+  const snap = latestSnapshot();
+  const byCode = (snap && snap.byCode) || {};
+  /* Output-weighted, exactly as the emissions strip computes it — the same fuel must not carry
+     two different factors in two places on one site. */
+  const factorFor = (key) => {
+    if(CI_FACTOR_FLAT[key]) return { factor: F[CI_FACTOR_FLAT[key]] ?? null, blended:false };
+    if(key === "imports"){
+      const vals = CI_IMPORT_FACTORS.map(n=>F[n]).filter(v=>v!=null && isFinite(v));
+      return vals.length ? { factor: vals.reduce((a,v)=>a+v,0)/vals.length, blended:true }
+                         : { factor:null, blended:true };
+    }
+    const codes = (SERIES_BY_KEY[key]||{}).codes;
+    if(!codes) return { factor:null, blended:false };
+    let mw = 0, wsum = 0, seen = 0;
+    for(const c of codes){
+      const f = F[CI_FACTOR_BY_CODE[c]];
+      if(f == null || !isFinite(f)) continue;
+      const q = Math.max(0, byCode[c] || 0);
+      seen++; mw += q; wsum += q * f;
+    }
+    if(!seen) return { factor:null, blended:false };
+    if(mw <= 0) return { factor: F[CI_FACTOR_BY_CODE[codes[0]]] ?? null, blended:false, nominal:true };
+    return { factor: wsum/mw, blended:false };
+  };
+
+  const list = Object.values(rows).map(r => {
+    const f = factorFor(r.key);
+    const co2 = (r.mw > 0 && f.factor != null) ? r.mw * f.factor : 0;
+    return { ...r, factor: f.factor, blended: !!f.blended, nominal: !!f.nominal, co2 };
+  }).sort((a,b) => Math.abs(b.mw) - Math.abs(a.mw));
+
+  const totalCo2 = list.reduce((a,r)=>a+r.co2, 0);
+  const cell = (r) => {
+    const rng = range[r.key];
+    /* ⚠ A NEGATIVE SERIES IS NOT A SHARE. Pumped storage while pumping and a net-importing
+       interconnector are both negative, and "−4% of generation" is not a statement anyone can
+       act on. `pc` is already null for those; the dash says so rather than printing a figure. */
+    return '<tr>'
+      /* ⚠ `css` IS A CUSTOM-PROPERTY NAME ("--c-nuclear"), NOT A COLOUR. The first draft wrote it
+         straight into `background:`, which is invalid CSS and renders nothing — so eight of the
+         nine keys were invisible and the one fuel with a null css (solar, which falls back) was
+         the only one that showed. It looked like a data problem and was a syntax one. */
+      + '<td><span class="fd-key' + (r.est ? ' is-est' : '') + '" style="background:' + (r.css ? 'var(' + esc(r.css) + ')' : 'var(--ink-mute)') + '"></span>'
+        + esc(r.label) + (r.est ? ' <span class="fd-est" title="Estimated, not metered">est</span>' : '')
+        + '</td>'
+      + '<td class="num">' + uv(r.mw) + '</td>'
+      + '<td class="num">' + (r.pc != null ? r.pc.toFixed(1) + '%' : '—') + '</td>'
+      + '<td class="num">' + (rng ? uv(rng.lo) + '–' + uv(rng.hi) : '—') + '</td>'
+      + '<td class="num">' + (r.factor != null ? Math.round(r.factor)
+          + (r.blended ? ' <span class="fd-est" title="Blend of the three published import factors">blend</span>' : '')
+          : '—') + '</td>'
+      + '<td class="num">' + (r.co2 > 0 && totalCo2 > 0 ? (r.co2/totalCo2*100).toFixed(1) + '%' : '—') + '</td>'
+      + '</tr>';
+  };
+
+  el.innerHTML =
+    '<div class="tablewrap"><table class="data fueldetail">'
+    + '<thead><tr><th>Fuel</th><th class="num">Now</th><th class="num">Share of gen.</th>'
+    + '<th class="num">24h range</th><th class="num">gCO<sub>2</sub>/kWh</th>'
+    + '<th class="num">Share of CO<sub>2</sub></th></tr></thead>'
+    + '<tbody>' + list.map(cell).join('') + '</tbody></table></div>'
+    + '<p class="fd-note">Megawatts are the latest five-minute reading. <b>Share of generation</b> '
+    + 'is of positive output only, so a fuel that is consuming — pumped storage while pumping, an '
+    + 'interconnector importing — shows a dash rather than a negative share. <b>24h range</b> is '
+    + 'the low and high of the half-hourly outturn behind the chart above. '
+    + '<b>Share of CO<sub>2</sub></b> is each fuel’s megawatts times its factor, as a share of '
+    + 'the total — which is why gas can be under a third of the electricity and most of the carbon. '
+    + 'Factors are ' + (liveFactors ? 'live from the NESO Carbon Intensity API'
+                                    : 'the published defaults; the live factors feed did not answer')
+    + '.</p>';
+}
+
+/* ============================================================================
+   v0.86 — DEMAND TODAY (Demand page)
+
+   ⚠ THE ONLY CHART ON THIS SITE THAT DRAWS DEMAND DIRECTLY. The dashboard shows demand as a
+   figure and as the top edge of the generation stack; neither answers the question a reader
+   actually arrives with, which is "is this a lot, and are we past the worst of it". A curve with
+   the day's peak marked answers both in one glance.
+
+   ⚠ TWO SERIES, BECAUSE THE GAP BETWEEN THEM IS INFORMATION. National demand (INDO) is what the
+   transmission system meets; transmission system demand (ITSDO) is that plus station load,
+   pumping and exports. Drawn together, the distance between the lines IS the difference between
+   the two boundaries, which is the thing this page exists to make legible. Drawn separately they
+   would be two charts of nearly the same shape and the point would be lost.
+
+   ⚠ THE FORECAST CONTINUES THE LINE AND IS DASHED. NDF runs forward from now; it takes the same
+   dashed treatment every forward series on this site has had since v0.85, so a reader who has
+   learned "dashed means not yet" carries that here. The join is at the last outturn point so the
+   two read as one story rather than two charts sharing an axis.
+   ============================================================================ */
+function renderDemandToday(){
+  const svg = $("demandchart"), box = $("demandbox"), tip = $("demandtip");
+  if(!svg || !box) return;
+  const rows = (S.demand || [])
+    .filter(r => r && r.startTime && Number.isFinite(Number(r.initialDemandOutturn)))
+    .sort((a,b) => new Date(a.startTime) - new Date(b.startTime));
+  if(rows.length < 5){ svg.innerHTML = ""; svg.removeAttribute("height"); return; }
+
+  /* The forecast, from the same publish and boundary filter the tiles use — a chart that drew a
+     different publish from the tile above it would be two answers to one question. */
+  const fc = [];
+  if(S.ndf && S.ndf.length){
+    const pub = latestPublish(S.ndf);
+    const nowMs = Date.now();
+    (S.ndf || []).filter(r => r && r.publishTime === pub
+        && (r.boundary === "N" || r.boundary == null)
+        && r.startTime && Number.isFinite(Number(r.demand)))
+      .sort((a,b) => new Date(a.startTime) - new Date(b.startTime))
+      /* ⚠ CLIPPED TO THE NEXT TWELVE HOURS. NDF publishes a horizon reaching about two days out,
+         and drawing all of it squeezed the OUTTURN — the subject of the chart — into the left
+         third of the box. The forecast is context for the day ahead here, not the subject; the
+         Demand margin tile below carries the multi-day view, which is what that dataset is for. */
+      .forEach(r => { const t = new Date(r.startTime).getTime();
+                      if(t >= nowMs - 30*60000 && t <= nowMs + 12*3600*1000) fc.push(r); });
+  }
+
+  const geom = chartGeom(box, {sm:200, md:240, lg:270});
+  if(!geom) return;
+  const {W, ml, mr} = geom;
+  const H = geom.H, mt = 12, mb = 22, iw = W-ml-mr, ih = H-mt-mb;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("height", H);
+
+  const t0 = new Date(rows[0].startTime).getTime();
+  const lastFc = fc.length ? new Date(fc[fc.length-1].startTime).getTime() : 0;
+  const t1 = Math.max(new Date(rows[rows.length-1].startTime).getTime(), lastFc);
+  const all = rows.map(r=>Number(r.initialDemandOutturn))
+    .concat(rows.map(r=>Number(r.initialTransmissionSystemDemandOutturn)).filter(Number.isFinite))
+    .concat(fc.map(r=>Number(r.demand)));
+  const ax = niceRange(Math.min(...all), Math.max(...all), 4);
+  const xT = t => ml + iw*((new Date(t).getTime()-t0)/((t1-t0)||1));
+  const y  = v => mt + ih - ((v-ax.min)/((ax.max-ax.min)||1)*ih);
+
+  let out = "";
+  for(let v=ax.min; v<=ax.max+1e-9; v+=ax.step){
+    const yy = y(v);
+    out += `<line class="gridline" x1="${ml}" y1="${yy.toFixed(1)}" x2="${W-mr}" y2="${yy.toFixed(1)}"/>`;
+    out += `<text class="axlabel" x="${ml-7}" y="${(yy+3.5).toFixed(1)}" text-anchor="end">${gw(v)}</text>`;
+  }
+  /* Time axis: every four hours, which is as many labels as fit at the narrowest tier. */
+  const hourStep = 4*3600*1000;
+  for(let t = Math.ceil(t0/hourStep)*hourStep; t <= t1; t += hourStep){
+    const xx = xT(t);
+    out += `<text class="axlabel" x="${xx.toFixed(1)}" y="${(mt+ih+15).toFixed(1)}" text-anchor="middle">${fmtTime(t)}</text>`;
+  }
+
+  const line = (pts, cls, style) =>
+    `<polyline fill="none" ${style} points="${pts.join(" ")}"/>`;
+
+  /* Transmission system demand first, so national demand sits on top of it — national is the
+     figure the page leads with and the one a reader traces. */
+  const its = rows.filter(r=>Number.isFinite(Number(r.initialTransmissionSystemDemandOutturn)))
+    .map(r=>`${xT(r.startTime).toFixed(1)},${y(Number(r.initialTransmissionSystemDemandOutturn)).toFixed(1)}`);
+  if(its.length >= 5)
+    out += line(its, "", 'stroke="var(--ink-mute)" stroke-width="1.6" stroke-linejoin="round" opacity=".75"');
+
+  const ind = rows.map(r=>`${xT(r.startTime).toFixed(1)},${y(Number(r.initialDemandOutturn)).toFixed(1)}`);
+  out += line(ind, "", 'stroke="var(--mark)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"');
+
+  /* ⚠ THE FORECAST IS NOT JOINED TO THE LAST OUTTURN POINT, and the first version was. Drawing a
+     segment from the final measurement to the first forecast asserts that the two are one
+     continuous series — and they are not: they are different datasets, published by different
+     processes, and they do not have to meet. When they disagree the join renders as a vertical
+     cliff that reads as a rendering fault rather than as what it is, which is two sources saying
+     slightly different things about the same moment. Left as its own line, the gap between them
+     is visible and honest, and a large gap is information rather than a glitch. */
+  if(fc.length >= 2){
+    const pts = fc.map(r=>`${xT(r.startTime).toFixed(1)},${y(Number(r.demand)).toFixed(1)}`);
+    out += line(pts, "", 'stroke="var(--mark)" stroke-width="2" stroke-dasharray="4 3" stroke-linejoin="round" opacity=".85"');
+  }
+
+  /* ⚠ THE PEAK IS THE POINT OF THE CHART. Marked on the national series, with its time, because
+     "how far past the peak are we" is the question this page is most often opened to answer. */
+  const peakVal = Math.max(...rows.map(r=>Number(r.initialDemandOutturn)));
+  const peak = rows.find(r => Number(r.initialDemandOutturn) === peakVal);
+  if(peak){
+    const px = xT(peak.startTime), py = y(peakVal);
+    out += `<line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${px.toFixed(1)}" y2="${(mt+ih).toFixed(1)}"
+             stroke="var(--ink-mute)" stroke-width="1" stroke-dasharray="2 3" opacity=".7"/>`;
+    out += `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="4" fill="var(--surface)"
+             stroke="var(--mark)" stroke-width="2"/>`;
+  }
+  const last = rows[rows.length-1];
+  out += `<circle cx="${xT(last.startTime).toFixed(1)}" cy="${y(Number(last.initialDemandOutturn)).toFixed(1)}"
+           r="4" fill="var(--mark)" stroke="var(--surface)" stroke-width="2"/>`;
+  out += `<line class="crosshair" x1="0" y1="${mt}" x2="0" y2="${mt+ih}" style="display:none"/>`;
+  svg.innerHTML = out;
+  svg.setAttribute("role","img");
+  svg.setAttribute("aria-label",
+    `National and transmission system demand over the last 24 hours, peaking at ${uv(peakVal)} megawatts`
+    + (peak ? ` at ${fmtTime(peak.startTime)}` : "") + (fc.length ? ", with NESO's forecast continuing ahead" : ""));
+
+  const cap = $("demand-peak");
+  if(cap && peak){
+    const nowV = Number(last.initialDemandOutturn);
+    const dPc = peakVal > 0 ? (nowV - peakVal)/peakVal*100 : 0;
+    cap.innerHTML =
+      `<b>Today&rsquo;s peak so far: ${uv(peakVal)} MW</b> at ${esc(fmtTime(peak.startTime))}`
+      + ` &middot; now <b>${uv(nowV)} MW</b>, `
+      + (Math.abs(dPc) < 0.5 ? "which is at the peak"
+         : (dPc < 0 ? `<b>${Math.abs(dPc).toFixed(0)}%</b> below it` : `<b>${dPc.toFixed(0)}%</b> above it`))
+      + `. The peak is the highest half hour in the window shown, not the day&rsquo;s forecast peak.`;
+  }
+
+  if(tip){
+    const ch = svg.querySelector(".crosshair");
+    attachHover(box, svg, (ev)=>{
+      const r = svg.getBoundingClientRect(); const px = (ev.clientX-r.left)/r.width*W;
+      let best=0, bd=Infinity;
+      rows.forEach((pt,i)=>{ const d=Math.abs(xT(pt.startTime)-px); if(d<bd){bd=d;best=i;} });
+      const pt = rows[best];
+      ch.setAttribute("x1", xT(pt.startTime)); ch.setAttribute("x2", xT(pt.startTime)); ch.style.display="";
+      const its2 = Number(pt.initialTransmissionSystemDemandOutturn);
+      tip.innerHTML =
+        `<div class="t-head">${esc(fmtDate(pt.startTime))} ${esc(fmtTime(pt.startTime))} &middot; SP${pt.settlementPeriod}</div>`
+        + `<div class="t-row"><span class="n">National demand</span><span class="v">${uv(Number(pt.initialDemandOutturn))} MW</span></div>`
+        + (Number.isFinite(its2)
+            ? `<div class="t-row"><span class="n">Transmission system</span><span class="v">${uv(its2)} MW</span></div>`
+              + `<div class="t-row t-tot"><span class="n">Difference</span><span class="v">${uv(its2-Number(pt.initialDemandOutturn))} MW</span></div>`
+            : "");
+      tip.classList.add("show");
+      placeTip(tip, box, (xT(pt.startTime)/W)*box.clientWidth, 4);
+    });
+  }
+}
+
+/* ============================================================================
+   v0.86 — THE THREE DEMAND BOUNDARIES (Demand page)
+
+   ⚠ THIS IS THE PAGE'S REASON TO EXIST. "GB electricity demand" is three different numbers
+   that differ by thousands of megawatts, all three correct, and a reader who does not know that
+   concludes one of the sources is lying. The dashboard states them; it has no room to lay them
+   side by side and name what each one includes.
+
+   ⚠ THE ARITHMETIC IS SHOWN, NOT ASSERTED. Each row states what it adds to or removes from the
+   one above, so the differences are checkable against the figures printed beside them rather
+   than taken on trust. A reader who adds them up and gets the right answer has learned the
+   boundary; one who is told "these differ" has learned nothing.
+   ============================================================================ */
+function renderBoundaries(){
+  const el = $("boundaries");
+  if(!el) return;
+  const rows = (S.demand || []).filter(r => r && Number.isFinite(Number(r.initialDemandOutturn)));
+  if(!rows.length){ el.innerHTML = ""; return; }
+  const last = rows[rows.length-1];
+  const indo = Number(last.initialDemandOutturn);
+  const itsdo = Number(last.initialTransmissionSystemDemandOutturn);
+  const sol = latestSolar();
+  const embedded = sol ? Math.max(0, sol.mw) : null;
+  const und = embedded != null ? indo + embedded : null;
+
+  /* ⚠ v0.87, THE SECOND SITE OF THE SAME FAULT — found by asking where ELSE the page adds a
+     modelled figure to a metered one, rather than stopping at the figure that was reported. The
+     flow band's "Underlying demand" was fixed earlier this release; this row runs the identical
+     `indo + embedded` sum in a different renderer and was not, because a fix applied where a
+     fault was REPORTED is not a fix applied where the fault LIVES.
+
+     ⚠ AND IT IS WORSE HERE THAN IT WAS THERE. This panel's whole reason to exist is that the
+     three demand figures DIFFER. With a stale solar estimate it prints National demand and
+     Underlying demand as the same number and explains the step as "Adds 0 MW" — the page
+     refuting its own thesis, in its own arithmetic, with nothing to say why. A reader would
+     conclude the boundary distinction is imaginary, which is the exact misunderstanding this
+     page was built to correct.
+
+     The row still shows: the figure is a real sum of a real reading and a real estimate. What it
+     needs is the ESTIMATE's age attached to it, and a note naming which input is old rather than
+     ageing the whole row — the same treatment, and the same reason, as the flow band. */
+  const undStale = solarStaleMin(sol);
+  const undNote = undStale == null ? "" :
+    "The embedded solar estimate in this sum was last published " + Math.round(undStale)
+    + " minutes ago, at " + fmtTime(sol.t) + ". The sun is up, so embedded generation is almost "
+    + "certainly higher than the figure added here, and underlying demand higher than shown.";
+
+  const row = (name, ds, val, note, cls, ageMin, ageNote) =>
+    '<div class="bd-row' + (cls ? ' ' + cls : '') + '">'
+    + '<div class="bd-name">' + name
+      + (ds ? ' <span class="term ds" data-term="' + esc(ds) + '">' + esc(ds) + '</span>' : '') + '</div>'
+    + '<div class="bd-val">' + (val == null ? '—' : uv(val)) + ' <span class="bd-u">' + U() + '</span>'
+      + (val != null && ageMin != null ? geAgeMark(ageMin, ageNote) : '') + '</div>'
+    + '<div class="bd-note">' + note + '</div>'
+    + '</div>';
+
+  el.innerHTML =
+    row('National demand', 'INDO', indo,
+        'What the transmission system met. <b>Excludes</b> everything supplied by generation '
+        + 'connected to the local distribution networks &mdash; rooftop solar above all &mdash; '
+        + 'because the system never sees it. This is the figure most often quoted as '
+        + '&ldquo;GB demand&rdquo;.')
+  + row('Transmission system demand', 'ITSDO',
+        Number.isFinite(itsdo) ? itsdo : null,
+        Number.isFinite(itsdo)
+          ? '<b>Adds ' + uv(itsdo - indo) + ' ' + U() + '</b>: station load, pumping at storage '
+            + 'stations, and exports over the interconnectors. It is what the system is actually '
+            + 'carrying rather than what consumers are taking.'
+          : 'Not reported for this settlement period.')
+  + row('Underlying demand', null, und,
+        und == null
+          ? 'Needs the embedded solar estimate, which is not available this refresh.'
+          : '<b>Adds ' + uv(embedded) + ' ' + U() + '</b> of estimated embedded generation to '
+            + 'national demand: electricity people used that the transmission system never saw. '
+            + '<span class="bd-est">Estimated</span> &mdash; embedded output is not metered '
+            + 'centrally, so this figure is a model, not a reading.'
+            /* The stale sentence is APPENDED rather than substituted: what the row means does not
+               change because the estimate is late, and replacing the explanation with a warning
+               would cost the reader the boundary lesson to tell them about a refresh. */
+            + (undStale == null ? ''
+               : ' <b class="bd-old">The estimate is ' + esc(Math.round(undStale) >= 90
+                   ? Math.round(undStale/60) + ' hours' : Math.round(undStale) + ' minutes')
+                 + ' old</b> (' + esc(fmtTime(sol.t)) + '), so the step above is understated and '
+                 + 'underlying demand is higher than shown.'),
+        'is-est', undStale, undNote)
+  + '<p class="bd-foot">All three describe the same instant. <b>None of them is the true figure</b>, '
+  + 'because there is no single true figure &mdash; each answers a different question. If a source '
+  + 'quotes a GB demand number that disagrees with the one you expected, the boundary is almost '
+  + 'always the reason, and it is usually not stated.</p>';
+}
+
+/* ============================================================================
+   v0.86 — THE BAND TABLE (Carbon intensity page)
+
+   ⚠ THE BANDS ARE NOT A FIXED SCALE, AND ALMOST NOTHING SAYS SO. NESO redraws the boundaries
+   every year as the grid decarbonises: a figure that was "low" in 2019 is "high" in 2026 without
+   a single gram changing. Every other dashboard prints the label and not the year, so a reader
+   comparing an old screenshot with a new one concludes the grid got dirtier.
+
+   ⚠ WHICH IS WHY THIS TABLE IS GENERATED FROM CI_BANDS, NOT TYPED. The dashboard already holds
+   the per-year boundary table — it has to, to label the current figure — and typing the numbers
+   again here would create a second set that goes stale in a different January from the first.
+   The year shown is the year the page is banding against, so the two can never disagree.
+   ============================================================================ */
+function renderBandTable(){
+  const el = $("bandtable");
+  if(!el) return;
+  const cur = ciCurrent();
+  const year = (cur && cur.band && cur.band.year) || 2026;
+  const cuts = CI_BANDS[year];
+  if(!cuts){ el.innerHTML = ""; return; }
+  const names = CI_NAMES;
+  const COLS = ["var(--ci1)","var(--ci2)","var(--ci3)","var(--ci4)","var(--ci5)"];
+  const rows = names.map((n,i)=>{
+    const lo = i === 0 ? 0 : cuts[i-1];
+    const hi = i === names.length-1 ? null : cuts[i];
+    const here = cur && cur.g != null && cur.g >= lo && (hi == null || cur.g < hi);
+    return '<tr' + (here ? ' class="bt-now"' : '') + '>'
+      /* ⚠ THE PARENTHESES ARE LOad-BEARING. Written without them this is
+         `('…background:' + COLS[i]) || ('var(--ink-mute)' + '"></span>')`, because `+` binds
+         tighter than `||` — so whenever COLS[i] was truthy (always) the closing quote and the
+         span's end tag were DROPPED, the style attribute swallowed the rest of the table, and
+         five rows parsed as one. It rendered without throwing and looked like a data fault. */
+      + '<td><span class="bt-key" style="background:' + (COLS[i] || 'var(--ink-mute)') + '"></span>'
+      + esc(n) + (here ? ' <span class="bt-here">now</span>' : '') + '</td>'
+      + '<td class="num">' + (hi == null ? num(lo) + ' and above'
+          : (i === 0 ? 'under ' + num(hi) : num(lo) + '–' + num(hi-1))) + '</td>'
+      + '</tr>';
+  }).join('');
+  el.innerHTML =
+    '<div class="tablewrap"><table class="data bandtable">'
+    + '<thead><tr><th>Band</th><th class="num">gCO<sub>2</sub>/kWh</th></tr></thead>'
+    + '<tbody>' + rows + '</tbody></table></div>'
+    + '<p class="fd-note">⚠ <b>These boundaries are for ' + year + ' and they move.</b> NESO '
+    + 'redraws them as the grid decarbonises, so the same figure earns a worse label each time '
+    + 'the scale tightens. A reading of 150 gCO<sub>2</sub>/kWh was comfortably "low" a few years '
+    + 'ago and is "moderate" now — <b>the electricity did not change, the yardstick did</b>. '
+    + 'Comparing a band label across years compares two different scales; compare the grams.</p>';
+}
+
+/* ============================================================================
+   v0.86 — FREQUENCY AGAINST ITS LIMITS (System page)
+
+   ⚠ THE CHART SHOWS THE SHAPE; THIS SHOWS THE COMPLIANCE. A frequency trace tells a reader that
+   the line wobbles. It does not tell them whether the wobble matters, because the two limits that
+   decide that are not visible as numbers: the OPERATIONAL band (±0.2 Hz), which NESO works to,
+   and the STATUTORY band (±0.5 Hz), which is a legal obligation. This panel states how much of
+   the last hour sat inside each, which is the question the chart cannot answer.
+
+   ⚠ AND IT DISTINGUISHES THE TWO, because they are not the same kind of thing. Leaving the
+   operational band is ordinary and happens most days; leaving the statutory band is a serious
+   event. A panel that showed one percentage would flatten that difference, and a reader would
+   either be alarmed by something routine or unmoved by something that is not.
+   ============================================================================ */
+function renderFreqBands(){
+  const el = $("freqbands");
+  if(!el) return;
+  const pts = (S.freq || []).filter(r => r && Number.isFinite(Number(r.frequency)));
+  if(pts.length < 5){ el.innerHTML = ""; return; }
+  const vals = pts.map(r => Number(r.frequency));
+  const n = vals.length;
+  const inBand = (tol) => vals.filter(v => Math.abs(v - 50) <= tol).length / n * 100;
+  const op = inBand(0.2), st = inBand(0.5);
+  const lo = Math.min(...vals), hi = Math.max(...vals);
+  const mean = vals.reduce((a,v)=>a+v,0)/n;
+  /* Longest unbroken run outside the operational band — a single excursion of ten minutes and
+     twenty scattered seconds are the same percentage and very different events. */
+  let run = 0, worst = 0;
+  for(const v of vals){ if(Math.abs(v-50) > 0.2){ run++; worst = Math.max(worst, run); } else run = 0; }
+  const secs = worst * 15;
+
+  const row = (name, pc, note, cls) =>
+    '<div class="hz-row' + (cls ? ' ' + cls : '') + '">'
+    + '<div class="hz-name">' + name + '</div>'
+    + '<div class="hz-bar"><span style="width:' + pc.toFixed(1) + '%"></span></div>'
+    + '<div class="hz-pc">' + pc.toFixed(1) + '%</div>'
+    + '<div class="hz-note">' + note + '</div></div>';
+
+  el.innerHTML =
+    row('Inside &plusmn;0.2 Hz', op,
+        'The <b>operational</b> band NESO works to. Leaving it is ordinary — it happens on most '
+        + 'days, and the balancing mechanism exists to pull the system back.')
+  + row('Inside &plusmn;0.5 Hz', st,
+        'The <b>statutory</b> band, a legal obligation on the system operator. Leaving this is a '
+        + 'serious event, not a routine one.', st < 100 ? 'is-breach' : '')
+  + '<div class="hz-stats">'
+    + '<div><span class="k">Range</span><span class="v">' + num(lo,3) + '–' + num(hi,3) + ' Hz</span></div>'
+    + '<div><span class="k">Mean</span><span class="v">' + num(mean,3) + ' Hz</span></div>'
+    + '<div><span class="k">Longest excursion</span><span class="v">'
+      + (secs ? (secs >= 60 ? Math.round(secs/60) + ' min' : secs + ' s') : 'none') + '</span></div>'
+  + '</div>'
+  + '<p class="hz-foot">⚠ <b>A percentage and a duration are different claims.</b> Twenty scattered '
+  + 'seconds outside the operational band and one unbroken excursion of five minutes give the '
+  + 'same percentage and describe very different hours, so both are shown. '
+  + 'Readings are taken every 15 seconds, so the shortest excursion this can see is 15 seconds '
+  + 'long — a briefer one happened and is not here.</p>';
+}
+
 function renderEmissions(){
   const el = $("ci-emissions");
   if(!el) return;
@@ -5347,7 +5941,13 @@ function renderIndicatedImbalance(){
   }
 
   /* ---- right: the settled outturn, from the prices feed already in hand ---- */
-  const px = S.px24 || [];
+  /* ⚠ READS `S.prices` DIRECTLY, NOT `S.px24`. `px24` is a convenience slice assigned inside
+     `renderTiles` — a renderer that writes to a dozen dashboard tile elements and is not in every
+     page's scope. On the System page that made this cell's contents depend on whether an
+     unrelated renderer had run to completion, and it silently did not, so the settled column read
+     "No settled period has reported a volume yet" while the data sat in memory.
+     A panel should depend on the STATE, not on another renderer's side effect. */
+  const px = (S.prices || []).slice(-48);
   const nivRows = px.filter(r => r && Number.isFinite(Number(r.netImbalanceVolume)));
   let settled = null;
   if(!nivRows.length){
@@ -6749,6 +7349,69 @@ const PAGE_SCOPES = {
     renders: new Set(["status", "health", "interconnectors", "interconnector history"]),
     feeds:   new Set(["fuelinst", "ic", "health"]),
     history: new Set(["ic"])
+  },
+  /* ⚠ v0.86: THE GENERATION PAGE. Wider than Interconnectors because the mix is not one panel —
+     it is the fuel breakdown, the 24-hour and 7-day history behind it, and the wind and solar
+     forecast comparisons, and each of those reads a different feed.
+     `demand` is here although the page shows no demand figure: the mix's denominator is GB
+     generation INCLUDING embedded solar, and the embedded estimate is reconciled against the
+     demand outturn. Dropping it would not remove a panel, it would silently change a percentage.
+     `health` and `fuelinst` are shell furniture for every page — the live chip states the
+     settlement period from the same snapshot the dashboard uses. */
+  /* ⚠ v0.86: THE DEMAND PAGE. `demand` and `ndf` are the page's own subject. `pvlive` and `agws`
+     are here for the embedded-solar estimate, which is the whole of the difference between
+     national and underlying demand — without it the boundaries panel loses its third row, which
+     is the row the page is built around. `temp` because demand and temperature is the one
+     relationship a reader can act on. `ocnmfd2` for the margin ahead. */
+  demand: {
+    renders: new Set(["status", "health", "tiles", "demand today", "demand boundaries",
+                      "demand forecast", "demand margin", "temperature"]),
+    feeds:   new Set(["fuelinst", "summary", "demand", "pvlive", "agws", "ndf", "ocnmfd2",
+                      "temp", "health"]),
+    history: new Set([])
+  },
+  /* ⚠ v0.86: THE CARBON INTENSITY PAGE. `ci24` is the settled-vs-forecast series, `ciFact` the
+     published factors, and `fuelinst`/`summary`/`pvlive`/`agws` are here because the emissions
+     strip is a fuel-mix calculation — the page's argument is that the mix and the carbon do not
+     line up, and half of that argument comes from the generation feeds. */
+  "carbon-intensity": {
+    renders: new Set(["status", "health", "tiles", "carbon", "emissions", "band table",
+                      "mix", "fuel detail"]),
+    feeds:   new Set(["fuelinst", "summary", "demand", "pvlive", "agws", "ci24", "ciFact", "health"]),
+    history: new Set([])
+  },
+  /* ⚠ THE SYSTEM PAGE, AND THE FEED KEYS ARE NOT WHAT THE RENDERERS ARE CALLED. The 24-hour
+     imbalance price series is assembled by `renderPrice` from `pxToday` and `pxYday` — two
+     separate day fetches in the MAIN jobs list — and not from anything named `price`. The first
+     version of this scope listed `price` under `history`, on the reasonable-sounding assumption
+     that a 24-hour series is history; the page then rendered an empty chart box with a title and
+     a Download button, and threw nothing, because a renderer that finds no data is a renderer
+     doing its job. The lesson generalises: **a scope is a list of FEED KEYS, and feed keys have
+     to be read out of `jobs`, never inferred from the renderer's name.** */
+  system: {
+    renders: new Set(["status", "health", "tiles", "frequency", "price", "indicated imbalance",
+                      "market price", "forecast imbalance", "frequency bands"]),
+    /* ⚠ `summary` IS HERE FOR A REASON THAT IS NOT OBVIOUS AND IS WORTH WRITING DOWN.
+       `renderPrice` takes its x-domain from `stackSeries()` — the GENERATION history — because on
+       the dashboard the price chart sits directly beneath the generation stack and the two are
+       deliberately aligned to the same window. On a page with no stack that coupling is invisible
+       and fatal: without `summary` the series is empty, `stackSeries()` returns nothing, and
+       renderPrice bails at its first guard, leaving a titled empty chart box with a working
+       Download button. It threw nothing, because a renderer with no data is behaving correctly.
+       ⚠ RECORDED AS OPEN WORK rather than fixed here: `renderPrice` should derive its own domain
+       from its own series. That is a change to a renderer the dashboard also uses, and this
+       release is not the place for it. */
+    feeds:   new Set(["fuelinst", "summary", "freq", "mid", "imbalngc", "pxToday", "pxYday", "health"]),
+    history: new Set([])
+  },
+  generation: {
+    renders: new Set(["status", "health", "mix", "generation-history", "wind", "fuel detail"]),
+    /* `ciFact` is the published emission factors. The detail table's last two columns are the
+       page's own argument — share of generation against share of carbon — and running them off
+       the hard-coded fallback set when a live feed exists would be a worse figure for no saving.
+       It is one request and it is cached hard at the other end. */
+    feeds:   new Set(["fuelinst", "summary", "demand", "pvlive", "agws", "dgws", "windfor", "ciFact", "health"]),
+    history: new Set(["fuelhh", "wind", "agws"])
   }
 };
 const SCOPE = Object.prototype.hasOwnProperty.call(PAGE_SCOPES, PAGE) ? PAGE_SCOPES[PAGE] : null;
@@ -6822,6 +7485,16 @@ function render(){
      throws takes this band down and not the frequency panel above it. */
   safeRender("indicated imbalance", renderIndicatedImbalance);
   safeRender("emissions", renderEmissions);
+  /* v0.86: Generation page only — the dashboard has no #fueldetail, so this is a
+     no-op there rather than a branch. */
+  safeRender("fuel detail", renderFuelDetail);
+  /* v0.86: Demand page only — no #demandchart or #boundaries on the dashboard, so both are
+     no-ops there rather than a branch. */
+  safeRender("demand today", renderDemandToday);
+  safeRender("demand boundaries", renderBoundaries);
+  /* v0.86: the Carbon intensity and System pages. No-ops on every other page. */
+  safeRender("band table", renderBandTable);
+  safeRender("frequency bands", renderFreqBands);
   /* ⚠ v0.81: the tile fallbacks write into the seven headline tiles, which exist on the
      dashboard alone — so this passes through the same scope gate as every other renderer
      rather than being special-cased. `attachTerms` is selector-driven and safe anywhere. */
@@ -7090,6 +7763,16 @@ function icFlowLine(key){
 }
 (function(){
   const tip = $("ictip"), body = $("ic-body");
+  /* ⚠ v0.86: GUARDED, because this script now boots on pages that do not contain the
+     interconnector panel. Every binding below hangs off `body`, so on the Generation page the
+     very first `addEventListener` threw and took THE REST OF BOOT WITH IT — the fuel detail
+     table rendered as an empty shell and nothing said why, because a page error is not a console
+     error and the metric fallbacks had already papered over the visible gaps.
+     ⚠ THIS IS THE EIGHTH SUCH BINDING. rev 75 guarded seven when the Interconnectors page was
+     built, and this is the same fault from the opposite direction: that release checked the
+     bindings the IC page LACKED, and never the ones only the IC page HAS. A page-scoped script
+     has to survive both directions, and only loading each generated page finds it. */
+  if(!tip || !body) return;
   function show(ev, key){
     const m = IC_META[key] || {name:key, cc:"", code:""};
     const f = icFlowLine(key);
@@ -7994,7 +8677,7 @@ function redrawCharts(){ renderStack(); renderPrice(); renderWind(); renderCarbo
   renderMarketPrice(); renderForecastImbalance(); renderDemandForecast(); renderDemandMargin();
   const snap = latestSnapshot(); if(snap) renderTiles(snap);
   /* v0.85: it owns two sparklines, so it belongs here for the same reason the others do. */
-  renderIndicatedImbalance(); }
+  renderIndicatedImbalance(); renderDemandToday(); }
 /* ⚠ v0.41: THE EXPANDED PANEL NEEDS TWO PASSES, and the reason is ordering, not flakiness.
    A panel's primary chart sizes itself against its siblings — and on two panels those siblings
    are rendered LATER in this very function: the imbalance-price subchart below the 24-hour
@@ -8165,6 +8848,23 @@ window.addEventListener("resize", ()=>{
   clearTimeout(rTimer);
   rTimer = setTimeout(redrawChartsSettled, 150);
 });
+
+/* ⚠ v0.88 (rev 82): THE CHIP-MOVING BLOCK THAT STOOD HERE IS GONE, AND WHY IS WORTH KEEPING.
+   rev 81 re-parented `#live-status` between the nav row and the header row with a matchMedia
+   listener at 1000px, because the chip was sharing the nav row and clipping the fourth
+   destination from 761px to about 950px. Option 5 moves the chip into the header row at EVERY
+   width, so the condition the listener existed to handle can no longer arise: the nav has the
+   row to itself unconditionally.
+
+   ⚠ SO THE JS WAS DELETED RATHER THAN LEFT RUNNING. Two mechanisms placing one element is how
+   one of them silently stops working — and this one would have kept moving an `aria-live` region
+   in the DOM on every crossing of a breakpoint that no longer means anything, which a screen
+   reader may announce. A workaround outlives its fault unless something goes looking.
+
+   ⚠ AND THE CHECK WAS REPOINTED, NOT DELETED. `liveChipPlacement` asserted the chip was on the
+   nav row above 1000px, which is now the wrong answer to the right question. It asserts the new
+   invariant instead — the chip is in the header row at every width AND the nav never clips —
+   because a check whose subject changed is a check to repoint. */
 
 setInterval(()=>{ if(!document.hidden) loadAll(); }, REFRESH_MS);
 /* v0.82: the age ticks every 30s so a minute never passes unclaimed. Cheap by construction — it

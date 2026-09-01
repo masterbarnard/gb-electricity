@@ -1,4 +1,4 @@
-/* GENERATED from dash/GB_Electricity_v0.85.html (md5 6d1793470b51045acb8cf19603cff376) by tools/pages85.mjs — do not edit. */
+/* GENERATED from dash/GB_Electricity_v0.88.html (md5 cdbffc5b1d6f83061544fce5a06da4dd) by tools/pages88.mjs — do not edit. */
   /* v0.80 (rev 74, Phase 0): the three Inter faces moved to css/fonts.css, their bytes to
      assets/inter-{400,600,700}.woff2 — linked from <head>. The OFL licence notice travels
      with them, as the licence requires. */
@@ -97,8 +97,11 @@
      link's own line-box slack, so the padding alone cannot be read as the answer. Measured
      after the change and reported in the release notes; the masthead loses the difference in
      sticky height, which is paid back on every scroll. */
+  /* ⚠ v0.88: 15px → 11px, and the row is `align-items:flex-start` no longer. With the strapline
+     inline the brand block is a single line of type rather than a stack, so centring the two
+     sides against each other is now the correct alignment rather than an approximation of one. */
   .header-top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-    padding-top:15px;padding-bottom:2px;}
+    padding-top:11px;padding-bottom:3px;}
   .brand{display:flex;align-items:center;margin-right:auto;min-width:0;}
   /* The brand button inherits the row's whole look — no chrome of its own, because the mark
      and wordmark ARE the affordance. Focus ring for keyboards; the cursor for everyone else. */
@@ -106,10 +109,50 @@
     display:flex;align-items:center;gap:12px;min-width:0;
     font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:8px;}
   .brand-reset:focus-visible{outline:2px solid var(--blue-text);outline-offset:4px;}
-  .mark{width:34px;height:34px;flex-shrink:0;}
-  .wordmark{display:flex;flex-direction:column;line-height:1.02;min-width:0;}
-  .wordmark .name{font-size:21px;font-weight:700;color:var(--ink);letter-spacing:-0.01em;}
-  .wordmark .sub{font-size:12px;color:var(--ink-dim);letter-spacing:.03em;margin-top:3px;}
+  /* ⚠ v0.88: 34px → 30px, and this is a PROPORTION correction rather than a saving hunted for.
+     The mark was sized against a two-line wordmark: name over strapline stood 34px tall, and the
+     mark matched it. Option 5 sets those two inline, so the text beside the mark is now a single
+     22px line — and a 34px mark next to 22px of type is half again its height, which reads as a
+     logo with a caption rather than as a lockup.
+     ⚠ IT IS ALSO WHERE THE MASTHEAD'S REMAINING HEIGHT WAS. The mark, not the type, was setting
+     the brand row's height: 34px of row for 22px of text put a measured 17px between the wordmark
+     and the nav labels below — against the 8–12px this project targeted at v0.83. 30px takes the
+     masthead to 80px and the gap to 15px.
+     ⚠ AND 15px IS NOT A MISS OF THAT TARGET, because the target is not transferable. It was
+     measured when the nav link box was 30px; the brief asks for a 34px tap target, and a 34px box
+     around 17px of text carries 8.5px of line-box slack per side by construction. Chasing 8–12px
+     now would mean taking it back out of the tap target, which is the trade the brief explicitly
+     forbids. The mark is judged at the size it has to survive by rendering it there, as the
+     favicon was at v0.13 — not by this argument. */
+  .mark{width:30px;height:30px;flex-shrink:0;}
+  /* ⚠ v0.88 (rev 82) — OPTION 5: THE STRAPLINE SITS BESIDE THE NAME, NOT UNDER IT.
+     Stacked, the two lines cost the brand block the height of both; inline they cost the height
+     of the taller one, and that recovered height is what pays for a bigger navigation row without
+     the masthead growing. The masthead is sticky, so every pixel is paid on every scroll.
+     ⚠ ALIGNED ON THE BASELINE, not centred. Two texts of different size centred on a common axis
+     leave the smaller one floating; on the baseline they read as one line of type, which is the
+     whole point of setting them inline. The gap is 11px — enough that the strapline is plainly a
+     separate statement, tight enough that it belongs to the name rather than to the space.
+     ⚠ `flex-wrap:wrap` here is the ≤1100px behaviour and it is NOT a media query. The strapline
+     drops under the name at whatever width the two stop fitting, which is a different number in
+     every language and at every zoom level. A breakpoint would name one of them and be wrong at
+     the rest. `--wm-gap` doubles as the row-gap so a wrapped strapline is not jammed under the
+     name's descenders. */
+  .wordmark{display:flex;flex-flow:row wrap;align-items:baseline;
+    --wm-gap:11px;column-gap:var(--wm-gap);row-gap:2px;line-height:1.05;min-width:0;}
+  /* ⚠ THE DISPLAY FACE, ONE OF ITS TWO USES. Weight 400, because Hammersmith One HAS only 400 —
+     see css/fonts.css. It reads heavier than Inter 400 at the same size, so the wordmark does not
+     lose presence by dropping from 700; measured at 21px it sits between Inter 600 and 700.
+     ⚠ AND THE LETTER-SPACING GOES BACK TO NORMAL. The -0.01em was tightening Inter, which is
+     drawn loose for UI; Hammersmith is already close-fitted and the same negative tracking closes
+     the counters on 'e' and 'c' — the two letters this face is most recognisable by. */
+  .wordmark .name{font-family:var(--display);font-size:21px;font-weight:400;
+    color:var(--ink);letter-spacing:0;}
+  /* The strapline takes the display face too — it is part of the brand statement, and setting
+     half a line in one face and half in another is the kind of detail that reads as a mistake
+     rather than as a decision. 12.5px because Hammersmith runs a touch smaller on the x-height. */
+  .wordmark .sub{font-family:var(--display);font-size:12.5px;color:var(--ink-dim);
+    letter-spacing:.02em;margin-top:0;}
   /* ================= BYLINE (v0.27) =================
      A third line in the wordmark, one step quieter than the strapline above it — which is the
      whole design. A credit that competes with the tool's own name reads as self-promotion; a
@@ -126,7 +169,35 @@
      announcing it has, and the name is a better label for a person than a company's mark is.
      It also drops half a point below the strapline and loses its bold, so the vertical order in
      the wordmark now matches the order of importance: the tool, what it is, who made it. */
-  .header-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  /* ⚠ v0.88: THE STATUS CLUSTER IS COMPLETE HERE NOW — Live · age · SP · MW/GW · temperature.
+     The live chip moved back up from the nav row, which is what frees the nav row to be a
+     navigation row and nothing else. `justify-content:flex-end` so that when the cluster wraps
+     below ~1100px it stays right-aligned against the brand rather than drifting left.
+     ⚠ THIS SUPERSEDES REV 81's BREAKPOINT MOVE. That release re-parented the chip with
+     matchMedia below 1000px to stop it crowding the nav; the chip now lives here at EVERY width,
+     so the JS was removed rather than left running alongside — two mechanisms moving one element
+     is how one of them silently stops working. The check that asserted the old behaviour was
+     repointed, not deleted. */
+  /* ⚠ `margin-left:auto` AND NOT ONLY `.brand{margin-right:auto}`. The brand's auto margin pushes
+     this cluster right while the two SHARE a line; the moment the cluster wraps to a line of its
+     own that margin is on the other row and does nothing, so the cluster would sit hard left —
+     which is the one thing the brief names about the wrapped state. An auto margin on this
+     element instead holds it right on whichever line it lands. */
+  .header-actions{display:flex;align-items:center;justify-content:flex-end;
+    margin-left:auto;gap:14px;flex-wrap:wrap;row-gap:6px;min-width:0;}
+  /* ⚠ THE ORDER IS A HIERARCHY, and it is stated because it looks arbitrary. Live status is a
+     READING about whether the page can be trusted right now, so it leads. MW/GW is a CONTROL over
+     every figure below. Temperature is context for demand and nothing depends on it, so it comes
+     last and is the quietest thing in the row — the brief's own instruction, and it matches what
+     the page already did by putting the temperature after the unit switch at v0.83. */
+  .header-actions > .livewrap{order:1;}
+  .header-actions > .unitswitch{order:2;}
+  .header-actions > .tempchip{order:3;}
+  /* Live is one step louder than the temperature beside it: same size, but the lead word and the
+     age take --ink while the temperature's context text stays --ink-dim. */
+  .header-actions .livewrap{font-size:12.5px;}
+  .header-actions .livewrap #live-lead,
+  .header-actions .livewrap #live-age{font-weight:700;color:var(--ink);}
   .version-label{font-size:12px;color:var(--ink-dim);letter-spacing:.02em;
     white-space:nowrap;}
   .livewrap{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-dim);
@@ -272,26 +343,36 @@
      changes SIZE — the page's own rule is that a quiet thing is quiet by size, weight and
      position, and these two are already quiet by position. */
   .header-actions .tempchip{color:var(--ink-dim);}
-  .navrow{display:flex;align-items:center;gap:16px;}
-  /* The nav is the flexible half and the one that scrolls; the status never shrinks, because a
-     truncated timestamp is worse than a truncated nav — the nav's items are recoverable by
-     scrolling and half a clock time is not. */
+  /* ⚠ v0.88 (rev 82): THE NAV ROW IS NAVIGATION AND NOTHING ELSE.
+     From v0.82 to v0.87 it carried the live status too, which was a good trade while the status
+     had nowhere cheaper to go — it cost zero added masthead height. It stopped being a good trade
+     the moment the strapline went inline and freed room in the brand row, because the chip had
+     been squeezing the nav: rev 81 recorded the nav clipping at "Dashboard Generation Demand
+     Interc" from 761px to about 950px, and the chip sharing this row was the cause.
+     ⚠ SO THIS IS THE REAL FIX FOR THAT, and rev 81's breakpoint move was the symptom's fix. The
+     nav now has the row to itself at EVERY width, which is why the matchMedia block that
+     re-parented the chip could be deleted rather than kept. */
+  .navrow{display:flex;align-items:center;}
   .navrow > .mainnav{flex:1 1 auto;min-width:0;}
-  .navrow > .livewrap{flex:0 0 auto;}
-  /* ⚠ v0.82: EMPHASIS BY WEIGHT AND INK, NOT BY SIZE OR COLOUR. The chip is a status, and the
-     page's own rule is that a quiet thing is quiet by size, weight and position — so the loud
-     version of it is the same size in a stronger ink with the reading itself at 700. No new
-     hue: `--ink` is the ink the figures already use. */
-  .navrow .livewrap{font-size:12.5px;color:var(--ink-dim);}
-  .navrow .livewrap #live-lead{font-weight:700;color:var(--ink);}
-  .navrow .livewrap #live-age{font-weight:700;color:var(--ink);}
-  @media (max-width:700px){
-    /* The status keeps its place at the end of the row; the nav gives up the width because it
-       can scroll and the status cannot. Below 430px the absolute time is dropped rather than
-       the age — see `#live-clock` — because "3 min ago" is the question a reader is asking. */
-    .navrow{gap:10px;}
-    .navrow .livewrap{font-size:11.5px;}
-  }
+  /* ⚠ v0.88 — THE 1100px TIER, AND I FIRST CONCLUDED IT WAS UNNECESSARY BY MEASURING THE WRONG
+     THING. An offline ladder said the masthead held one row from 1600px down to 780px, so the
+     brief's ~1100px tier looked like a described symptom rather than a measured one — and it was
+     the HARNESS, running the real fixtures, that showed the masthead at 123px through 1080px and
+     900px while my own probe said 80px.
+     ⚠ THE DIFFERENCE WAS AN EMPTY MASTHEAD. With no network the live chip reads "No live data"
+     and the temperature chip is still `hidden`, so the status cluster measured 180px. Populated,
+     it is 492px — "Live · updated 17:00 · just now · SP34" plus "19.0°C +1.5 vs normal". Brand
+     (519px) + gap + cluster (492px) stops fitting at about 1090px, which is the brief's number
+     almost exactly. THE BRIEF WAS RIGHT AND MY MEASUREMENT WAS WRONG, because a layout measured
+     without its content is a layout nobody will see.
+     ⚠ THE STRAPLINE STANDS DOWN RATHER THAN MOVING TO ITS OWN LINE, and that was measured too.
+     Stacking it under the name — the brief's own suggestion — keeps the brand block ~350px wide
+     and two lines tall, so the cluster STILL wraps and the masthead goes to 130px: worse than
+     doing nothing. Hiding it holds a flat 80px from 768px to 1100px. The brief allowed either.
+     It is the least load-bearing thing in the masthead — the page's name, its live state and its
+     navigation all survive without it, the <h1> and the meta description carry the same words for
+     anything reading the page, and the phone tier has hidden it since v0.318. */
+  @media (max-width:1100px){ .wordmark .sub{display:none;} }
   /* ⚠ THE CHIP SHEDS DETAIL BEFORE THE NAV SHEDS WIDTH, and the order it sheds in is the order
      of how general the information is. The absolute time goes first (the age answers the same
      question and answers it better), then the settlement period (specialist detail). What never
@@ -321,14 +402,31 @@
   .mainnav::-webkit-scrollbar{display:none;}
   .mainnav a{position:relative;display:inline-flex;align-items:center;white-space:nowrap;
     scroll-snap-align:start;
-    /* ⚠ v0.83: 34px → 30px, and the height is HALF the spacing problem rather than a size
-       choice. The link centres its text in its own box, so a 34px box put 9px of slack above
-       the text — the reader sees that slack as part of the gap between the two masthead rows,
-       and no amount of padding trimming below the row above could remove it. 30px leaves ~7px,
-       which is what brings the measured text-to-text gap inside the 8–12px target. Desktop
-       only: the coarse-pointer tier keeps 36px, well clear of the 24px WCAG 2.5.8 floor. */
-    height:30px;padding:0 11px;border-radius:6px 6px 0 0;
-    font-family:var(--sans);font-size:13.5px;font-weight:600;letter-spacing:.005em;
+    /* ⚠ v0.83 took this 34px → 30px to close the gap between the two masthead rows; v0.88 puts
+       it back to 34px, and the reason v0.83's argument no longer applies is the whole point.
+       That release could only buy row spacing out of the link's own line-box slack, because the
+       brand row above was a two-line stack and its height was fixed. Option 5 sets the strapline
+       inline, so the brand row gives back more height than the nav takes — the masthead gets
+       SHORTER while the navigation gets BIGGER, which is the thing neither could do alone.
+       34px is also the tap target the brief asks for, comfortably over the 24px WCAG 2.5.8
+       floor, and the coarse-pointer tier below still lifts it further. */
+    height:34px;padding:0 11px;border-radius:6px 6px 0 0;
+    /* ⚠ INTER, DELIBERATELY, ON A MASTHEAD THAT IS OTHERWISE JOHNSTON-FACED. Hammersmith One has
+       ONE weight, so a nav set in it could not mark its current tab with weight — only colour and
+       the underline. Inter keeps all four signals. Navigation usability outranks brand
+       distinctiveness, and this is the one place on the page where the two actually conflict.
+       See css/fonts.css.
+       ⚠ 14px, NOT THE 14.5px THE BRIEF ASKED FOR, and the half-pixel is a real constraint rather
+       than a rounding. The harness caps the page's type scale at FIFTEEN distinct sizes — a
+       ceiling this project set after v0.71 accumulated twenty-three — and it was already at
+       fifteen. 14.5px would have been the sixteenth step; 14px is a rung the scale already has,
+       with eight other uses.
+       ⚠ SO THE CEILING WAS NOT RAISED TO FIT THE CHANGE. The project's own rule, recorded at
+       rev 61: reducing space means finding the space, not raising the ceiling. Half a pixel is
+       invisible; a type scale that grows by one step per brief is how twenty-three happened. The
+       prominence increase the brief asked for is delivered by 13.5px → 14px AND 30px → 34px
+       together, and the second of those is the one a reader actually feels. */
+    font-family:var(--sans);font-size:14px;font-weight:600;letter-spacing:.005em;
     color:var(--ink-dim);text-decoration:none;
     transition:color .15s ease,background-color .15s ease;}
   .mainnav a:hover{color:var(--blue-text);background:var(--grey-bg);}
@@ -425,6 +523,30 @@
     /* ⚠ v0.70: THREE, NOT FOUR. The panel shows the three largest movements, so the track count
      is the panel's contract rather than a layout preference. */
   .insight-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+  /* ⚠ v0.87: AN ODD COUNT FILLS THE ROW RATHER THAN LEAVING A HOLE, AND THIS IS WHY IT IS A
+     LAYOUT RULE AND NOT A FOURTH CARD. The author saw a gap beside the third mover on a phone
+     and proposed adding a fourth. But the panel does not show three movers — it shows
+     `filter(|Δ| >= 50 MW).sort().slice(0,3)`, a VARIABLE count of 0, 1, 2 or 3, deliberately so
+     since v0.70: "a panel that always finds three movers cannot tell you that nothing is
+     happening, which is half of what a reader came to find out."
+     So the gap is not caused by there being three cards. It is caused by an ODD count in a
+     two-column grid, and a fourth slot would move it rather than close it — three movers in four
+     slots leaves the same hole, and one mover leaves a bigger one.
+     ⚠ AND THE CONTENT OBJECTION IS THE STRONGER ONE. The fourth-largest movement is by
+     definition less meaningful than the third, and the third is often already marginal. Adding a
+     data point to fill a hole is letting the layout decide what the page says.
+     This handles 1 and 3 identically, invents nothing, and changes nothing on desktop, where
+     three cards fill three columns exactly.
+     ⚠ THE BREAKPOINT IS 900px, WHICH IS WHERE THE GRID ACTUALLY BECOMES TWO COLUMNS. The first
+     draft used 1080 — a number borrowed from the tile rows — and at 1080 this grid is still
+     THREE columns, so the rule spanned a third card across all three and pushed it onto a row of
+     its own. It made a gap where there had been none. Measured before and after: at 1080 the
+     three cards are 336/336/1025 with the bad rule and 456/456/456 without it.
+     A span rule has to be tied to the column count it is compensating for, not to a tier that
+     happens to sound like "mobile". */
+  @media (max-width:900px){
+    .insight-grid > .insight-item:last-child:nth-child(odd){grid-column:1 / -1;}
+  }
   .insight-grid[hidden]{display:none;}
   .insight-head .note{font-size:12px;font-weight:600;color:var(--ink-mute);}
   /* ⚠ v0.70: THE QUIET STATE IS A STATED READING, not an empty panel. Below the ±50 MW floor the
@@ -433,6 +555,33 @@
   .insight-quiet{font-size:13.5px;line-height:1.45;color:var(--ink-dim);
     padding:10px 11px;border:1px solid var(--grey-line);border-radius:7px;background:var(--page);}
   .insight-quiet b{color:var(--ink);}
+  /* ⚠ v0.87: THE MOVER TRACE. Requested as "the last hour"; drawn as SIX hours, because an hour
+     of half-hourly data is THREE POINTS and three points are a zigzag rather than a shape — it
+     would have told a reader less than the number above it. Six hours is thirteen points, which
+     is enough to answer the question the delta cannot: is this the ordinary morning ramp, or is
+     something unusual happening.
+     ⚠ IT SITS UNDER A BACKGROUND WASH. `.insight-item::before` fills part of the card to show
+     magnitude, so the trace has to stay legible over both the washed and unwashed halves. It
+     takes `currentColor` — the card's ink — at reduced opacity, which reads on either half and
+     in both themes.
+     ⚠ NOT THE FUEL COLOUR, and an earlier draft of this comment claimed it was. Each card sets
+     `--bar` to its fuel token and wears it as a 3px top border, so tinting the trace to match
+     was the obvious next step. It was rejected on legibility: the context line runs at .55
+     opacity, and the paler tokens — solar's gold above all — disappear at that weight against
+     the card. The border can carry the identity because it is solid and 3px; a hairline at half
+     opacity cannot. The trace's job is SHAPE, and ink is what stays readable at 22px.
+     ⚠ THE REPORTED HOUR IS MARKED. Without it the trace is six hours of context beside a figure
+     about one of them, and a reader has no way to see which. */
+  .mv-spark{display:block;width:100%;height:22px;margin-top:7px;overflow:visible;}
+  .mv-spark .mvline{fill:none;stroke:currentColor;stroke-width:1.5;opacity:.55;
+    stroke-linejoin:round;stroke-linecap:round;}
+  .mv-spark .mvwin{fill:none;stroke:currentColor;stroke-width:2.2;opacity:.95;
+    stroke-linejoin:round;stroke-linecap:round;}
+  .mv-spark .mvdot{fill:currentColor;opacity:.95;}
+  /* On a phone the cards are two-up and their text already wraps to two lines; the trace loses a
+     little height rather than the card gaining it. */
+  @media (max-width:560px){ .mv-spark{height:18px;margin-top:5px;} }
+
   .insight-item.mover[hidden]{display:none;}
   .insight-item{--fill:0%;--bar:var(--blue-text);position:relative;overflow:hidden;min-width:0;
     /* ⚠ v0.73: `--surface`, not `--page`, at the author's request. The cards sat on the page
@@ -2535,6 +2684,12 @@
       border-top:1px solid var(--grey-line);}
   }
 
+  /* ⚠ v0.87: THE AGE MARK, SIZED FOR AN ARITHMETIC ROW. The `.ge-val` rows are 12px, so the full
+     figure-state component would be larger than the number it qualifies. Same words, same muted
+     tone, no icon — at this size a 12px clock glyph is a smudge. */
+  .ge-age{font-size:10.5px;font-weight:700;letter-spacing:.02em;color:var(--warn);
+    white-space:nowrap;cursor:help;}
+
   .meter{height:6px;border-radius:3px;background:var(--grey-line);margin-top:9px;overflow:hidden;}
   /* The low-carbon meter fills in the CARBON RAMP'S CLEAN END rather than a fuel colour. That
      is the one green on this page that already means "low carbon" - it is the colour of the
@@ -3396,6 +3551,112 @@
 
   /* ================= Table view ================= */
   .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  /* ⚠ v0.86: THE FUEL DETAIL TABLE (Generation page). It reuses `table.data`, which the mix's
+     own table view already uses — one table style on the site, not a second one that drifts.
+     What is added here is only what this table needs: a colour key that ties each row to the
+     segment it represents in the strip above, and a provenance chip for estimated or blended
+     figures. Both are small because they are qualifiers, not content. */
+  .fueldetail{margin-top:2px;}
+  .fd-key{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;
+    vertical-align:baseline;flex:0 0 auto;}
+  /* ⚠ AN ESTIMATED SERIES TAKES THE HATCH IT HAS EVERYWHERE ELSE. Solar carries no colour token
+     — it is drawn as a hatched fill, not a flat one — so the first version fell through to the
+     mute grey and the one row a reader most needs to recognise as an estimate was the one whose
+     key did not match the chart above it. Same fill, same hatch, one component's worth of
+     difference. */
+  .fd-key.is-est{background:var(--solar-fill) !important;background-image:var(--hatch-est);}
+  .fd-est{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.03em;
+    text-transform:uppercase;color:var(--ink-mute);border:1px solid var(--grey-line);
+    border-radius:4px;padding:0 4px;margin-left:5px;cursor:help;}
+  .fd-note{margin:11px 0 0;font-size:12px;line-height:1.5;color:var(--ink-dim);}
+  .fd-note b{color:var(--ink);}
+  /* A wide table on a narrow screen scrolls inside its own box rather than pushing the page
+     sideways — the page body must never scroll horizontally. */
+  .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  @media (max-width:560px){
+    table.data.fueldetail{font-size:12.5px;min-width:430px;}
+  }
+
+  /* ⚠ v0.86: THE DEMAND BOUNDARIES PANEL. Three rows, each naming a figure, its value and what
+     it adds to or removes from the one above. Laid out as a grid rather than a table because the
+     third column is a paragraph, not a cell — a table would either clip it or set the whole row
+     to its height and leave the figures floating. */
+  .bd-row{display:grid;grid-template-columns:minmax(150px,1.1fr) minmax(110px,auto) minmax(0,2.4fr);
+    gap:14px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--grey-line);}
+  .bd-row:last-of-type{border-bottom:0;}
+  .bd-name{font-weight:700;color:var(--ink);font-size:13.5px;}
+  .bd-val{font-size:19px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;
+    white-space:nowrap;}
+  .bd-val .bd-u{font-size:12px;font-weight:600;color:var(--ink-dim);margin-left:2px;}
+  /* v0.87: the age mark goes UNDER the figure, not after it. `.bd-val` is `nowrap` in a
+     `minmax(110px,auto)` column, so setting it inline would widen the column by the width of the
+     mark and pull the note column in on every row — including the two that never carry one. */
+  .bd-val .ge-age{display:block;margin-top:3px;}
+  .bd-note{font-size:12.5px;line-height:1.5;color:var(--ink-dim);}
+  .bd-note b{color:var(--ink);}
+  /* The estimated row is marked in the same words and the same tone the rest of the site uses. */
+  .bd-est{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.03em;
+    text-transform:uppercase;color:var(--ink-mute);border:1px solid var(--grey-line);
+    border-radius:4px;padding:0 4px;}
+  /* v0.87: the stale-estimate sentence takes --warn, the same colour the age mark beside the
+     figure takes, so the two read as one statement rather than as two separate concerns.
+     ⚠ It must OUT-SPECIFY `.bd-note b{color:var(--ink)}` above, which would otherwise turn the
+     warning into ordinary emphasis. Two classes and an element beat one class and an element, so
+     this wins on specificity and not on position — it stays correct if the rules are reordered. */
+  .bd-note b.bd-old{color:var(--warn);}
+  .bd-foot{margin:13px 0 0;font-size:12.5px;line-height:1.55;color:var(--ink-dim);}
+  .bd-foot b{color:var(--ink);}
+  .dm-peak{margin:11px 0 0;font-size:12.5px;line-height:1.5;color:var(--ink-dim);}
+  .dm-peak b{color:var(--ink);}
+  @media (max-width:700px){
+    /* Stacked: the figure sits under its name and the explanation under both, which keeps the
+       three-column relationship legible when there is no room for three columns. */
+    .bd-row{grid-template-columns:minmax(0,1fr);gap:4px;}
+    .bd-val{font-size:21px;}
+  }
+
+  /* ⚠ v0.86: THE BAND TABLE (Carbon intensity page) and the FREQUENCY BANDS panel (System page).
+     Both reuse `table.data` and the existing stat type scale rather than introducing a third.
+     ⚠ THE PREFIX IS `hz-`, NOT `fb-`, AND THAT IS NOT A STYLE PREFERENCE. The first version used
+     `fb-` for "frequency bands" and collided with the FLOW BAND, whose components have owned that
+     prefix since v0.65 — including `.fb-note`, a retired chip the harness explicitly asserts is
+     gone, rule and all, so that a removed thing cannot be quietly reinstated. The check fired on
+     the collision, correctly: from the source there is no way to tell a resurrected chip from a
+     new panel that happened to pick the same name. Renamed rather than the check weakened. */
+  .bt-key{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;
+    vertical-align:baseline;}
+  tr.bt-now td{background:var(--grey-bg);}
+  .bt-here{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.03em;
+    text-transform:uppercase;color:var(--blue-text);margin-left:6px;}
+  /* A percentage bar, not a chart: the number is the claim and the bar is only there so two
+     rows can be compared without reading both figures. */
+  .hz-row{display:grid;grid-template-columns:minmax(120px,auto) minmax(80px,1fr) 56px minmax(0,2.2fr);
+    gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--grey-line);}
+  .hz-row:last-of-type{border-bottom:0;}
+  .hz-name{font-weight:700;font-size:13px;color:var(--ink);white-space:nowrap;}
+  .hz-bar{height:6px;border-radius:3px;background:var(--grey-line);overflow:hidden;}
+  .hz-bar span{display:block;height:100%;background:var(--mark);border-radius:3px;}
+  /* ⚠ THE STATUTORY ROW GOES AMBER ONLY WHEN IT IS ACTUALLY BREACHED, and nothing else here
+     uses the warn ramp. This is the page's one genuine "something is wrong" state. */
+  .hz-row.is-breach .hz-bar span{background:var(--warn);}
+  .hz-row.is-breach .hz-pc{color:var(--warn);}
+  .hz-pc{font-size:14px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink);}
+  .hz-note{font-size:12px;line-height:1.45;color:var(--ink-dim);}
+  .hz-note b{color:var(--ink);}
+  .hz-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:13px;
+    padding-top:11px;border-top:1px solid var(--grey-line);}
+  .hz-stats .k{display:block;font-size:11px;font-weight:700;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--ink-mute);}
+  .hz-stats .v{display:block;font-size:15px;font-weight:700;color:var(--ink);margin-top:3px;
+    font-variant-numeric:tabular-nums;}
+  .hz-foot{margin:12px 0 0;font-size:12px;line-height:1.5;color:var(--ink-dim);}
+  .hz-foot b{color:var(--ink);}
+  @media (max-width:700px){
+    .hz-row{grid-template-columns:minmax(0,1fr) 56px;grid-template-areas:"name pc" "bar bar" "note note";gap:6px 10px;}
+    .hz-name{grid-area:name;} .hz-pc{grid-area:pc;} .hz-bar{grid-area:bar;} .hz-note{grid-area:note;}
+    .hz-stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+  }
+
   table.data{border-collapse:collapse;width:100%;font-size:13.5px;}
   table.data th{text-align:left;font-size:11px;color:var(--ink-dim);font-weight:700;text-transform:uppercase;
     letter-spacing:.04em;padding:3px 8px 5px 0;border-bottom:1px solid var(--ink);white-space:nowrap;}
@@ -3918,7 +4179,13 @@
     .wordmark .sub,.byline{display:none;}
     .header-actions{width:100%;display:flex;align-items:center;justify-content:flex-start;
       flex-wrap:nowrap;gap:7px;min-width:0;}
-    .livewrap{font-size:11px;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;}
+    /* ⚠ v0.87: THESE RULES PRE-DATED THE MARKUP THEY NOW MATCH. `.header-actions .livewrap` was
+       styled here before rev 76 moved the chip onto the nav row, and the rules were never
+       removed — so the tier was already dressed for a chip that was not there. v0.87 puts it
+       back, and the ellipsis is what keeps it from pushing the temperature off the row on a
+       320px screen: the chip gives up its own tail before it costs anything else space. */
+    .livewrap{font-size:11px;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;
+      white-space:nowrap;}
     .tempchip{font-size:11px;flex:0 0 auto;}
     .tempchip .tdelta{display:none;}
     .unitswitch{flex:0 0 auto;}

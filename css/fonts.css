@@ -53,3 +53,57 @@
   font-display:swap;
   src:url(../assets/inter-700.woff2) format('woff2');
 }
+
+/* ============================================================================
+   HAMMERSMITH ONE — THE MASTHEAD DISPLAY FACE  (v0.88, rev 82)
+
+   ⚠ WHAT THIS IS FOR, AND WHAT IT IS NOT FOR. This face sets the wordmark and
+   the strapline in the masthead. NOTHING ELSE. Cards, charts, figures, tables,
+   the navigation, the methodology and about pages and every other component stay
+   on Inter. It is reached through `--display`, which is declared once in
+   tokens.css and used in exactly two rules; the harness asserts that count, so a
+   third use fails the release rather than quietly spreading a display face
+   through a page made of numbers.
+
+   ⚠ THE BRIEF ASKED FOR JOHNSTON, AND JOHNSTON IS NOT AVAILABLE. Johnston100 is
+   TfL's proprietary typeface and is not licensed to this project, so it is not
+   here and must not be added. The brief's named open alternative, "Skaldic Sans",
+   could not be found to exist under that name — no foundry, no repository, no
+   OFL release — so nothing was installed under it. Railway Sans
+   (github.com/googlefonts/railway-sans) is a genuine open digitisation of
+   Johnston's 1916 face and would be the closer match, but it has no tagged
+   release and its files were not obtainable. Hammersmith One is the face that is
+   real, obtainable, openly licensed and genuinely Johnston-derived: circular O
+   and C, humanist proportions, and the diamond tittle that is the Underground's
+   most recognisable single detail.
+
+   ⚠ ONE WEIGHT EXISTS — 400 — AND THAT IS A DESIGN CONSTRAINT, NOT A GAP TO FILL.
+   Ask for 700 and the browser SMEARS the 400 outlines, which is the synthesised
+   bold this file already refuses for Inter; the rule is not weaker because the
+   face is a display one. So the wordmark is set at 400, where this face is
+   already heavier than Inter's 400, and the NAVIGATION KEPT INTER precisely so
+   its current tab can go on saying "current" with weight as well as with colour
+   and an underline. Navigation usability outranks brand distinctiveness, and this
+   is where the two were actually in tension.
+
+   ⚠ LICENCE — SIL Open Font License 1.1, the same terms as Inter above. The
+   licence requires the copyright notice and licence to travel WITH the font; the
+   full text is in assets/HAMMERSMITH-ONE-OFL.txt and the notice is here. It is a
+   condition, not a courtesy.
+
+     Copyright (c) 2011, Sorkin Type Co. (www.sorkintype.com eben@eyebytes.com)
+     with Reserved Font Name "Hammersmith One".
+     This Font Software is licensed under the SIL Open Font License, Version 1.1.
+     This licence is available with a FAQ at: https://scripts.sil.org/OFL
+
+   ⚠ RESERVED FONT NAME. "Hammersmith One" is reserved under the OFL, so the
+   family is declared under its own name and never renamed — a modified or
+   re-served copy under that name would breach the licence.
+   ============================================================================ */
+@font-face{
+  font-family:'Hammersmith One';
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+  src:url(../assets/hammersmith-one-400.woff2) format('woff2');
+}

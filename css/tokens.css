@@ -166,6 +166,14 @@
        every reader already has on disk, which keeps the swap from re-flowing the page. */
     --sans:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     --mono:ui-monospace,'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
+    /* ⚠ v0.88: THE DISPLAY FACE, AND ITS SCOPE IS TWO RULES. Hammersmith One sets the masthead
+       wordmark and its strapline, and nothing else on the site — see the long note in fonts.css
+       for why the navigation deliberately KEPT Inter. It falls back to `--sans`, not to a
+       generic, so a reader who never receives the 19 KB file gets today's masthead rather than
+       Times New Roman; and because the fallback is the face the rest of the page is already
+       using, the swap changes two lines of text and re-flows nothing else.
+       ⚠ A THIRD USE OF THIS TOKEN IS A BUG UNTIL IT IS A DECISION. The harness counts them. */
+    --display:'Hammersmith One',var(--sans);
     /* ---- v0.18 TYPOGRAPHIC RULE — read this before adding font-family anywhere ----
        Both stacks were correct before this rule was written. What was
        wrong was not the faces but where they were applied: v0.17 set the monospace face on
