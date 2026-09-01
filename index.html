@@ -20,8 +20,8 @@
 <!-- v0.3197: stable social-sharing preview for iMessage, WhatsApp, Messages, LinkedIn, etc. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v89.png">
-<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v89.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v90.png">
+<meta property="og:image:secure_url" content="https://gbelectricity.uk/gb-electricity-preview-v90.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -29,7 +29,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB Electricity — Live Generation &amp; Demand">
 <meta name="twitter:description" content="Live GB electricity dashboard: generation mix, demand, wind and solar, interconnector flows, carbon intensity and grid frequency. Updated every few minutes.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v89.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v90.png">
 <meta name="twitter:image:alt" content="GB Electricity — Real-time insight into Great Britain’s electricity system">
 <!-- v0.3190: public search title deliberately omits the dashboard version; version remains in the footer/About dialog. -->
 <!-- v0.3198: desktop Simplified viewport fix, vertical compression and release-hardening checks. -->
@@ -2786,6 +2786,9 @@
      tone, no icon — at this size a 12px clock glyph is a smudge. */
   .ge-age{font-size:10.5px;font-weight:700;letter-spacing:.02em;color:var(--warn);
     white-space:nowrap;cursor:help;}
+  /* v0.90: the age marks are focusable now that their note opens the site's own popover. */
+  .ge-age:focus-visible,.figstate-age:focus-visible{
+    outline:2px solid var(--blue-text);outline-offset:2px;border-radius:4px;}
 
   .meter{height:6px;border-radius:3px;background:var(--grey-line);margin-top:9px;overflow:hidden;}
   /* The low-carbon meter fills in the CARBON RAMP'S CLEAN END rather than a fuel colour. That
@@ -2951,6 +2954,24 @@
   /* ================= Charts ================= */
   .chartbox{position:relative;width:100%;min-width:0;max-width:100%;touch-action:pan-y;-webkit-user-select:none;user-select:none;}
   svg.chart{display:block;width:100%;max-width:100%;overflow:visible;}
+  /* ⚠ v0.90 (rev 84): AN EMPTY CHART SAID NOTHING WHILE LOADING. The stack, frequency and price
+     boxes were blank white until their first draw — beside a mix panel that shows a skeleton
+     bar, so one panel looked alive and its neighbours looked broken. Every chart region now
+     carries the same quiet wash while it waits.
+     ⚠ GATED ON BOOT, NOT ON EMPTINESS ALONE. `svg:not(:has(*))` also matches a chart whose feed
+     FAILED — and a shimmer on a failed chart would claim progress that is not being made, the
+     exact confusion the live chip fix in this release removes. `data-booted` is set when the
+     first load cycle settles, so after it an empty chart is a real absence and the panel's own
+     prose says so; the wash appears only in the window where "empty" genuinely means "loading".
+     The page's global reduced-motion rule already stops the animation for readers who ask. */
+  body:not([data-booted]) svg.chart:not(:has(*)){
+    background:linear-gradient(100deg, var(--grey-bg) 40%, var(--blue-2) 50%, var(--grey-bg) 60%);
+    background-size:200% 100%;
+    animation:chartwait 1.6s linear infinite;
+    border-radius:6px;
+    min-height:120px;
+  }
+  @keyframes chartwait{from{background-position:130% 0;}to{background-position:-30% 0;}}
   .gridline{stroke:var(--grey-line);stroke-width:1;stroke-dasharray:2 3;}
   .crosshair{stroke:var(--ink-dim);stroke-width:1;stroke-dasharray:3 3;pointer-events:none;}
   .axlabel{font-size:11px;fill:var(--ink-dim);font-family:var(--sans);}
@@ -3548,6 +3569,13 @@
     text-align:left;border-bottom:1px dotted var(--blue-text);-webkit-tap-highlight-color:transparent;}
   button.ic-open:hover{border-bottom-style:solid;}
   button.ic-open:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;}
+  /* ⚠ v0.90 (rev 84): 17px TALL ON A PHONE. The ten link-name buttons measured 17px at 320–430,
+     against WCAG 2.5.8's 24px floor — the one interactive control on the page below it. The
+     floor is met with padding balanced by margin so the ROW grid does not grow: the target gets
+     taller, the layout does not. Coarse pointers only; a mouse does not need the slack. */
+  @media (pointer:coarse){
+    button.ic-open{padding-top:4px;padding-bottom:4px;margin-top:-4px;margin-bottom:-4px;min-height:24px;}
+  }
   /* v0.26: the ⓘ glyph is gone. It sat after ten names in a column where every name is the same
      kind of thing, so it read as ten pieces of punctuation rather than one affordance — and the
      affordance was never it: the name is blue, dotted-underlined, and goes solid on hover, which
@@ -5806,24 +5834,30 @@
     <div class="insight-head"><h2>What is changing?</h2>
       <span class="note" id="insight-note">Largest movements in the last hour</span></div>
     <div class="insight-grid" id="insight-grid">
+      <!-- ⚠ v0.90 (rev 84): the pre-boot cards read "Waiting for data" rather than a bare em
+           dash over an em dash. Two dashes in an empty card are a shrug: they say nothing about
+           whether the page is broken, loading, or has decided there is nothing to show. The
+           first render replaces these labels entirely, so the words cost nothing once live —
+           and if fewer than three movers clear the ±50 MW bar, the SPARE cards are hidden by
+           the renderer, so these placeholders can never sit beside real ones. -->
       <div class="insight-item mover" id="mv-1" tabindex="0" role="button"
            aria-expanded="false" aria-describedby="infopop">
         <span class="insight-icon" id="mv-1-icon" aria-hidden="true"></span>
-        <div class="k" id="mv-1-k">—</div><div class="v" id="mv-1-v">—</div>
+        <div class="k" id="mv-1-k">Waiting for data</div><div class="v" id="mv-1-v">—</div>
         <div class="p" id="mv-1-p"></div>
         <svg class="mv-spark" id="mv-1-spark" aria-hidden="true" focusable="false"></svg>
       </div>
       <div class="insight-item mover" id="mv-2" tabindex="0" role="button"
            aria-expanded="false" aria-describedby="infopop">
         <span class="insight-icon" id="mv-2-icon" aria-hidden="true"></span>
-        <div class="k" id="mv-2-k">—</div><div class="v" id="mv-2-v">—</div>
+        <div class="k" id="mv-2-k">Waiting for data</div><div class="v" id="mv-2-v">—</div>
         <div class="p" id="mv-2-p"></div>
         <svg class="mv-spark" id="mv-2-spark" aria-hidden="true" focusable="false"></svg>
       </div>
       <div class="insight-item mover" id="mv-3" tabindex="0" role="button"
            aria-expanded="false" aria-describedby="infopop">
         <span class="insight-icon" id="mv-3-icon" aria-hidden="true"></span>
-        <div class="k" id="mv-3-k">—</div><div class="v" id="mv-3-v">—</div>
+        <div class="k" id="mv-3-k">Waiting for data</div><div class="v" id="mv-3-v">—</div>
         <div class="p" id="mv-3-p"></div>
         <svg class="mv-spark" id="mv-3-spark" aria-hidden="true" focusable="false"></svg>
       </div>
@@ -6778,7 +6812,7 @@
            asserted the pre-boot <title> and masthead name against APP_NAME; this placeholder was
            simply never added, which is why it was the one free to drift. It is asserted now, so a
            release that forgets it fails instead of shipping. -->
-      <span class="version-label" id="version-label" title="Dashboard version">v0.89</span> &middot;
+      <span class="version-label" id="version-label" title="Dashboard version">v0.90</span> &middot;
       <!-- ⚠ v0.60: THE MODAL IS GONE AND THESE ARE BOTH REAL LINKS, About first.
            Until now the footer offered "About this Dashboard", a button opening a dialog that
            cloned all fourteen sections — while /about, published at rev 54, carried four of
@@ -6849,7 +6883,7 @@
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.89";
+const APP_VERSION = "v0.90";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -7693,15 +7727,24 @@ function solarStaleMin(sol){
 }
 /* The arithmetic rows are `.ge-val`s rather than `.value`s, so they take a compact mark rather
    than the full figure-state component — same words, same tone, sized for a 12px row. */
+/* ⚠ v0.90 (rev 84): THE NOTE MOVED FROM `title` TO `data-note`, AND THE MARKS ARE FOCUSABLE.
+   Reported by the author: hovering "3h old" showed nothing. The title attribute was present and
+   reachable — measured on the live site — but a native title is the wrong instrument for a mark
+   that says cursor:help: it appears after a 1–2 second delay that reads as broken, it NEVER
+   fires on touch (every phone and tablet reader got nothing, always), and keyboard users cannot
+   reach it at all. The site already keeps this promise properly for the dotted dataset terms —
+   hover previews, tap and Enter pin, Escape closes — so the age marks now go through the same
+   `#infopop`, wired by delegation below because these spans are re-created on every render.
+   `title` is GONE, not kept alongside: two tooltips answering one hover is worse than either. */
 function geAgeMark(minutes, note){
   const m = Math.round(minutes);
-  return ' <span class="ge-age" title="' + esc(note) + '">'
+  return ' <span class="ge-age" tabindex="0" data-note="' + esc(note) + '">'
     + esc(m >= 90 ? Math.round(m/60) + "h old" : m + "m old") + '</span>';
 }
 function figAgeMark(minutes, note){
   const m = Math.round(minutes);
   const label = m >= 90 ? Math.round(m/60) + "h old" : m + "m old";
-  return '<span class="figstate-age" title="' + esc(note || ("This reading is " + m +
+  return '<span class="figstate-age" tabindex="0" data-note="' + esc(note || ("This reading is " + m +
     " minutes old — older than the usual refresh.")) + '">' +
     '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/>' +
     '<path d="M12 7v5l3 2"/></svg>' +
@@ -8212,6 +8255,10 @@ async function loadAll(){
      would report the page as still loading when it is as loaded as it is going to get. */
   const prog = loadProgress(keys.length);
   const results = await Promise.allSettled(keys.map(k=>jobs[k]().finally(prog.tick)));
+  /* v0.90: the first completed cycle — from here on, an absent snapshot is a real absence.
+     The body attribute is the same fact for CSS: the chart-loading washes key off it. */
+  S.firstLoadSettled = true;
+  document.body.setAttribute("data-booted","1");
   results.forEach((r,i)=>{
     const k = keys[i];
     if(r.status==="fulfilled"){
@@ -8461,8 +8508,11 @@ function renderHealth(){
   if(!h || typeof h.status !== "number" || h.status === 2){ bar.style.display="none"; return; }
   const desc = (h.entries && h.entries.health && h.entries.health.description) || null;
   bar.innerHTML =
-    `<b>Elexon reports its API as not healthy.</b> The Insights API's own health endpoint is `+
-    `returning status <b class="ds">${h.status}</b>` +
+    /* ⚠ v0.90: "returning status 0" reached readers. Status 0 is an XHR internal — it means the
+       request did not complete — and a bare numeric code is developer notation either way. The
+       number is kept for the curious in the title attribute; the sentence says what it MEANS. */
+    `<b>Elexon reports its API as not healthy.</b> The Insights API's own health check `+
+    `<span title="health endpoint status ${h.status}">${h.status === 0 ? "is not answering" : "is reporting a problem"}</span>` +
     (desc ? ` — “${esc(desc)}”` : "") + `. ` +
     `Figures on this page may be stale or incomplete until it recovers. ` +
     `<b>This is Elexon's assessment of its own service, not ours</b> — everything here that came `+
@@ -8800,6 +8850,22 @@ function renderDemandMargin(){
 
 function renderStatus(snap){
   const dot=$("livedot"),txt=$("livetext"),live=$("live-status");
+  /* ⚠ v0.90 (rev 84): "No live data" WAS SHOWING AT 0ms. Boot applies the stored theme and unit,
+     and both of those call render() to repaint — which ran this function with no snapshot before
+     a single request had been SENT, replacing the pre-boot "connecting…" with a red failure the
+     instant the page opened. On a fast connection it was a sub-second flash; on a slow one the
+     page called itself broken for the whole first load. Measured with stalled feeds: the error
+     state at 0ms, 750ms, 1500ms… while every fetch was still pending.
+     A missing snapshot means FAILED only after a load cycle has actually finished. Until then it
+     means LOADING, and the chip keeps saying so. `S.firstLoadSettled` is set at the end of
+     loadAll's first pass — success or failure — which is the first moment "no data" is a fact
+     about the feeds rather than about the clock. */
+  if(!snap && !S.firstLoadSettled){
+    dot.className="livedot";live.classList.remove("stale");live.classList.remove("err");
+    txt.textContent="connecting…";
+    live.title="Contacting the live data feeds.";
+    return;
+  }
   if(!snap){dot.className="livedot err";live.classList.remove("stale");live.classList.add("err");txt.textContent="No live data";live.title="The latest Elexon live generation snapshot could not be loaded.";}
   else{
     const ageMin=(Date.now()-new Date(snap.publishTime).getTime())/60000,stale=ageMin>20;
@@ -8816,7 +8882,13 @@ function renderStatus(snap){
     live.title=stale?"The latest live snapshot is more than 20 minutes old. The page refreshes automatically every five minutes.":"Latest Elexon live generation snapshot: "+fmtTime(snap.publishTime)+" · settlement period "+(snap.settlementPeriod??"–");
   }
   const eb=$("errbar");
-  if(S.errors.length){eb.style.display="block";eb.innerHTML="<b>Some feeds didn't load.</b> "+S.errors.map(esc).join(" · ")+"<br>The page retries automatically every five minutes. If you opened this file directly and the browser reports a CORS or network error, serve the folder over http (e.g. <b class='ds'>python3 -m http.server</b>) and reload.";}
+  if(S.errors.length){eb.style.display="block";eb.innerHTML="<b>Some feeds didn't load.</b> "+S.errors.map(esc).join(" · ")
+      +"<br>The page retries automatically every five minutes."
+      /* ⚠ v0.90: the python3 -m http.server sentence was shipping to every reader of the PUBLIC
+         SITE, where no one has a folder to serve — it is advice for the author's own machine and
+         it read like leaked scaffolding. It appears only when the page really was opened as a
+         file, which is the one situation it helps. */
+      +(location.protocol==="file:" ? " If you opened this file directly and the browser reports a CORS or network error, serve the folder over http (e.g. <b class='ds'>python3 -m http.server</b>) and reload." : "");}
   else eb.style.display="none";
 }
 
@@ -14777,6 +14849,81 @@ function attachTerms(){
   });
 }
 attachTerms();
+
+/* ============================================================
+   v0.90 (rev 84) — THE AGE MARKS OPEN THE SITE'S OWN TOOLTIP
+
+   ⚠ DELEGATED, NOT BOUND PER ELEMENT, and the reason is the marks' life cycle: every refresh
+   re-renders the figures and re-creates these spans, so a per-element binding (the attachTerms
+   pattern) would need re-attaching after every render and would silently stop working the first
+   time a new render path forgot to. One set of document-level listeners survives any re-render —
+   the same reasoning the expand buttons used before rev 83 removed them.
+
+   ⚠ THE SEMANTICS ARE attachInfoPop'S, NOT NEW ONES: hover previews (fine pointers only), click
+   or Enter pins, focus previews, Escape / outside click / scroll dismisses. A second, slightly
+   different tooltip behaviour would be a second thing to learn; the point of this change is that
+   the marks join a system, not that they get a bespoke one.
+
+   ⚠ AND IT DOES NOT FIGHT THE OTHER USERS OF #infopop. The popover element is shared; each
+   attachInfoPop instance guards its handlers with its own `open` flag, so their outside-click
+   and scroll closers no-op while this one is showing. The same discipline here: every handler
+   checks this module's own state first. */
+(function(){
+  const SEL = ".figstate-age,.ge-age";
+  const pop = $("infopop");
+  if(!pop) return;
+  let cur = null, pinned = false;
+  const fine = () => matchMedia("(pointer:fine)").matches;
+  const note = el => el.dataset.note || "";
+  function show(m){
+    pop.innerHTML = esc(note(m));
+    pop.style.width = ""; pop.style.maxWidth = "";
+    const r = m.getBoundingClientRect();
+    pop.hidden = false;
+    const w = pop.offsetWidth, h = pop.offsetHeight;
+    let left = Math.min(r.left, window.innerWidth - w - 10);
+    let top  = r.bottom + 8;
+    if(top + h > window.innerHeight - 8) top = Math.max(8, r.top - h - 8);
+    pop.style.left = Math.max(8,left) + "px"; pop.style.top = top + "px";
+    m.setAttribute("aria-describedby","infopop");
+    cur = m;
+  }
+  function hide(){
+    if(!cur) return;
+    cur.removeAttribute("aria-describedby");
+    pop.hidden = true; cur = null; pinned = false;
+  }
+  document.addEventListener("mouseover", e => {
+    const m = e.target.closest ? e.target.closest(SEL) : null;
+    if(m && fine() && !pinned && note(m)) show(m);
+  });
+  document.addEventListener("mouseout", e => {
+    const m = e.target.closest ? e.target.closest(SEL) : null;
+    /* leaving one child of the mark for another is not leaving the mark */
+    if(m && cur === m && !pinned && !(e.relatedTarget && m.contains(e.relatedTarget))) hide();
+  });
+  document.addEventListener("click", e => {
+    const m = e.target.closest ? e.target.closest(SEL) : null;
+    if(m && note(m)){ if(pinned && cur === m){ hide(); } else { show(m); pinned = true; } return; }
+    if(cur && !pop.contains(e.target)) hide();
+  });
+  document.addEventListener("focusin", e => {
+    const m = e.target.closest ? e.target.closest(SEL) : null;
+    if(m && note(m) && m.matches(":focus-visible") && !pinned) show(m);
+  });
+  document.addEventListener("focusout", e => {
+    const m = e.target.closest ? e.target.closest(SEL) : null;
+    if(m && cur === m) hide();
+  });
+  document.addEventListener("keydown", e => {
+    if(e.key === "Escape" && cur){ hide(); return; }
+    if(e.key !== "Enter" && e.key !== " ") return;
+    const m = e.target.closest ? e.target.closest(SEL) : null;
+    if(m && note(m)){ e.preventDefault(); if(pinned && cur === m){ hide(); } else { show(m); pinned = true; } }
+  });
+  window.addEventListener("scroll", () => { if(cur && !pinned) hide(); }, true);
+  window.addEventListener("resize", () => { if(cur) hide(); });
+})();
 
 /* ============================================================
    ABOUT THIS DASHBOARD

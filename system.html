@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- GENERATED FILE — do not edit. Produced by tools/pages89.mjs from
-     dash/GB_Electricity_v0.89.html (md5 dbe43e6db6ad9fea6a6bacfd04b5393e). Edit the dashboard, re-run the generator. -->
+<!-- GENERATED FILE — do not edit. Produced by tools/pages90.mjs from
+     dash/GB_Electricity_v0.90.html (md5 df77c0ea0b2d7f10c8ed06c3135ca008). Edit the dashboard, re-run the generator. -->
 <html lang="en-GB" data-page="system" class="page-ic">
 <head>
 <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 <title>GB System Frequency & Imbalance — Live 50 Hz, Balancing Prices Explained</title>
 <meta name="description" content="GB grid frequency at 15-second resolution against its operational and statutory limits, how much of the last hour sat inside each, the indicated and settled imbalance positions, and the difference between the market price and the imbalance price.">
 <link rel="canonical" href="https://gbelectricity.uk/system">
-<meta name="generator" content="pages89.mjs — from GB Electricity v0.89">
+<meta name="generator" content="pages90.mjs — from GB Electricity v0.90">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -24,11 +24,11 @@
 <meta property="og:url" content="https://gbelectricity.uk/system">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v89.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v90.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GB System Frequency & Imbalance — Live 50 Hz, Balancing Prices Explained">
 <meta name="twitter:description" content="GB grid frequency at 15-second resolution against its operational and statutory limits, how much of the last hour sat inside each, the indicated and settled imbalance positions, and the difference between the market price and the imbalance price.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v89.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v90.png">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
 <link rel="icon" sizes="48x48 96x96" href="/favicon.ico">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -47,7 +47,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
 <link rel="stylesheet" href="/css/tokens.css">
 <link rel="stylesheet" href="/styles.css">
 <style>
-  /* ---- generated page shell (pages89.mjs) ---- */
+  /* ---- generated page shell (pages90.mjs) ---- */
   /* ⚠ v0.73: BACK TO TOP. Fixed to the corner rather than pinned to the end of the article,
      because a reader wants it at the moment they decide to leave, not after scrolling further to
      find it. 44px minimum on both axes (WCAG 2.5.5's enhanced target, not merely 2.5.8's 24) —
@@ -200,7 +200,19 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         </div>
         </a>
       </div>
+      <!-- ⚠ v0.90 (rev 84): THE SHELL IS THE SECOND MASTHEAD, AND REV 82 ONLY UPDATED THE
+           FIRST. Option 5 moved the live status into this cluster on the dashboard; this shell
+           went on placing it on the nav row, under a comment that said "exactly as the dashboard
+           does" — which had stopped being true. Worse than the drift itself: rev 82 DELETED the
+           .navrow-scoped livewrap styles the old position depended on, so the chip on every app
+           page rendered unstyled for its context and ran 27px past a 390px viewport. Found by
+           the rev 84 state survey, not by the harness — mastheadOption5 measured only the
+           dashboard, which is how a second implementation drifts: every check pointed at the
+           first one. The scenario now samples an app page as well.
+           The cluster is Live · MW/GW here — no temperature, because the app pages do not fetch
+           weather and an empty chip would be a control pretending to be a reading. -->
       <div class="header-actions">
+        <span class="livewrap" id="live-status" title="Waiting for the latest live data"><span class="livedot" id="livedot"></span><span id="livetext" aria-live="polite">connecting…</span></span>
         <button type="button" class="unitswitch" id="unitswitch" data-unit="MW" data-flip="0"
                 role="switch" aria-checked="false" aria-label="Show values in gigawatts">
           <span class="slider" aria-hidden="true"></span>
@@ -208,8 +220,8 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
           <span class="unitbtn" data-unit="GW">GW</span>
         </button></div>
     </div>
-    <!-- rev 76: the nav row carries the live status on an app page, exactly as the dashboard
-         does. A static page has no live status to show, so the row holds the nav alone. -->
+    <!-- v0.90: the nav row is navigation and nothing else, on every page — the dashboard's
+         rev 82 rule, now true here too. -->
     <div class="navrow">
 <nav class="mainnav" id="mainnav" aria-label="Sections">
       <a href="/" data-nav="dashboard">Dashboard</a>
@@ -219,7 +231,6 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
       <a href="/carbon-intensity" data-nav="carbon-intensity">Carbon intensity</a>
       <a href="/system" data-nav="system" aria-current="page">System</a>
     </nav>
-      <span class="livewrap" id="live-status" title="Waiting for the latest live data"><span class="livedot" id="livedot"></span><span id="livetext" aria-live="polite">connecting…</span></span>
     </div>
   </div>
   <hr class="rule">
@@ -408,7 +419,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" title="Generated from GB Electricity v0.89">v0.89</span> &middot;
+      <span class="version-label" title="Generated from GB Electricity v0.90">v0.90</span> &middot;
       <a href="/about" class="footer-link">About</a> &middot;
       <a href="/methodology" class="footer-link">Methodology</a>
       <span class="theme-pref" id="theme-pref" role="radiogroup" aria-label="Colour theme">
@@ -451,7 +462,7 @@ window.__GBE_PAGE = "system";
    harness asserts those match these, because "single-sourced" was not quite true and a rename
    that missed them would have shown the old name with script blocked. */
 const APP_NAME    = "GB Electricity";
-const APP_VERSION = "v0.89";
+const APP_VERSION = "v0.90";
 // v0.33: release check of the v0.3206 build — CSV export cell join fixed (newline -> comma);
 // dead "Use Refresh" instructions reworded after the control's removal at v0.3194; keyboard focus
 // restored on the methodology disclosure; the disclosure's red action cell moved to the chrome blue
@@ -1295,15 +1306,24 @@ function solarStaleMin(sol){
 }
 /* The arithmetic rows are `.ge-val`s rather than `.value`s, so they take a compact mark rather
    than the full figure-state component — same words, same tone, sized for a 12px row. */
+/* ⚠ v0.90 (rev 84): THE NOTE MOVED FROM `title` TO `data-note`, AND THE MARKS ARE FOCUSABLE.
+   Reported by the author: hovering "3h old" showed nothing. The title attribute was present and
+   reachable — measured on the live site — but a native title is the wrong instrument for a mark
+   that says cursor:help: it appears after a 1–2 second delay that reads as broken, it NEVER
+   fires on touch (every phone and tablet reader got nothing, always), and keyboard users cannot
+   reach it at all. The site already keeps this promise properly for the dotted dataset terms —
+   hover previews, tap and Enter pin, Escape closes — so the age marks now go through the same
+   `#infopop`, wired by delegation below because these spans are re-created on every render.
+   `title` is GONE, not kept alongside: two tooltips answering one hover is worse than either. */
 function geAgeMark(minutes, note){
   const m = Math.round(minutes);
-  return ' <span class="ge-age" title="' + esc(note) + '">'
+  return ' <span class="ge-age" tabindex="0" data-note="' + esc(note) + '">'
     + esc(m >= 90 ? Math.round(m/60) + "h old" : m + "m old") + '</span>';
 }
 function figAgeMark(minutes, note){
   const m = Math.round(minutes);
   const label = m >= 90 ? Math.round(m/60) + "h old" : m + "m old";
-  return '<span class="figstate-age" title="' + esc(note || ("This reading is " + m +
+  return '<span class="figstate-age" tabindex="0" data-note="' + esc(note || ("This reading is " + m +
     " minutes old — older than the usual refresh.")) + '">' +
     '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/>' +
     '<path d="M12 7v5l3 2"/></svg>' +
@@ -1814,6 +1834,10 @@ async function loadAll(){
      would report the page as still loading when it is as loaded as it is going to get. */
   const prog = loadProgress(keys.length);
   const results = await Promise.allSettled(keys.map(k=>jobs[k]().finally(prog.tick)));
+  /* v0.90: the first completed cycle — from here on, an absent snapshot is a real absence.
+     The body attribute is the same fact for CSS: the chart-loading washes key off it. */
+  S.firstLoadSettled = true;
+  document.body.setAttribute("data-booted","1");
   results.forEach((r,i)=>{
     const k = keys[i];
     if(r.status==="fulfilled"){
@@ -2063,8 +2087,11 @@ function renderHealth(){
   if(!h || typeof h.status !== "number" || h.status === 2){ bar.style.display="none"; return; }
   const desc = (h.entries && h.entries.health && h.entries.health.description) || null;
   bar.innerHTML =
-    `<b>Elexon reports its API as not healthy.</b> The Insights API's own health endpoint is `+
-    `returning status <b class="ds">${h.status}</b>` +
+    /* ⚠ v0.90: "returning status 0" reached readers. Status 0 is an XHR internal — it means the
+       request did not complete — and a bare numeric code is developer notation either way. The
+       number is kept for the curious in the title attribute; the sentence says what it MEANS. */
+    `<b>Elexon reports its API as not healthy.</b> The Insights API's own health check `+
+    `<span title="health endpoint status ${h.status}">${h.status === 0 ? "is not answering" : "is reporting a problem"}</span>` +
     (desc ? ` — “${esc(desc)}”` : "") + `. ` +
     `Figures on this page may be stale or incomplete until it recovers. ` +
     `<b>This is Elexon's assessment of its own service, not ours</b> — everything here that came `+
@@ -2402,6 +2429,22 @@ function renderDemandMargin(){
 
 function renderStatus(snap){
   const dot=$("livedot"),txt=$("livetext"),live=$("live-status");
+  /* ⚠ v0.90 (rev 84): "No live data" WAS SHOWING AT 0ms. Boot applies the stored theme and unit,
+     and both of those call render() to repaint — which ran this function with no snapshot before
+     a single request had been SENT, replacing the pre-boot "connecting…" with a red failure the
+     instant the page opened. On a fast connection it was a sub-second flash; on a slow one the
+     page called itself broken for the whole first load. Measured with stalled feeds: the error
+     state at 0ms, 750ms, 1500ms… while every fetch was still pending.
+     A missing snapshot means FAILED only after a load cycle has actually finished. Until then it
+     means LOADING, and the chip keeps saying so. `S.firstLoadSettled` is set at the end of
+     loadAll's first pass — success or failure — which is the first moment "no data" is a fact
+     about the feeds rather than about the clock. */
+  if(!snap && !S.firstLoadSettled){
+    dot.className="livedot";live.classList.remove("stale");live.classList.remove("err");
+    txt.textContent="connecting…";
+    live.title="Contacting the live data feeds.";
+    return;
+  }
   if(!snap){dot.className="livedot err";live.classList.remove("stale");live.classList.add("err");txt.textContent="No live data";live.title="The latest Elexon live generation snapshot could not be loaded.";}
   else{
     const ageMin=(Date.now()-new Date(snap.publishTime).getTime())/60000,stale=ageMin>20;
@@ -2418,7 +2461,13 @@ function renderStatus(snap){
     live.title=stale?"The latest live snapshot is more than 20 minutes old. The page refreshes automatically every five minutes.":"Latest Elexon live generation snapshot: "+fmtTime(snap.publishTime)+" · settlement period "+(snap.settlementPeriod??"–");
   }
   const eb=$("errbar");
-  if(S.errors.length){eb.style.display="block";eb.innerHTML="<b>Some feeds didn't load.</b> "+S.errors.map(esc).join(" · ")+"<br>The page retries automatically every five minutes. If you opened this file directly and the browser reports a CORS or network error, serve the folder over http (e.g. <b class='ds'>python3 -m http.server</b>) and reload.";}
+  if(S.errors.length){eb.style.display="block";eb.innerHTML="<b>Some feeds didn't load.</b> "+S.errors.map(esc).join(" · ")
+      +"<br>The page retries automatically every five minutes."
+      /* ⚠ v0.90: the python3 -m http.server sentence was shipping to every reader of the PUBLIC
+         SITE, where no one has a folder to serve — it is advice for the author's own machine and
+         it read like leaked scaffolding. It appears only when the page really was opened as a
+         file, which is the one situation it helps. */
+      +(location.protocol==="file:" ? " If you opened this file directly and the browser reports a CORS or network error, serve the folder over http (e.g. <b class='ds'>python3 -m http.server</b>) and reload." : "");}
   else eb.style.display="none";
 }
 
@@ -8379,6 +8428,81 @@ function attachTerms(){
   });
 }
 attachTerms();
+
+/* ============================================================
+   v0.90 (rev 84) — THE AGE MARKS OPEN THE SITE'S OWN TOOLTIP
+
+   ⚠ DELEGATED, NOT BOUND PER ELEMENT, and the reason is the marks' life cycle: every refresh
+   re-renders the figures and re-creates these spans, so a per-element binding (the attachTerms
+   pattern) would need re-attaching after every render and would silently stop working the first
+   time a new render path forgot to. One set of document-level listeners survives any re-render —
+   the same reasoning the expand buttons used before rev 83 removed them.
+
+   ⚠ THE SEMANTICS ARE attachInfoPop'S, NOT NEW ONES: hover previews (fine pointers only), click
+   or Enter pins, focus previews, Escape / outside click / scroll dismisses. A second, slightly
+   different tooltip behaviour would be a second thing to learn; the point of this change is that
+   the marks join a system, not that they get a bespoke one.
+
+   ⚠ AND IT DOES NOT FIGHT THE OTHER USERS OF #infopop. The popover element is shared; each
+   attachInfoPop instance guards its handlers with its own `open` flag, so their outside-click
+   and scroll closers no-op while this one is showing. The same discipline here: every handler
+   checks this module's own state first. */
+(function(){
+  const SEL = ".figstate-age,.ge-age";
+  const pop = $("infopop");
+  if(!pop) return;
+  let cur = null, pinned = false;
+  const fine = () => matchMedia("(pointer:fine)").matches;
+  const note = el => el.dataset.note || "";
+  function show(m){
+    pop.innerHTML = esc(note(m));
+    pop.style.width = ""; pop.style.maxWidth = "";
+    const r = m.getBoundingClientRect();
+    pop.hidden = false;
+    const w = pop.offsetWidth, h = pop.offsetHeight;
+    let left = Math.min(r.left, window.innerWidth - w - 10);
+    let top  = r.bottom + 8;
+    if(top + h > window.innerHeight - 8) top = Math.max(8, r.top - h - 8);
+    pop.style.left = Math.max(8,left) + "px"; pop.style.top = top + "px";
+    m.setAttribute("aria-describedby","infopop");
+    cur = m;
+  }
+  function hide(){
+    if(!cur) return;
+    cur.removeAttribute("aria-describedby");
+    pop.hidden = true; cur = null; pinned = false;
+  }
+  document.addEventListener("mouseover", e => {
+    const m = e.target.closest ? e.target.closest(SEL) : null;
+    if(m && fine() && !pinned && note(m)) show(m);
+  });
+  document.addEventListener("mouseout", e => {
+    const m = e.target.closest ? e.target.closest(SEL) : null;
+    /* leaving one child of the mark for another is not leaving the mark */
+    if(m && cur === m && !pinned && !(e.relatedTarget && m.contains(e.relatedTarget))) hide();
+  });
+  document.addEventListener("click", e => {
+    const m = e.target.closest ? e.target.closest(SEL) : null;
+    if(m && note(m)){ if(pinned && cur === m){ hide(); } else { show(m); pinned = true; } return; }
+    if(cur && !pop.contains(e.target)) hide();
+  });
+  document.addEventListener("focusin", e => {
+    const m = e.target.closest ? e.target.closest(SEL) : null;
+    if(m && note(m) && m.matches(":focus-visible") && !pinned) show(m);
+  });
+  document.addEventListener("focusout", e => {
+    const m = e.target.closest ? e.target.closest(SEL) : null;
+    if(m && cur === m) hide();
+  });
+  document.addEventListener("keydown", e => {
+    if(e.key === "Escape" && cur){ hide(); return; }
+    if(e.key !== "Enter" && e.key !== " ") return;
+    const m = e.target.closest ? e.target.closest(SEL) : null;
+    if(m && note(m)){ e.preventDefault(); if(pinned && cur === m){ hide(); } else { show(m); pinned = true; } }
+  });
+  window.addEventListener("scroll", () => { if(cur && !pinned) hide(); }, true);
+  window.addEventListener("resize", () => { if(cur) hide(); });
+})();
 
 /* ============================================================
    ABOUT THIS DASHBOARD

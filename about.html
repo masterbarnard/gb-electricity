@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- GENERATED FILE — do not edit. Produced by tools/pages89.mjs from
-     dash/GB_Electricity_v0.89.html (md5 dbe43e6db6ad9fea6a6bacfd04b5393e). Edit the dashboard, re-run the generator. -->
+<!-- GENERATED FILE — do not edit. Produced by tools/pages90.mjs from
+     dash/GB_Electricity_v0.90.html (md5 df77c0ea0b2d7f10c8ed06c3135ca008). Edit the dashboard, re-run the generator. -->
 <html lang="en-GB" data-page="about" class="">
 <head>
 <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 <title>About GB Electricity — Data Sources, Licences & Status</title>
 <meta name="description" content="Where GB Electricity’s live UK grid data comes from: Elexon Insights (BMRS), the NESO Carbon Intensity API and Sheffield Solar PV_Live — the endpoints called, the attribution and licences, and the source and status of the project.">
 <link rel="canonical" href="https://gbelectricity.uk/about">
-<meta name="generator" content="pages89.mjs — from GB Electricity v0.89">
+<meta name="generator" content="pages90.mjs — from GB Electricity v0.90">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -24,11 +24,11 @@
 <meta property="og:url" content="https://gbelectricity.uk/about">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v89.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v90.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="About GB Electricity — Data Sources, Licences & Status">
 <meta name="twitter:description" content="Where GB Electricity’s live UK grid data comes from: Elexon Insights (BMRS), the NESO Carbon Intensity API and Sheffield Solar PV_Live — the endpoints called, the attribution and licences, and the source and status of the project.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v89.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v90.png">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
 <link rel="icon" sizes="48x48 96x96" href="/favicon.ico">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -47,7 +47,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
 <link rel="stylesheet" href="/css/tokens.css">
 <link rel="stylesheet" href="/styles.css">
 <style>
-  /* ---- generated page shell (pages89.mjs) ---- */
+  /* ---- generated page shell (pages90.mjs) ---- */
   /* ⚠ v0.73: BACK TO TOP. Fixed to the corner rather than pinned to the end of the article,
      because a reader wants it at the moment they decide to leave, not after scrolling further to
      find it. 44px minimum on both axes (WCAG 2.5.5's enhanced target, not merely 2.5.8's 24) —
@@ -200,10 +200,21 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         </div>
         </a>
       </div>
+      <!-- ⚠ v0.90 (rev 84): THE SHELL IS THE SECOND MASTHEAD, AND REV 82 ONLY UPDATED THE
+           FIRST. Option 5 moved the live status into this cluster on the dashboard; this shell
+           went on placing it on the nav row, under a comment that said "exactly as the dashboard
+           does" — which had stopped being true. Worse than the drift itself: rev 82 DELETED the
+           .navrow-scoped livewrap styles the old position depended on, so the chip on every app
+           page rendered unstyled for its context and ran 27px past a 390px viewport. Found by
+           the rev 84 state survey, not by the harness — mastheadOption5 measured only the
+           dashboard, which is how a second implementation drifts: every check pointed at the
+           first one. The scenario now samples an app page as well.
+           The cluster is Live · MW/GW here — no temperature, because the app pages do not fetch
+           weather and an empty chip would be a control pretending to be a reading. -->
       <div class="header-actions"></div>
     </div>
-    <!-- rev 76: the nav row carries the live status on an app page, exactly as the dashboard
-         does. A static page has no live status to show, so the row holds the nav alone. -->
+    <!-- v0.90: the nav row is navigation and nothing else, on every page — the dashboard's
+         rev 82 rule, now true here too. -->
     <div class="navrow">
 <nav class="mainnav" id="mainnav" aria-label="Sections">
       <a href="/" data-nav="dashboard">Dashboard</a>
@@ -379,7 +390,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" title="Generated from GB Electricity v0.89">v0.89</span> &middot;
+      <span class="version-label" title="Generated from GB Electricity v0.90">v0.90</span> &middot;
       <a href="/about" class="footer-link">About</a> &middot;
       <a href="/methodology" class="footer-link">Methodology</a>
       <span class="theme-pref" id="theme-pref" role="radiogroup" aria-label="Colour theme">
@@ -394,7 +405,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
 
 <script>
 
-/* ---- generated page runtime (pages89.mjs) — the minimum the static pages
+/* ---- generated page runtime (pages90.mjs) — the minimum the static pages
    need: theme, year, glossary. Everything content-bearing is extracted from
    the dashboard at generation time. ---- */
 const $ = (id)=>document.getElementById(id);
@@ -442,7 +453,7 @@ function applyTheme(pref, persist){
 const copyrightYear = $("copyright-year");
 if(copyrightYear) copyrightYear.textContent = String(new Date().getFullYear());
 
-/* Glossary — extracted verbatim from the dashboard by pages89.mjs. */
+/* Glossary — extracted verbatim from the dashboard by pages90.mjs. */
 const termDefs={
   MID:"Market Index Data — the volume-weighted price of electricity traded on the GB day-ahead and within-day exchanges for a settlement period. Two providers report; this page weights them by traded volume.",
   IMBALNGC:"Indicated Imbalance — NESO’s forecast of how far generation will run above or below demand in a settlement period. A forecast, not a settled figure, and published for seventeen transmission boundaries as well as the national one.",
