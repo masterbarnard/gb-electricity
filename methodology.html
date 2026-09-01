@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- GENERATED FILE — do not edit. Produced by tools/pages88.mjs from
-     dash/GB_Electricity_v0.88.html (md5 cdbffc5b1d6f83061544fce5a06da4dd). Edit the dashboard, re-run the generator. -->
+<!-- GENERATED FILE — do not edit. Produced by tools/pages89.mjs from
+     dash/GB_Electricity_v0.89.html (md5 dbe43e6db6ad9fea6a6bacfd04b5393e). Edit the dashboard, re-run the generator. -->
 <html lang="en-GB" data-page="methodology" class="">
 <head>
 <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 <title>Methodology — How GB Electricity Derives Its Live Figures</title>
 <meta name="description" content="How GB Electricity derives each live figure: the UK generation mix, national and underlying demand, embedded solar, interconnector flows, carbon intensity and grid frequency — and what the public data cannot see.">
 <link rel="canonical" href="https://gbelectricity.uk/methodology">
-<meta name="generator" content="pages88.mjs — from GB Electricity v0.88">
+<meta name="generator" content="pages89.mjs — from GB Electricity v0.89">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -24,11 +24,11 @@
 <meta property="og:url" content="https://gbelectricity.uk/methodology">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v88.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v89.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Methodology — How GB Electricity Derives Its Live Figures">
 <meta name="twitter:description" content="How GB Electricity derives each live figure: the UK generation mix, national and underlying demand, embedded solar, interconnector flows, carbon intensity and grid frequency — and what the public data cannot see.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v88.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v89.png">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
 <link rel="icon" sizes="48x48 96x96" href="/favicon.ico">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -47,7 +47,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
 <link rel="stylesheet" href="/css/tokens.css">
 <link rel="stylesheet" href="/styles.css">
 <style>
-  /* ---- generated page shell (pages88.mjs) ---- */
+  /* ---- generated page shell (pages89.mjs) ---- */
   /* ⚠ v0.73: BACK TO TOP. Fixed to the corner rather than pinned to the end of the article,
      because a reader wants it at the moment they decide to leave, not after scrolling further to
      find it. 44px minimum on both axes (WCAG 2.5.5's enhanced target, not merely 2.5.8's 24) —
@@ -131,11 +131,14 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
      the width the bars need. The prose below it keeps the measure. */
   .page-ic .page-main{max-width:1680px;}
   .page-ic .panel{margin-top:4px;}
-  /* The panel's own head carries an expand button on the dashboard. On a page that is already
-     the expanded view there is nothing to expand into, so it goes — along with the panel's
-     duplicate H2, because the page has an H1 that says the same thing and two headings for one
-     subject is the fault rev 71 and rev 72 both paid for at the level of words. */
-  .page-ic .panel-head .ic-expand{display:none;}
+  /* The panel's duplicate H2 is suppressed because the page has an H1 that says the same thing,
+     and two headings for one subject is the fault rev 71 and rev 72 both paid for at the level
+     of words.
+     v0.89 (rev 83): the rule that used to sit here hiding this page's expand button is RETIRED.
+     The button is removed from the markup now, by dropExpandButtons, the same way it is removed
+     from Generation, Carbon intensity and System — one mechanism instead of a hide here and a
+     deletion there. Nothing changes for a reader: it was already invisible and out of the tab
+     order, which was measured before it was touched. */
   .page-ic .panel > .panel-head > h2{position:absolute;width:1px;height:1px;overflow:hidden;
     clip-path:inset(50%);white-space:nowrap;}
   .page-ic .ic-prose{max-width:74ch;margin:30px auto 0;}
@@ -481,7 +484,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" title="Generated from GB Electricity v0.88">v0.88</span> &middot;
+      <span class="version-label" title="Generated from GB Electricity v0.89">v0.89</span> &middot;
       <a href="/about" class="footer-link">About</a> &middot;
       <a href="/methodology" class="footer-link">Methodology</a>
       <span class="theme-pref" id="theme-pref" role="radiogroup" aria-label="Colour theme">
@@ -496,7 +499,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
 
 <script>
 
-/* ---- generated page runtime (pages88.mjs) — the minimum the static pages
+/* ---- generated page runtime (pages89.mjs) — the minimum the static pages
    need: theme, year, glossary. Everything content-bearing is extracted from
    the dashboard at generation time. ---- */
 const $ = (id)=>document.getElementById(id);
@@ -544,7 +547,7 @@ function applyTheme(pref, persist){
 const copyrightYear = $("copyright-year");
 if(copyrightYear) copyrightYear.textContent = String(new Date().getFullYear());
 
-/* Glossary — extracted verbatim from the dashboard by pages88.mjs. */
+/* Glossary — extracted verbatim from the dashboard by pages89.mjs. */
 const termDefs={
   MID:"Market Index Data — the volume-weighted price of electricity traded on the GB day-ahead and within-day exchanges for a settlement period. Two providers report; this page weights them by traded volume.",
   IMBALNGC:"Indicated Imbalance — NESO’s forecast of how far generation will run above or below demand in a settlement period. A forecast, not a settled figure, and published for seventeen transmission boundaries as well as the national one.",

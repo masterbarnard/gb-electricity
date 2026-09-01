@@ -1,4 +1,4 @@
-/* GENERATED from dash/GB_Electricity_v0.88.html (md5 cdbffc5b1d6f83061544fce5a06da4dd) by tools/pages88.mjs — do not edit. */
+/* GENERATED from dash/GB_Electricity_v0.89.html (md5 dbe43e6db6ad9fea6a6bacfd04b5393e) by tools/pages89.mjs — do not edit. */
   /* v0.80 (rev 74, Phase 0): the three Inter faces moved to css/fonts.css, their bytes to
      assets/inter-{400,600,700}.woff2 — linked from <head>. The OFL licence notice travels
      with them, as the licence requires. */
@@ -3189,7 +3189,27 @@
        column whatever it is allowed to wrap to. It heads both of those tracks in meaning
        anyway: they are the same quantity drawn twice. */
     .ichead .h-flow{grid-column:2 / 4;}
-    .ichead .h-cap{4 / -1;}
+    /* ⚠ v0.89 (rev 83): `.ichead .h-cap{4 / -1;}` STOOD HERE — the property name eaten, so the
+       browser dropped it and the rule never applied. It was RECONSTRUCTED as
+       `grid-column:4 / -1` on two witnesses (the sibling line above spans a heading with exactly
+       that property; the base rule for this selector is `grid-column:3 / -1`), then ID-scoped
+       when `unreachableCss` showed the bare form losing to that base rule — a container query
+       adds no specificity.
+
+       ⚠ AND THEN THE HARNESS PROVED THE RECONSTRUCTION WRONG, WHICH IS WHY IT IS NOT HERE.
+       Once it actually applied, `narrowWidthsDoNotOverflow` reported `.h-cap` and `.icsort`
+       overflowing by 38px at 320, 360 and 390. The arithmetic is plain in the track list four
+       lines above: with `h-flow` spanning 2/4, column 4 alone is the 40px track, and the capacity
+       heading — a word, a bracketed unit and a sort arrow — cannot fit it. The base rule's
+       `3 / -1` gives it 94px, which is why the page has looked right for the whole time this
+       declaration was doing nothing.
+
+       So it is DELETED rather than restored. The intent was legible and the property was almost
+       certainly right; the resulting layout is measurably worse than the one that has been
+       shipping. **Two witnesses for what a rule MEANT are not evidence that applying it is an
+       improvement** — the only evidence for that is rendering it, which is what the harness did.
+       Recorded at length because the next person to read the comment below will have the same
+       good idea, and this is the answer to it. */
   }
   /* ---- the header row ----
      `display:contents` for the same reason the link rows use it: the cells are grid items of
@@ -3740,9 +3760,14 @@
   }
   #wind-controls .wind-expand{margin-top:0;}
   #wind-controls .wind-expand.is-close{font-size:23px;}
-  @media (pointer:coarse){
-    #wind-controls .wind-range,
-  }
+  /* ⚠ v0.89 (rev 83): AN EMPTY @media BLOCK WAS REMOVED FROM HERE. It read, in full:
+         @media (pointer:coarse){ #wind-controls .wind-range, }
+     — a selector list ending in a comma, with no second selector and no declarations at all.
+     Whatever coarse-pointer sizing was meant for the wind range control is GONE, not merely
+     invalid, so unlike the other four faults of this family there is nothing to reconstruct and
+     nothing was reconstructed. Recorded rather than quietly deleted: if a touch-sized wind range
+     control turns out to be missing, this is where it went. The blocks at `@media (pointer:coarse)`
+     further down still size the other controls, so the tier is not unguarded. */
   @media (max-width:760px){
     #wind-controls{width:auto; margin-left:auto; margin-top:4px;}
   }
@@ -3991,11 +4016,29 @@
     font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--ink-mute);
     vertical-align:baseline;white-space:nowrap;cursor:help;}
   @media (max-width:560px){ .figstate-fc .figstate-fc-t{display:none;} }
-  .figstate-age{display:inline-flex;align-items:center;gap:3px;margin-left:6px;
+  /* ⚠ v0.89 (rev 83): THIS READ AS A SUPERSCRIPT, and it is the fault v0.84 already fixed on the
+     mark directly above it. Reported by the author from the live site: beside a 44px figure the
+     "2h old" mark sat high enough to look like an exponent — "30,760 MW²ʰ ᵒˡᵈ".
+     ⚠ MEASURED, WHICH CHANGED THE FIX. `vertical-align:middle` centres the box on the parent's
+     baseline plus half its x-height, so against a 44px number the mark's own baseline rode 8.9px
+     ABOVE the figure's. Setting `baseline` alone only got it to 2.9px, because an INLINE-FLEX
+     box takes its baseline from its first flex item — and the first item here is the SVG, which
+     has none, so the browser used its bottom edge instead. The container is `display:inline` now,
+     so the baseline comes from the TEXT, and the glyph is placed against it with its own
+     `vertical-align`. Measured after: 1.3px rise, glyph optically centred to 0.3px.
+     ⚠ AND IT IS THE SAME MISTAKE TWICE. v0.84 measured the FORECAST mark 5.4px high, found the
+     same cause and set it to `baseline` — the rule immediately above this one. This mark was
+     added at v0.87 and given `middle` without checking its neighbour. A fix recorded in a comment
+     three lines away did not survive the next component that needed it.
+     `gap` is gone in favour of a margin on the glyph: gap does nothing on an inline box, and the
+     ≤1000px tier below turns this back into a flex column — one spacing mechanism that works in
+     both rather than two that must agree. */
+  .figstate-age{display:inline;margin-left:6px;
     font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--warn);
-    vertical-align:middle;white-space:nowrap;cursor:help;}
+    vertical-align:baseline;white-space:nowrap;cursor:help;}
   .figstate-age svg{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;
-    stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+    stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;
+    vertical-align:-0.15em;margin-right:3px;}
   /* On the smallest figures the words would be longer than the number they annotate, so the
      glyph carries it alone and the title tells the rest. */
   .tile .value .figstate-age .figstate-age-t,
@@ -4025,7 +4068,10 @@
     .panel-tools{width:100%;margin-top:2px;}
     .panel-head{grid-template-columns:minmax(0,1fr);
       grid-template-areas:"title" "note" "tools";}
-    .panel-head > .panel-tools{tretch;}
+    /* v0.89 (rev 83): `.panel-head > .panel-tools{tretch;}` deleted. Measured before removing —
+       the tools already fill the head at 390/480/700/760 (348px in a 368px head) because
+       `.panel-tools{width:100%}` two lines above delivers it. Whatever the eaten property was,
+       its effect is already in force, so this is a deletion and not a loss. */
     .header-actions{flex-wrap:wrap;justify-content:flex-end;row-gap:6px;}
     /* v0.80 (rev 74, Phase 0): the --red-tail phone value moved to css/tokens.css under the
        same max-width:760px condition. */
@@ -4135,7 +4181,9 @@
     svg.chart{width:100%;height:auto;}
     .legend{padding-right:2px;}
     .legend span,.legend .legend-key{white-space:normal;line-height:1.25;}
-    .range-switch{0 78px;}
+    /* v0.89 (rev 83): `.range-switch{0 78px;}` deleted — measured as already in force. The
+       computed flex is `0 0 78px` and the rendered width 78px at every width from 390 to 760,
+       from the base rule, so this restated what was already true. */
     .export-btn{flex:0 0 102px;}
     .panel-head .note{max-width:100%;overflow-wrap:anywhere;}
   }
@@ -4194,7 +4242,9 @@
 
     /* The view selector is a normal scrolling control, not a sticky navigation element. */
     .viewbar-strip{padding:7px 0 4px;}
-    .viewbar .viewbtn{x 12px;}
+    /* v0.89 (rev 83): `.viewbar .viewbtn{x 12px;}` deleted — it targets nothing. The element
+       does not exist on the page at any width, so this rule could not have applied even had the
+       property name survived. */
 
     /* Headline figures: one card per row. This is the key fix for the clipped mobile
        screenshot seen in v0.315. */
@@ -4379,7 +4429,12 @@
     }
     .panel-head > .panelbtn.xp{margin-left:auto;}
     #wind-controls{
-      width:100%;x;
+      /* v0.89 (rev 83): a stray `x;` sat after this declaration and was dropped by the browser.
+         The sixth and last of the family the CSS scan found. Harmless — `width:100%` is valid and
+         applies — but it is the clearest evidence of what caused all six: not a find-and-replace,
+         which would have left a consistent signature, but an editing accident that truncated a
+         property name in five places and left a loose fragment here. */
+      width:100%;
     }
   }
   /* v0.3200 — generation-history controls stay fixed between 24h and 7d.
@@ -5047,6 +5102,7 @@
     .tile .value .figstate-age,
     .balancebox .value .figstate-age{
       display:flex;
+      align-items:center;      /* v0.89: was on the base rule; only meaningful once this is flex */
       width:max-content;
       max-width:100%;
       margin-left:0;
