@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<!-- GENERATED FILE — do not edit. Produced by tools/pages90.mjs from
-     dash/GB_Electricity_v0.90.html (md5 df77c0ea0b2d7f10c8ed06c3135ca008). Edit the dashboard, re-run the generator. -->
+<!doctype html>
+<!-- GENERATED from dash/GB_Electricity_v0.91.html (md5 2d05bd37795cb7c326c62c604d05cbc2) by tools/pages91.mjs — do not edit; edit the dashboard and re-run. -->
 <html lang="en-GB" data-page="about" class="">
 <head>
 <meta charset="UTF-8">
@@ -8,189 +7,35 @@
 <title>About GB Electricity — Data Sources, Licences & Status</title>
 <meta name="description" content="Where GB Electricity’s live UK grid data comes from: Elexon Insights (BMRS), the NESO Carbon Intensity API and Sheffield Solar PV_Live — the endpoints called, the attribution and licences, and the source and status of the project.">
 <link rel="canonical" href="https://gbelectricity.uk/about">
-<meta name="generator" content="pages90.mjs — from GB Electricity v0.90">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "About GB Electricity — Data Sources, Licences & Status",
-  "url": "https://gbelectricity.uk/about",
-  "description": "Where GB Electricity’s live UK grid data comes from: Elexon Insights (BMRS), the NESO Carbon Intensity API and Sheffield Solar PV_Live — the endpoints called, the attribution and licences, and the source and status of the project.",
-  "isPartOf": { "@type": "WebSite", "name": "GB Electricity", "url": "https://gbelectricity.uk/" }
-}
-</script>
+<meta name="generator" content="pages91.mjs — from GB Electricity v0.91">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"About GB Electricity — Data Sources, Licences & Status","url":"https://gbelectricity.uk/about","description":"Where GB Electricity’s live UK grid data comes from: Elexon Insights (BMRS), the NESO Carbon Intensity API and Sheffield Solar PV_Live — the endpoints called, the attribution and licences, and the source and status of the project.","isPartOf":{"@type":"WebSite","name":"GB Electricity","url":"https://gbelectricity.uk/"}}</script>
 <meta property="og:title" content="About GB Electricity — Data Sources, Licences & Status">
 <meta property="og:description" content="Where GB Electricity’s live UK grid data comes from: Elexon Insights (BMRS), the NESO Carbon Intensity API and Sheffield Solar PV_Live — the endpoints called, the attribution and licences, and the source and status of the project.">
 <meta property="og:url" content="https://gbelectricity.uk/about">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="GB Electricity">
-<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v90.png">
+<meta property="og:image" content="https://gbelectricity.uk/gb-electricity-preview-v91.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="About GB Electricity — Data Sources, Licences & Status">
 <meta name="twitter:description" content="Where GB Electricity’s live UK grid data comes from: Elexon Insights (BMRS), the NESO Carbon Intensity API and Sheffield Solar PV_Live — the endpoints called, the attribution and licences, and the source and status of the project.">
-<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v90.png">
+<meta name="twitter:image" content="https://gbelectricity.uk/gb-electricity-preview-v91.png">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
 <link rel="icon" sizes="48x48 96x96" href="/favicon.ico">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" sizes="96x96" href="/favicon.png">
 <meta name="color-scheme" content="light dark">
-<script>/* Applied before first paint so a dark-mode reader never gets a white flash.
-  The storage key is extracted from the dashboard at generation time, so the two
-  cannot disagree about where the preference lives. */
-(function(){try{var p=localStorage.getItem("nd-theme");
-var t=(p==="dark"||p==="light")?p:((window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light");
-document.documentElement.setAttribute("data-theme",t);}catch(e){
-document.documentElement.setAttribute("data-theme","light");}})();</script>
-<!-- rev 74 Phase 0: fonts and tokens live in their own sheets now; order matters —
-     tokens before styles.css, whose rules consume them. -->
+<script>!function(){try{var t=localStorage.getItem("nd-theme"),e="dark"===t||"light"===t?t:window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.setAttribute("data-theme",e)}catch(t){document.documentElement.setAttribute("data-theme","light")}}();</script>
 <link rel="stylesheet" href="/css/fonts.css">
 <link rel="stylesheet" href="/css/tokens.css">
 <link rel="stylesheet" href="/styles.css">
-<style>
-  /* ---- generated page shell (pages90.mjs) ---- */
-  /* ⚠ v0.73: BACK TO TOP. Fixed to the corner rather than pinned to the end of the article,
-     because a reader wants it at the moment they decide to leave, not after scrolling further to
-     find it. 44px minimum on both axes (WCAG 2.5.5's enhanced target, not merely 2.5.8's 24) —
-     it is a floating control with nothing adjacent, so there is no reason to be mean with it. */
-  .to-top{position:fixed;right:18px;bottom:18px;z-index:40;
-    display:inline-flex;align-items:center;gap:7px;
-    min-height:44px;padding:0 16px 0 13px;border-radius:22px;
-    background:var(--surface);color:var(--ink);text-decoration:none;
-    border:1px solid var(--grey-line);box-shadow:0 2px 10px rgba(17,24,39,.10);
-    font-size:13.5px;font-weight:600;}
-  .to-top[hidden]{display:none;}
-  .to-top svg{width:17px;height:17px;flex-shrink:0;color:var(--blue-text);}
-  .to-top:hover{border-color:var(--blue-text);color:var(--blue-text);}
-  .to-top:focus-visible{outline:2px solid var(--blue-text);outline-offset:3px;}
-  /* The smooth scroll is the reader's choice, not ours. */
-  @media (prefers-reduced-motion: no-preference){ html{scroll-behavior:smooth;} }
-  /* The nav sits under a sticky masthead, so an anchor jump must stop short of it or the first
-     line lands behind the header — the commonest fault with in-page navigation. */
-  #page-nav{scroll-margin-top:78px;}
-  .page-article h2{scroll-margin-top:78px;}
-  @media (max-width:560px){ .to-top{right:12px;bottom:12px;padding:0 14px 0 11px;} }
-  .page-main{max-width:880px;margin:0 auto;padding:22px 18px 46px;}
-  .page-crumb{margin:0 0 4px;font-size:12.5px;}
-  .page-crumb a{color:var(--blue-text);text-decoration:none;}
-  .page-crumb a:hover{text-decoration:underline;}
-  .page-h1{margin:6px 0 6px;font-size:26px;line-height:1.15;color:var(--ink);}
-  .page-lede{margin:0 0 22px;font-size:15px;line-height:1.6;color:var(--ink-dim);max-width:74ch;}
-  a.brand-reset{text-decoration:none;color:inherit;display:flex;}
-  /* The section headings are h2 on a page (a real h1 sits above them); the
-     treatment is .about h4's, re-emitted from the same declarations. */
-  .page-article h2{margin:30px 0 9px;font-size:13.5px;font-weight:700;letter-spacing:.06em;
-    text-transform:uppercase;color:var(--blue-text);scroll-margin-top:10px;
-    padding-top:14px;border-top:1px solid var(--grey-line);}
-  .page-article h2:first-of-type{margin-top:4px;padding-top:0;border-top:none;}
-  /* The purpose text reuses the dashboard's own .seo-copy typography, but as a
-     full-width opening section rather than a boxed disclosure body. */
-  .page-article .seo-lede{font-size:16px;line-height:1.6;color:var(--ink);margin:0 0 12px;max-width:74ch;}
-  .page-article .seo-points{list-style:none;margin:8px 0 14px;padding:2px 0 2px 13px;
-    border-left:2px solid var(--blue-line);max-width:74ch;}
-  .page-article .seo-points li{margin:0 0 6px;line-height:1.55;font-size:14.5px;}
-  .page-article .seo-points b{color:var(--ink);}
-  .page-article ul{max-width:74ch;}
-  .page-article li{font-size:14.5px;line-height:1.6;margin:0 0 6px;}
-  .page-next{margin:34px 0 0;padding-top:16px;border-top:1px solid var(--grey-line);
-    font-size:13.5px;display:flex;gap:18px;flex-wrap:wrap;}
-  .page-next a{color:var(--blue-text);}
-  /* The section nav. Two columns where there is room — ten items in one column is a scroll of
-     its own before the reader has started — and the same quiet grey ground the dialog's jump
-     list used, so a reader who knew the old one recognises this. */
-  .page-toc{margin:0 0 22px;padding:12px 14px;background:var(--grey-bg);border-radius:8px;
-    border:1px solid var(--grey-line);}
-  .page-toc .k{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
-    color:var(--ink-mute);margin-bottom:8px;}
-  .page-toc ol{margin:0;padding:0;list-style:none;columns:2;column-gap:26px;}
-  @media (max-width:700px){ .page-toc ol{columns:1;} }
-  .page-toc li{break-inside:avoid;margin:0 0 5px;}
-  .page-toc a{font-size:12.5px;color:var(--ink-dim);text-decoration:none;
-    border-bottom:1px solid transparent;}
-  .page-toc a:hover{color:var(--blue-text);border-bottom-color:var(--blue-text);}
-  .page-toc a:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;border-radius:2px;}
-  /* An anchored heading must not land under the sticky masthead. */
-  .page-article h2{scroll-margin-top:86px;}
-  @media (max-width:620px){ .page-h1{font-size:22px;} }
-
-  /* ---- rev 75: Under development notice ---------------------------------- */
-  /* Quiet on purpose. A stub that shouts is a stub that reads as an error; this states what the
-     page will be and hands the reader somewhere that works today. */
-  .stub{border:1px solid var(--blue-line);background:var(--grey-bg);border-radius:10px;
-    padding:18px 20px;margin:6px 0 8px;max-width:74ch;}
-  .stub-k{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
-    color:var(--blue-text);margin-bottom:9px;}
-  .stub-lede{margin:0 0 10px;font-size:15px;line-height:1.6;color:var(--ink);}
-  .stub p{margin:0 0 10px;font-size:14px;line-height:1.6;color:var(--ink-dim);}
-  .stub p:last-child{margin-bottom:0;}
-  .stub-feeds{font-size:13px;}
-  .stub a{color:var(--blue-text);}
-
-  /* ---- rev 75: the Interconnectors page ---------------------------------- */
-  /* The panel is the subject of this page, so it sits at the page's own width rather than the
-     74ch measure that governs prose — a ten-row table capped at a reading measure would waste
-     the width the bars need. The prose below it keeps the measure. */
-  .page-ic .page-main{max-width:1680px;}
-  .page-ic .panel{margin-top:4px;}
-  /* The panel's duplicate H2 is suppressed because the page has an H1 that says the same thing,
-     and two headings for one subject is the fault rev 71 and rev 72 both paid for at the level
-     of words.
-     v0.89 (rev 83): the rule that used to sit here hiding this page's expand button is RETIRED.
-     The button is removed from the markup now, by dropExpandButtons, the same way it is removed
-     from Generation, Carbon intensity and System — one mechanism instead of a hide here and a
-     deletion there. Nothing changes for a reader: it was already invisible and out of the tab
-     order, which was measured before it was touched. */
-  .page-ic .panel > .panel-head > h2{position:absolute;width:1px;height:1px;overflow:hidden;
-    clip-path:inset(50%);white-space:nowrap;}
-  .page-ic .ic-prose{max-width:74ch;margin:30px auto 0;}
-  .page-ic .ic-prose.wide{max-width:none;}
-  .page-ic .ic-prose h2{margin:30px 0 8px;font-size:19px;line-height:1.25;color:var(--ink);}
-  .page-ic .ic-prose h2:first-child{margin-top:0;}
-  .page-ic .ic-prose p{margin:0 0 12px;font-size:14.5px;line-height:1.62;color:var(--ink-dim);
-    max-width:74ch;}
-  .page-ic .ic-prose p b, .page-ic .ic-prose li b{color:var(--ink);}
-  .page-ic .ic-prose ul{margin:8px 0 14px;padding-left:18px;max-width:74ch;}
-  .page-ic .ic-prose li{font-size:14.5px;line-height:1.6;margin:0 0 7px;color:var(--ink-dim);}
-  .page-ic .ic-prose a{color:var(--blue-text);}
-  /* A pull-out for the one thing readers most often get wrong. Left rule rather than a box:
-     the page already has a bordered panel and a bordered table, and a third border would make
-     the prose look like more furniture. */
-  .page-ic .ic-note{border-left:3px solid var(--blue-line);padding:2px 0 2px 14px;margin:14px 0 16px;
-    max-width:74ch;}
-  .page-ic .ic-note p{margin:0 0 8px;}
-  .page-ic .ic-note p:last-child{margin-bottom:0;}
-
-  /* The reference table. ⚠ IT SCROLLS INSIDE ITS OWN BOX, never the page: seven columns of link
-     detail cannot fit a 360px phone, and a table that widens the document is the one overflow
-     fault this project has fixed most often. */
-  .ic-ref-wrap{margin:10px 0 6px;overflow-x:auto;-webkit-overflow-scrolling:touch;
-    border:1px solid var(--blue-line);border-radius:9px;}
-  .ic-ref{border-collapse:collapse;width:100%;min-width:720px;font-size:13px;}
-  .ic-ref caption{text-align:left;padding:11px 13px 0;font-size:12.5px;color:var(--ink-mute);
-    caption-side:top;}
-  .ic-ref th, .ic-ref td{padding:9px 13px;text-align:left;vertical-align:top;
-    border-bottom:1px solid var(--grey-line);}
-  .ic-ref thead th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
-    color:var(--ink-mute);background:var(--grey-bg);white-space:nowrap;}
-  .ic-ref tbody tr:last-child td{border-bottom:none;}
-  .ic-ref td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
-  .ic-ref .lk{font-weight:700;color:var(--ink);white-space:nowrap;}
-  .ic-ref .cc{color:var(--ink-dim);}
-  .ic-ref a{color:var(--blue-text);}
-  @media (max-width:700px){
-    .page-ic .page-main{padding-left:12px;padding-right:12px;}
-    .page-ic .ic-prose h2{font-size:17.5px;}
-  }
-</style>
+<style>.to-top{position:fixed;right:18px;bottom:18px;z-index:40;display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 16px 0 13px;border-radius:22px;background:var(--surface);color:var(--ink);text-decoration:none;border:1px solid var(--grey-line);box-shadow:0 2px 10px rgba(17,24,39,.1);font-size:13.5px;font-weight:600}.to-top[hidden]{display:none}.to-top svg{width:17px;height:17px;flex-shrink:0;color:var(--blue-text)}.to-top:hover{border-color:var(--blue-text);color:var(--blue-text)}.to-top:focus-visible{outline:2px solid var(--blue-text);outline-offset:3px}@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}#page-nav{scroll-margin-top:78px}.page-article h2{scroll-margin-top:78px}@media (max-width:560px){.to-top{right:12px;bottom:12px;padding:0 14px 0 11px}}.page-main{max-width:880px;margin:0 auto;padding:22px 18px 46px}.page-crumb{margin:0 0 4px;font-size:12.5px}.page-crumb a{color:var(--blue-text);text-decoration:none}.page-crumb a:hover{text-decoration:underline}.page-h1{margin:6px 0 6px;font-size:26px;line-height:1.15;color:var(--ink)}.page-lede{margin:0 0 22px;font-size:15px;line-height:1.6;color:var(--ink-dim);max-width:74ch}a.brand-reset{text-decoration:none;color:inherit;display:flex}.page-article h2{margin:30px 0 9px;font-size:13.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue-text);scroll-margin-top:10px;padding-top:14px;border-top:1px solid var(--grey-line)}.page-article h2:first-of-type{margin-top:4px;padding-top:0;border-top:none}.page-article .seo-lede{font-size:16px;line-height:1.6;color:var(--ink);margin:0 0 12px;max-width:74ch}.page-article .seo-points{list-style:none;margin:8px 0 14px;padding:2px 0 2px 13px;border-left:2px solid var(--blue-line);max-width:74ch}.page-article .seo-points li{margin:0 0 6px;line-height:1.55;font-size:14.5px}.page-article .seo-points b{color:var(--ink)}.page-article ul{max-width:74ch}.page-article li{font-size:14.5px;line-height:1.6;margin:0 0 6px}.page-next{margin:34px 0 0;padding-top:16px;border-top:1px solid var(--grey-line);font-size:13.5px;display:flex;gap:18px;flex-wrap:wrap}.page-next a{color:var(--blue-text)}.page-toc{margin:0 0 22px;padding:12px 14px;background:var(--grey-bg);border-radius:8px;border:1px solid var(--grey-line)}.page-toc .k{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:8px}.page-toc ol{margin:0;padding:0;list-style:none;columns:2;column-gap:26px}@media (max-width:700px){.page-toc ol{columns:1}}.page-toc li{break-inside:avoid;margin:0 0 5px}.page-toc a{font-size:12.5px;color:var(--ink-dim);text-decoration:none;border-bottom:1px solid transparent}.page-toc a:hover{color:var(--blue-text);border-bottom-color:var(--blue-text)}.page-toc a:focus-visible{outline:2px solid var(--blue-text);outline-offset:2px;border-radius:2px}.page-article h2{scroll-margin-top:86px}@media (max-width:620px){.page-h1{font-size:22px}}.stub{border:1px solid var(--blue-line);background:var(--grey-bg);border-radius:10px;padding:18px 20px;margin:6px 0 8px;max-width:74ch}.stub-k{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--blue-text);margin-bottom:9px}.stub-lede{margin:0 0 10px;font-size:15px;line-height:1.6;color:var(--ink)}.stub p{margin:0 0 10px;font-size:14px;line-height:1.6;color:var(--ink-dim)}.stub p:last-child{margin-bottom:0}.stub-feeds{font-size:13px}.stub a{color:var(--blue-text)}.page-ic .page-main{max-width:1680px}.page-ic .panel{margin-top:4px}.page-ic .panel>.panel-head>h2{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.page-ic .ic-prose{max-width:74ch;margin:30px auto 0}.page-ic .ic-prose.wide{max-width:none}.page-ic .ic-prose h2{margin:30px 0 8px;font-size:19px;line-height:1.25;color:var(--ink)}.page-ic .ic-prose h2:first-child{margin-top:0}.page-ic .ic-prose p{margin:0 0 12px;font-size:14.5px;line-height:1.62;color:var(--ink-dim);max-width:74ch}.page-ic .ic-prose li b,.page-ic .ic-prose p b{color:var(--ink)}.page-ic .ic-prose ul{margin:8px 0 14px;padding-left:18px;max-width:74ch}.page-ic .ic-prose li{font-size:14.5px;line-height:1.6;margin:0 0 7px;color:var(--ink-dim)}.page-ic .ic-prose a{color:var(--blue-text)}.page-ic .ic-note{border-left:3px solid var(--blue-line);padding:2px 0 2px 14px;margin:14px 0 16px;max-width:74ch}.page-ic .ic-note p{margin:0 0 8px}.page-ic .ic-note p:last-child{margin-bottom:0}.ic-ref-wrap{margin:10px 0 6px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--blue-line);border-radius:9px}.ic-ref{border-collapse:collapse;width:100%;min-width:720px;font-size:13px}.ic-ref caption{text-align:left;padding:11px 13px 0;font-size:12.5px;color:var(--ink-mute);caption-side:top}.ic-ref td,.ic-ref th{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--grey-line)}.ic-ref thead th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-mute);background:var(--grey-bg);white-space:nowrap}.ic-ref tbody tr:last-child td{border-bottom:none}.ic-ref td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.ic-ref .lk{font-weight:700;color:var(--ink);white-space:nowrap}.ic-ref .cc{color:var(--ink-dim)}.ic-ref a{color:var(--blue-text)}@media (max-width:700px){.page-ic .page-main{padding-left:12px;padding-right:12px}.page-ic .ic-prose h2{font-size:17.5px}}</style>
 </head>
 <body>
-
 <header class="masthead">
   <div class="wrap">
     <div class="header-top">
       <div class="brand">
-        <!-- On a page, the logo goes home the way every site trained readers to expect —
-             and home is the live dashboard, so this is an <a>, not the dashboard's reset
-             button, which resets state a static page does not have. -->
+        
         <a class="brand-reset" href="/" title="Back to the live dashboard">
         <svg class="mark" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
              style="color:var(--blue-text)"><polyline points="3,22 12,22 16,8 21,24" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="21,24 29,16" fill="none" stroke="var(--mark-red)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -200,21 +45,10 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         </div>
         </a>
       </div>
-      <!-- ⚠ v0.90 (rev 84): THE SHELL IS THE SECOND MASTHEAD, AND REV 82 ONLY UPDATED THE
-           FIRST. Option 5 moved the live status into this cluster on the dashboard; this shell
-           went on placing it on the nav row, under a comment that said "exactly as the dashboard
-           does" — which had stopped being true. Worse than the drift itself: rev 82 DELETED the
-           .navrow-scoped livewrap styles the old position depended on, so the chip on every app
-           page rendered unstyled for its context and ran 27px past a 390px viewport. Found by
-           the rev 84 state survey, not by the harness — mastheadOption5 measured only the
-           dashboard, which is how a second implementation drifts: every check pointed at the
-           first one. The scenario now samples an app page as well.
-           The cluster is Live · MW/GW here — no temperature, because the app pages do not fetch
-           weather and an empty chip would be a control pretending to be a reading. -->
+      
       <div class="header-actions"></div>
     </div>
-    <!-- v0.90: the nav row is navigation and nothing else, on every page — the dashboard's
-         rev 82 rule, now true here too. -->
+    
     <div class="navrow">
 <nav class="mainnav" id="mainnav" aria-label="Sections">
       <a href="/" data-nav="dashboard">Dashboard</a>
@@ -228,7 +62,6 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
   </div>
   <hr class="rule">
 </header>
-
 <main class="wrap page-main" id="main">
   <article class="about page-article">
     <p class="page-crumb"><a href="/">&larr; Live dashboard</a></p>
@@ -244,11 +77,9 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         <li><a href="#sec-source-and-status">Source and status</a></li>
       </ol>
     </nav>
-
       <p class="seo-lede">Every few minutes, Great Britain’s electricity system rearranges itself
         — wind rises, gas throttles back, a cable to Norway reverses direction. This dashboard
         shows that happening, from the public data, as it happens.</p>
-
       <h2 id="sec-what-you-can-see">What you can see</h2>
       <ul class="seo-points">
         <li><b>Generation by fuel type</b> — gas, nuclear, wind, biomass, hydro, pumped storage
@@ -262,10 +93,8 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         <li><b>Every window downloadable</b> — any panel expands to fill the screen, and any data
           window exports as a timestamped CSV.</li>
       </ul>
-
       <p>There is no account, no tracking and no server: it is a single HTML page that calls
         public APIs from your browser and draws what comes back.</p>
-
       <p><b>Sources:</b> <a href="https://bmrs.elexon.co.uk/" target="_blank" rel="noopener noreferrer">Elexon
         Insights (BMRS)</a>, the <a href="https://carbonintensity.org.uk/" target="_blank" rel="noopener noreferrer">NESO
         Carbon Intensity API</a> and <a href="https://www.solar.sheffield.ac.uk/pvlive/" target="_blank" rel="noopener noreferrer">Sheffield
@@ -286,7 +115,6 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         connected versus accepted capacity, geographic breakdowns and downloadable data.
         Those ideas may inform future GB Electricity capacity and network views rather than the live system page itself.
       </p>
-
       
 <h2 id="sec-endpoints-called">Endpoints called</h2>
       <div class="srcs">
@@ -306,7 +134,6 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         <span>carbonintensity.org.uk GET /intensity/factors</span>
         <span>carbonintensity.org.uk GET /intensity/{from}/pt24h</span>
       </div>
-
       
 <h2 id="sec-data-sources-and-attribution">Data sources and attribution</h2>
       <p class="attrib">
@@ -340,7 +167,6 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         describe PV_Live as live research whose estimates may be inaccurate, and offer no
         guarantee of availability.
       </p>
-
       
 <h2 id="sec-source-and-status">Source and status</h2>
       <p>
@@ -357,18 +183,6 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
     </nav>
   </article>
 </main>
-
-<!-- ⚠ v0.73: BACK TO TOP, and it is a LINK rather than a button, at the author's stated purpose.
-     He asked for it so a reader can "use the contents list to look somewhere else" — so the
-     destination is not the top of the window, it is the section nav. An an anchor to #page-nav
-     moves keyboard focus there as well as scrolling, which a scroll-to-zero button does not: a
-     button leaves focus stranded at the foot of the document, so the next Tab returns the reader
-     to where they just left. It also works with JavaScript off and offers the browser's own
-     "open in new tab" semantics, which a div-with-a-handler does not.
-     Hidden until the contents list has scrolled off: a control that is present from the top is
-     either useless or in the way, and the contents leaving the screen is the exact moment it
-     starts to be needed. "hidden" is toggled rather than opacity, so it leaves the
-     tab order entirely while it is not offered. -->
 <a class="to-top" id="to-top" href="#page-nav" hidden>
   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor"
        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -376,9 +190,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
   </svg>
   <span>Contents</span>
 </a>
-
 <div id="infopop" role="tooltip" aria-label="Explanation" hidden></div>
-
 <footer class="foot">
   <div class="wrap">
     <div class="foot-left">
@@ -390,7 +202,7 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
         rel="noopener noreferrer">Sheffield Solar PV_Live</a></span>
     </div>
     <div class="foot-right">
-      <span class="version-label" title="Generated from GB Electricity v0.90">v0.90</span> &middot;
+      <span class="version-label" title="Generated from GB Electricity v0.91">v0.91</span> &middot;
       <a href="/about" class="footer-link">About</a> &middot;
       <a href="/methodology" class="footer-link">Methodology</a>
       <span class="theme-pref" id="theme-pref" role="radiogroup" aria-label="Colour theme">
@@ -402,124 +214,6 @@ document.documentElement.setAttribute("data-theme","light");}})();</script>
     </div>
   </div>
 </footer>
-
-<script>
-
-/* ---- generated page runtime (pages90.mjs) — the minimum the static pages
-   need: theme, year, glossary. Everything content-bearing is extracted from
-   the dashboard at generation time. ---- */
-const $ = (id)=>document.getElementById(id);
-const esc = (s)=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const store = {
-  get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
-  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
-};
-/* Three states, and the stored value is the PREFERENCE not the resolved theme — the same
-   contract the dashboard uses, and the same storage key, so a choice made on either document is
-   honoured by the other. System is a subscription rather than a one-off reading. */
-const THEME_PREFS = ["system","light","dark"];
-let themePref = "system";
-function resolvedTheme(pref){
-  if(pref === "dark" || pref === "light") return pref;
-  return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)
-    ? "dark" : "light";
-}
-function applyTheme(pref, persist){
-  if(!THEME_PREFS.includes(pref)) pref = "system";
-  themePref = pref;
-  if(persist) store.set("nd-theme", pref);
-  document.documentElement.setAttribute("data-theme", resolvedTheme(pref));
-  document.querySelectorAll("[data-theme-pref]").forEach(b=>{
-    const on = b.dataset.themePref === pref;
-    b.setAttribute("aria-checked", String(on));
-    b.classList.toggle("is-on", on);
-    b.tabIndex = on ? 0 : -1;
-  });
-}
-(function(){
-  const group = $("theme-pref");
-  if(group) group.addEventListener("click", (e)=>{
-    const b = e.target.closest("[data-theme-pref]");
-    if(b) applyTheme(b.dataset.themePref, true);
-  });
-  if(window.matchMedia){
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const follow = ()=>{ if(themePref === "system") applyTheme("system", false); };
-    if(mq.addEventListener) mq.addEventListener("change", follow);
-    else if(mq.addListener) mq.addListener(follow);
-  }
-  applyTheme(store.get("nd-theme") || "system", false);
-})();
-const copyrightYear = $("copyright-year");
-if(copyrightYear) copyrightYear.textContent = String(new Date().getFullYear());
-
-/* Glossary — extracted verbatim from the dashboard by pages90.mjs. */
-const termDefs={
-  MID:"Market Index Data — the volume-weighted price of electricity traded on the GB day-ahead and within-day exchanges for a settlement period. Two providers report; this page weights them by traded volume.",
-  IMBALNGC:"Indicated Imbalance — NESO’s forecast of how far generation will run above or below demand in a settlement period. A forecast, not a settled figure, and published for seventeen transmission boundaries as well as the national one.",
-  NDF:"National Demand Forecast — NESO’s forecast of transmission-system demand. Excludes embedded generation, on the same boundary as the National demand outturn.",
-  OCNMFD2:"Operational Continuous Network Margin Forecast, 2–14 days — the forecast surplus of available generation over demand at peak. Daily, and never for today: the nearest figure it publishes is two days out.",
-  INDO:"Initial National Demand Outturn — the transmission-system demand figure published by Elexon.",
-  DISEBSP:"System Sell Price / System Buy Price — the imbalance price dataset used for the settlement price chart.",
-  INTOUTHH:"Half-hourly interconnector outturn — measured flow into or out of GB.",
-  FUELHH:"Half-hourly generation outturn by fuel type — Elexon’s 30-minute average generation dataset.",
-  FUELINST:"Instantaneous generation outturn by fuel type — Elexon’s near-real-time fuel mix feed.",
-  WINDFOR:"Wind generation forecast — Elexon’s forecast of GB wind output.",
-  DGWS:"Day-ahead generation forecast for wind and solar — Elexon’s DGWS feed.",
-  AGWS:"Actual generation for wind and solar — Elexon’s AGWS outturn feed.",
-  PV_LIVE:"PV_Live — Sheffield Solar’s modelled estimate of GB photovoltaic generation, including embedded solar.",
-  FREQ:"System frequency — measured GB system frequency, published at 15-second resolution.",
-  B1610:"B1610 — an Elexon embedded-generation dataset used in demand and embedded-generation analysis.",
-  PSRTYPE:"psrType — the technology classification used by Elexon’s wind-and-solar endpoint.",
-  OTHER:"OTHER — Elexon’s residual fuel category for generation not assigned to the named fuel categories."
-};
-function attachTerms(){
-  const pop=$("infopop");
-  document.querySelectorAll(".term[data-term]").forEach(el=>{
-    if(el.dataset.termBound)return;el.dataset.termBound="1";el.setAttribute("tabindex","0");
-    const show=()=>{
-      pop.innerHTML=`<b>${esc(el.dataset.term)}</b> — ${esc(termDefs[el.dataset.term]||"Dataset identifier.")}`;
-      const r=el.getBoundingClientRect();pop.hidden=false;const w=pop.offsetWidth,h=pop.offsetHeight;
-      let left=Math.min(r.left,innerWidth-w-10),top=r.bottom+7;if(top+h>innerHeight-8)top=Math.max(8,r.top-h-7);
-      pop.style.left=Math.max(8,left)+"px";pop.style.top=top+"px";el.setAttribute("aria-describedby","infopop");
-    };
-    const hide=()=>{pop.hidden=true;};
-    el.addEventListener("mouseenter",()=>{if(matchMedia("(pointer:fine)").matches)show();});
-    el.addEventListener("mouseleave",()=>{if(matchMedia("(pointer:fine)").matches)hide();});
-    el.addEventListener("focus",()=>{if(el.matches(":focus-visible"))show();});
-    el.addEventListener("blur",hide);
-    el.addEventListener("click",e=>{e.stopPropagation();pop.hidden?show():hide();});
-    el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pop.hidden?show():hide();}});
-  });
-}
-attachTerms();
-/* #infopop is position:fixed; on a scrolling document it must not ride along. */
-addEventListener("scroll", ()=>{ const p=$("infopop"); if(p) p.hidden=true; }, {passive:true});
-
-/* Back-to-top visibility. One and a half viewports is the point at which the section nav is
-   reliably off screen, so the control appears exactly when it starts being useful.
-   The smooth scroll is opt-in on the reader's own setting rather than on ours: scroll-behavior is
-   set in CSS behind prefers-reduced-motion no-preference, so a reader who has asked the system to
-   stop moving things gets an instant jump. Doing it here in JS would have meant reading the media
-   query twice and keeping the two in step.
-   NOTE: this block is inside a template literal in the generator — no backticks. */
-(function(){
-  const btn = $("to-top"), nav = $("page-nav");
-  if(!btn) return;
-  /* The useful moment is not a viewport multiple, it is the moment the contents list leaves the
-     screen — that is when a reader can no longer reach it and needs the control. It also works on
-     a page of any length, where "one and a half viewports" is a guess that is wrong on a short
-     page and late on a long one. */
-  const show = ()=>{
-    const gone = nav ? nav.getBoundingClientRect().bottom < 0
-                     : window.scrollY > window.innerHeight;
-    btn.hidden = !gone;
-  };
-  addEventListener("scroll", show, {passive:true});
-  addEventListener("resize", show, {passive:true});
-  show();
-})();
-
-</script>
+<script>const $=e=>document.getElementById(e),esc=e=>String(e).replace(/[&<>"]/g,e=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[e])),store={get(e){try{return localStorage.getItem(e)}catch(e){return null}},set(e,t){try{localStorage.setItem(e,t)}catch(e){}}},THEME_PREFS=["system","light","dark"];let themePref="system";function resolvedTheme(e){return"dark"===e||"light"===e?e:window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}function applyTheme(e,t){THEME_PREFS.includes(e)||(e="system"),themePref=e,t&&store.set("nd-theme",e),document.documentElement.setAttribute("data-theme",resolvedTheme(e)),document.querySelectorAll("[data-theme-pref]").forEach(t=>{const n=t.dataset.themePref===e;t.setAttribute("aria-checked",String(n)),t.classList.toggle("is-on",n),t.tabIndex=n?0:-1})}!function(){const e=$("theme-pref");if(e&&e.addEventListener("click",e=>{const t=e.target.closest("[data-theme-pref]");t&&applyTheme(t.dataset.themePref,!0)}),window.matchMedia){const e=window.matchMedia("(prefers-color-scheme: dark)"),t=()=>{"system"===themePref&&applyTheme("system",!1)};e.addEventListener?e.addEventListener("change",t):e.addListener&&e.addListener(t)}applyTheme(store.get("nd-theme")||"system",!1)}();const copyrightYear=$("copyright-year");copyrightYear&&(copyrightYear.textContent=String((new Date).getFullYear()));const termDefs={MID:"Market Index Data — the volume-weighted price of electricity traded on the GB day-ahead and within-day exchanges for a settlement period. Two providers report; this page weights them by traded volume.",IMBALNGC:"Indicated Imbalance — NESO’s forecast of how far generation will run above or below demand in a settlement period. A forecast, not a settled figure, and published for seventeen transmission boundaries as well as the national one.",NDF:"National Demand Forecast — NESO’s forecast of transmission-system demand. Excludes embedded generation, on the same boundary as the National demand outturn.",OCNMFD2:"Operational Continuous Network Margin Forecast, 2–14 days — the forecast surplus of available generation over demand at peak. Daily, and never for today: the nearest figure it publishes is two days out.",INDO:"Initial National Demand Outturn — the transmission-system demand figure published by Elexon.",DISEBSP:"System Sell Price / System Buy Price — the imbalance price dataset used for the settlement price chart.",INTOUTHH:"Half-hourly interconnector outturn — measured flow into or out of GB.",FUELHH:"Half-hourly generation outturn by fuel type — Elexon’s 30-minute average generation dataset.",FUELINST:"Instantaneous generation outturn by fuel type — Elexon’s near-real-time fuel mix feed.",WINDFOR:"Wind generation forecast — Elexon’s forecast of GB wind output.",DGWS:"Day-ahead generation forecast for wind and solar — Elexon’s DGWS feed.",AGWS:"Actual generation for wind and solar — Elexon’s AGWS outturn feed.",PV_LIVE:"PV_Live — Sheffield Solar’s modelled estimate of GB photovoltaic generation, including embedded solar.",FREQ:"System frequency — measured GB system frequency, published at 15-second resolution.",B1610:"B1610 — an Elexon embedded-generation dataset used in demand and embedded-generation analysis.",PSRTYPE:"psrType — the technology classification used by Elexon’s wind-and-solar endpoint.",REGIONAL:"NESO regional carbon intensity — a model forecast of intensity and generation mix for the 14 distribution regions and the nations. It publishes no settled actuals, so every regional figure is a forecast.",OTHER:"OTHER — Elexon’s residual fuel category for generation not assigned to the named fuel categories."};function attachTerms(){const e=$("infopop");document.querySelectorAll(".term[data-term]").forEach(t=>{if(t.dataset.termBound)return;t.dataset.termBound="1",t.setAttribute("tabindex","0");const n=()=>{e.innerHTML=`<b>${esc(t.dataset.term)}</b> — ${esc(termDefs[t.dataset.term]||"Dataset identifier.")}`;const n=t.getBoundingClientRect();e.hidden=!1;const a=e.offsetWidth,o=e.offsetHeight;let r=Math.min(n.left,innerWidth-a-10),s=n.bottom+7;s+o>innerHeight-8&&(s=Math.max(8,n.top-o-7)),e.style.left=Math.max(8,r)+"px",e.style.top=s+"px",t.setAttribute("aria-describedby","infopop")},a=()=>{e.hidden=!0};t.addEventListener("mouseenter",()=>{matchMedia("(pointer:fine)").matches&&n()}),t.addEventListener("mouseleave",()=>{matchMedia("(pointer:fine)").matches&&a()}),t.addEventListener("focus",()=>{t.matches(":focus-visible")&&n()}),t.addEventListener("blur",a),t.addEventListener("click",t=>{t.stopPropagation(),e.hidden?n():a()}),t.addEventListener("keydown",t=>{"Enter"!==t.key&&" "!==t.key||(t.preventDefault(),e.hidden?n():a())})})}attachTerms(),addEventListener("scroll",()=>{const e=$("infopop");e&&(e.hidden=!0)},{passive:!0}),function(){const e=$("to-top"),t=$("page-nav");if(!e)return;const n=()=>{const n=t?t.getBoundingClientRect().bottom<0:window.scrollY>window.innerHeight;e.hidden=!n};addEventListener("scroll",n,{passive:!0}),addEventListener("resize",n,{passive:!0}),n()}();</script>
 </body>
 </html>
