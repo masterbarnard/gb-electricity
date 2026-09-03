@@ -1,1 +1,1 @@
-import{getURL as o}from"./neso.js";export const PVLIVE="https://api.pvlive.uk/pvlive/api/v4/gsp/0";export const PVLIVE_PROXY="";export const proxied=o=>o;export const fetchPvLive=(e,t)=>o(`${PVLIVE}?start=${encodeURIComponent(e)}&end=${encodeURIComponent(t)}`);
+import{getURL as o}from"./neso.js?v=1.00";export const PVLIVE="https://api.pvlive.uk/pvlive/api/v4/gsp/0";export const PVLIVE_PROXY="";export const proxied=o=>o;export const fetchPvLive=(e,t)=>o(`${PVLIVE}?start=${encodeURIComponent(e)}&end=${encodeURIComponent(t)}`);
