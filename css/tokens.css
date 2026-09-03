@@ -153,11 +153,28 @@
        been checked. These are the band colours composited at 36% on the light surface, worked
        out once and written down.
        ⚠ v0.66: RECOMPUTED from the toned ramp at the same 36%, not adjusted by eye. Adjacent
-       zones now separate by 6.5–9.2 ΔE (was 4.6–7.5 — the washes got BETTER, because 36% of a
-       less chromatic colour lands further from its neighbour in lightness terms), and --mark
-       keeps 10.8:1 where the trace crosses them, the same floor as before.
-       Was: #c0cfac #d8e8b6 #fceeab #f8d9af #f3c7aa */
-    --ciw1:#c2ceb6; --ciw2:#dae7c4; --ciw3:#f9efc6; --ciw4:#f3dbc0; --ciw5:#edccba;
+       zones now separate by 6.5–9.2 ΔE (was 4.6–7.5), and --mark keeps 10.8:1 where the trace
+       crosses them.  [that was #c2ceb6 #dae7c4 #f9efc6 #f3dbc0 #edccba — superseded, see below]
+
+       ⚠⚠ v0.98 (rev 92): RESTORED — AND THIS WAS A BUG, NOT A PREFERENCE. The author reported
+       the intensity panel as washed out. It was: **these were 36% composites of a ramp that
+       has not existed since v0.76.** Rev 61 toned the ramp; v0.66 recomputed these from the
+       toned values, correctly; then **v0.76 restored --ci1…5 to their original brightness at
+       the author's own request and NOBODY RECOMPUTED THE WASHES.** The zones have been derived
+       from a superseded source for sixteen releases, so the chart's background and the band
+       colours it is supposed to be a wash OF had quietly come apart.
+       ⚠ THE PROOF IS THAT THE ARITHMETIC LANDS EXACTLY ON THE OLD VALUES. 36% of the live ramp
+       on white reproduces the pre-v0.66 set to ΔE 0.0 on all five bands — this is a derivation
+       restored, not a colour chosen. The same is true of dark at 34%.
+       ⚠ AND IT IMPROVES THE MEASUREMENT RATHER THAN TRADING AGAINST IT. Adjacent separation
+       goes 6.5–9.2 → **6.7–9.8** (CIEDE2000) and --mark holds **10.97:1** across the zones
+       against the 10.8 floor. Nothing was given up to get the brightness back, which is what
+       you would expect from a fix that restores a derivation rather than overriding one.
+       ⚠ THE FORMULA, STATED, BECAUSE THIS FILE HAD TWO. The 6.5–9.2 above is CIEDE2000; the
+       same colours measure 7.1–10.3 under CIE76. Rev 92 reproduced both to the decimal and the
+       apparent disagreement was a missing label, not an error. Every ΔE in this block is
+       CIEDE2000 unless it says otherwise. */
+    --ciw1:#c0cfac; --ciw2:#d8e8b6; --ciw3:#fceeab; --ciw4:#f8d9af; --ciw5:#f3c7aa;
     /* ⚠ INTER FIRST, AND THE REST OF THE STACK IS NOT DECORATION. `font-display:swap` means
        every reader sees the fallback for at least one frame, and a reader whose network drops
        the page mid-load sees it for good. So the stack is a face the page actually works in,
@@ -192,19 +209,51 @@
     /* ---- Categorical series palette (validated against the six dataviz checks, light) ----
        Worst adjacent pair: ΔE 17.4 deuteranopia / 22.0 normal vision; all eight ≥3:1 on surface.
        THE ARRAY ORDER IS THE CVD-SAFETY MECHANISM — see the SERIES comment before reordering. ---- */
-    --c-nuclear:#8353B3; --c-biomass:#4E9A5B; --c-hydro:#10568C; --c-wind:#279FA0;
+    /* ⚠ v0.96 (rev 90): NUCLEAR, WIND AND OTHER TAKE THE AUTHOR'S PROPOSED HUES. Three of a
+       nine-colour set he put forward on 2 Sept; the other six were measured and declined, and
+       `Rev90_Colour_Study.html` renders why. What matters here is that the three were tested as
+       a SET rather than as a list, because a palette constraint is a property of the whole
+       array: worst pair ΔE 9.9 → 12.3 and worst adjacent greyscale 1.58:1 → 1.74:1, so the
+       array is measurably SAFER than the one it replaces, not merely different.
+       ⚠ His three beat the four I recommended. Adding his Interconnectors dropped the worst
+       pair back to 10.3 — Wind/Interconnectors became the new closest pair. A subset can be
+       better than the set it came from; the lesson is that neither is knowable by eye.
+
+       ⚠ WIND IS THE BINDING CONSTRAINT AND CANNOT ABSORB ANOTHER LIGHTENING. #0EA5A8 measures
+       3.01:1 on white — one hundredth over WCAG 1.4.11's floor for graphical objects, and the
+       marks in MOVER_ICONS use it as a 1.7px STROKE, which is a harder test than a filled bar.
+       Rendered at true size in both themes and read as legible, so it ships. But the margin was
+       bought from somewhere and the alternative is recorded because it is a real trade, not an
+       oversight:
+
+         #0EA5A8 (shipped)  3.01:1 on white   worst pair ΔE 12.3
+         #00A0A3            3.20:1            worst pair ΔE 10.8   ΔE 1.8 from the shipped value
+         #009FA6            3.23:1            worst pair ΔE 10.8   ΔE 3.3
+
+       Darkening wind moves it TOWARD biomass, so contrast margin is paid for in pair
+       separation; a search over ±10° of hue and ±4 L* found nothing clearing both. The shipped
+       value takes the better half of the trade because pair separation at 9.9 was the light
+       array's actual weakness, while 3.20:1 was never comfortable either — wind has been this
+       palette's contrast floor since the fork. ⚠ If wind is ever touched again, it goes DARKER
+       or not at all, and the pair with biomass is what pays. */
+    --c-nuclear:#6D4ACD; --c-biomass:#4E9A5B; --c-hydro:#10568C; --c-wind:#0EA5A8;
     /* v0.45: the demand side's ground, mixed to sit the same distance from the surface
        as --grey-bg does on the supply side rather than being picked by eye. */
     --teal-pale:#EAF6F5;
     /* ⚠ v0.49: TEAL USED AS TEXT, which the series value cannot do — and this fixes a real
        accessibility defect rather than tidying a preference. The DEMAND SIDE caption and its
-       arrow both took --c-wind, which is #279FA0 and measures 3.20:1 on white. That is fine
+       arrow both took --c-wind, which was #279FA0 and measured 3.20:1 on white. That is fine
        for a chart fill, adequate for a graphic, and BELOW THE 4.5:1 WCAG AA FLOOR FOR TEXT —
        and the caption is 10.5px uppercase, which is the least forgiving text on the page.
        Exactly the --blue / --blue-text split, arrived at for exactly the same reason at rev 11:
        a colour chosen to sit in a chart cannot be assumed to carry a label.
-       #1B7273 is 5.67:1 on white, ΔE 17.7 from --c-wind (so it does not claim to BE the wind
+       #1B7273 is 5.67:1 on white, ΔE 20.6 from --c-wind (so it does not claim to BE the wind
        series while doing chrome duty) and ΔE 37.9 from hydro, its next nearest.
+       ⚠ v0.96 (rev 90): --c-wind became #0EA5A8, 3.01:1 on white, so the ARGUMENT is unchanged
+       and stronger — the series value is further below the text floor than before, and the
+       separation from this token widened from 17.7 to 20.6. The figures above are restated
+       rather than left describing a colour that is no longer there, which is the fault this
+       same release retired from the sun mark's prose.
        ⚠ --c-wind ITSELF IS UNTOUCHED. The eight-series array is the colour-blindness safety
        mechanism and this is a new token beside it, never a change to it. */
     --teal-text:#1B7273;
@@ -230,7 +279,7 @@
        fill in the mix chart.
        --bal-pos #0F7A5A is 5.31:1 on white, ΔE 20.4 from biomass, its nearest series. */
     /* --bal-pos:#0F7A5A; --bal-neg:#BE2F26;  (retired v0.51) */
-    --c-storage:#8A3362; --c-imports:#7386D5; --c-gas:#9B1111;   --c-other:#BC7C40;
+    --c-storage:#8A3362; --c-imports:#7386D5; --c-gas:#9B1111;   --c-other:#A37A00;
 
     /* ---- Diverging pair for interconnector flow (import / export) ---- */
     /* ⚠ v0.57: `--flow-out-ink` IS A SECOND TOKEN, NOT A CHANGE TO THE FIRST.
@@ -303,7 +352,27 @@
                 var(--solar-line) 5.7px 7.4px,transparent 8px);
     --hatch-est-sm:repeating-linear-gradient(135deg,transparent 0 2.8px,
                    var(--solar-line) 3.2px 4.6px,transparent 5px);
-    --daylight:#FFF9E9; --night:#FAFBFC;
+    /* ⚠ v0.98 (rev 92): --night #FAFBFC -> #F7F9FC, AT THE AUTHOR'S REQUEST — AND THE REQUEST
+       WAS MADE ON A FIGURE OF MINE THAT WAS ON THE WRONG SCALE, WHICH IS RECORDED HERE SO THE
+       NEXT PERSON DOES NOT REPEAT IT. He asked whether night should have a colour at all; I
+       reported it at ΔE 1.6 from the surface and called it invisible. That was CIE76. **This
+       project measures washes and chrome in OKLab ×100**, where night was 1.25 against day's
+       2.81 — a deliberate 2.25:1 asymmetry with a full argument in the chart's own source, not
+       an oversight. Three scales are in play in this file and all three were called "ΔE"; see
+       the Index §2a convention added at rev 92.
+       ⚠ SO THIS IS A TUNING OF A MEASURED ASYMMETRY, NOT A FIX. The argument stands: day is the
+       emphasised half, night must not read as "no data here" (rev 27's reason for dropping the
+       night wash in the first place), and the pair must separate by HUE as well as lightness.
+       All three survive. Night goes 1.25 -> **1.91** from the surface, day is untouched at 2.81,
+       so day stays the emphasised half at 1.47:1 rather than 2.25:1. The seam between the two
+       washes — which the source note says is what actually matters — IMPROVES, 2.41 -> 2.64.
+       Night stays cool at hue 258° against day's 90°, --mark holds 16.82:1 over it, and the
+       distance from the solar hatch is unmoved (9.5 -> 9.3 against `--solar-fill`, which is the
+       token the harness reads; measuring `--solar-line` instead gives a different number and
+       briefly convinced me the old figures were wrong — they were not).
+       The author's report is the evidence that 2.25:1 was tuned too far: he looked at the chart
+       and asked whether night had a colour. Was: #FAFBFC. */
+    --daylight:#FFF9E9; --night:#F7F9FC;
     --foot-bg:#DFE5F2;
 
     --head-ink:#FFFFFF;
@@ -352,10 +421,21 @@
     /* The WASHES do need a second set, for exactly the reason the fuel steps do: the same alpha
        over a near-black surface lands somewhere different. 34% on #171922. Measured: adjacent
        zones separate by 5.0–8.6 ΔE, and --mark keeps 6.0:1 or better across all five.
-       ⚠ v0.66: recomputed from the toned ramp at the same 34%. Adjacent zones now separate by
-       8.1–11.1 ΔE and --mark still keeps 6.0:1 at its worst step.
-       Was: #2a3a1f #415128 #63581e #5f4422 #5a331d */
-    --ciw1:#2c3928; --ciw2:#435035; --ciw3:#605837; --ciw4:#5b4632; --ciw5:#55372c;
+       ⚠ v0.66: recomputed from the toned ramp at the same 34%. Adjacent zones separated by
+       8.1–11.1 ΔE (CIEDE2000) and --mark kept 6.0:1 at its worst step.
+       ⚠⚠ v0.98 (rev 92): RESTORED, for the reason set out in full in the light block — v0.76
+       put --ci1…5 back to their original brightness and these were never recomputed, so the
+       dark zones were 34% of a ramp that no longer exists. 34% of the LIVE ramp on #171922
+       lands on the pre-v0.66 set EXACTLY, all five bands, both themes. ⚠ ciw5 is #5a331d and not the
+       #5a321d my own arithmetic first produced: Python's round() and the browser's Math.round()
+       disagree on a .5 in one channel, and the value that ships is the one the BROWSER computes,
+       because the browser is what composites the real thing. The scenario tolerates one channel
+       step for exactly this reason and still measures 0 here.
+       Adjacent separation 8.1–11.1 → **8.3–11.9**. ⚠ --mark measures **5.99:1** at its worst
+       step, which is what it measured before this change too: the "6.0:1 or better" written
+       above is a rounding of 5.99 and always was. Recorded rather than left to be rediscovered
+       as a regression by whoever next reads the floor as a hard 6.0. */
+    --ciw1:#2a3a1f; --ciw2:#415128; --ciw3:#63581e; --ciw4:#5f4422; --ciw5:#5a331d;
     /* Dark mode takes its OWN steps from the same hues — not an automatic flip, because a
        colour that clears 3:1 on white rarely clears it on near-black.
        Deliberate trade-off: these steps hold CVD separation at ΔE 15.4 (deuteranopia) /
@@ -366,7 +446,16 @@
        label, and the table view lists every fuel type); two fills collapsing into each other
        for a colour-blind reader is not. So the CVD margin wins, and the required relief
        channel is shipped rather than assumed. */
-    --c-nuclear:#926ABE; --c-biomass:#5A9E65; --c-hydro:#0B67A9; --c-wind:#12A7A8;
+    /* ⚠ v0.96 (rev 90): THE DARK TWINS ARE DERIVED AND MEASURED, NEVER FLIPPED — §3's rule.
+       Each keeps its light partner's hue (within 3°) and lifts L*, which is the relationship the
+       existing dark set already had (+2 to +7 L*, hue held). Solved against the DARK palette's
+       own floors on the dark ground, not the light one's.
+       ⚠ AND IT EXPOSED SOMETHING THE LIGHT SET HAD HIDDEN: the dark array's worst pair was
+       ΔE 6.7 (Nuclear/Hydro) against the light array's 9.9 — the two themes were never equally
+       safe, and nothing measured the dark one on its own terms. Replacing three of its members
+       takes it to ΔE 16.8 and its worst adjacent greyscale from 1.30:1 to 1.80:1. The remaining
+       floor, 2.66:1 on Gas, is untouched and is now the dark set's binding constraint. */
+    --c-nuclear:#7942DC; --c-biomass:#5A9E65; --c-hydro:#0B67A9; --c-wind:#1EB3B6;
     --teal-pale:#152A2B;
     /* Dark takes its own values for all three, never a flip of light. #35C8C9 is 8.56:1 on the
        dark surface (the light value would be 2.1:1 there and unreadable) and ΔE 11.9 from dark
@@ -375,10 +464,18 @@
        because a red light enough to read on near-black is nowhere near a saturated fill. */
     --teal-text:#35C8C9;
     /* --bal-pos:#39C08D; --bal-neg:#F2807A;  (retired v0.51 — see the light block) */
-    --c-storage:#94436D; --c-imports:#6F87F9; --c-gas:#B3241F;   --c-other:#C28246;
+    --c-storage:#94436D; --c-imports:#6F87F9; --c-gas:#B3241F;   --c-other:#B88B0D;
     --flow-in:#2FA3A4; --flow-out:#C4574A; --flow-out-ink:#C86458; --flow-zero:#383846;
     --solar-line:#E3BE4A; --solar-fill:#4A3F1A;
-    --daylight:#252325; --night:#1A1D28;
+    /* ⚠ v0.98 (rev 92): --night #1A1D28 -> #1B1F2E, the dark twin of the light change above,
+       SOLVED ON THE DARK GROUND rather than flipped. Dark's day wash is 4.62 from its surface
+       where light's is 2.81, so matching the light hex would have produced a different
+       relationship, not the same one. Night goes 1.77 -> 2.94, giving day:night 1.57:1 against
+       light's 1.47:1 — the two themes keep the same asymmetry, which is the property the
+       original note set out to hold ("day stays roughly 2.5x the departure in BOTH themes";
+       it is now roughly 1.5x in both). Seam 3.26 -> 3.15, --mark 13.77:1, hue 273° and still
+       cool. Was: #1A1D28. */
+    --daylight:#252325; --night:#1B1F2E;
     --foot-bg:#080A11;
     --head-ink:#EEF1FF;
     --ok:#4EC17E; --warn:#D5A94E; --bad:#E0736A;
