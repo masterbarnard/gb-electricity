@@ -1,0 +1,30 @@
+# GB Electricity
+
+> A live dashboard for the Great Britain electricity system: generation mix, national and
+> underlying demand, wind and solar, interconnector flows, carbon intensity and grid
+> frequency. Figures come from Elexon Insights (BMRS), the NESO Carbon Intensity API and
+> Sheffield Solar PV_Live, and are refreshed continuously. The project's aim is the
+> clearest explanation of Britain's electricity system, so every figure states its
+> source, its boundary and its age.
+
+## Pages
+
+- [Live dashboard](https://gbelectricity.uk/): The whole system on one page — what is generating now, what
+  the country is drawing, and what is changing.
+- [Methodology](https://gbelectricity.uk/methodology): What each figure on the live dashboard means, how it is derived from the public feeds, and where the data can mislead you.
+- [About GB Electricity](https://gbelectricity.uk/about): The provenance of the data, every endpoint the page calls, the licences that come with them, and where the project stands.
+- [Generation](https://gbelectricity.uk/generation): Every fuel on the GB system: what is running now, how that compares with the last 24 hours, and what each one costs in carbon.
+- [Demand](https://gbelectricity.uk/demand): What the country is drawing right now, how that compares with today’s peak, and why three published figures for GB demand can all be right at once.
+- [Interconnectors](https://gbelectricity.uk/interconnectors): Ten subsea and tunnel cables connect Great Britain to six countries. This is what each one is doing right now, and what decides which way it runs.
+- [Carbon intensity](https://gbelectricity.uk/carbon-intensity): How clean the electricity is this half hour, how that figure is built from the fuel mix, and why the bands it is judged against are not fixed.
+- [System](https://gbelectricity.uk/system): Whether generation and demand are matching, measured three ways — and why none of them causes the others.
+
+## Using this data
+
+- The figures are derived, not republished: see the methodology page for how each one is
+  calculated and what the public feeds cannot see.
+- Elexon's BMRS data is used under its Licence to use BMRS open data, which prescribes its
+  attribution verbatim; NESO's Carbon Intensity data is CC BY 4.0. The about page carries
+  every endpoint, licence and attribution in full.
+- The dashboard renders its figures in the browser from live API calls, so a fetch of the
+  HTML alone will not contain current values.
