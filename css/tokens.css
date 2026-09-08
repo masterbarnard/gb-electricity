@@ -29,6 +29,19 @@
        `.balancebox` 15px) which is a 2px drift waiting to be noticed, on top of the 13px one
        that actually shipped. Side-by-side cards cannot each own this number. */
     --card-pad-t:13px;
+    /* ⚠ v1.30 (rev 124), CANDIDATE 14: THE VALUE SCALE — four steps, declared once. The
+       dashboard sheet carried thirty-eight rules on `.value` with fourteen distinct font sizes,
+       nearly all of them one figure stepping down through media blocks. A breakpoint now moves
+       these tokens; the rules only consume them. hero = the flow band's three headline figures
+       (fluid between 1180 and 890px, 40px once the band stacks); tile = the condition tiles;
+       mid = the balance figure and the two-up phone tiles; small = an inline figure in prose. */
+    --val-hero:44px;
+    --val-tile:32px;
+    --val-mid:27px;
+    --val-small:16px;
+    --val-unit-hero:16px;
+    --val-unit:14px;
+    --val-unit-mid:13.5px;
     /* ---- Chrome. Achromatic on purpose. ----
        This is a data dashboard: the only things on the page that should carry hue are the
        series. A branded chrome colour competes with them for meaning — a reader has to learn
@@ -236,6 +249,30 @@
        array's actual weakness, while 3.20:1 was never comfortable either — wind has been this
        palette's contrast floor since the fork. ⚠ If wind is ever touched again, it goes DARKER
        or not at all, and the pair with biomass is what pays. */
+    /* ⚠ v1.04 (rev 98): --c-wind WAS SOLVED TO #2B9DA0 AND THE MOVE WAS THEN REFUSED. Recorded
+       because the next person to notice wind at 2.79:1 on --page will re-derive exactly this.
+       THE FAULT IS REAL: 3.01:1 on --surface but 2.79:1 on --page, under WCAG 1.4.11's 3:1.
+       ⚠ THE COST IS PAID BY COLOUR-BLIND READERS, AND THAT IS WHY IT WAS REFUSED. Any wind
+       that clears 3:1 on BOTH grounds at this hue drops the light array's worst dichromat pair
+       (biomass/wind) from 12.3 to 10.0 — above the 9.9 floor, but it hands back the whole of
+       rev 90's improvement. A search over L and C holding H found 299 values that clear every
+       clause at once and EVERY ONE of them is a desaturated grey-teal (#799393 and its
+       neighbours), a visible move of 8.1 OKLab — wind stops reading as teal at all.
+       ⚠ AND REV 90 ALREADY TOOK THIS TRADE, IN THIS DIRECTION, ON THE RECORD: the note above
+       says the value "takes the better half of the trade because pair separation at 9.9 was the
+       light array's actual weakness, while 3.20:1 was never comfortable either". Reversing that
+       judgement needs new evidence and there is none.
+       THE ASYMMETRY THAT DECIDES IT: dichromat separation serves readers who cannot use the
+       hue at all and have no other route to it. The 3:1 floor here guards a mark that ALSO
+       carries a label, a legend and a table view — three non-colour routes to the same fact.
+       Twenty-three hundredths of contrast is not worth 2.3 ΔE of separation for readers with
+       no alternative.
+       ⚠ SO IT IS A KNOWN, ACCEPTED FAILURE AND THE HARNESS SAYS SO OUT LOUD (see the
+       ground-contrast arm of paletteSafety, added this release). An accepted failure that is
+       not written down becomes a passing test.
+       ⚠ IF THE GROUND EVER CHANGES (candidate 9), THIS IS RE-OPENED — a lighter --page would
+       clear wind at no cost to the pair, and that is the cheap fix nobody can take today
+       because --ink-mute has four hundredths of headroom against the same ground. */
     --c-nuclear:#6D4ACD; --c-biomass:#4E9A5B; --c-hydro:#10568C; --c-wind:#0EA5A8;
     /* v0.45: the demand side's ground, mixed to sit the same distance from the surface
        as --grey-bg does on the supply side rather than being picked by eye. */
@@ -254,8 +291,20 @@
        separation from this token widened from 17.7 to 20.6. The figures above are restated
        rather than left describing a colour that is no longer there, which is the fault this
        same release retired from the sun mark's prose.
-       ⚠ --c-wind ITSELF IS UNTOUCHED. The eight-series array is the colour-blindness safety
-       mechanism and this is a new token beside it, never a change to it. */
+       ⚠ v1.04 (rev 98): --c-wind WAS PROPOSED FOR #2B9DA0 AND HELD. Had it moved, this
+       separation would have narrowed 20.6 -> 13.4 and the figures above would have needed
+       restating a second time. They did not move, and the near-miss is the note: any future
+       --c-wind change must restate them BEFORE shipping, not after.
+       ⚠ AND THE CLOSING DELIMITER OF THIS COMMENT MATTERS. An edit at rev 98 replaced a slice
+       of this block that ran up to the NEXT DECLARATION, and so ate the comment terminator —
+       which put --teal-text INSIDE the comment. The token silently ceased to exist, the demand
+       caption fell back to an inherited colour, and `balanceArrows` caught it. A slice that ends
+       at the next thing eats whatever sits between the two.
+       ⚠ AND THE NOTE ABOVE THEN DID IT AGAIN, IN THE OPPOSITE DIRECTION: the first draft of it
+       quoted the terminator literally, which CLOSED THIS COMMENT four lines early and left a
+       stray one below. A comment about a delimiter may not contain the delimiter. Both faults
+       were found mechanically — the first by the harness, the second by a balance scan — and
+       neither was visible by reading. */
     --teal-text:#1B7273;
     /* ⚠ REMOVED AT v0.51 WITH THE FEATURE. The values and their measurements are kept as a
        record, commented out rather than deleted, because the sign-colour question has now been
@@ -293,6 +342,19 @@
        So the MARK keeps its colour and the WORDS get their own, lightened only as far as 4.5
        requires. In light they are the same value, because light already passes. */
     --flow-in:#0F6F70; --flow-out:#8C2E1F; --flow-out-ink:#8C2E1F; --flow-zero:#D9D9D9;
+
+    /* ---- Temperature against seasonal normal (v1.24, rev 118, candidate 43) ----
+       ⚠ ALIASES OF THE FLOW PAIR, NOT USES OF IT. The values are identical today and the
+       indirection still earns its place: `--flow-*` is named for interconnector direction, and a
+       future decision about how an import reads has no business changing how a warm day reads.
+       This is the same argument that produced `--flow-out-ink` — one token cannot answer to two
+       jobs — and it costs two declarations per theme.
+       ⚠ AND IT ALIASES `--flow-out-ink`, NOT `--flow-out`, BECAUSE THIS IS TEXT. Measured on the
+       tile surface: --flow-out is 4.01:1 in dark and fails the 4.5 floor; --flow-out-ink is
+       4.52:1 and passes. --temp-cool is 5.95:1 light and 5.75:1 dark.
+       ⚠ COLOUR IS NOT THE CARRIER. The figure already reads "+1.6 vs normal" with an explicit
+       sign; the colour makes a scannable row out of a line that was already complete. */
+    --temp-warm:#8C2E1F; --temp-cool:#0F6F70;
 
     /* ---- Embedded solar: NOT a 9th categorical hue ----
        Gold cannot be one. At any lightness where it still reads as gold it sits outside the
@@ -388,9 +450,14 @@
        lighter runs into that series; going toward cyan runs into wind; going violet runs into
        nuclear. The way out is not hue but CHROMA: a deep, low-chroma blue reads unmistakably as
        blue structure while sitting outside the saturated band the series occupy. #2B3A78 is
-       ΔE 13.9 from its nearest series (hydro, not interconnectors — the low chroma is what
+       ΔE 14.3 from its nearest series (hydro, not interconnectors — the low chroma is what
        moves it), carries white text at 10.6:1, and works as a border at 1.65:1 against the
-       surface. This is why dark is not, and must never be, an automatic flip of light. ---- */
+       surface.
+       ⚠ v1.04 (rev 98): 13.9 -> 14.3 because dark --c-hydro moved to #2069A5. The nearest
+       series is STILL hydro and the separation IMPROVED, so the argument is unchanged and
+       slightly stronger — but the figure is restated rather than left describing a colour that
+       is no longer there. ⚠ This claim is one of the seven the design guide re-derives, so a
+       stale figure here fails the guide's own method table; that is what caught it. This is why dark is not, and must never be, an automatic flip of light. ---- */
     --blue:#2B3A78; --blue-2:#1E2440; --blue-line:#303A5E; --blue-ink:#3A4A92;
     /* 8.7:1 on the dark surface, and ΔE 13.6 from periwinkle interconnectors — the lightest
        blue that is unmistakably interface rather than data. */
@@ -455,7 +522,10 @@
        safe, and nothing measured the dark one on its own terms. Replacing three of its members
        takes it to ΔE 16.8 and its worst adjacent greyscale from 1.30:1 to 1.80:1. The remaining
        floor, 2.66:1 on Gas, is untouched and is now the dark set's binding constraint. */
-    --c-nuclear:#7942DC; --c-biomass:#5A9E65; --c-hydro:#0B67A9; --c-wind:#1EB3B6;
+    /* ⚠ v1.04 (rev 98): --c-hydro #0B67A9 -> #2069A5. 2.94:1 on the dark surface, under the
+       3:1 graphical floor; now 3.02 surface / 3.25 page. ΔL +0.006 — very nearly invisible,
+       which is the point: the fix is a floor clearance, not a restyle. Hue held. */
+    --c-nuclear:#7942DC; --c-biomass:#5A9E65; --c-hydro:#2069A5; --c-wind:#1EB3B6;
     --teal-pale:#152A2B;
     /* Dark takes its own values for all three, never a flip of light. #35C8C9 is 8.56:1 on the
        dark surface (the light value would be 2.1:1 there and unreadable) and ΔE 11.9 from dark
@@ -464,8 +534,19 @@
        because a red light enough to read on near-black is nowhere near a saturated fill. */
     --teal-text:#35C8C9;
     /* --bal-pos:#39C08D; --bal-neg:#F2807A;  (retired v0.51 — see the light block) */
-    --c-storage:#94436D; --c-imports:#6F87F9; --c-gas:#B3241F;   --c-other:#B88B0D;
+    /* ⚠ v1.04 (rev 98): --c-storage #94436D -> #984C72 (2.74/2.94 -> 3.01/3.24, ΔL +0.020).
+       ⚠ AND DARK --c-gas IS DELIBERATELY LEFT FAILING AT 2.66/2.86. IT HAS NO SOLUTION WHILE
+       --red STAYS PUT: reaching 3:1 needs L +0.03, which lands it ΔE 9.4 from the dark --red,
+       under the 11.5 rev 18 examined and rejected. The escape is to move the DARK --red only,
+       #D75755 -> #EC6A67 (ΔE 15.3 from the new gas, and it improves the red's own contrast
+       4.49 -> 5.69, leaving light --red #C94A4A and therefore the brand mark untouched) —
+       that is a decision about the six-place identity device and it has NOT been taken.
+       ⚠ SO THE HARNESS RECORDS THIS AS A KNOWN, ACCEPTED FAILURE WITH THIS REASON RATHER THAN
+       PASSING IT. An accepted failure that is not written down becomes a passing test. */
+    --c-storage:#984C72; --c-imports:#6F87F9; --c-gas:#B3241F;   --c-other:#B88B0D;
     --flow-in:#2FA3A4; --flow-out:#C4574A; --flow-out-ink:#C86458; --flow-zero:#383846;
+    /* v1.24 (rev 118): the text-safe red, measured 4.52:1 on --surface; --flow-out is 4.01:1 */
+    --temp-warm:#C86458; --temp-cool:#2FA3A4;
     --solar-line:#E3BE4A; --solar-fill:#4A3F1A;
     /* ⚠ v0.98 (rev 92): --night #1A1D28 -> #1B1F2E, the dark twin of the light change above,
        SOLVED ON THE DARK GROUND rather than flipped. Dark's day wash is 4.62 from its surface
