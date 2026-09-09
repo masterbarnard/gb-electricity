@@ -18,6 +18,7 @@
 - [Interconnectors](https://gbelectricity.uk/interconnectors): Ten subsea and tunnel cables connect Great Britain to six countries. This is what each one is doing right now, and what decides which way it runs.
 - [Carbon intensity](https://gbelectricity.uk/carbon-intensity): How clean the electricity is this half hour, how that figure is built from the fuel mix, and why the bands it is judged against are not fixed.
 - [System](https://gbelectricity.uk/system): Whether generation and demand are matching, measured three ways — and why none of them causes the others.
+- [Batteries](https://gbelectricity.uk/batteries): What the battery fleet is actually doing — and how much of it the system operator is telling to do it.
 
 ## Using this data
 
