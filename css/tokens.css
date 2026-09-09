@@ -35,6 +35,16 @@
        these tokens; the rules only consume them. hero = the flow band's three headline figures
        (fluid between 1180 and 890px, 40px once the band stacks); tile = the condition tiles;
        mid = the balance figure and the two-up phone tiles; small = an inline figure in prose. */
+    /* ⚠ v1.34 (rev 128): THE FUEL-MIX BAR HEIGHT, DECLARED ONCE BECAUSE TWO RULES NEED IT.
+       `.track` sets the collapsed height and `#panel-mix.is-expanded .track` sets the FLOOR the
+       expanded bar may not go below, and the rule that sets the floor says so in its own comment:
+       "min-height is the ordinary collapsed height, so the expanded view can never render a
+       THINNER bar than the collapsed one it came from". It was 14px against a collapsed 19px —
+       the two numbers had drifted apart, and the property the comment claims had not been true
+       for some time. Candidate 77's low-carbon line took 8% of the expanded panel's height and
+       the bars fell to 16px, which is how it surfaced: thinner expanded than collapsed, exactly
+       what the floor exists to prevent. One token, consumed by both rules, cannot drift again. */
+    --track-h:19px;
     --val-hero:44px;
     --val-tile:32px;
     --val-mid:27px;
