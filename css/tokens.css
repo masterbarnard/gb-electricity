@@ -169,7 +169,31 @@
        ramp TOWARDS Other's orange. Going back puts 2.6 ΔE of separation from the fuel palette
        back, well clear of the project's 8.0 target. The exact prior values were written down at
        rev 61, so this is a restoration rather than a re-cut — no re-derivation, no drift. */
-    --ci1:#4f7a18; --ci2:#93bf34; --ci3:#f7d117; --ci4:#eb9622; --ci5:#dd6414;
+    /* ⚠ v1.48 (rev 143), CANDIDATE 13 — THE LIGHT GROUND TAKES ITS OWN THREE STEPS.
+       MEASURED against the light surface #FFFFFF and the page ground #EDF0F7, on the 3:1 WCAG
+       floor for a graphical object:
+         --ci1 5.09 / 4.46  ok        --ci4 2.35 / 2.06  FAILED
+         --ci2 2.16 / 1.89  FAILED    --ci5 3.55 / 3.12  ok
+         --ci3 1.49 / 1.31  FAILED
+       Three of five, and the worst of them a yellow at 1.31 — a line a reader could not see.
+       ⚠ THE FIVE HAD NO DARK VARIANT: ONE VALUE SERVED TWO GROUNDS, which is what made this
+       unfixable in place. On the dark surface the same five run 3.45 to 11.75, so darkening
+       them for light would have broken dark. The block below now carries the ORIGINAL values,
+       so **dark is byte-for-byte unchanged** and only the light ground moves.
+       Hue and saturation are held and lightness alone is reduced, to the first step that clears
+       3.05 on BOTH light grounds: #729528 (3.47/3.05), #a18706 (3.51/3.08), #c37812 (3.49/3.06).
+       ⚠ WHAT THIS IS AND IS NOT. These five are used in exactly two places today — the carbon
+       scale's gradient track and `.meter span` — which are FILLED BARS carrying tick marks and
+       labels, not lines. So this was not a live defect a reader was meeting; it is the block
+       that stopped candidate 91 (Kyle's band-coloured sparkline), where they WOULD be lines and
+       the floor would bite. The visible change is that the light theme's carbon meter reads
+       darker through its middle three bands.
+       ⚠ AND IT IS NOT ALL OF CANDIDATE 13. Five fuel colours also fail — `--c-gas` at 2.46 on
+       the dark ground, `--c-hydro`, `--c-nuclear` and `--c-storage` at ~2.78, and `--c-wind` at
+       2.64 on light. Those ARE drawn as chart series. They are left alone deliberately: moving
+       five fuel colours changes every chart on the site and is Kyle's to look at, not a change
+       to fold into a rev that was about something else. Measured and recorded; not done. */
+    --ci1:#4f7a18; --ci2:#729528; --ci3:#a18706; --ci4:#c37812; --ci5:#dd6414;
     /* v0.20: WASHES of the five band colours, for the intensity chart's background zones.
        Not the band colours themselves and not an opacity applied to them: the two surfaces are
        different, so one alpha would give two different results and only one of them would have
@@ -197,7 +221,21 @@
        same colours measure 7.1–10.3 under CIE76. Rev 92 reproduced both to the decimal and the
        apparent disagreement was a missing label, not an error. Every ΔE in this block is
        CIEDE2000 unless it says otherwise. */
-    --ciw1:#c0cfac; --ciw2:#d8e8b6; --ciw3:#fceeab; --ciw4:#f8d9af; --ciw5:#f3c7aa;
+    /* ⚠ v1.48 (rev 143): THREE OF THESE ARE RECOMPUTED, BECAUSE THE RAMP MOVED AND A WASH IS NOT
+       A COLOUR — IT IS A DERIVATION. Candidate 13 darkened --ci2, --ci3 and --ci4 for the light
+       ground; these washes are those band colours composited at 36% on the surface, so leaving
+       them would have left the chart's background zones derived from a ramp that no longer
+       exists. That is rev 92's fault exactly — sixteen releases with the background composited
+       from a superseded source — and it is why `bandWashesAreDerived` exists.
+       ⚠ THE HARNESS CAUGHT IT, ON THE FIRST RUN, WITH A WORST-CHANNEL OFFSET OF 31. I changed the
+       ramp and did not think about the washes; the clause recomputes the composite from the LIVE
+       ramp rather than trusting the stored hexes, so it failed with the expected values in its
+       own output. Recomputed from those, not by eye:
+         --ciw2 #d8e8b6 -> #ccd9b2    --ciw3 #fceeab -> #ddd4a5    --ciw4 #f8d9af -> #e9ceaa
+       --ciw1 and --ciw5 are unchanged because --ci1 and --ci5 were unchanged. The dark washes are
+       untouched for the same reason: the dark ramp did not move, and `darkWashesAreTheLiveRamp-
+       Composited` passed on the same run. */
+    --ciw1:#c0cfac; --ciw2:#ccd9b2; --ciw3:#ddd4a5; --ciw4:#e9ceaa; --ciw5:#f3c7aa;
     /* ⚠ INTER FIRST, AND THE REST OF THE STACK IS NOT DECORATION. `font-display:swap` means
        every reader sees the fallback for at least one frame, and a reader whose network drops
        the page mid-load sees it for good. So the stack is a face the page actually works in,
@@ -513,6 +551,15 @@
        above is a rounding of 5.99 and always was. Recorded rather than left to be rediscovered
        as a regression by whoever next reads the floor as a hard 6.0. */
     --ciw1:#2a3a1f; --ciw2:#415128; --ciw3:#63581e; --ciw4:#5f4422; --ciw5:#5a331d;
+    /* ⚠ v1.48 (rev 143), CANDIDATE 13: THE BAND COLOURS NOW HAVE A DARK VARIANT, AND IT IS THE
+       VALUE THEY ALWAYS HAD. Until this rev one value served both grounds, which is why the
+       three that failed on light could not be fixed without breaking dark. These are the
+       originals, restated here so the dark theme is unchanged by the light-ground fix:
+       against the dark surface #171922 they run --ci1 3.45, --ci2 8.13, --ci3 11.75,
+       --ci4 7.44, --ci5 4.93 — every one clear of the 3:1 floor.
+       ⚠ --ci1 AT 3.45 IS THE TIGHT ONE HERE and is left as it is: it clears the floor, and
+       moving it would be a change to the one band that never failed anywhere. */
+    --ci1:#4f7a18; --ci2:#93bf34; --ci3:#f7d117; --ci4:#eb9622; --ci5:#dd6414;
     /* Dark mode takes its OWN steps from the same hues — not an automatic flip, because a
        colour that clears 3:1 on white rarely clears it on near-black.
        Deliberate trade-off: these steps hold CVD separation at ΔE 15.4 (deuteranopia) /
