@@ -642,7 +642,20 @@
     /* Same hue and chroma as the light value, lifted 0.04 in L: #C94A4A reads 3.81:1 on the
        dark surface and this reads 4.49:1, and a muted red on a near-black ground goes muddy
        before it goes dim. ΔE 12.4 from dark gas, 10.9 from dark Other, 33.8 from the dark blue. */
-    --red:#D75755;
+    /* ⚠ v1.54 (rev 149): #D75755 -> #EC6A67, THE DARK VALUE ONLY, AND IT IS THE DECISION REV 98
+       NAMED AND LEFT UNTAKEN. Kyle took it 14 September 2026.
+       ⚠ LIGHT --red #C94A4A AND --mark-red ARE BOTH UNTOUCHED, so the brand mark is byte-identical
+       in both themes. That is what made this the cheap escape: the identity device does not move.
+       ⚠ IT IMPROVES EVERY CONSTRAINT THE HARNESS HOLDS THIS TOKEN TO, measured in OKLab x100 —
+       the metric `redIsMuted` and rev 18's 11.5 are both stated in:
+         chroma           0.1621 -> 0.1619   (must stay <= 0.20; essentially unchanged)
+         contrast surf    4.49   -> 5.69     (and 4.83 -> 6.12 on --page)
+         nearest series   gas 12.4 -> other 15.4
+         from --blue      33.8   -> 38.5     (floor 30)
+         from the carbon ramp  7.0 -> 7.8    (floor 6)
+       ⚠ AND IT UNBLOCKS --c-gas, which is the whole reason for touching it: with the red here,
+       a gas value exists that clears the 3:1 graphical floor AND stays clear of the red. */
+    --red:#EC6A67;
     --mark-red:#EF3F48;      /* the mark's own red, lifted for dark exactly as it always was */
     --mark:#E9EBF4;
     --accent:var(--blue); --accent-dark:var(--blue-ink); --accent-tint:#1E2440; --accent-line:#303A5E;
@@ -729,7 +742,28 @@
        that is a decision about the six-place identity device and it has NOT been taken.
        ⚠ SO THE HARNESS RECORDS THIS AS A KNOWN, ACCEPTED FAILURE WITH THIS REASON RATHER THAN
        PASSING IT. An accepted failure that is not written down becomes a passing test. */
-    --c-storage:#984C72; --c-imports:#6F87F9; --c-gas:#B3241F;   --c-other:#B88B0D;
+
+    /* ⚠⚠ v1.54 (rev 149): THE EXCEPTION ABOVE IS CLOSED, BY TAKING THE DECISION IT NAMED.
+       The rev 98 note was correct in every particular and its escape route was the real one: move
+       the DARK --red. Kyle took that decision on 14 September 2026 and `--red` is now #EC6A67, so
+       gas can finally clear the graphical floor. **This entry closes candidate 13.**
+       ⚠ #B3241F -> #C82823, chosen for MARGIN rather than for the maximum on any one constraint:
+         contrast          3.16 on --surface, 3.39 on --page   (3:1 floor, both dark grounds)
+         from the new --red  14.5   (floor 10; rev 18's stricter bar is 11.5)
+         nearest other series  --c-storage at 12.9
+       A window exists from #C32722 to #CF2A24. #C32722 maximises the red separation at 15.4 but
+       sits at 3.03 contrast — one rounding step from failing again — so the middle is taken.
+       ⚠ HUE AND SATURATION ARE HELD. This is the same red, lighter; it is not a new gas colour.
+       ⚠ AND A CORRECTION THAT COST A RUN, KEPT BECAUSE IT IS THE USEFUL PART: earlier in this rev
+       I claimed the rev 98 note rested on a wrong number, having measured "12.6" in **ΔE2000**.
+       This project's floor is **OKLab x100**. In OKLab the same pair reads 9.8 against a floor of
+       10, and `redIsMuted -> clearOfEverySeriesDark` failed in one run. The ΔE2000 implementation
+       had been validated 8/8 against Sharma, Wu & Dalal (2005), which proved the arithmetic and
+       nothing about whether it was the right question. **VALIDATING THE IMPLEMENTATION OF THE
+       WRONG METRIC IS NOT VALIDATION.** Before contradicting a clause, read what it measures.
+       ⚠ REV 98 PREDICTED THE NEW GAS WOULD SIT AT ΔE 15.3 FROM #EC6A67. The sweep lands #C32722 at
+       15.4. That note was right about everything. */
+    --c-storage:#984C72; --c-imports:#6F87F9; --c-gas:#C82823;   --c-other:#B88B0D;
     /* v1.51 (rev 146): the series inks, dark. See the light block for the argument and the
        measurements. Four are the fill repeated (wind, biomass, imports, other already clear 4.5
        on all three dark grounds); four are solved. No solar ink — solar is not a categorical hue. */
