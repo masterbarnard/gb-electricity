@@ -378,8 +378,124 @@
     /* --bal-pos:#0F7A5A; --bal-neg:#BE2F26;  (retired v0.51) */
     --c-storage:#8A3362; --c-imports:#7386D5; --c-gas:#9B1111;   --c-other:#A37A00;
 
+    /* ⚠ v1.51 (rev 146): THE SERIES INKS — EIGHT NAMES, DECLARED IN BOTH THEMES, AND ONLY HALF
+       OF THEM ARE NEW VALUES. Kyle: "instead of having the colour dot next to the fuel type
+       (e.g. wind, interconnectors etc), is it possible to have the word in the fuel type
+       colour?" — and, later, "this could also be applied to the 'Gas is 49.8% of the mix right
+       now, nuclear 16.1% and wind 13.0%.' sentence at the top of the Generation details page."
+
+       ⚠ A FILL IS NOT AN INK, WHICH IS THE WHOLE REASON THIS BLOCK EXISTS. `--c-*` are drawn as
+       bars and areas and owe WCAG 3:1 as non-text marks. Colouring a WORD with one asks 4.5:1 of
+       a value that was never chosen to carry it. Measured on --surface, --page AND --grey-bg —
+       three grounds, because these words land in panel bodies, on the page ground and inside
+       chips — **eight of the sixteen fills already clear 4.5 on all three and are repeated here
+       unchanged; eight needed solving.** Repeating the passing ones rather than aliasing them is
+       deliberate: a reader of this sheet should see one ink per series per theme in one place,
+       not eight values and eight indirections.
+
+       SOLVED (minimum move from the fill, hue and chroma held, lightness alone reduced/raised):
+         light   wind    #0EA5A8 -> #0C787C   5.26 / 4.86 / 4.61
+         light   biomass #4E9A5B -> #097E44   5.15 / 4.76 / 4.51
+         light   imports #7386D5 -> #4367CB   5.20 / 4.80 / 4.56
+         light   other   #A37A00 -> #8E6700   5.13 / 4.75 / 4.50
+         dark    gas     #B3241F -> #F94239   4.89 / 5.26 / 4.52
+         dark    nuclear #7942DC -> #A664FE   4.90 / 5.27 / 4.52
+         dark    hydro   #2069A5 -> #518CBE   4.88 / 5.24 / 4.50
+         dark    storage #984C72 -> #C36B96   4.89 / 5.26 / 4.52
+       Every ink also clears ΔE 10 from every OTHER ink in its own theme, so two fuel words in one
+       sentence can never read as the same series. Checked pairwise, both themes: no collisions.
+
+       ⚠ THERE IS NO SOLAR INK, AND THAT IS THE RULE THIS SHEET ALREADY STATES rather than an
+       omission. The note further down says it outright — "Embedded solar: NOT a 9th categorical
+       hue" — and solar is encoded by texture, outline and label everywhere on the site: the fuel
+       table, the composition strip, the legend and both charts. A ninth ink would quietly reverse
+       that. So the solar word keeps `--ink` and keeps its `.ins-mark.is-est` hatch, which is the
+       one visible difference in the sentence and carries a real meaning: that figure is modelled,
+       not metered.
+       ⚠ AND IT HAPPENS TO REMOVE THE ONE COLLISION THE SOLVE FOUND. A solar ink lands at #856800,
+       **ΔE 3.4 from the light `other` ink** — the two words would have been indistinguishable in
+       running prose. The rule and the measurement agree, which is the comfortable case.
+
+       ⚠ WHAT THIS DOES NOT DO. It does not touch a single `--c-*` fill, so every chart on the
+       site is byte-identical. **Candidate 13's open half stays open**: `--c-wind` still measures
+       2.79 on the light page ground as a MARK, which is a different failure in a different place
+       and is Kyle's to decide. The inks are the answer to the TEXT half only. */
+    --c-gas-ink:#9B1111;     --c-nuclear-ink:#6D4ACD; --c-wind-ink:#0C787C;   --c-biomass-ink:#097E44;
+    --c-imports-ink:#4367CB; --c-hydro-ink:#10568C;   --c-other-ink:#8E6700;  --c-storage-ink:#8A3362;
+
     /* ---- Diverging pair for interconnector flow (import / export) ---- */
-    /* ⚠ v0.57: `--flow-out-ink` IS A SECOND TOKEN, NOT A CHANGE TO THE FIRST.
+    /* ⚠ v1.51 (rev 146), KYLE'S OPTION A3: THE EXPORT COLOUR IS NO LONGER A RED, AND
+       `--flow-out-ink` IS RETIRED. Read this before the v0.57 note below, which it supersedes.
+
+       KYLE, ON THE DEPLOYED v1.50 DASHBOARD: "The exporting colour looks too much like the gas
+       fuel colour … a reddish looks like a liability which exporting sort of is, but it's also
+       positive that the system has enough spare generation to export … I still don't like
+       exporting being 'red' which I associate with negativity. An orange colour is more neutral
+       in meaning, and compliments the interconnector importing colour."
+
+       ⚠ TWO INDEPENDENT COLLISIONS WERE MEASURED, NOT ONE. Light `--flow-out` #8C2E1F sat
+       ΔE2000 **4.6** from `--c-gas` #9B1111 — and was BYTE-IDENTICAL to `--bad`. Dark
+       `--flow-in` #2FA3A4 sat ΔE **4.7** from `--c-wind` #1EB3B6. Anything under about ΔE 10 is
+       the same colour to a reader who is not holding two swatches side by side, and Kyle was
+       reading the dashboard, where the gas bar and the export bar sit one panel apart.
+
+       THE VALUES, SOLVED AND MEASURED on --surface / --page / --grey-bg:
+         light  --flow-in  #0F6F70  5.95 / 5.50 / 5.22   ΔE 19.5 from wind   — UNCHANGED
+         light  --flow-out #A75001  5.54 / 5.12 / 4.86   ΔE 18.2 from gas
+         dark   --flow-in  #4D9491  4.97 / 5.34 / 4.59   ΔE 10.2 from wind
+       ⚠ THE DARK IMPORT VALUE MOVED ONCE MORE, AND THE HARNESS IS WHY. The first solve returned
+       #379391 at 4.79 / 5.15 / **4.42** — it cleared --surface and --page and missed --grey-bg by
+       eight hundredths, and the solve had only been given two of the three grounds. Run 1 of
+       verify151 failed `bothTokensAreTextSafeOnAllThreeGrounds` on exactly that. #4D9491 is ΔE 2.4
+       from it, so nothing about the look changed; the measurement is now true on all three.
+         dark   --flow-out #D48E63  6.55 / 7.04 / 6.04   ΔE 29.3 from gas
+
+       ⚠ THE DARK VALUE IS KYLE'S OWN SWATCH, TAKEN UNCHANGED. He sent #D48E63 against the dark
+       surface and it already cleared every floor there. It CANNOT serve light: on #FFFFFF it
+       measures **2.68:1**, under the 4.5 text floor and under the 3:1 graphical floor as well.
+       The light value is the same OKLCH hue (H52) at a darker step, so the two read as one
+       colour across the two themes rather than as two different oranges.
+
+       ⚠ WHY THE SIGN NO LONGER NEEDS TO BE RED, in Kyle's own reversal. He first reasoned that
+       export goes right-to-left because it is negative and that red therefore fits. He kept the
+       premise and reversed the conclusion, and the reversal is the better call: THE SIDE OF ZERO
+       ALREADY CARRIES THE POLARITY, and so does the sign on the net figure. A colour saying it a
+       third time stops meaning "outbound" and starts meaning "wrong".
+
+       ⚠ AND THERE IS A TECHNICAL ARGUMENT, NOT ONLY A SEMANTIC ONE. Teal–orange is the
+       canonical colour-blind-safe diverging pair — the reason ColorBrewer's diverging schemes
+       are brown–teal and purple–orange rather than red–green. The two sit ~145° apart and
+       separate on BOTH the red–green and the blue–yellow axis. Red–teal, which is what shipped
+       from the fork until now, separates on only one of them.
+
+       ⚠ `--flow-out-ink` IS GONE, AND THAT IS THE POINT OF THE MEASUREMENT ABOVE. It existed
+       because v0.57 found `--flow-out` at 4.01:1 on the dark surface and one token could not
+       answer to both a bar and a label. BOTH A3 VALUES CLEAR 4.5:1 ON ALL THREE GROUNDS IN BOTH
+       THEMES, so the six rules that took it collapse back onto `--flow-out`. The token is
+       removed rather than left as an alias, and `verify151` asserts it resolves nowhere — a
+       retired token kept alive as an alias is a token that comes back.
+
+       ⚠ ONE ADJACENCY TO HOLD, RECORDED RATHER THAN DISCOVERED LATER. In light, #A75001's
+       nearest neighbour is `--warn` #98671B at ΔE **11.1**. That clears the 10 floor, but it is
+       the same amber that marks an exception in the panel heads — two ambers on one dashboard
+       meaning different things. The mitigation is a size and place difference (`--warn` is only
+       ever a 6px dot with 11px text in a panel head; export is a large bar in a panel body) and
+       it is enough. It is the FIRST thing to re-measure if either token moves again.
+
+       ⚠ THE .22 COMPOSITES WERE MEASURED, BECAUSE NOBODY HAD EVER MEASURED THEM. Two polygon
+       fills on /interconnectors draw these colours at `opacity:.22` (the net-flow chart and the
+       per-link traces), which is a DIFFERENT COLOUR from the token and had never been checked on
+       either palette. Composited over --surface:
+         light  current in 1.39:1 / out 1.46:1, the two ΔE 18.8   →   A3 in 1.39 / out 1.37, ΔE 17.1
+         dark   current in 1.39:1 / out 1.27:1, the two ΔE 26.8   →   A3 in 1.34 / out 1.45, ΔE 20.1
+       A3's WEAKEST composite is 1.34 against the current pair's weakest of 1.27, so the change
+       improves the floor in dark and holds it in light, and the two washes stay far apart in
+       both. **The opacity stays at .22.** These are grounds under a trace, not graphical objects,
+       which is why 1.3–1.5:1 is the design and not a failure — the same class as `.freqband` at
+       5.5% ink.
+
+       —— SUPERSEDED, kept because it records why the second token existed for ninety revisions:
+       ⚠ v0.57: `--flow-out-ink` IS A SECOND TOKEN, NOT A CHANGE TO THE FIRST.
        In dark, `--flow-out` on the panel surface is 4.01:1 — under the 4.5 floor for the five
        places it colours TEXT (the export figures in the link table, and the EXPORTS FROM GB
        label). The obvious fix, lightening `--flow-out`, would also lighten the export BARS, and
@@ -389,7 +505,7 @@
        colour-blindness safety and a nudged red is a nudged red everywhere.
        So the MARK keeps its colour and the WORDS get their own, lightened only as far as 4.5
        requires. In light they are the same value, because light already passes. */
-    --flow-in:#0F6F70; --flow-out:#8C2E1F; --flow-out-ink:#8C2E1F; --flow-zero:#D9D9D9;
+    --flow-in:#0F6F70; --flow-out:#A75001; --flow-zero:#D9D9D9;
 
     /* ---- Temperature against seasonal normal (v1.24, rev 118, candidate 43) ----
        ⚠ ALIASES OF THE FLOW PAIR, NOT USES OF IT. The values are identical today and the
@@ -397,9 +513,22 @@
        future decision about how an import reads has no business changing how a warm day reads.
        This is the same argument that produced `--flow-out-ink` — one token cannot answer to two
        jobs — and it costs two declarations per theme.
-       ⚠ AND IT ALIASES `--flow-out-ink`, NOT `--flow-out`, BECAUSE THIS IS TEXT. Measured on the
-       tile surface: --flow-out is 4.01:1 in dark and fails the 4.5 floor; --flow-out-ink is
-       4.52:1 and passes. --temp-cool is 5.95:1 light and 5.75:1 dark.
+       ⚠ v1.51 (rev 146): THE FUTURE DECISION THIS NOTE ANTICIPATED HAS NOW ARRIVED, AND THE
+       INDIRECTION EARNED ITS PLACE EXACTLY AS WRITTEN. `--flow-out` moved from the oxide red
+       #8C2E1F to the orange #A75001 (light) / #D48E63 (dark) because Kyle found the export bar
+       reading as the gas bar beside it. **The temperature pair did not move with it**, which is
+       the whole reason it was declared as literals rather than `var(--flow-*)`: how an import
+       reads and how a warm day reads are two questions, and this rev answered only one of them.
+       The values below are therefore UNCHANGED and are no longer the same as the flow pair.
+       ⚠ AND A FINDING THAT FOLLOWS FROM THAT, RECORDED AND NOT ACTED ON: `--temp-warm` #8C2E1F
+       is now the last holder of the value the flow pair just left, which means it is still
+       ΔE 4.6 from `--c-gas` and still byte-identical to `--bad`. It sits on /demand's temperature
+       tile, a different page from the gas bar, so it is not the collision Kyle reported — but it
+       is the same value. **The author has not asked for this and it is not filed as a candidate.**
+       ⚠ THE SUPERSEDED NOTE, kept for the measurement: this pair used to alias `--flow-out-ink`
+       rather than `--flow-out` because it is text. On the tile surface --flow-out was 4.01:1 in
+       dark and failed the 4.5 floor; --flow-out-ink was 4.52:1 and passed. That token is retired
+       at v1.51 — see the diverging-pair note above. --temp-cool is 5.95:1 light and 5.75:1 dark.
        ⚠ COLOUR IS NOT THE CARRIER. The figure already reads "+1.6 vs normal" with an explicit
        sign; the colour makes a scannable row out of a line that was already complete. */
     --temp-warm:#8C2E1F; --temp-cool:#0F6F70;
@@ -601,8 +730,15 @@
        ⚠ SO THE HARNESS RECORDS THIS AS A KNOWN, ACCEPTED FAILURE WITH THIS REASON RATHER THAN
        PASSING IT. An accepted failure that is not written down becomes a passing test. */
     --c-storage:#984C72; --c-imports:#6F87F9; --c-gas:#B3241F;   --c-other:#B88B0D;
-    --flow-in:#2FA3A4; --flow-out:#C4574A; --flow-out-ink:#C86458; --flow-zero:#383846;
-    /* v1.24 (rev 118): the text-safe red, measured 4.52:1 on --surface; --flow-out is 4.01:1 */
+    /* v1.51 (rev 146): the series inks, dark. See the light block for the argument and the
+       measurements. Four are the fill repeated (wind, biomass, imports, other already clear 4.5
+       on all three dark grounds); four are solved. No solar ink — solar is not a categorical hue. */
+    --c-gas-ink:#F94239;     --c-nuclear-ink:#A664FE; --c-wind-ink:#1EB3B6;   --c-biomass-ink:#5A9E65;
+    --c-imports-ink:#6F87F9; --c-hydro-ink:#518CBE;   --c-other-ink:#B88B0D;  --c-storage-ink:#C36B96;
+    --flow-in:#4D9491; --flow-out:#D48E63; --flow-zero:#383846;
+    /* v1.24 (rev 118): the text-safe red, measured 4.52:1 on --surface. ⚠ v1.51 (rev 146): it was
+       `--flow-out-ink`'s value and that token is now retired; this literal is its only remaining
+       holder, and it is DELIBERATELY left where it is — see the note on --temp-warm above. */
     --temp-warm:#C86458; --temp-cool:#2FA3A4;
     --solar-line:#E3BE4A; --solar-fill:#4A3F1A;
     /* ⚠ v0.98 (rev 92): --night #1A1D28 -> #1B1F2E, the dark twin of the light change above,
